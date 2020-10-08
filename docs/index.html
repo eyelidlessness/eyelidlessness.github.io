@@ -45,11 +45,39 @@
         max-width: 50em;
         margin: 1em auto;
       }
+
+      @keyframes blinkingText {
+        0% {
+          color: #000;
+        }
+        49% {
+          color: #000;
+        }
+        50% {
+          color: transparent;
+        }
+        99% {
+          color: transparent;
+        }
+        100% {
+          color: #000;
+        }
+      }
+
+      blink {
+        animation: blinkingText 1s infinite;
+      }
+
+
     </style>
   </head>
   <body>
     <main>
-      underconstruction.gif
+      <marquee title="This one's for u Lee">
+        <blink>
+          underconstruction.gif
+        </blink>
+      </marquee>
     </main>
   </body>
 </html>
