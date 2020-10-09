@@ -1,22 +1,21 @@
+import Head from 'next/head';
 import Blink from '../components/Blink';
 
 const title = `This one\'s for u Lee`;
 
 const Index = () => (
-  <div>
-    <Blink>
-      <marquee title={ title }>
-        underconstruction.gif
-      </marquee>
-    </Blink>
-
-
-    <marquee title={ 'hey' + title }>
-      { /* <Blink> */ }
-        underconstruction.gif
-      { /* </Blink> */ }
-    </marquee>
-  </div>
+  <>
+    <Head>
+      <title>Hey okay be patient...</title>
+    </Head>
+    <p>
+      <Blink>
+        <marquee title={ title }>
+          ⚛️ underconstruction.gif
+        </marquee>
+      </Blink>
+    </p>
+  </>
 );
 
 export default Index;

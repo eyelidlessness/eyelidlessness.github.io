@@ -28,7 +28,7 @@
     "next/chokidar": "^3.0.0"
   },
   "scripts": {
-    "build": "next build && next export",
+    "build": "next build && next export -o docs",
     "start": "next build && next start",
     "start-dev": "next",
     "typecheck": "tsc"

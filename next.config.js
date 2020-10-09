@@ -5,7 +5,6 @@ const withPrefresh = require('@prefresh/next');
 
 module.exports = withMDX(
   withPrefresh({
-    distDir: 'docs',
     poweredByHeader: false,
     target: 'serverless',
     trailingSlash: true,

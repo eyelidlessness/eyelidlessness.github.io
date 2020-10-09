@@ -13,7 +13,6 @@ class Document extends BaseDocument {
       <Html>
         <Head>
           <GlobalStyles />
-          <title>Hey okay be patient...</title>
         </Head>
         <body>
           <Main>
