@@ -3,7 +3,7 @@ name: build
 on:
   push:
     branches:
-      - main
+      - features/gh-build-redux
 
 jobs:
   build:
