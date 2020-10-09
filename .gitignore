@@ -1,0 +1,4 @@
+/.next
+/.tsbuildinfo
+/node_modules
+/yarn-error.log
