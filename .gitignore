@@ -1,4 +1,5 @@
 /.next
 /.tsbuildinfo
+/docs
 /node_modules
 /yarn-error.log
