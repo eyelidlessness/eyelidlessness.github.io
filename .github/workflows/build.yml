@@ -20,12 +20,8 @@ jobs:
       - run: yarn typecheck
       - run: yarn build
 
-      - uses: webfactory/ssh-agent@v0.2.0
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-
       - uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
-          SSH: true
           BRANCH: gh-pages
           FOLDER: docs
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
