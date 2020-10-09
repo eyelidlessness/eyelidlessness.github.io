@@ -3,7 +3,7 @@ name: build
 on:
   push:
     branches:
-      - features/gh-build
+      - main
 
 jobs:
   build:
@@ -15,4 +15,5 @@ jobs:
           node-version: '14'
           check-latest: true
       - run: yarn install
+      - run: yarn typecheck
       - run: yarn build
