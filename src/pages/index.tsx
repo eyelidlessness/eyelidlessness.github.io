@@ -11,7 +11,12 @@ const Index = () => (
     <p>
       <Blink>
         <marquee title={ title }>
-          ⚛️ underconstruction.gif
+          ⚛️
+          <span style={ {
+            display: 'inline-block',
+            width: '0.5em',
+          } } />
+          underconstruction.gif
         </marquee>
       </Blink>
     </p>
