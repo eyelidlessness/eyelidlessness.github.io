@@ -4,6 +4,7 @@ import BaseDocument, {
   Main as BaseMain,
   NextScript,
 } from 'next/document';
+import Favicons from '../components/Favicons';
 import GlobalStyles from '../components/GlobalStyles';
 import Main from '../components/Main';
 
@@ -13,6 +14,7 @@ class Document extends BaseDocument {
       <Html>
         <Head>
           <GlobalStyles />
+          <Favicons />
         </Head>
         <body>
           <Main>
