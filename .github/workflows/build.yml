@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
@@ -17,3 +18,9 @@ jobs:
       - run: yarn install
       - run: yarn typecheck
       - run: yarn build
+
+      - uses: JamesIves/github-pages-deploy-action@3.6.2
+        with:
+          BRANCH: gh-pages
+          FOLDER: build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
