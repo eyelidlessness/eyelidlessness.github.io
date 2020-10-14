@@ -15,10 +15,9 @@ jobs:
         with:
           node-version: '14'
           check-latest: true
-        run: |
-          yarn install
-          yarn typecheck
-          yarn build
+      - run: yarn install
+      - run: yarn typecheck
+      - run: yarn build
 
       - uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
