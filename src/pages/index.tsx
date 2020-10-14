@@ -17,6 +17,7 @@ const Index = () => (
             width: '0.5em',
           } } />
           underconstruction.gif
+          🎉
         </marquee>
       </Blink>
     </p>
