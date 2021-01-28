@@ -1,8 +1,19 @@
-import styled from '@emotion/styled';
+import { ComponentChildren } from 'preact';
+import {
+  css,
+  StylesProvider,
+} from '@/lib/styles';
 
-const Main = styled.main({
-  margin: '1em auto',
-  maxWidth: '50em',
-});
+css.global(`
+  html, body {
+    background: #ccc;
+  }
+`);
 
-export default Main;
+type MainProps = JSX.IntrinsicElements['div'] & {
+  readonly children?: ComponentChildren;
+}
+
+export const Main = ({ children }: MainProps) => (
+  <StylesProvider>{ children }</StylesProvider>
+);

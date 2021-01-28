@@ -1,30 +1,41 @@
-import BaseDocument, {
-  Head,
+import {
+  defineDocument,
   Html,
-  Main as BaseMain,
-  NextScript,
-} from 'next/document';
-import Favicons from '../components/Favicons';
-import GlobalStyles from '../components/GlobalStyles';
-import Main from '../components/Main';
+  Head,
+  __HeadContext,
+  __InternalDocContext,
+  Main,
+  MicrositeScript,
+} from 'microsite/document';
+import { __SeoContext } from 'microsite/head';
 
-class Document extends BaseDocument {
-  render() {
-    return (
-      <Html>
-        <Head>
-          <GlobalStyles />
-          <Favicons />
-        </Head>
-        <body>
-          <Main>
-            <BaseMain />
-          </Main>
-          <NextScript />
-        </body>
-      </Html>
-    )
-  }
+const Document = () => {
+  return (
+    <Html>
+      <Head />
+      <body>
+        <MicrositeScript />
+        <Main />
+      </body>
+    </Html>
+  );
+};
+
+interface RenderPageResult {
+  readonly __renderPageResult: any;
 }
 
-export default Document;
+let renderLock: Promise<RenderPageResult> | null = null;
+
+export default defineDocument(Document, {
+  async prepare({ renderPage }) {
+    await renderLock;
+    renderLock = renderPage();
+
+    const page = await renderLock;
+
+    return {
+      ...page,
+    };
+  },
+});

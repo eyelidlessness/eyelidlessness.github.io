@@ -1,36 +1,39 @@
 {
   "name": "eyelidlessness-github-io",
-  "version": "0.0.1",
-  "engines": {
-    "node": ">=14.13.0 <15.0",
-    "yarn": ">=1.22.5"
+  "version": "0.1.0",
+  "type": "module",
+  "homepage": "/",
+  "scripts": {
+    "start": "microsite",
+    "build": "microsite build",
+    "serve": "microsite build --serve",
+    "typecheck": "tsc"
   },
-  "private": true,
   "devDependencies": {
-    "@emotion/core": "^10.0.35",
-    "@emotion/styled": "^10.0.27",
-    "@mdx-js/loader": "^1.6.18",
-    "@next/mdx": "^9.5.4",
-    "@prefresh/next": "^1.2.4",
-    "@types/node": "^14.11.7",
-    "@types/react": "^16.9.51",
-    "emotion": "^10.0.27",
-    "next": "^9.5.4",
-    "preact": "^10.5.4",
-    "preact-render-to-string": "^5.1.10",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-refresh": "^0.8.3",
-    "react-ssr-prepass": "npm:preact-ssr-prepass@^1.1.1",
-    "typescript": "^4.0.3"
+    "@prefresh/snowpack": "^3.0.1",
+    "@types/md5": "^2.2.1",
+    "@types/node": "^14.14.21",
+    "domexception": "^2.0.1",
+    "eslint": "^3.14.1",
+    "fela": "^11.5.1",
+    "fela-dom": "^11.5.1",
+    "fela-preset-web": "^11.5.1",
+    "fela-tools": "^11.5.1",
+    "md5": "^2.3.0",
+    "microsite": "npm:@eyelidlessness/microsite@^1.1.0-next.5",
+    "preact": "^10.5.10",
+    "preact-fela": "^11.5.1",
+    "preact-render-to-string": "^5.1.12",
+    "react": "npm:@preact/compat",
+    "rollup": "^2.0.0",
+    "typescript": "^4.1.2"
   },
   "resolutions": {
-    "next/chokidar": "^3.0.0"
-  },
-  "scripts": {
-    "build": "next build && next export -o build",
-    "start": "next build && next start",
-    "start-dev": "next",
-    "typecheck": "tsc"
+    "microsite/postcss-cli/chokidar/fsevents": "^2.3.x",
+    "microsite/preact": "^10.5.10",
+    "microsite/rollup/fsevents": "^2.3.x",
+    "microsite/snowpack/skypack/rollup/fsevents": "^2.3.x",
+    "rollup/fsevents": "^2.3.x",
+    "snowpack/esinstall/rollup/fsevents": "^2.3.x"
   }
 }
