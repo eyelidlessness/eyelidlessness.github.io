@@ -20,8 +20,6 @@ const HydrationCheck = (props: HydrationCheckProps) => {
   const [ count, setCount ] = useState(currentCount);
 
   if (typeof window === 'undefined') {
-    console.log('rendering server...');
-
     return (
       <p>
         HydrationCheck! { currentCountMessage }

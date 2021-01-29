@@ -69,6 +69,11 @@ export const setGlobalStyles = () => {
         url('/fonts/Minipax/regular.ttf')   format('truetype');
     }
 
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
     *, *:before, *:after {
       box-sizing: inherit;
     }
@@ -92,7 +97,7 @@ export const setGlobalStyles = () => {
     }
 
     ${headingElements.map((el) => `${el} small`).join(',')} {
-      color:         currentColor;
+      color:          currentColor;
       font-size:      0.875em;
       vertical-align: 0.05em;
     }

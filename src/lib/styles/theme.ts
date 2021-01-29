@@ -1,3 +1,8 @@
+import {
+  DEFAULT_TOPIC,
+  Topic,
+} from '@/lib/content';
+import { css } from './styles';
 
 const vwRatio = 2;
 
@@ -9,7 +14,7 @@ const baseFontSizeRange = {
 
 const darkMode = '@media (prefers-color-scheme: dark)' as const;
 
-export const headingElements = [
+const headingElements = [
   'h1',
   'h2',
   'h3',
@@ -18,7 +23,7 @@ export const headingElements = [
   'h6',
 ] as const;
 
-export const listElements = [
+const listElements = [
   'dd',
   'dl',
   'dt',
@@ -27,36 +32,36 @@ export const listElements = [
   'ul',
 ] as const;
 
-export const semanticBlockElements = [
-  ...headingElements,
-  'address',
-  'article',
-  'aside',
-  'blockquote',
-  'details',
-  'dialog',
-  'figcaption',
-  'figure',
-  'footer',
-  'header',
-  'hgroup',
-  'main',
-  'menu',
-  'nav',
-  'p',
-  'section',
-] as const;
+// const semanticBlockElements = [
+//   ...headingElements,
+//   'address',
+//   'article',
+//   'aside',
+//   'blockquote',
+//   'details',
+//   'dialog',
+//   'figcaption',
+//   'figure',
+//   'footer',
+//   'header',
+//   'hgroup',
+//   'main',
+//   'menu',
+//   'nav',
+//   'p',
+//   'section',
+// ] as const;
 
-export const blockElements = [
-  ...headingElements,
-  ...semanticBlockElements,
-  'div',
-  'fieldset',
-  'form',
-  'hgroup',
-  'hr',
-  'pre',
-] as const;
+// const blockElements = [
+//   ...headingElements,
+//   ...semanticBlockElements,
+//   'div',
+//   'fieldset',
+//   'form',
+//   'hgroup',
+//   'hr',
+//   'pre',
+// ] as const;
 
 const firstLastMarginZeroElements = [
   ...headingElements,
@@ -95,7 +100,7 @@ const headingRanges = {
 const mainGridMaxWidthCh = 65;
 const mainGridSidePaddingRem = 1.25;
 
-export const mainGridColumns = [
+const mainGridColumns = [
   '0.7fr',
   `${mainGridSidePaddingRem}rem`,
   [
@@ -139,6 +144,150 @@ const proseFontFamily = proseFonts
     fontName
   ))
   .join(', ');
+
+
+const topicColorMapping = {
+  DEFAULT_TOPIC: {
+    dark:  '#aaa',
+    light: '#555',
+  },
+
+  ABLEISM:         '#edc258',
+  ARTS_CRAFTS:     '#293fe4',
+  LEMON:           '#82c2e4',
+  MENTAL_ILLNESS:  '#d33d0a',
+  NEURODIVERGENCE: '#f7834a',
+  PHILOSOPHY:      '#9a9aa6',
+  POLITICS:        '#ffe413',
+  RACISM:          '#7a5221',
+  SEXISM:          '#ec9ac0',
+  SUBSTANCE_ABUSE: '#edbb0e',
+  TECHNOLOGY:      'hsla(336deg, 100%, 42%, 0.9)',
+  TRANSPHOBIA:     '#10be8a',
+} as const;
+
+
+const topicColorClassNameEntries = [
+  [
+    Topic[DEFAULT_TOPIC],
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.DEFAULT_TOPIC.light,
+      },
+
+      [darkMode]: {
+        '&, &.hover-inherit-topic-color:hover': {
+          color: topicColorMapping.DEFAULT_TOPIC.dark,
+        },
+      },
+    }),
+  ],
+
+  [
+    Topic.ABLEISM,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.ABLEISM,
+      },
+    }),
+  ],
+  [
+    Topic.ARTS_CRAFTS,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.ARTS_CRAFTS,
+      },
+    }),
+  ],
+  [
+    Topic.LEMON,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.LEMON,
+      },
+    }),
+  ],
+  [
+    Topic.MENTAL_ILLNESS,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.MENTAL_ILLNESS,
+      },
+    }),
+  ],
+  [
+    Topic.NEURODIVERGENCE,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.NEURODIVERGENCE,
+      },
+    }),
+  ],
+  [
+    Topic.PHILOSOPHY,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.PHILOSOPHY,
+      },
+    }),
+  ],
+  [
+    Topic.POLITICS,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.POLITICS,
+      },
+    }),
+  ],
+  [
+    Topic.RACISM,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.RACISM,
+      },
+    }),
+  ],
+  [
+    Topic.SEXISM,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.SEXISM,
+      },
+    }),
+  ],
+  [
+    Topic.SUBSTANCE_ABUSE,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.SUBSTANCE_ABUSE,
+      },
+    }),
+  ],
+  [
+    Topic.TECHNOLOGY,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.TECHNOLOGY,
+      },
+    }),
+  ],
+  [
+    Topic.TRANSPHOBIA,
+    css({
+      '&, &.hover-inherit-topic-color:hover': {
+        color: topicColorMapping.TRANSPHOBIA,
+      },
+    }),
+  ],
+] as const;
+
+type TopicThemeKey =
+  | typeof DEFAULT_TOPIC
+  | string;
+
+export const topicColorClassNames = Object.fromEntries<TopicThemeKey, string>(
+  topicColorClassNameEntries
+);
 
 export const theme = {
   baseFontSizeRange,
@@ -431,7 +580,7 @@ export const theme = {
   //   },
   // },
 
-  // topicColorClassNames,
+  topicColorClassNames,
 
   // // topicTagOutlineMask: {
   // //   light: 'rgba(255, 255, 255, 0.85)',

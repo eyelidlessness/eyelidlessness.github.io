@@ -76,8 +76,6 @@ const fullBleedContainerClassName = css({
   gridTemplateColumns,
 });
 
-console.log('fullBleedContainerClassName', fullBleedContainerClassName);
-
 export const FullBleedContainer = <
   P extends BaseFullBleedContainerProps,
   T extends ElementType

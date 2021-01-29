@@ -11,7 +11,7 @@ export const jsToCSS = (
   selectors.join(','),
   '{',
   Object.entries(js)
-    .reduce<string>((acc, [ k, v ]) => (
+    .reduce((acc, [ k, v ]) => (
       typeof v === 'object' && k.includes('&')
         ? `${acc}${jsToCSS(
           selectors.map((selector) => k.replace(/&/g, selector)),

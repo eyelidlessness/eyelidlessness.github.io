@@ -1,8 +1,13 @@
 import { seo }        from 'microsite/head';
 import { definePage } from 'microsite/page';
+import {
+  BlogArt,
+  BlogArtDefs,
+} from '@/components/BlogArt';
 import { Head }       from '@/components/Head';
 import HydrationCheck from '@/components/HydrationCheck';
 import { Main }       from '@/components/Main';
+import { Topic }      from '@/lib/content';
 import {
   css,
   styled,
@@ -33,6 +38,11 @@ const WelpPage = ({
       </Head>
 
       <Main>
+        <BlogArtDefs />
+        <BlogArt
+          hash="cb544c93e5b363ba1198a8b9c2f5ab9b97065a1a"
+          topics={[ Topic.LEMON, Topic.ARTS_CRAFTS ]}
+        />
         <h1>Welcome to Microsite!</h1>
         <div class={ green95 }>Green 95</div>
         <Red>test</Red>

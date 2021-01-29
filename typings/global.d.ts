@@ -11,6 +11,12 @@ type ArrayType<T extends ReadonlyArray<any>> =
     ? U
   : never;
 
+interface ObjectConstructor {
+  fromEntries<K extends PropertyKey, T>(
+    entries: Iterable<readonly [ K, T ]>
+  ): Record<K, T>;
+}
+
 type RecordType<T extends Readonly<Record<any, any>>> =
   T extends Record<any, infer V>
     ? V

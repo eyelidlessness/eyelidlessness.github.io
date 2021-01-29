@@ -12,7 +12,6 @@
       "dom.iterable",
       "esnext"
     ],
-    "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "module": "esnext",

@@ -34,6 +34,9 @@ const pluginFela = () => ({
       path.resolve(buildDirectory, 'src/pages/**/*.js')
     );
 
+    const { h } = await import('preact');
+    const { default: render } = await import('preact-render-to-string');
+
     for (const pagePath of pages) {
       /** @type {{default: AnyPage}} */
       const {
@@ -41,11 +44,9 @@ const pluginFela = () => ({
       } = (await import(pagePath));
 
       // TODO 2021-01-28: Render the page in case anything is declared dynamically?
-      // const { h } = require('preact');
-      // const render = require('preact-render-to-string');
 
-      // const Page = getPageComponent(page);
-      // await render(h(Page, {}));
+      const Page = getPageComponent(page);
+      await render(h(Page, {}));
     }
 
     const stylesPath = path.resolve(buildDirectory, 'src/lib/styles/styles.js');

@@ -34,6 +34,8 @@ let renderLock: Promise<RenderPageResult> | null = null;
 
 export default defineDocument(Document, {
   async prepare({ renderPage }) {
+    console.trace('huh');
+
     await renderLock;
     renderLock = renderPage();
 
