@@ -4,6 +4,20 @@
  * ---------------------------------------------------------------------------
  */
 
+type ArrayType<T extends ReadonlyArray<any>> =
+  T extends Array<infer U>
+    ? U
+  : T extends ReadonlyArray<infer U>
+    ? U
+  : never;
+
+type RecordType<T extends Readonly<Record<any, any>>> =
+  T extends Record<any, infer V>
+    ? V
+  : T extends Readonly<Record<any, infer V>>
+    ? V
+  : never;
+
 interface Set<T> {
   has<V>(this: Set<T>, value: V): value is Extract<V & T, T>;
 }

@@ -31,6 +31,9 @@
   "exclude": [
     "node_modules"
   ],
+  "files": [
+    "./env.d.ts"
+  ],
   "include": [
     "./env.d.ts",
     "plugins",

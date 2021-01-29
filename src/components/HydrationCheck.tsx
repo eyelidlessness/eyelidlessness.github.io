@@ -13,13 +13,26 @@ const HydrationCheck = (props: HydrationCheckProps) => {
     currentCount = 0,
   } = props;
 
-  const [ count, setCount ] = useState(currentCount);
-
   const currentCountMessage = currentCount === 0
     ? ' '
     : `Initial count from props: ${currentCount} `;
 
-    console.log('rendering HydrationCheck...')
+  const [ count, setCount ] = useState(currentCount);
+
+  if (typeof window === 'undefined') {
+    console.log('rendering server...');
+
+    return (
+      <p>
+        HydrationCheck! { currentCountMessage }
+        Count: { count } {' '}
+        <button>-</button> {' '}
+        <button>+</button>
+
+        { children } { ' huh '}
+      </p>
+    );
+  }
 
   return (
     <p>
@@ -28,11 +41,11 @@ const HydrationCheck = (props: HydrationCheckProps) => {
       <button onClick={ () => setCount(count - 1) }>-</button> {' '}
       <button onClick={ () => setCount(count + 1) }>+</button>
 
-      { children } { ' huh'}
+      { children } { ' huh '}
     </p>
   );
 };
 
 export default withHydrate(HydrationCheck, {
-  // method: 'visible',
+  method: 'visible',
 });

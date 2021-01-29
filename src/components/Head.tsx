@@ -1,5 +1,6 @@
 import { __HeadContext }    from 'microsite/document';
 import { Head as BaseHead } from 'microsite/head';
+import { Favicons }         from './Favicons';
 
 export const Head = ({
   children,
@@ -9,8 +10,7 @@ export const Head = ({
   return (
     <BaseHead { ...rest }>
       { children }
-      <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-      <link rel="alternate icon" href="./favicon.ico" />
+      <Favicons />
     </BaseHead>
   );
 };

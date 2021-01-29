@@ -32,9 +32,7 @@ const pluginFela = () => ({
     const path  = require('path');
     const pages = glob.sync(
       path.resolve(buildDirectory, 'src/pages/**/*.js')
-    ).filter((page) => (
-      page !== path.resolve(buildDirectory, 'src/pages/_document.js')
-    ));
+    );
 
     for (const pagePath of pages) {
       /** @type {{default: AnyPage}} */

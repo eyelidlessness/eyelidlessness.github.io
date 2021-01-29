@@ -1,23 +1,28 @@
 import {
   defineDocument,
-  Html,
+  // Html,
   Head,
   __HeadContext,
   __InternalDocContext,
   Main,
   MicrositeScript,
 } from 'microsite/document';
-import { __SeoContext } from 'microsite/head';
+import { __SeoContext }   from 'microsite/head';
+import { Body }           from '@/components/Body';
+import { Html }           from '@/components/Html';
+import { StylesProvider } from '@/lib/styles';
 
 const Document = () => {
   return (
-    <Html>
-      <Head />
-      <body>
-        <MicrositeScript />
-        <Main />
-      </body>
-    </Html>
+    <StylesProvider>
+      <Html>
+        <Head />
+        <Body>
+          <MicrositeScript />
+          <Main />
+        </Body>
+      </Html>
+    </StylesProvider>
   );
 };
 

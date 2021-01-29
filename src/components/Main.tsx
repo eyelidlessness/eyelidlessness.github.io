@@ -1,19 +1,15 @@
-import { ComponentChildren } from 'preact';
-import {
-  css,
-  StylesProvider,
-} from '@/lib/styles';
-
-css.global(`
-  html, body {
-    background: #ccc;
-  }
-`);
+import { ComponentChildren }  from 'preact';
+import { StylesProvider }     from '@/lib/styles';
+import { FullBleedContainer } from './FullBleedContainer';
 
 type MainProps = JSX.IntrinsicElements['div'] & {
   readonly children?: ComponentChildren;
 }
 
 export const Main = ({ children }: MainProps) => (
-  <StylesProvider>{ children }</StylesProvider>
+  <StylesProvider>
+    <FullBleedContainer>
+      { children }
+    </FullBleedContainer>
+  </StylesProvider>
 );

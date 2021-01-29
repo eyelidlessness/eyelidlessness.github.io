@@ -1,8 +1,14 @@
 import { createRenderer } from 'fela';
+import createIdentifier   from 'fela-identifier';
+import pluginEmbedded     from 'fela-plugin-embedded';
+// @ts-ignore
+import pluginSelectors    from 'fela-plugin-multiple-selectors';
+import pluginTypescript   from 'fela-plugin-typescript';
 import { renderToString } from 'fela-tools';
 import {
   ComponentChildren,
   ComponentProps,
+  ElementType,
   h,
 } from 'preact';
 import {
@@ -12,12 +18,20 @@ import {
 } from 'preact-fela';
 import hashed             from './hashed';
 
+export const identifier = createIdentifier();
+
 const devMode = import.meta.env?.MODE === 'development';
 
 export const renderer = createRenderer({
   devMode,
   enhancers: [
+    identifier,
     hashed(),
+  ],
+  plugins: [
+    pluginEmbedded(),
+    pluginSelectors(),
+    pluginTypescript(),
   ],
 });
 
@@ -75,10 +89,12 @@ export const css = Object.assign(baseCSS, {
   global: renderer.renderStatic.bind(renderer) as typeof renderer.renderStatic,
 });
 
-export const styled = <T extends keyof JSX.IntrinsicElements>(
+export const styled = <T extends ElementType>(
   element: T,
   style:   Style<ComponentProps<T>>
 ) => (
   css(style),
-  createComponent(style, element, Object.keys)
+  createComponent(style, element as any, Object.keys)
 );
+
+export { combineRules } from 'fela';

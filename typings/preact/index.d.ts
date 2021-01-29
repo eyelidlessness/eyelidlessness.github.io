@@ -8,7 +8,7 @@ declare module 'preact' {
       : never
   }[keyof JSX.IntrinsicElements];
 
-  export type ElementType<P> =
+  export type ElementType<P = {}> =
     | CompatibleIntrinsicElement<P>
     | ComponentType<P>;
 }
