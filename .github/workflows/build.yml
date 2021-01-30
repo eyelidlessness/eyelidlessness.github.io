@@ -17,6 +17,7 @@ jobs:
       - run: yarn test
       - run: yarn build
       - run: echo ${{ github.ref }}
+      - run: echo ${{ github.ref == 'bugfix/deploy-branch-check' }}
 
       - uses: JamesIves/github-pages-deploy-action@3.6.2
         if: ${{ github.ref == 'main' }}
