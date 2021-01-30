@@ -16,11 +16,9 @@ jobs:
       - run: yarn typecheck
       - run: yarn test
       - run: yarn build
-      - run: echo ${{ github.ref }}
-      - run: echo ${{ github.ref == 'bugfix/deploy-branch-check' }}
 
       - uses: JamesIves/github-pages-deploy-action@3.6.2
-        if: ${{ github.ref == 'main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           BRANCH: gh-pages
           FOLDER: dist
