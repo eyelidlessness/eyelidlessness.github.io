@@ -21,6 +21,7 @@ jobs:
       - run: yarn build
 
       - uses: JamesIves/github-pages-deploy-action@3.6.2
+        if: ${{ github.ref == 'main' }}
         with:
           BRANCH: gh-pages
           FOLDER: dist
