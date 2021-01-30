@@ -4,12 +4,8 @@ import {
   TRule,
   TRuleProps,
 } from 'fela';
-import createIdentifier   from 'fela-identifier';
-import pluginEmbedded     from 'fela-plugin-embedded';
-// @ts-ignore
-import pluginSelectors    from 'fela-plugin-multiple-selectors';
-import pluginTypescript   from 'fela-plugin-typescript';
 import { renderToString } from 'fela-tools';
+import module             from 'module';
 import {
   ComponentChildren,
   ComponentProps,
@@ -23,14 +19,19 @@ import {
 } from 'preact-fela';
 import hashed             from './hashed';
 
-export const identifier = createIdentifier();
+const _require = module.createRequire(import.meta.url);
+
+const { default: pluginEmbedded } = _require('fela-plugin-embedded');
+const { default: pluginSelectors } = _require('fela-plugin-multiple-selectors');
+
+/** @type {import('fela-plugin-typescript')} */
+const { default: pluginTypescript } = _require('fela-plugin-typescript');
 
 const devMode = import.meta.env?.MODE === 'development';
 
 export const renderer = createRenderer({
   devMode,
   enhancers: [
-    identifier,
     hashed(),
   ],
   plugins: [
@@ -99,8 +100,7 @@ const styles = Symbol('styles');
 
 type StyledComponent<P> =
   & ElementType<P>
-  & { readonly [styles]: readonly Style<P>[] }
-  // & { readonly [styledComponentRule]: TRule<ComponentProps<T>> };
+  & { readonly [styles]: readonly Style<P>[] };
 
 const isStyledComponent = <P>(
   Component: ElementType<P>
@@ -116,9 +116,7 @@ interface StyleableProps {
 export const styled = <T extends ElementType<StyleableProps>>(
   Component: T,
   style:     Style<ComponentProps<T>>
-)/* : StyledComponent<T> */ => {
-  // css(style);
-
+) => {
   const currentStyles: ReadonlyArray<Style<ComponentProps<T>>> = (
     isStyledComponent(Component)
       ? Component[styles]
@@ -133,22 +131,7 @@ export const styled = <T extends ElementType<StyleableProps>>(
   const rules = [ ...currentRules, () => style ];
   const rule = combineRules(...rules as Array<TRule<TRuleProps>>);
 
-  // const newRule: TRule<ComponentProps<T>> = (
-  //   props:    ComponentProps<T>,
-  //   renderer: IRenderer
-  // ) => (
-  //   typeof style === 'function'
-  //     ? style(props, renderer)
-  //     : style
-  // );
-
-  // const rule = typeof currentRule === 'function'
-  //   ? combineRules(currentRule, newRule)
-  //   : newRule;
   const allStyles = [ ...currentStyles, style ];
-
-  // console.trace('rule', rule({}, renderer));
-  // css(rule);
 
   const InnerComponent: keyof JSX.IntrinsicElements = (
     typeof Component === 'string'
@@ -175,48 +158,6 @@ export const styled = <T extends ElementType<StyleableProps>>(
   return Object.assign(StyledComponent, {
     [styles]: allStyles,
   });
-
-  // if (typeof Component === 'string') {
-  //   return Object.assign(createComponent(
-  //     rule,
-  //     Component,
-  //     Object.keys,
-  //   ), {
-  //     [styles]: allStyles,
-  //   });
-  // }
-
-
-  // return Object.assign((props: ComponentProps<T>) => (
-  //   // <FelaComponent style={ rule } { ...props } />
-  //   h(FelaComponent, {
-  //     as:    Component,
-  //     style: rule,
-  //     ...props,
-  //   })
-  // ), { [styles]: allStyles });
-
-
-  // const className = allStyles.map(css).join(' ');
-
-  // const className = css(rule);
-
-  // return Object.assign((props: ComponentProps<T>) => {
-  //   // const { css } = useFela(style);
-
-  //   const { children, ...rest } = props as any;
-  //   // const className = renderer.renderRule(rule, props);
-  //   // const className = css(rule(props, renderer));
-
-  //   return h<ComponentProps<T>>(Component as any, {
-  //     ...rest,
-  //     className,
-  //   }, children);
-  // }, {
-  //   [styles]: allStyles,
-  // });
-
-  // return createComponent(rule, Component as any, Object.keys);
 };
 
 export { combineRules };
