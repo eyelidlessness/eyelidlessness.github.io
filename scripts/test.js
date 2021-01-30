@@ -4,13 +4,10 @@
 
 import chalk                      from 'chalk';
 import { set as setChalkContext } from 'ava/lib/chalk.js';
-import { normalizeGlobs }         from 'ava/lib/globs.js';
 import { controlFlow }            from 'ava/lib/ipc-flow-control.js';
 import del                        from 'del';
 import estrella                   from 'estrella';
-import fs                         from 'fs';
 import globby                     from 'globby';
-import os                         from 'os';
 import path                       from 'path';
 
 const cwd         = process.cwd();
