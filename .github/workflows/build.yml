@@ -16,6 +16,7 @@ jobs:
       - run: yarn typecheck
       - run: yarn test
       - run: yarn build
+      - run: echo ${{ github.ref }}
 
       - uses: JamesIves/github-pages-deploy-action@3.6.2
         if: ${{ github.ref == 'main' }}
