@@ -1,5 +1,10 @@
-/.next
-/.tsbuildinfo
-/build
-/node_modules
-/yarn-error.log
+dist/
+
+.microsite/
+node_modules/
+$RECYCLE.BIN/
+
+.DS_Store
+Thumbs.db
+UserInterfaceState.xcuserstate
+.env

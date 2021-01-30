@@ -1,27 +1,30 @@
-import Head from 'next/head';
-import Blink from '../components/Blink';
+import { seo }        from 'microsite/head';
+import { definePage } from 'microsite/page';
+import {
+  BlogArt,
+  BlogArtDefs,
+} from '@/components/BlogArt';
+import { Head }       from '@/components/Head';
+import { Main }       from '@/components/Main';
+import { Topic }      from '@/lib/content';
 
-const title = `This one\'s for u Lee`;
+const IndexPage = () => {
+  return (
+    <>
+      <Head>
+        <seo.title>Blobby art exhibit temp site | Eyelidlessness</seo.title>
+      </Head>
 
-const Index = () => (
-  <>
-    <Head>
-      <title>Hey okay be patient...</title>
-    </Head>
-    <p>
-      <Blink>
-        <marquee title={ title }>
-          ⚛️
-          <span style={ {
-            display: 'inline-block',
-            width: '0.5em',
-          } } />
-          underconstruction.gif
-          🎉
-        </marquee>
-      </Blink>
-    </p>
-  </>
-);
+      <Main>
+        <BlogArtDefs />
+        <BlogArt
+          hash="b19a9fc4c8d52b37763e07fb7abd5d7d92c87fc0"
+          topics={[ Topic.TECHNOLOGY ]}
+        />
+        <p><a href="./huh/">Huh</a></p>
+      </Main>
+    </>
+  );
+};
 
-export default Index;
+export default definePage(IndexPage);

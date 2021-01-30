@@ -1,30 +1,48 @@
-import BaseDocument, {
+import {
+  defineDocument,
+  // Html,
   Head,
-  Html,
-  Main as BaseMain,
-  NextScript,
-} from 'next/document';
-import Favicons from '../components/Favicons';
-import GlobalStyles from '../components/GlobalStyles';
-import Main from '../components/Main';
+  __HeadContext,
+  __InternalDocContext,
+  Main,
+  MicrositeScript,
+} from 'microsite/document';
+import { __SeoContext }   from 'microsite/head';
+import { Body }           from '@/components/Body';
+import { Html }           from '@/components/Html';
+import { StylesProvider } from '@/lib/styles';
 
-class Document extends BaseDocument {
-  render() {
-    return (
+const Document = () => {
+  return (
+    <StylesProvider>
       <Html>
-        <Head>
-          <GlobalStyles />
-          <Favicons />
-        </Head>
-        <body>
-          <Main>
-            <BaseMain />
-          </Main>
-          <NextScript />
-        </body>
+        <Head />
+        <Body>
+          <MicrositeScript />
+          <Main />
+        </Body>
       </Html>
-    )
-  }
+    </StylesProvider>
+  );
+};
+
+interface RenderPageResult {
+  readonly __renderPageResult: any;
 }
 
-export default Document;
+let renderLock: Promise<RenderPageResult> | null = null;
+
+export default defineDocument(Document, {
+  async prepare({ renderPage }) {
+    console.trace('huh');
+
+    await renderLock;
+    renderLock = renderPage();
+
+    const page = await renderLock;
+
+    return {
+      ...page,
+    };
+  },
+});

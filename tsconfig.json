@@ -1,35 +1,42 @@
 {
+  "extends": "microsite/base",
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
+    "baseUrl": "src",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "inlineSourceMap": true,
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext",
+      "esnext"
     ],
-    "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@/*": [ "./*" ]
+    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5",
-    "tsBuildInfoFile": "./.tsbuildinfo",
+    "target": "es5"
   },
   "exclude": [
-    "node_modules",
+    "node_modules"
+  ],
+  "files": [
+    "./env.d.ts"
   ],
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-  ],
+    "./env.d.ts",
+    "plugins",
+    "snowpack",
+    "src",
+    "typings"
+  ]
 }

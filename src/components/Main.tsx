@@ -1,8 +1,15 @@
-import styled from '@emotion/styled';
+import { ComponentChildren }  from 'preact';
+import { StylesProvider }     from '@/lib/styles';
+import { FullBleedContainer } from './FullBleedContainer';
 
-const Main = styled.main({
-  margin: '1em auto',
-  maxWidth: '50em',
-});
+type MainProps = JSX.IntrinsicElements['div'] & {
+  readonly children?: ComponentChildren;
+}
 
-export default Main;
+export const Main = ({ children }: MainProps) => (
+  <StylesProvider>
+    <FullBleedContainer>
+      { children }
+    </FullBleedContainer>
+  </StylesProvider>
+);

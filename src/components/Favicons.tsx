@@ -1,23 +1,61 @@
-const Favicons = () => (
+export const Favicons = () => (
   <>
     <link
-      rel='apple-touch-icon'
-      sizes='180x180'
-      href='/favicons/apple-touch-icon.png' />
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicons/apple-touch-icon.png?v=ngjrq69M4N"
+    />
     <link
-      rel='icon'
-      type='image/png'
-      sizes='32x32'
-      href='/favicons/favicon-32x32.png' />
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicons/favicon-32x32.png?v=ngjrq69M4N"
+    />
     <link
-      rel='icon'
-      type='image/png'
-      sizes='16x16'
-      href='/favicons/favicon-16x16.png' />
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/favicons/android-chrome-192x192.png?v=ngjrq69M4N"
+    />
     <link
-      rel='manifest'
-      href='/favicons/site.webmanifest' />
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicons/favicon-16x16.png?v=ngjrq69M4N"
+    />
+    <link
+      rel="manifest"
+      href="/favicons/site.webmanifest?v=ngjrq69M4N"
+    />
+    <link
+      rel="mask-icon"
+      href="/favicons/safari-pinned-tab.svg?v=ngjrq69M4N"
+      // @ts-ignore
+      color="#ff0000"
+    />
+    <link
+      rel="shortcut icon"
+      href="/favicons/favicon.ico?v=ngjrq69M4N"
+    />
+    <meta
+      name="apple-mobile-web-app-title"
+      content="Eyelidlessness"
+    />
+    <meta
+      name="application-name"
+      content="Eyelidlessness"
+    />
+    <meta
+      name="msapplication-TileColor"
+      content="#555555"
+    />
+    <meta
+      name="msapplication-config"
+      content="/favicons/browserconfig.xml?v=ngjrq69M4N"
+    />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+    />
   </>
 );
-
-export default Favicons;
