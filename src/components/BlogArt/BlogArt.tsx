@@ -24,12 +24,6 @@ const BlogArtContainer = styled(FullBleedContainer, {
 });
 
 const BlogArtGraphic = styled('svg', {
-  nested: {
-    '&, & > *': {
-      gridColumn: '1 / -1',
-    },
-  },
-
   display:  'block',
   height:   'inherit'/* :   `${INVERSE_RATIO}vw` */,
   position: 'absolute',

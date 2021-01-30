@@ -17,6 +17,7 @@ jobs:
           check-latest: true
       - run: yarn install
       - run: yarn typecheck
+      - run: yarn test
       - run: yarn build
 
       - uses: JamesIves/github-pages-deploy-action@3.6.2
