@@ -38,11 +38,6 @@
     "fsevents": "*"
   },
   "resolutions": {
-    "microsite/postcss-cli/chokidar/fsevents": "^2.3.x",
-    "microsite/preact": "^10.5.10",
-    "microsite/rollup/fsevents": "^2.3.x",
-    "microsite/snowpack/skypack/rollup/fsevents": "^2.3.x",
-    "rollup/fsevents": "^2.3.x",
-    "snowpack/esinstall/rollup/fsevents": "^2.3.x"
+    "microsite/preact": "^10.5.10"
   }
 }
