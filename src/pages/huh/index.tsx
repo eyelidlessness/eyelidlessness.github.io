@@ -8,23 +8,27 @@ import { Head }       from '@/components/Head';
 import { Main }       from '@/components/Main';
 import { Topic }      from '@/lib/content';
 
-const IndexPage = () => {
+const HuhPage = () => {
   return (
     <>
       <Head>
-        <seo.title>Blobby art exhibit temp site | Eyelidlessness</seo.title>
+        <seo.title>Huh | Eyelidlessness</seo.title>
       </Head>
 
       <Main>
         <BlogArtDefs />
         <BlogArt
-          hash="b19a9fc4c8d52b37763e07fb7abd5d7d92c87fc0"
-          topics={[ Topic.TECHNOLOGY ]}
+          hash="681e459feb0081fa8d068d4be66a2ce65d066aa6"
+          topics={[
+            Topic.NEURODIVERGENCE,
+            Topic.MENTAL_ILLNESS,
+            Topic.SUBSTANCE_ABUSE,
+          ]}
         />
-        <p><a href="./huh/">Huh</a></p>
+        <p><a href="./what/">What</a></p>
       </Main>
     </>
   );
 };
 
-export default definePage(IndexPage);
+export default definePage(HuhPage);

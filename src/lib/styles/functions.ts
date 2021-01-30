@@ -13,13 +13,19 @@ export const jsToCSS = (
   Object.entries(js)
     .reduce((acc, [ k, v ]) => (
       typeof v === 'object' && k.includes('&')
+        ? acc
+        : `${acc}${hyphenate(k)}:${v};`
+    ), ''),
+  '}',
+  Object.entries(js)
+    .reduce((acc, [ k, v ]) => (
+      typeof v === 'object' && k.includes('&')
         ? `${acc}${jsToCSS(
           selectors.map((selector) => k.replace(/&/g, selector)),
           v
         )}`
-        : `${acc}${hyphenate(k)}:${v};`
+        : acc
     ), ''),
-  '}'
 ].join(''));
 
 export const clamp = (...args: readonly string[]) => (

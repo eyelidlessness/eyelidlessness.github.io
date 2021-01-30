@@ -46,9 +46,6 @@ const Segment = styled('path', {
   opacity:  0.85,
 });
 
-const SoftVerticalFadeBlobs = styled('use', {
-});
-
 const chunkString = (value: string, length: number): readonly string[] => {
   const pattern = new RegExp(`.{${length}}`, 'g');
 
@@ -193,7 +190,7 @@ export const BlogArt = (props: BlogArtProps) => {
   const {
     className,
     hash,
-    padded             = false,
+    // padded             = false,
     topics: baseTopics = [],
   } = props;
 

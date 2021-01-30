@@ -180,7 +180,7 @@ export const setGlobalStyles = () => {
       margin-bottom: 0;
     }
 
-    ${jsToCSS([ 'a' ], {
+    ${jsToCSS([ 'a', 'a:active', 'a:visited' ], {
       ...theme.links,
       fontWeight: 'bold',
     })}
@@ -209,7 +209,7 @@ export const setGlobalStyles = () => {
 
       ${jsToCSS([ 'pre' ], theme[theme.darkMode].pre)}
 
-      ${jsToCSS([ 'links' ], theme[theme.darkMode].links)}
+      ${jsToCSS([ 'a', 'a:active', 'a:visited' ], theme[theme.darkMode].links)}
 
       ${jsToCSS([ 'aside', 'small' ], theme[theme.darkMode].deemphasize)}
     }

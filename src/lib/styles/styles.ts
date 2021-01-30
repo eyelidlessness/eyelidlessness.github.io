@@ -1,8 +1,6 @@
 import {
   combineRules,
   createRenderer,
-
-  IRenderer,
   TRule,
   TRuleProps,
 } from 'fela';
@@ -19,12 +17,9 @@ import {
   h,
 } from 'preact';
 import {
-  connect,
   createComponent,
-  FelaComponent,
   RendererProvider,
   Style,
-  useFela,
 } from 'preact-fela';
 import hashed             from './hashed';
 
