@@ -13,6 +13,10 @@ const IndexPage = () => {
     <>
       <Head>
         <seo.title>Blobby art exhibit temp site | Eyelidlessness</seo.title>
+        <seo.description>
+          Just a little sneak peak of my personal site and statically
+          generated art project.
+        </seo.description>
       </Head>
 
       <Main>
@@ -21,7 +25,7 @@ const IndexPage = () => {
           hash="b19a9fc4c8d52b37763e07fb7abd5d7d92c87fc0"
           topics={[ Topic.TECHNOLOGY ]}
         />
-        <p><a href="./huh/">Huh</a></p>
+        <p><a href="./huh/" rel="preload">Huh</a></p>
       </Main>
     </>
   );
