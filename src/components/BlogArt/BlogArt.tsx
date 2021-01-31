@@ -46,7 +46,9 @@ const chunkString = (value: string, length: number): readonly string[] => {
   return value.match(pattern) ?? [];
 };
 
-const hexToNumber = (value: string) => parseInt(value, 16);
+const hexToNumber = (value: string) => (
+  parseInt(value, 16)
+);
 
 type SortResult = -1 | 1;
 

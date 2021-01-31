@@ -1,25 +1,31 @@
-import { seo }        from 'microsite/head';
-import { definePage } from 'microsite/page';
+import { seo }         from 'microsite/head';
+import { definePage }  from 'microsite/page';
 import {
   BlogArt,
   BlogArtDefs,
 } from '@/components/BlogArt';
-import { Head }       from '@/components/Head';
-import { Main }       from '@/components/Main';
-import { Topic }      from '@/lib/content';
+import { Head }        from '@/components/Head';
+import { Main }        from '@/components/Main';
+import { Topic }       from '@/lib/content';
+import { getFileHash } from '@/lib/git';
 
-const WelpPage = () => {
+interface WelpPageProps {
+  readonly hash:   string;
+  readonly topics: readonly Topic[];
+}
+
+const WelpPage = ({ hash, topics }: WelpPageProps) => {
   return (
     <>
       <Head>
-        <seo.title>Blobby art exhibit temp site | Eyelidlessness</seo.title>
+        <seo.title>Welp | Eyelidlessness</seo.title>
       </Head>
 
       <Main>
         <BlogArtDefs />
         <BlogArt
-          hash="cb544c93e5b363ba1198a8b9c2f5ab9b97065a1a"
-          topics={[ Topic.LEMON, Topic.ARTS_CRAFTS ]}
+          hash={ hash }
+          topics={ topics }
         />
         <p><a href="/">🏡 HELP</a></p>
       </Main>
@@ -27,4 +33,19 @@ const WelpPage = () => {
   );
 };
 
-export default definePage(WelpPage);
+export default definePage(WelpPage, {
+  async getStaticProps({ path }) {
+    const hash = getFileHash(path);
+    const topics = [
+      Topic.LEMON,
+      Topic.ARTS_CRAFTS,
+    ] as const;
+
+    return {
+      props: {
+        hash,
+        topics,
+      },
+    };
+  },
+});
