@@ -12,24 +12,42 @@ export const jsToCSS = (
   '{',
   Object.entries(js)
     .reduce((acc, [ k, v ]) => (
-      typeof v === 'object' && k.includes('&')
+      typeof v === 'object' && (k === 'nested' || k.includes('&'))
         ? acc
         : `${acc}${hyphenate(k)}:${v};`
     ), ''),
   '}',
   Object.entries(js)
-    .reduce((acc, [ k, v ]) => (
-      typeof v === 'object' && k.includes('&')
-        ? `${acc}${jsToCSS(
-          selectors.map((selector) => k.replace(/&/g, selector)),
-          v
-        )}`
-        : acc
-    ), ''),
+    .map(([ k, v ]) => {
+      if (typeof v === 'object') {
+        if (k === 'nested') {
+          return Object.entries(v).map(([ k, v ]) => {
+            const nestedSelectors = selectors.map((selector) => (
+              k.replace(/&/g, selector)
+            ));
+
+            return jsToCSS(nestedSelectors, v as any);
+          }).join('');
+        }
+        else if (k.includes('&')) {
+          const nestedSelectors = selectors.map((selector) => (
+            k.replace(/&/g, selector)
+          ));
+
+          return jsToCSS(nestedSelectors, v);
+        }
+      }
+
+      return '';
+    }, []).join(''),
 ].join(''));
 
 export const clamp = (...args: readonly string[]) => (
   `clamp(${args.join(',')})`
+);
+
+export const cleanWhitespace = (str: string) => (
+  str.replace(/\s+/g, ' ').trim()
 );
 
 export * from 'polished';

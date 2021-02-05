@@ -3,7 +3,7 @@ import { definePage }  from 'microsite/page';
 import {
   BlogArt,
   BlogArtDefs,
-} from '@/components/BlogArt';
+} from '@/components/Blog';
 import { Head }        from '@/components/Head';
 import { Main }        from '@/components/Main';
 import {

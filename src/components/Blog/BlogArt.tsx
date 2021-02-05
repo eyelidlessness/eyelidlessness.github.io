@@ -7,7 +7,10 @@ import {
   styled,
   theme,
 } from '@/lib/styles';
-import { FullBleedContainer } from '@/components/FullBleedContainer';
+import {
+  fullBleedClassName,
+  FullBleedContainer,
+} from '@/components/FullBleedContainer';
 
 const GOLDEN_RATIO  = 1.6180334;
 const RATIO         = GOLDEN_RATIO * 5;
@@ -16,16 +19,16 @@ const INVERSE_RATIO = 100 / RATIO;
 export const blogArtHeight = clamp('6rem', `${INVERSE_RATIO}vw`, '10rem');
 
 const BlogArtContainer = styled(FullBleedContainer, {
-  gridColumn: '1/-1',
-  height:   blogArtHeight/* :   `${INVERSE_RATIO}vw` */,
-  position: 'relative',
-  width:    '100%',
-  zIndex:   -1,
+  height:       blogArtHeight,
+  marginBottom: '1em',
+  position:     'relative',
+  width:        '100%',
+  zIndex:       -1,
 });
 
 const BlogArtGraphic = styled('svg', {
   display:  'block',
-  height:   'inherit'/* :   `${INVERSE_RATIO}vw` */,
+  height:   'inherit',
   position: 'absolute',
   width:    '100%',
 });
@@ -425,7 +428,11 @@ export const BlogArt = (props: BlogArtProps) => {
 
   return (
     <BlogArtContainer className={ className }>
-      <BlogArtGraphic preserveAspectRatio="none" viewBox={ viewBox.join(' ') }>
+      <BlogArtGraphic
+        className={ fullBleedClassName }
+        preserveAspectRatio="none"
+        viewBox={ viewBox.join(' ') }
+      >
         <defs>
           {/* <linearGradient id="horizontalMidFadeGradient" y2="0" x2="1">
             <stop offset="0"      stopColor="white" stopOpacity="0.25" />

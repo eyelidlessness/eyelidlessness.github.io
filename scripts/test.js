@@ -55,7 +55,7 @@ const runTests = () => {
     minify:    false,
     outdir:    outDir,
     sourcemap: 'inline',
-    tsc:       isWatch,
+    tslint:    isWatch,
     watch:     false,
 
     async onEnd() {
@@ -90,7 +90,7 @@ const runTests = () => {
           ranFromCli: true,
           require: [],
           serial: undefined,
-          snapshotDir: null,
+          snapshotDir: path.resolve(cwd, './snapshots'),
           timeout: '10s',
           updateSnapshots: undefined,
           workerArgv: undefined

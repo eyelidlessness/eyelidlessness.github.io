@@ -1,11 +1,10 @@
 import {
   defineDocument,
   Head,
+  Html,
   Main,
   MicrositeScript,
 } from 'microsite/document';
-import { Body }           from '@/components/Body';
-import { Html }           from '@/components/Html';
 import { StylesProvider } from '@/lib/styles';
 
 const Document = () => {
@@ -13,10 +12,10 @@ const Document = () => {
     <StylesProvider>
       <Html>
         <Head />
-        <Body>
+        <body tabIndex={ -1 }>
           <MicrositeScript />
           <Main />
-        </Body>
+        </body>
       </Html>
     </StylesProvider>
   );

@@ -10,3 +10,4 @@ UserInterfaceState.xcuserstate
 .env
 /.test
 /coverage
+/yarn-error.log

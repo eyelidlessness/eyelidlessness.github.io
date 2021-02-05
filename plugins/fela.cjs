@@ -39,8 +39,13 @@ const pluginFela = () => ({
 
     const { h } = await import('preact');
     const { default: render } = await import('preact-render-to-string');
+    const documentPath = path.resolve(buildDirectory, 'src/pages/_document.js');
 
     for (const pagePath of pages) {
+      if (pagePath === documentPath) {
+        continue;
+      }
+
       /** @type {AnyPage | null} */
       let page = null;
 
@@ -49,7 +54,7 @@ const pluginFela = () => ({
         page = (await import(pagePath)).default;
       }
       catch (error) {
-        console.error(error);
+        console.trace(error);
 
         throw error;
       }
@@ -73,8 +78,15 @@ const pluginFela = () => ({
         ? staticProps.props
         : {};
 
-      // @ts-ignore
-      await render(h(Page, props));
+      try {
+        // @ts-ignore
+        await render(h(Page, props));
+      }
+      catch (error) {
+        console.trace(pagePath, error);
+
+        throw error;
+      }
     }
 
     const stylesPath = path.resolve(buildDirectory, 'src/lib/styles/styles.js');

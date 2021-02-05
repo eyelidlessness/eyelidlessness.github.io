@@ -3,7 +3,7 @@ import { definePage }  from 'microsite/page';
 import {
   BlogArt,
   BlogArtDefs,
-} from '@/components/BlogArt';
+} from '@/components/Blog';
 import { Head }        from '@/components/Head';
 import { Main }        from '@/components/Main';
 import { Topic }       from '@/lib/content';
@@ -27,7 +27,7 @@ const HuhPage = ({ hash, topics }: HuhPageProps) => {
           hash={ hash }
           topics={ topics }
         />
-        <p><a href="./what/">What</a></p>
+        <p><a href="/blog/2021/02/what-the-art/">What</a></p>
       </Main>
     </>
   );

@@ -3,39 +3,39 @@ export const Favicons = () => (
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="/favicons/apple-touch-icon.png?v=ngjrq69M4N"
+      href="/favicons/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="/favicons/favicon-32x32.png?v=ngjrq69M4N"
+      href="/favicons/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="192x192"
-      href="/favicons/android-chrome-192x192.png?v=ngjrq69M4N"
+      href="/favicons/android-chrome-192x192.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="/favicons/favicon-16x16.png?v=ngjrq69M4N"
+      href="/favicons/favicon-16x16.png"
     />
     <link
       rel="manifest"
-      href="/favicons/site.webmanifest?v=ngjrq69M4N"
+      href="/favicons/site.webmanifest"
     />
     <link
       rel="mask-icon"
-      href="/favicons/safari-pinned-tab.svg?v=ngjrq69M4N"
+      href="/favicons/safari-pinned-tab.svg"
       // @ts-ignore
       color="#ff0000"
     />
     <link
       rel="shortcut icon"
-      href="/favicons/favicon.ico?v=ngjrq69M4N"
+      href="/favicons/favicon.ico"
     />
     <meta
       name="apple-mobile-web-app-title"
@@ -51,7 +51,7 @@ export const Favicons = () => (
     />
     <meta
       name="msapplication-config"
-      content="/favicons/browserconfig.xml?v=ngjrq69M4N"
+      content="/favicons/browserconfig.xml"
     />
     <meta
       name="theme-color"
