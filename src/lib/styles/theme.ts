@@ -210,7 +210,7 @@ const topicColorClassNameEntries = [
     }),
   ],
   [
-    Topic.ARTS_CRAFTS,
+    Topic.ART,
     css({
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.ARTS_CRAFTS,
@@ -449,14 +449,14 @@ export const theme = {
 
     siteHeader: {
       pageLinks: {
-        color: 'hsl(336deg, 100%, 95%)',
+        color: '#fff',
 
-        ':active': {
-          color: 'hsl(336deg, 100%, 95%)',
+        '&:active, &:focus, &:hover': {
+          color: '#f9f9f9',
         },
 
         ':visited': {
-          color: 'hsl(336deg, 100%, 95%)',
+          color: '#fff',
         },
       },
     },
@@ -553,14 +553,14 @@ export const theme = {
     columns: siteHeaderColumns,
 
     pageLinks: {
-      color: 'hsl(336deg, 100%, 42%)',
+      color: '#000',
 
-      ':active': {
-        color: 'hsl(336deg, 100%, 42%)',
+      '&:active, &:focus, &:hover': {
+        color: '#0a0a0a',
       },
 
       ':visited': {
-        color: 'hsl(336deg, 100%, 42%)',
+        color: '#000',
       },
     },
   },

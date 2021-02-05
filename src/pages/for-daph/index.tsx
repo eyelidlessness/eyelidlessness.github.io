@@ -12,7 +12,6 @@ import {
   getFileHash,
   getInitialCommitDate,
 } from '@/lib/git';
-import { styled }     from '@/lib/styles';
 
 interface IndexPageProps {
   readonly hash: string;
@@ -20,12 +19,6 @@ interface IndexPageProps {
     readonly created: Date;
   };
 }
-
-const WhatTheArtLink = styled('a', {
-  display:  'inline-block',
-  fontSize: '2em',
-  margin:   '0 auto',
-});
 
 const IndexPage = ({
   hash,
@@ -47,9 +40,7 @@ const IndexPage = ({
         <BlogArtDefs />
         <BlogArt hash={ hash } title={ title } topics={ topics } />
 
-        <WhatTheArtLink href="/blog/2021/02/what-the-art/">
-          What the art...?
-        </WhatTheArtLink>
+        <p><a href="./for-daph/huh/" rel="preload">Huh</a></p>
       </Main>
     </>
   );

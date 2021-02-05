@@ -280,7 +280,10 @@ const renderToken = (token: IThemedToken, themeMatches: RenderThemeMatches): VNo
       }, {})
     }), {})
   }), {}) ?? {};
-  const Component = styled('span', styles);
+
+  const Component = Object.keys(styles).length > 0
+    ? styled('span', styles)
+    : 'span';
 
   if (content.replace(/\s+/, '') === '' || Component == null) {
     return h('span', {}, content);

@@ -6,7 +6,7 @@ export const Topic = {
   [DEFAULT_TOPIC]: DEFAULT_TOPIC,
 
   ABLEISM:         'Ableism',
-  ARTS_CRAFTS:     'Art',
+  ART:             'Art',
   LEMON:           'My puppy',
   MENTAL_ILLNESS:  'Mental illness',
   NEURODIVERGENCE: 'Neurodivergence',

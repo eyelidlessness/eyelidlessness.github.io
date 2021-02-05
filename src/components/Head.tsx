@@ -1,6 +1,7 @@
 import { Head as BaseHead } from 'microsite/head';
 import {
   clamp,
+  cleanWhitespace,
   headingElements,
   jsToCSS,
   setGlobalStyles,
@@ -10,7 +11,7 @@ import { Favicons }         from './Favicons';
 
 setGlobalStyles();
 
-const criticalStyles = `
+const criticalStyles = cleanWhitespace(`
   @font-face {
     font-display: fallback;
     font-family:  Minipax;
@@ -63,7 +64,7 @@ const criticalStyles = `
     -webkit-font-smoothing:  antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-`;
+`);
 
 export const Head = ({
   children,

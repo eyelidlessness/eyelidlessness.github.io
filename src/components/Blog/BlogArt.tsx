@@ -153,6 +153,7 @@ export interface BlogArtProps {
   readonly className?: string;
   readonly hash:       string;
   readonly padded?:    boolean;
+  readonly title:      string;
   readonly topics?:    readonly Topic[];
 }
 
@@ -189,7 +190,7 @@ export const BlogArt = (props: BlogArtProps) => {
   const {
     className,
     hash,
-    // padded             = false,
+    title,
     topics: baseTopics = [],
   } = props;
 
@@ -433,31 +434,17 @@ export const BlogArt = (props: BlogArtProps) => {
         preserveAspectRatio="none"
         viewBox={ viewBox.join(' ') }
       >
+        <title>
+          Generated art for the page or post titled
+          <i>{ title }</i>,
+          with the content or commit hash { hash } {
+            topics.length > 0
+              ? [ ', and the topics: ', topics.map(String).join(', ') ]
+              : null
+          }
+        </title>
+
         <defs>
-          {/* <linearGradient id="horizontalMidFadeGradient" y2="0" x2="1">
-            <stop offset="0"      stopColor="white" stopOpacity="0.25" />
-            <stop offset="0.0125" stopColor="white" stopOpacity="0.25" />
-            <stop offset="0.075"  stopColor="white" stopOpacity=".5" />
-            <stop offset="0.5"    stopColor="white" stopOpacity="1" />
-            <stop offset="0.925"  stopColor="white" stopOpacity=".5" />
-            <stop offset="0.9875" stopColor="white" stopOpacity="0.25" />
-            <stop offset="1"      stopColor="white" stopOpacity="0.25" />
-          </linearGradient>
-
-          <mask id="horizontalMidFade" maskContentUnits="objectBoundingBox">
-            <rect fill="url(#softVerticalFadeGradient)" height="1" width="1" />
-          </mask>
-
-          <linearGradient id="softVerticalFadeGradient" y2="1" x2="0">
-            <stop offset="0"    stopColor="white" stopOpacity="1" />
-            <stop offset="0.25" stopColor="white" stopOpacity=".75" />
-            <stop offset="1"    stopColor="white" stopOpacity="0.35" />
-          </linearGradient>
-
-          <mask id="softVerticalFade" maskContentUnits="objectBoundingBox">
-            <rect fill="url(#softVerticalFadeGradient)" height="1" width="1" />
-          </mask> */}
-
           <filter id={ id('blur') }>
             <feOffset
               in="SourceGraphic"
@@ -469,7 +456,6 @@ export const BlogArt = (props: BlogArtProps) => {
             <feGaussianBlur
               in="glowOffsetOut"
               stdDeviation={ glowSize }
-              transform={ `translate(0, ${yMax * (verticalPadding * 2)})` }
               result="glowBlurOut"
             />
 
@@ -505,7 +491,6 @@ export const BlogArt = (props: BlogArtProps) => {
               result="glowBlurOut"
               in="glowOffsetOut"
               stdDeviation={ glowSize }
-              transform={ `translate(0, ${yMax * (verticalPadding * 2)})` }
             />
           </filter>
 
@@ -521,7 +506,6 @@ export const BlogArt = (props: BlogArtProps) => {
               in="glowOffsetOut"
               result="glowBlurOut"
               stdDeviation={ glowSize }
-              transform={ `translate(0, ${yMax * (verticalPadding * 20)})` }
             />
 
             <feTurbulence

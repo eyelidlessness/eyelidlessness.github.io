@@ -46,7 +46,7 @@ export const BlogPost = ({
 
     <Main as="article">
       <BlogArtDefs />
-      <BlogArt hash={ hash } topics={ topics } />
+      <BlogArt hash={ hash } title={ title } topics={ topics } />
 
       <BlogPostHeading>
         <BlogPostTitle>What the art?</BlogPostTitle>

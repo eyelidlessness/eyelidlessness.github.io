@@ -137,20 +137,8 @@ export const SiteHeader = () => (
 
         <SiteHeaderPagesList>
           <SiteHeaderPagesListItem>
-            <SiteHeaderPageLink href="/huh/">
-              Huh
-            </SiteHeaderPageLink>
-          </SiteHeaderPagesListItem>
-
-          <SiteHeaderPagesListItem>
-            <SiteHeaderPageLink href="/blog/2021/02/what-the-art/">
-              What
-            </SiteHeaderPageLink>
-          </SiteHeaderPagesListItem>
-
-          <SiteHeaderPagesListItem>
-            <SiteHeaderPageLink href="/welp/">
-              Welp
+            <SiteHeaderPageLink href="/blog/">
+              Blog
             </SiteHeaderPageLink>
           </SiteHeaderPagesListItem>
         </SiteHeaderPagesList>

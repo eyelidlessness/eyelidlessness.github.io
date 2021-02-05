@@ -25,6 +25,7 @@ const HuhPage = ({ hash, topics }: HuhPageProps) => {
         <BlogArtDefs />
         <BlogArt
           hash={ hash }
+          title={ 'Huh' }
           topics={ topics }
         />
         <p><a href="/blog/2021/02/what-the-art/">What</a></p>
