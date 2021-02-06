@@ -7,7 +7,10 @@ import {
   styled,
   theme,
 } from '@/lib/styles';
-import { FullBleedContainer } from '@/components/FullBleedContainer';
+import {
+  fullBleedClassName,
+  FullBleedContainer,
+} from '@/components/FullBleedContainer';
 
 const GOLDEN_RATIO  = 1.6180334;
 const RATIO         = GOLDEN_RATIO * 5;
@@ -16,8 +19,7 @@ const INVERSE_RATIO = 100 / RATIO;
 export const blogArtHeight = clamp('6rem', `${INVERSE_RATIO}vw`, '10rem');
 
 const BlogArtContainer = styled(FullBleedContainer, {
-  gridColumn: '1/-1',
-  height:   blogArtHeight/* :   `${INVERSE_RATIO}vw` */,
+  height:   blogArtHeight,
   position: 'relative',
   width:    '100%',
   zIndex:   -1,
@@ -25,7 +27,7 @@ const BlogArtContainer = styled(FullBleedContainer, {
 
 const BlogArtGraphic = styled('svg', {
   display:  'block',
-  height:   'inherit'/* :   `${INVERSE_RATIO}vw` */,
+  height:   'inherit',
   position: 'absolute',
   width:    '100%',
 });
@@ -46,7 +48,9 @@ const chunkString = (value: string, length: number): readonly string[] => {
   return value.match(pattern) ?? [];
 };
 
-const hexToNumber = (value: string) => parseInt(value, 16);
+const hexToNumber = (value: string) => (
+  parseInt(value, 16)
+);
 
 type SortResult = -1 | 1;
 
@@ -148,6 +152,7 @@ export interface BlogArtProps {
   readonly className?: string;
   readonly hash:       string;
   readonly padded?:    boolean;
+  readonly title:      string;
   readonly topics?:    readonly Topic[];
 }
 
@@ -184,7 +189,7 @@ export const BlogArt = (props: BlogArtProps) => {
   const {
     className,
     hash,
-    // padded             = false,
+    title,
     topics: baseTopics = [],
   } = props;
 
@@ -423,32 +428,22 @@ export const BlogArt = (props: BlogArtProps) => {
 
   return (
     <BlogArtContainer className={ className }>
-      <BlogArtGraphic preserveAspectRatio="none" viewBox={ viewBox.join(' ') }>
+      <BlogArtGraphic
+        className={ fullBleedClassName }
+        preserveAspectRatio="none"
+        viewBox={ viewBox.join(' ') }
+      >
+        <title>
+          Generated art for the page or post titled
+          <i>{ title }</i>,
+          with the content or commit hash { hash } {
+            topics.length > 0
+              ? [ ', and the topics: ', topics.map(String).join(', ') ]
+              : null
+          }
+        </title>
+
         <defs>
-          {/* <linearGradient id="horizontalMidFadeGradient" y2="0" x2="1">
-            <stop offset="0"      stopColor="white" stopOpacity="0.25" />
-            <stop offset="0.0125" stopColor="white" stopOpacity="0.25" />
-            <stop offset="0.075"  stopColor="white" stopOpacity=".5" />
-            <stop offset="0.5"    stopColor="white" stopOpacity="1" />
-            <stop offset="0.925"  stopColor="white" stopOpacity=".5" />
-            <stop offset="0.9875" stopColor="white" stopOpacity="0.25" />
-            <stop offset="1"      stopColor="white" stopOpacity="0.25" />
-          </linearGradient>
-
-          <mask id="horizontalMidFade" maskContentUnits="objectBoundingBox">
-            <rect fill="url(#softVerticalFadeGradient)" height="1" width="1" />
-          </mask>
-
-          <linearGradient id="softVerticalFadeGradient" y2="1" x2="0">
-            <stop offset="0"    stopColor="white" stopOpacity="1" />
-            <stop offset="0.25" stopColor="white" stopOpacity=".75" />
-            <stop offset="1"    stopColor="white" stopOpacity="0.35" />
-          </linearGradient>
-
-          <mask id="softVerticalFade" maskContentUnits="objectBoundingBox">
-            <rect fill="url(#softVerticalFadeGradient)" height="1" width="1" />
-          </mask> */}
-
           <filter id={ id('blur') }>
             <feOffset
               in="SourceGraphic"
@@ -460,7 +455,6 @@ export const BlogArt = (props: BlogArtProps) => {
             <feGaussianBlur
               in="glowOffsetOut"
               stdDeviation={ glowSize }
-              transform={ `translate(0, ${yMax * (verticalPadding * 2)})` }
               result="glowBlurOut"
             />
 
@@ -496,7 +490,6 @@ export const BlogArt = (props: BlogArtProps) => {
               result="glowBlurOut"
               in="glowOffsetOut"
               stdDeviation={ glowSize }
-              transform={ `translate(0, ${yMax * (verticalPadding * 2)})` }
             />
           </filter>
 
@@ -512,7 +505,6 @@ export const BlogArt = (props: BlogArtProps) => {
               in="glowOffsetOut"
               result="glowBlurOut"
               stdDeviation={ glowSize }
-              transform={ `translate(0, ${yMax * (verticalPadding * 20)})` }
             />
 
             <feTurbulence

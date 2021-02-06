@@ -11,4 +11,13 @@ declare module 'preact' {
   export type ElementType<P = {}> =
     | CompatibleIntrinsicElement<P>
     | ComponentType<P>;
+
+  namespace JSX {
+    interface HTMLAttributes<RefType extends EventTarget = EventTarget> {
+      datetime?:  string;
+      itemprop?:  string;
+      itemscope?: string;
+      itemtype?:  string;
+    }
+  }
 }

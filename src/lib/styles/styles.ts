@@ -1,6 +1,7 @@
 import {
   combineRules,
   createRenderer,
+  IStyle,
   TRule,
   TRuleProps,
 } from 'fela';
@@ -21,18 +22,22 @@ import hashed             from './hashed';
 
 const _require = module.createRequire(import.meta.url);
 
-const { default: pluginEmbedded } = _require('fela-plugin-embedded');
-const { default: pluginSelectors } = _require('fela-plugin-multiple-selectors');
+const { default: createIdentifier } = _require('fela-identifier');
+const { default: pluginEmbedded }   = _require('fela-plugin-embedded');
+const { default: pluginSelectors }  = _require('fela-plugin-multiple-selectors');
 
 /** @type {import('fela-plugin-typescript')} */
 const { default: pluginTypescript } = _require('fela-plugin-typescript');
 
 const devMode = import.meta.env?.MODE === 'development';
 
+export const identifier = createIdentifier();
+
 export const renderer = createRenderer({
   devMode,
   enhancers: [
     hashed(),
+    identifier,
   ],
   plugins: [
     pluginEmbedded(),
@@ -98,7 +103,7 @@ export const css = Object.assign(baseCSS, {
 // const styledComponentRule = Symbol('rule');
 const styles = Symbol('styles');
 
-type StyledComponent<P> =
+export type StyledComponent<P> =
   & ElementType<P>
   & { readonly [styles]: readonly Style<P>[] };
 
@@ -111,6 +116,11 @@ const isStyledComponent = <P>(
 
 interface StyleableProps {
   className?: string;
+}
+
+interface StyledProps {
+  as?:       ElementType;
+  children?: any;
 }
 
 export const styled = <T extends ElementType<StyleableProps>>(
@@ -147,11 +157,15 @@ export const styled = <T extends ElementType<StyleableProps>>(
       : [ value ]
   );
 
-  const StyledComponent = ({ children, ...rest }: ComponentProps<T> & { children?: any }) => (
+  const StyledComponent = ({
+    as = Component,
+    children,
+    ...rest
+  }: Omit<ComponentProps<T>, keyof StyledProps> & StyledProps) => (
     // @ts-ignore
     h(BaseComponent, {
       ...rest,
-      as: Component,
+      as,
     }, ...toArray(children))
   );
 
@@ -161,3 +175,4 @@ export const styled = <T extends ElementType<StyleableProps>>(
 };
 
 export { combineRules };
+export type { IStyle };

@@ -1,15 +1,31 @@
-import { ComponentChildren }  from 'preact';
-import { StylesProvider }     from '@/lib/styles';
+import {
+  ComponentChildren,
+  ElementType,
+} from 'preact';
+import {
+  styled,
+  StylesProvider,
+} from '@/lib/styles';
 import { FullBleedContainer } from './FullBleedContainer';
+import { SiteHeader }         from './Site';
 
 type MainProps = JSX.IntrinsicElements['div'] & {
+  readonly as?:       ElementType;
   readonly children?: ComponentChildren;
 }
 
-export const Main = ({ children }: MainProps) => (
+const BaseMain = styled(FullBleedContainer, {
+  paddingBottom: '4em',
+});
+
+export const Main = ({
+  as = 'main',
+  children,
+}: MainProps) => (
   <StylesProvider>
-    <FullBleedContainer>
+    <SiteHeader />
+    <BaseMain as={ as }>
       { children }
-    </FullBleedContainer>
+    </BaseMain>
   </StylesProvider>
 );

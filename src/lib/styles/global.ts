@@ -15,7 +15,7 @@ const emphasisElements = [
   'strong',
 ] as const;
 
-const headingElements = [
+export const headingElements = [
   'h1',
   'h2',
   'h3',
@@ -57,43 +57,12 @@ const blockElements = Array.from(new Set([
 
 export const setGlobalStyles = () => {
   css.global(`
-    @font-face {
-      font-family: Minipax;
-      font-style:  normal;
-      font-weight: normal;
-
-      src:
-        local('__Minipax'),
-        url('/fonts/Minipax/regular.woff2') format('woff2'),
-        url('/fonts/Minipax/regular.woff')  format('woff'),
-        url('/fonts/Minipax/regular.ttf')   format('truetype');
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-    }
-
-    *, *:before, *:after {
-      box-sizing: inherit;
-    }
-
     ${blockElements.join(',')} {
       display: block;
     }
 
-    body, p, ol, ul {
+    body, dl, p, ol, ul {
       font-weight: normal;
-    }
-
-    ${headingElements.join(',')} {
-      font-family:   Minipax;
-      font-weight:   normal;
-      line-height:   0.9375;
-      margin-bottom: 1rem;
-      margin-top:    1rem;
-      padding-left:  1rem;
-      text-indent:   -1rem;
     }
 
     ${headingElements.map((el) => `${el} small`).join(',')} {
@@ -161,8 +130,17 @@ export const setGlobalStyles = () => {
       borderRadius: '0.1875rem',
       display:      'inline-block',
       fontSize:     '0.875em',
-      lineHeight:   1,
-      padding:      '0.3125rem 0.375rem 0.125rem',
+      hyphens:      'auto',
+      lineHeight:   '1.5em',
+      overflowWrap: 'break-word',
+      padding:      '0.25rem 0.375rem 0',
+      wordWrap:     'break-word',
+
+      nested: {
+        '&:first-line': {
+          verticalAlign: '-0.5em',
+        },
+      },
     })}
 
     pre code {
@@ -180,9 +158,9 @@ export const setGlobalStyles = () => {
       margin-bottom: 0;
     }
 
-    ${jsToCSS([ 'a', 'a:active', 'a:visited' ], {
+    ${jsToCSS([ 'a' ], {
       ...theme.links,
-      fontWeight: 'bold',
+      fontWeight: 'bolder',
     })}
 
     ${jsToCSS([ 'aside', 'small' ], theme.deemphasize)}
@@ -192,8 +170,16 @@ export const setGlobalStyles = () => {
       max-width: 100%;
     }
 
-    small {
-      font-size: 0.9375em;
+    q {
+      font-style: italic;
+    }
+
+    q::before {
+      content: "“";
+    }
+
+    q::after {
+      content: "”";
     }
 
     sup {
@@ -205,12 +191,20 @@ export const setGlobalStyles = () => {
     }
 
     ${theme.darkMode} {
+      ${jsToCSS([ 'body' ], {
+        ...theme[theme.darkMode].document,
+        ...theme[theme.darkMode].prose,
+      })}
+
+      body, dl, p, ol, ul {
+        font-weight:    300;
+        letter-spacing: 0.2px;
+      }
+
       ${jsToCSS(emphasisElements, theme[theme.darkMode].emphasize)}
-
       ${jsToCSS([ 'pre' ], theme[theme.darkMode].pre)}
-
-      ${jsToCSS([ 'a', 'a:active', 'a:visited' ], theme[theme.darkMode].links)}
-
+      ${jsToCSS([ 'code' ], theme[theme.darkMode].code)}
+      ${jsToCSS([ 'a' ], theme[theme.darkMode].links)}
       ${jsToCSS([ 'aside', 'small' ], theme[theme.darkMode].deemphasize)}
     }
   `);

@@ -1,15 +1,10 @@
 import {
   defineDocument,
-  // Html,
   Head,
-  __HeadContext,
-  __InternalDocContext,
+  Html,
   Main,
   MicrositeScript,
 } from 'microsite/document';
-import { __SeoContext }   from 'microsite/head';
-import { Body }           from '@/components/Body';
-import { Html }           from '@/components/Html';
 import { StylesProvider } from '@/lib/styles';
 
 const Document = () => {
@@ -17,10 +12,10 @@ const Document = () => {
     <StylesProvider>
       <Html>
         <Head />
-        <Body>
+        <body tabIndex={ -1 }>
           <MicrositeScript />
           <Main />
-        </Body>
+        </body>
       </Html>
     </StylesProvider>
   );

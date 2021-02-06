@@ -11,7 +11,13 @@ type ArrayType<T extends ReadonlyArray<any>> =
     ? U
   : never;
 
+type Entries<T> = ReadonlyArray<{
+  [K in keyof T]-?: readonly [ key: K, value: T[K] ];
+}[keyof T]>;
+
 interface ObjectConstructor {
+  entries<T>(o: T): Entries<T>;
+
   fromEntries<K extends PropertyKey, T>(
     entries: Iterable<readonly [ K, T ]>
   ): Record<K, T>;

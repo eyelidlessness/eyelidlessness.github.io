@@ -1,14 +1,16 @@
 // @ts-check
 
+/// <reference path="../typings/preact/index.d.ts" />
+
 /**
- * @typedef {import('preact').ComponentType} ComponentType
- * @typedef {{Component: ComponentType}}     PageDefinition
- * @typedef {ComponentType | PageDefinition} AnyPage
+ * @typedef {import('preact').ElementType} ElementType
+ * @typedef {ReturnType<import('microsite/page').definePage>} PageDefinition
+ * @typedef {ElementType | PageDefinition} AnyPage
  */
 
 /**
  * @param {AnyPage} page
- * @returns {ComponentType}
+ * @returns {ElementType}
  */
 const getPageComponent = (page) => (
   (
@@ -30,23 +32,61 @@ const pluginFela = () => ({
   async optimize({ buildDirectory }) {
     const glob  = require('globby');
     const path  = require('path');
-    const pages = glob.sync(
+
+    let pages = glob.sync(
       path.resolve(buildDirectory, 'src/pages/**/*.js')
     );
 
     const { h } = await import('preact');
     const { default: render } = await import('preact-render-to-string');
+    const documentPath = path.resolve(buildDirectory, 'src/pages/_document.js');
 
     for (const pagePath of pages) {
-      /** @type {{default: AnyPage}} */
-      const {
-        default: page
-      } = (await import(pagePath));
+      if (pagePath === documentPath) {
+        continue;
+      }
 
-      // TODO 2021-01-28: Render the page in case anything is declared dynamically?
+      /** @type {AnyPage | null} */
+      let page = null;
+
+      try {
+        /** @type {{default: AnyPage}} */
+        page = (await import(pagePath)).default;
+      }
+      catch (error) {
+        console.trace(error);
+
+        throw error;
+      }
+
+      if (page == null) {
+        continue;
+      }
 
       const Page = getPageComponent(page);
-      await render(h(Page, {}));
+
+      const staticProps = (
+        (typeof page === 'object' && typeof page.getStaticProps === 'function')
+          ? await page.getStaticProps({
+            params: {},
+            path:   pagePath,
+          })
+          : { props: {} }
+      );
+
+      const props = typeof staticProps === 'object'
+        ? staticProps.props
+        : {};
+
+      try {
+        // @ts-ignore
+        await render(h(Page, props));
+      }
+      catch (error) {
+        console.trace(pagePath, error);
+
+        throw error;
+      }
     }
 
     const stylesPath = path.resolve(buildDirectory, 'src/lib/styles/styles.js');
