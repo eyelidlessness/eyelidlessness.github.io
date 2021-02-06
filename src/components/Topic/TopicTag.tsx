@@ -51,7 +51,7 @@ export const TopicTag = ({
     pathSegment == null ||
     typeof topic != 'string'
   ) {
-    return null;
+    throw new Error(`Unexpected topic: ${String(topic)}`);
   }
 
   const TopicTagOuter = link
