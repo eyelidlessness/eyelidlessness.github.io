@@ -21,7 +21,7 @@ declare module '@mdx-js/mdx' {
         : never;
     };
 
-  interface MDXOptions<
+  export interface MDXOptions<
     RH extends readonly AnyPlugin[],
     RM extends readonly AnyPlugin[]
   > {

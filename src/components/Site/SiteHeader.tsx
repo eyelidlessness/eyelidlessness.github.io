@@ -23,12 +23,13 @@ const BaseSiteHeader = styled('div', {
   padding: '1rem 0',
 });
 
-const wrapMediaQuery = '@media (min-width: 40em)';
+const wrapMediaQuery = '@media (min-width: 0)';
 
 const SiteHeaderNav = styled('nav', {
   nested: {
     [wrapMediaQuery]: {
-      flexFlow:       'row wrap',
+      // flexFlow:       'row wrap',
+      flexFlow:       'row',
       justifyContent: 'space-between',
     },
   },
@@ -135,13 +136,13 @@ export const SiteHeader = () => (
           </SiteHeaderHomeLink>
         </SiteHeaderHomeLinkContainer>
 
-        <SiteHeaderPagesList>
+        { false && <SiteHeaderPagesList>
           <SiteHeaderPagesListItem>
             <SiteHeaderPageLink href="/blog/2021/02/what-the-art/">
               Blog
             </SiteHeaderPageLink>
           </SiteHeaderPagesListItem>
-        </SiteHeaderPagesList>
+        </SiteHeaderPagesList>}
       </SiteHeaderNav>
     </SiteHeaderNavOuter>
   </BaseSiteHeader>

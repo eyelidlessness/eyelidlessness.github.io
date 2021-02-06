@@ -47,8 +47,8 @@ const IndexPage = ({
         <BlogArtDefs />
         <BlogArt hash={ hash } title={ title } topics={ topics } />
 
-        <WhatTheArtLink href="/blog/2021/02/what-the-art/">
-          What the art...?
+        <WhatTheArtLink href="/blog/2021/02/what-the-art-p1-why/">
+          What the art, part 1: Why?
         </WhatTheArtLink>
       </Main>
     </>

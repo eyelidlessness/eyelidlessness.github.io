@@ -12,6 +12,9 @@ const externalEntries = [
   'fela-tools',
   'fela-utils',
   'md5',
+  'remark-mdx',
+  'remark-mdx-to-plain-text',
+  'strip-markdown',
   // 'preact-fela',
   // 'preact-render-to-string',
 ];

@@ -3,5 +3,5 @@ declare module '@silvenon/remark-smartypants' {
 
   const remarkSmartypants: Plugin;
 
-  export default Plugin;
+  export default remarkSmartypants;
 }

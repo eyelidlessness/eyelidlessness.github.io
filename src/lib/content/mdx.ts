@@ -9,6 +9,7 @@ import {
 import remarkSmartypants          from '@silvenon/remark-smartypants'
 import { transform }              from 'buble-jsx-only';
 import dedent                     from 'dedent';
+import module                     from 'module';
 import {
   ElementType,
   Fragment,
@@ -16,6 +17,8 @@ import {
   VNode,
 } from 'preact';
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
+import remarkMDX                  from 'remark-mdx';
+import remarkMDXToPlainText       from 'remark-mdx-to-plain-text';
 import remarkSlug                 from 'remark-slug';
 import { CodeBlock }              from '@/components/CodeBlock';
 import {
@@ -24,15 +27,9 @@ import {
 } from '@/components/Emoji';
 import { syntaxHighlighting }     from './syntax';
 
-interface MDXProps<
-  RH extends readonly AnyPlugin[],
-  RM extends readonly AnyPlugin[]
-> {
-  readonly children?:      VNode;
-  readonly components?:    Readonly<Record<string, ElementType>>;
-  readonly rehypePlugins?: PluginsList<RH>;
-  readonly remarkPlugins?: PluginsList<RM>;
-}
+const _require = module.createRequire(import.meta.url);
+
+const remark = _require('remark');
 
 const Div = ({ className, children, ...rest }: JSX.IntrinsicElements['div']) => (
   className === 'language-id'
@@ -66,6 +63,16 @@ const defaultProps = {
     remarkSmartypants,
   ],
 };
+
+interface MDXProps<
+  RH extends readonly AnyPlugin[],
+  RM extends readonly AnyPlugin[]
+> {
+  readonly children?:      string | VNode;
+  readonly components?:    Readonly<Record<string, ElementType>>;
+  readonly rehypePlugins?: PluginsList<RH>;
+  readonly remarkPlugins?: PluginsList<RM>;
+}
 
 export const MDX = <
   RH extends readonly AnyPlugin[],
@@ -127,17 +134,50 @@ export const MDX = <
   return fn(h, ...values);
 };
 
-export const mdx = (
-  strings:   TemplateStringsArray,
-  ...exprs: Array<any>
+const joinTemplateLiteralStrings = (
+  strings:     TemplateStringsArray,
+  expressions: readonly any[]
 ) => {
   const [ first, ...rest ] = strings;
 
-  const str = exprs.reduce((acc, value, index) => ([
+  return expressions.reduce((acc, value, index) => ([
     ...acc,
     value,
     rest[index],
   ]), [ first ]).join('');
+};
+
+type TemplateTag<T> = (
+  strings:        TemplateStringsArray,
+  ...expressions: readonly any[]
+) => T;
+
+export const mdx: TemplateTag<VNode> = (strings, ...expressions) => {
+  const str = joinTemplateLiteralStrings(strings, expressions);
 
   return h(MDX, {}, str);
 };
+
+const mdxRaw: TemplateTag<string> = (strings, ...expressions) => {
+  const str = dedent(joinTemplateLiteralStrings(strings, expressions)).trim();
+
+  return remark()
+    .use(remarkMDX)
+    .use(remarkMDXToPlainText)
+    .processSync(str)
+    .contents
+    .trim();
+};
+
+export interface MDXDescription {
+  readonly Component: ElementType;
+  readonly raw:       string;
+}
+
+export const mdxDescription: TemplateTag<MDXDescription> = (
+  strings,
+  ...expressions
+) => ({
+  Component: () => mdx(strings, ...expressions),
+  raw:       mdxRaw(strings, ...expressions),
+});
