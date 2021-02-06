@@ -1,19 +1,20 @@
-import { seo }          from 'microsite/head';
-import { VNode }        from 'preact';
-import { Head }         from '@/components/Head';
-import { Main }         from '@/components/Main';
-import { Timestamp }    from '@/components/Timestamp';
-import { TopicTagList } from '@/components/Topic/TopicTagList';
-import { Topic }        from '@/lib/content';
-import { styled }       from '@/lib/styles';
-import { BlogArt }      from './BlogArt';
-import { BlogArtDefs }  from './BlogArtDefs';
+import { seo }                from 'microsite/head';
+import { VNode }              from 'preact';
+import { Head }               from '@/components/Head';
+import { Main }               from '@/components/Main';
+import { Timestamp }          from '@/components/Timestamp';
+import { TopicTagList }       from '@/components/Topic/TopicTagList';
+import { Topic }              from '@/lib/content';
+import { styled }             from '@/lib/styles';
+import { BlogArt }            from './BlogArt';
+import { BlogArtDefs }        from './BlogArtDefs';
+import { FullBleedContainer } from '../FullBleedContainer';
 
 const BlogPostTitle = styled('h1', {
   marginBottom: '0.25rem',
 });
 
-const BlogPostHeading = styled('div', {
+const BlogPostHeading = styled(FullBleedContainer, {
   marginBottom: '1rem',
 });
 
@@ -45,13 +46,13 @@ export const BlogPost = ({
     </Head>
 
     <Main as="article">
-      <BlogArtDefs />
-      <BlogArt hash={ hash } title={ title } topics={ topics } />
-
       <BlogPostHeading>
+        <BlogArtDefs />
+        <BlogArt hash={ hash } title={ title } topics={ topics } />
+
         <BlogPostTitle>What the art?</BlogPostTitle>
-        <Timestamp date={ created } />
-        <TopicTagList link={ true } topics={ topics } />
+        <Timestamp date={ created } itemprop="datePublished" />
+        <TopicTagList link={ false } topics={ topics } />
       </BlogPostHeading>
 
       { children }

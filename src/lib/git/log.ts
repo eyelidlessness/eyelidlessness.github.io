@@ -29,9 +29,11 @@ enum GitFormat {
 }
 
 interface FormattedGitLogDataOptions {
+  readonly branch?: string;
   readonly filter?: GitFilter;
   readonly format:  string;
   readonly path?:   string;
+  readonly remote?: string;
 }
 
 type FormattedGitLogData<T extends GitFilter> =
@@ -39,13 +41,18 @@ type FormattedGitLogData<T extends GitFilter> =
     ? string
   : string[];
 
+const DEFAULT_REMOTE_REF = 'origin';
+const DEFAULT_BRANCH_REF = 'main';
+
 export const getFormattedGitLogData = <T extends GitFilter = GitFilter.FIRST>(
   options: FormattedGitLogDataOptions
 ) => {
   const {
+    branch = DEFAULT_BRANCH_REF,
     filter = GitFilter.FIRST,
     format,
-    path = cwd,
+    path   = cwd,
+    remote = DEFAULT_REMOTE_REF,
   } = options;
   const {
     error,
@@ -53,7 +60,9 @@ export const getFormattedGitLogData = <T extends GitFilter = GitFilter.FIRST>(
   } = childProcess.spawnSync('git', [
     'log',
     filter,
+    `--branches=${branch}`,
     `--format=${format}`,
+    `--remotes=${remote}`,
     '--',
     path
   ]);

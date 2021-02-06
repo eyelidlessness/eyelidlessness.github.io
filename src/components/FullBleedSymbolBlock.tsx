@@ -6,6 +6,37 @@ import {
 import { styled }             from '@/lib/styles';
 import { FullBleedContainer } from './FullBleedContainer';
 
+const BaseOuterContainer = styled(FullBleedContainer, {
+  margin:   '1rem 0 2rem',
+  maxWidth: '100%',
+  padding:  0,
+  width:    'auto',
+});
+
+const BaseInnerContainer = styled('div', {
+  alignContent: 'flex-start',
+  alignItems:   'flex-start',
+  display:      'flex',
+  gridColumn:   '2 / 5',
+});
+
+const Symbol = styled('div', {
+  flexGrow:   0,
+  fontSize:   '9em',
+  height:     0,
+  lineHeight: '3.5rem',
+  overflow:   'visible',
+  textAlign:  'center',
+  transform:  'rotate(-6.5deg)',
+  userSelect: 'none',
+  width:      '3.75rem',
+});
+
+const Content = styled('div', {
+  flexGrow: 1,
+  padding:  '1rem 0.75rem',
+});
+
 type ContainerElement =
   | 'address'
   | 'article'
@@ -52,37 +83,6 @@ interface FullBleedSymbolBlockProps<
   symbol:               string;
   SymbolContainer?:     S;
 }
-
-const BaseOuterContainer = styled(FullBleedContainer, {
-  margin:   '1rem 0 2rem',
-  maxWidth: '100%',
-  padding:  0,
-  width:    'auto',
-});
-
-const BaseInnerContainer = styled('div', {
-  alignContent: 'flex-start',
-  alignItems:   'flex-start',
-  display:      'flex',
-  gridColumn:   '2 / 5',
-});
-
-const Symbol = styled('div', {
-  flexGrow:   0,
-  fontSize:   '9em',
-  height:     0,
-  lineHeight: '3.5rem',
-  overflow:   'visible',
-  textAlign:  'center',
-  transform:  'rotate(-6.5deg)',
-  userSelect: 'none',
-  width:      '3.75rem',
-});
-
-const Content = styled('div', {
-  flexGrow: 1,
-  padding:  '1rem 0.75rem',
-});
 
 const FullBleedSymbolBlock = <
   O extends FullBleedSymbolBlockComponent,

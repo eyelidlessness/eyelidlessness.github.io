@@ -130,8 +130,11 @@ export const setGlobalStyles = () => {
       borderRadius: '0.1875rem',
       display:      'inline-block',
       fontSize:     '0.875em',
+      hyphens:      'auto',
       lineHeight:   1,
+      overflowWrap: 'break-word',
       padding:      '0.3125rem 0.375rem 0.125rem',
+      wordWrap:     'break-word',
     })}
 
     pre code {
@@ -159,6 +162,18 @@ export const setGlobalStyles = () => {
     img {
       height:    auto;
       max-width: 100%;
+    }
+
+    q {
+      font-style: italic;
+    }
+
+    q::before {
+      content: "“";
+    }
+
+    q::after {
+      content: "”";
     }
 
     sup {

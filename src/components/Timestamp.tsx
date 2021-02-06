@@ -1,3 +1,4 @@
+import { ComponentProps } from 'preact';
 import {
   styled,
   theme,
@@ -28,15 +29,12 @@ const Time = styled('time', {
   ...theme.deemphasize,
 });
 
-interface TimestampProps {
-  readonly date: Date;
-}
+type TimestampProps =
+  & ComponentProps<typeof Time>
+  & { readonly date: Date }
 
-export const Timestamp = ({ date }: TimestampProps) => (
-  <Time
-    // @ts-expect-error: Preact is just wrong about this.
-    datetime={ date.toISOString() }
-  >
+export const Timestamp = ({ date, ...rest }: TimestampProps) => (
+  <Time { ...rest } datetime={ date.toISOString() }>
     { date.getDate() } { months[date.getMonth() + 1] } { date.getFullYear() }
   </Time>
 );

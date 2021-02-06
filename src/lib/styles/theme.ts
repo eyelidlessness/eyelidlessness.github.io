@@ -312,23 +312,29 @@ export const theme = {
 
   baseFontSizeRange,
   darkMode,
-  // aside: {
-  //   backgroundColor: 'hsl(53deg, 81%, 96%)',
-  //   color:           'hsl(212deg, 10%, 35%)',
 
-  //   'h1, h2, h3, h4, h5, h6': {
-  //     color: 'hsl(53deg, 13%, 26%)',
-  //   },
+  aside: {
+    backgroundColor: 'hsl(53deg, 81%, 96%)',
+    color:           'hsl(212deg, 10%, 35%)',
 
-  //   [darkMode]: {
-  //     backgroundColor: 'hsl(130deg,21%,14%)',
-  //     color:           'hsl(212deg, 3%, 80%)',
+    nested: {
+      '& > h1': {
+        color: 'hsl(53deg, 13%, 26%)',
+      },
 
-  //     'h1, h2, h3, h4, h5, h6': {
-  //       color: 'hsl(130deg, 6%, 90%)',
-  //     },
-  //   },
-  // },
+      [darkMode]: {
+        backgroundColor: 'hsl(130deg,21%,14%)',
+        color:           'hsl(212deg, 3%, 80%)',
+
+        nested: {
+          '& > h1': {
+            color: 'hsl(130deg, 6%, 90%)',
+          },
+        },
+      },
+    },
+
+  },
 
   // blog: {
   //   listing: {
@@ -431,7 +437,7 @@ export const theme = {
         color: 'hsl(205deg, 76%, 70%)',
       },
 
-      '&, &:active, &:visited': {
+      '&, &:active, &:visited, & code': {
         color:               'hsl(205deg, 56%, 70%)',
         textDecorationColor: 'hsla(205deg, 56%, 70%, 50%)',
       },
@@ -512,8 +518,10 @@ export const theme = {
       textDecorationColor: 'initial',
     },
 
-    color:               'hsl(205deg, 86%, 31%)',
-    textDecorationColor: 'hsla(205deg, 86%, 31%, 50%)',
+    '&, & code': {
+      color:               'hsl(205deg, 86%, 31%)',
+      textDecorationColor: 'hsla(205deg, 86%, 31%, 50%)',
+    },
   },
 
   mainGridColumns,

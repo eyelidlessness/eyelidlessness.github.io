@@ -19,11 +19,10 @@ const INVERSE_RATIO = 100 / RATIO;
 export const blogArtHeight = clamp('6rem', `${INVERSE_RATIO}vw`, '10rem');
 
 const BlogArtContainer = styled(FullBleedContainer, {
-  height:       blogArtHeight,
-  marginBottom: '1em',
-  position:     'relative',
-  width:        '100%',
-  zIndex:       -1,
+  height:   blogArtHeight,
+  position: 'relative',
+  width:    '100%',
+  zIndex:   -1,
 });
 
 const BlogArtGraphic = styled('svg', {

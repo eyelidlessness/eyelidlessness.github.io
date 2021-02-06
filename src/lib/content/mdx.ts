@@ -6,16 +6,23 @@ import {
   mdx as h,
   MDXProvider,
 } from '@mdx-js/preact';
-import { transform }          from 'buble-jsx-only';
-import dedent                 from 'dedent';
+import remarkSmartypants          from '@silvenon/remark-smartypants'
+import { transform }              from 'buble-jsx-only';
+import dedent                     from 'dedent';
 import {
   ElementType,
   Fragment,
   toChildArray,
   VNode,
 } from 'preact';
-import { CodeBlock }          from '@/components/CodeBlock';
-import { syntaxHighlighting } from './syntax';
+import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
+import remarkSlug                 from 'remark-slug';
+import { CodeBlock }              from '@/components/CodeBlock';
+import {
+  Emoji,
+  isEmojiProps,
+} from '@/components/Emoji';
+import { syntaxHighlighting }     from './syntax';
 
 interface MDXProps<
   RH extends readonly AnyPlugin[],
@@ -38,14 +45,25 @@ const Div = ({ className, children, ...rest }: JSX.IntrinsicElements['div']) => 
     }, ...toChildArray(children))
 );
 
+const Span = ({ children, ...props }: JSX.IntrinsicElements['span']) => (
+  isEmojiProps(props, children)
+    ? h(Emoji, props, children)
+    : h('span' as any, props, children)
+);
+
 const defaultProps = {
   components:    {
-    div: Div,
-    pre: CodeBlock,
+    div:  Div,
+    pre:  CodeBlock,
+    span: Span,
   },
-  rehypePlugins: [],
+  rehypePlugins: [
+    rehypeAccessibleEmojis,
+  ],
   remarkPlugins: [
     syntaxHighlighting,
+    remarkSlug,
+    remarkSmartypants,
   ],
 };
 
@@ -56,7 +74,7 @@ export const MDX = <
   const {
     children:      baseChildren      = h(() => null, {}),
     components:    baseComponents    = {},
-    rehypePlugins: baseRehypePlugins = [] as any as PluginsList<RH>,
+    rehypePlugins: baseRehypePlugins = [] ,
     remarkPlugins: baseRemarkPlugins = [],
   } = props;
 
