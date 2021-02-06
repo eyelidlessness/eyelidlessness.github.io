@@ -131,10 +131,16 @@ export const setGlobalStyles = () => {
       display:      'inline-block',
       fontSize:     '0.875em',
       hyphens:      'auto',
-      lineHeight:   1,
+      lineHeight:   '1.5em',
       overflowWrap: 'break-word',
-      padding:      '0.3125rem 0.375rem 0.125rem',
+      padding:      '0.25rem 0.375rem 0',
       wordWrap:     'break-word',
+
+      nested: {
+        '&:first-line': {
+          verticalAlign: '-0.5em',
+        },
+      },
     })}
 
     pre code {
