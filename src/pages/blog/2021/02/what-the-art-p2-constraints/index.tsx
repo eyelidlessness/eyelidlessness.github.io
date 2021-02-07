@@ -1,52 +1,21 @@
-import fs             from 'fs';
 import { definePage } from 'microsite/page';
-import { BlogPost }   from '@/components/Blog';
+import {
+  BlogPost,
+  BlogPostProps,
+  getBlogPostStaticProps,
+} from '@/components/Blog';
 import {
   mdx,
-  mdxDescription,
   Topic,
 } from '@/lib/content';
-import {
-  getFileHash,
-  getInitialCommitDate,
-} from '@/lib/git';
-
-interface WhatTheArtPostProps {
-  readonly hash: string;
-  readonly path: string;
-  readonly stat: {
-    readonly created: Date;
-  };
-  readonly title:  string;
-  readonly topics: readonly Topic[];
-}
 
 const fragmentURL = (path: string, fragment: string) => (
   `./${path.replace(/\/index$/, '/')}#${fragment}`
 );
 
-const WhatTheArtPost = ({
-  hash,
-  path,
-  stat,
-  title,
-  topics,
-}: WhatTheArtPostProps) => {
+const WhatTheArtPost = (props: BlogPostProps) => {
   return (
-    <BlogPost
-      description={mdxDescription`
-        Today is the day! I'm finally ready to share a project I've
-        been working on. A labor of love. It's been a long time
-        coming—about four months! I've shared some details with
-        some close friends and family, but mostly been pretty
-        tight-lipped about it <small>other than a slightly premature
-        post teasing it on social media… 🙃</small> until now.
-      `}
-      hash={ hash }
-      stat={ stat }
-      title={ title }
-      topics={ topics }
-    >
+    <BlogPost { ...props }>
       {mdx`
         Previous: [What the art, part 1: Why?](/blog/2021/02/what-the-art-p1-why/)
 
@@ -79,7 +48,7 @@ const WhatTheArtPost = ({
         Since every commit to a Git repository has a unique hash,
         I'm able to use a hash associated with a commit of each
         post to guarantee its uniqueness. For instance, this
-        post's unique commit hash is \`${ hash }\`.
+        post's unique commit hash is \`${ props.hash }\`.
 
         ## Cohesiveness
 
@@ -123,7 +92,7 @@ const WhatTheArtPost = ({
            the outcome.
 
         [3]: https://en.wikipedia.org/wiki/SHA-1
-        [4]: ${fragmentURL(path, 'evolution')}
+        [4]: ${fragmentURL(props.path, 'evolution')}
 
         ## Evolution
 
@@ -151,28 +120,27 @@ const WhatTheArtPost = ({
 };
 
 export default definePage(WhatTheArtPost, {
-  async getStaticProps({ path }) {
-    const hash = getFileHash(path);
-    const stat = {
-      created: (
-        getInitialCommitDate(path) ??
-        fs.statSync(import.meta.url.replace(/^file:(\/\/)?/, '')).ctime
-      ),
-    };
-    const title =  'What the art, part 2: Constraints';
-    const topics = [
+  async getStaticProps(context) {
+    const props = await getBlogPostStaticProps({
+      ...context,
+
+      description: mdx`
+        Today is the day! I'm finally ready to share a project I've
+        been working on. A labor of love. It's been a long time
+        coming—about four months! I've shared some details with
+        some close friends and family, but mostly been pretty
+        tight-lipped about it <small>other than a slightly premature
+        post teasing it on social media… 🙃</small> until now.
+      `,
+
+      title: 'What the art, part 2: Constraints',
+
+      topics: [
       Topic.ART,
       Topic.TECHNOLOGY,
-    ];
+      ],
+    });
 
-    return {
-      props: {
-        hash,
-        path,
-        stat,
-        title,
-        topics,
-      },
-    };
+    return { props };
   },
 });

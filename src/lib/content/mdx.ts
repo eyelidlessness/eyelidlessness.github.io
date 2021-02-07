@@ -25,6 +25,7 @@ import {
   Emoji,
   isEmojiProps,
 } from '@/components/Emoji';
+import { StylesProvider }         from '@/lib/styles';
 import { syntaxHighlighting }     from './syntax';
 
 const _require = module.createRequire(import.meta.url);
@@ -155,10 +156,12 @@ type TemplateTag<T> = (
 export const mdx: TemplateTag<VNode> = (strings, ...expressions) => {
   const str = joinTemplateLiteralStrings(strings, expressions);
 
-  return h(MDX, {}, str);
+  return h(StylesProvider, {},
+    h(MDX, {}, str)
+  );
 };
 
-const mdxRaw: TemplateTag<string> = (strings, ...expressions) => {
+export const mdxRaw: TemplateTag<string> = (strings, ...expressions) => {
   const str = dedent(joinTemplateLiteralStrings(strings, expressions)).trim();
 
   return remark()
@@ -168,16 +171,3 @@ const mdxRaw: TemplateTag<string> = (strings, ...expressions) => {
     .contents
     .trim();
 };
-
-export interface MDXDescription {
-  readonly Component: ElementType;
-  readonly raw:       string;
-}
-
-export const mdxDescription: TemplateTag<MDXDescription> = (
-  strings,
-  ...expressions
-) => ({
-  Component: () => mdx(strings, ...expressions),
-  raw:       mdxRaw(strings, ...expressions),
-});

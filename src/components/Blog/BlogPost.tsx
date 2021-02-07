@@ -1,14 +1,22 @@
+import fs                      from 'fs';
 import { seo }                 from 'microsite/head';
+import { PathParams }          from 'microsite/page';
+import { StaticPropsContext }  from 'microsite/utils/router';
 import { ComponentChildren }   from 'preact';
+import { renderToString }      from 'preact-render-to-string';
 import { FullBleedContainer }  from '@/components/FullBleedContainer';
 import { Head }                from '@/components/Head';
 import { Main }                from '@/components/Main';
 import { Timestamp }           from '@/components/Timestamp';
 import { TopicTagList }        from '@/components/Topic/TopicTagList';
 import {
-  MDXDescription,
+  mdxRaw,
   Topic,
 } from '@/lib/content';
+import {
+  getFileHash,
+  getInitialCommitDate,
+} from '@/lib/git';
 import { styled }              from '@/lib/styles';
 import { BlogArt }             from './BlogArt';
 import { BlogArtDefs }         from './BlogArtDefs';
@@ -22,23 +30,28 @@ const BlogPostHeading = styled(FullBleedContainer, {
   marginBottom: '1rem',
 });
 
-interface BlogPostProps {
-  readonly children?:   ComponentChildren;
-  readonly description: MDXDescription;
-  readonly hash:        string;
-  readonly stat: {
-    readonly created: Date;
-  };
-  readonly title:       string;
-  readonly topics:      readonly Topic[];
+export interface BlogPostDescription {
+  readonly description:    ComponentChildren;
+  readonly descriptionRaw: string;
+}
+
+interface BlogPostFileStat {
+  readonly created: Date;
+}
+
+export interface BlogPostProps extends BlogPostDescription {
+  readonly children?: ComponentChildren;
+  readonly hash:      string;
+  readonly path:      string;
+  readonly stat:      BlogPostFileStat;
+  readonly title:     string;
+  readonly topics:    readonly Topic[];
 }
 
 export const BlogPost = ({
   children,
-  description: {
-    Component: Description,
-    raw:       description,
-  },
+  description,
+  descriptionRaw,
   hash,
   stat: { created },
   title,
@@ -48,7 +61,7 @@ export const BlogPost = ({
     <Head>
       <seo.title>{ title } | Eyelidlessness</seo.title>
       <seo.description>
-        { description }
+        { descriptionRaw }
       </seo.description>
     </Head>
 
@@ -62,11 +75,58 @@ export const BlogPost = ({
         <TopicTagList link={ false } topics={ topics } />
       </BlogPostHeading>
 
-      <BlogPostDescription>
-        <Description />
-      </BlogPostDescription>
+      <BlogPostDescription>{ description }</BlogPostDescription>
 
       { children }
     </Main>
   </>
 );
+
+type AnyBlogPostProps<Path extends string> =
+  & PathParams<Path>
+  & Partial<Omit<BlogPostProps, 'children' | 'stat'>>
+  & {
+    readonly stat?: Partial<BlogPostFileStat>;
+  };
+
+interface DefineBlogPostOptions<
+  Path extends string,
+  P    extends AnyBlogPostProps<Path>
+> extends Omit<StaticPropsContext<P>, 'params'> {
+  readonly description: ComponentChildren;
+  readonly title:       string;
+  readonly topics:      readonly Topic[];
+}
+
+export const getBlogPostStaticProps = <
+  Path extends string,
+  P    extends AnyBlogPostProps<Path>
+>(options: DefineBlogPostOptions<Path, P>) => {
+  const {
+    description,
+    path,
+    title,
+    topics
+  } = options;
+
+  const descriptionRaw = mdxRaw`${renderToString(
+    <>{ description }</>
+  )}`;
+  const hash = getFileHash(path);
+  const stat = {
+    created: (
+      getInitialCommitDate(path) ??
+      fs.statSync(import.meta.url.replace(/^file:(\/\/)?/, '')).ctime
+    ),
+  };
+
+  return {
+    description,
+    descriptionRaw,
+    hash,
+    path,
+    stat,
+    title,
+    topics,
+  };
+};
