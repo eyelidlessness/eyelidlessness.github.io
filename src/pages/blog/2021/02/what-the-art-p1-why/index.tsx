@@ -87,7 +87,7 @@ const WhatTheArtPost = ({
         I've never had a tech blog, or much public tech presence.
         And while I want this site to _mostly_ focus on tech, I
         also had begun writing a disclaimer that I may post on
-        other topics, some of which can be challenging. Both Because
+        other topics, some of which can be challenging. Both because
         this is **my blog** after all, and because there are many
         important, challenging things to talk about that intersect
         with tech. Basically a site-wide content warning.
