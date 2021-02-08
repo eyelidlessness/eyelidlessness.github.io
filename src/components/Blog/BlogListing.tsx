@@ -34,6 +34,7 @@ const groupByYear = (posts: readonly BlogPostProps[]) => (
 
 
 const BlogArticleList = styled(FullBleedContainer, {
+  marginTop:   '1.5rem',
   paddingLeft: 0,
 
   nested: {
@@ -43,24 +44,17 @@ const BlogArticleList = styled(FullBleedContainer, {
   },
 });
 
-const baseArtClassName = css({
-  top: '1rem',
-});
-
 const BlogArticleListItem = styled(FullBleedContainer, {
-  margin:    '0 0 1.5rem',
+  ...theme.blog.listing.item,
+
   minHeight: blogArtHeight,
-  padding:   '1rem 0 1.5rem',
-  position:  'relative',
+  outlineStyle: 'solid',
+  outlineWidth: '1px',
+  padding:      '1rem 0 1.5rem',
+  position:     'relative',
 
   nested: {
-    '&:first-child': {
-      paddingTop: 0,
-    },
-
-    [`&:first-child .${baseArtClassName}`]: {
-      top: 0,
-    },
+    ...theme.blog.listing.item.nested,
 
     '&:last-child': {
       marginBottom: 0,
@@ -178,7 +172,6 @@ export const BlogListing = ({
                 <ListItem key={ path }>
                   <BlogPageArticleLink as={ 'a' } href={ path }>
                     <BlogPageArticleArt
-                      className={ baseArtClassName }
                       hash={ hash }
                       padded={ true }
                       title={ title }

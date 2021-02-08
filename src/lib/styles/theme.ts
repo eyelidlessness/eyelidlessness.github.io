@@ -353,8 +353,19 @@ export const theme = {
         },
       },
 
+      item: {
+        outlineColor: 'rgba(0, 0, 0, 0.1)',
+
+        nested: {
+          [darkMode]: {
+            outlineColor: '#000',
+          },
+        },
+      },
+
       itemAlt: {
         backgroundColor: 'hsl(192deg, 45%, 96%)',
+        outlineColor:    'rgba(0, 0, 0, 0.15)',
 
         nested: {
           [`& .${blogListingDescriptionIdentifier}`]: {
@@ -369,6 +380,7 @@ export const theme = {
 
           [darkMode]: {
             backgroundColor: 'hsl(192deg, 45%, 3%)',
+            outlineColor:    '#000',
           },
         },
       },
