@@ -1,4 +1,5 @@
 import {
+  ComponentChildren,
   ComponentProps,
   ComponentType,
   VNode,
@@ -60,9 +61,13 @@ type ContainerElement =
   | 'pre'
   | 'section';
 
+interface FullBleedSymbolBlockComponentProps {
+  readonly children?: ComponentChildren;
+}
+
 type FullBleedSymbolBlockComponent =
   | ContainerElement
-  | ComponentType;
+  | ComponentType<FullBleedSymbolBlockComponentProps>;
 
 type PropsOf<T extends FullBleedSymbolBlockComponent> =
   T extends ContainerElement ?
@@ -84,6 +89,37 @@ interface FullBleedSymbolBlockProps<
   SymbolContainer?:     S;
 }
 
+const FullBleedSymbolBlockDiv: FullBleedSymbolBlockComponent = 'div';
+
+const defaultProps = {
+  ContentContainer: FullBleedSymbolBlockDiv,
+  InnerContainer:   BaseInnerContainer,
+  OuterContainer:   FullBleedSymbolBlockDiv,
+  SymbolContainer:  FullBleedSymbolBlockDiv,
+} as const;
+
+type PropsWithDefaults =
+  & Omit<
+    FullBleedSymbolBlockProps<any, any, any, any>,
+    (
+      | 'ContentContainer'
+      | 'InnerContainer'
+      | 'OuterContainer'
+      | 'SymbolContainer'
+    )
+  >
+  & Required<
+    Pick<
+      FullBleedSymbolBlockProps<any, any, any, any>,
+      (
+        | 'ContentContainer'
+        | 'InnerContainer'
+        | 'OuterContainer'
+        | 'SymbolContainer'
+      )
+    >
+  >;
+
 const FullBleedSymbolBlock = <
   O extends FullBleedSymbolBlockComponent,
   I extends FullBleedSymbolBlockComponent,
@@ -92,19 +128,19 @@ const FullBleedSymbolBlock = <
 >(props: FullBleedSymbolBlockProps<O, I, C, S>) => {
   const {
     children,
-    ContentContainer    = 'div',
-    InnerContainer      = BaseInnerContainer,
-    OuterContainer      = 'div',
-    outerContainerProps = {},
+    ContentContainer,
+    InnerContainer,
+    OuterContainer,
+    outerContainerProps,
     symbol,
-    SymbolContainer    = 'div',
-  } = props;
+    SymbolContainer,
+  } = {
+    ...defaultProps,
+    ...props,
+  } as PropsWithDefaults;
 
   return (
-    <BaseOuterContainer
-      as={ OuterContainer }
-      { ...outerContainerProps }
-    >
+    <BaseOuterContainer as={ OuterContainer } { ...outerContainerProps }>
       <BaseInnerContainer as={ InnerContainer }>
         <Symbol as={ SymbolContainer } role="presentation">
           { symbol }

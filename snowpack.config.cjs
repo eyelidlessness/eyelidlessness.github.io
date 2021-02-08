@@ -11,6 +11,7 @@ const externalEntries = [
   'fela',
   'fela-tools',
   'fela-utils',
+  'globby',
   'md5',
   'remark-mdx',
   'remark-mdx-to-plain-text',

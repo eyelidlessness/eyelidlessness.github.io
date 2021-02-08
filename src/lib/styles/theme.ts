@@ -307,6 +307,8 @@ export const topicColorClassNames = Object.fromEntries<TopicThemeKey, string>(
   topicColorClassNameEntries
 );
 
+const blogListingDescriptionIdentifier = identifier();
+
 export const theme = {
   HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME,
 
@@ -336,37 +338,78 @@ export const theme = {
 
   },
 
-  // blog: {
-  //   listing: {
-  //     linkTextContent: {
-  //       backgroundColor: 'rgba(255, 255, 255, 0.75)',
+  blog: {
+    listing: {
+      descriptionIdentifier: blogListingDescriptionIdentifier,
 
-  //       [darkMode]: {
-  //         backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  //       },
-  //     },
+      description: {
+        color:    'hsl(212deg, 10%, 35%)',
+        fontSize: '0.9375em',
 
-  //     linkTitle: {
-  //       '&, &:hover': {
-  //         color: '#000',
-  //       },
+        nested: {
+          [darkMode]: {
+            color: 'hsl(212deg, 10%, 75%)',
+          },
+        },
+      },
 
-  //       [darkMode]: {
-  //         '&, &:hover': {
-  //           color: '#fff',
-  //         },
-  //       },
-  //     },
-  //   },
+      itemAlt: {
+        backgroundColor: 'hsl(192deg, 45%, 96%)',
 
-  //   timestamp: {
-  //     color: 'hsl(212deg, 10%, 25%)',
+        nested: {
+          [`& .${blogListingDescriptionIdentifier}`]: {
+            color:    'hsl(212deg, 10%, 20%)',
 
-  //     [darkMode]: {
-  //       color: 'hsl(212deg, 10%, 85%)',
-  //     },
-  //   },
-  // },
+            nested: {
+              [darkMode]: {
+                color: 'hsl(212deg, 10%, 90%)',
+              },
+            },
+          },
+
+          [darkMode]: {
+            backgroundColor: 'hsl(192deg, 45%, 3%)',
+          },
+        },
+      },
+
+      linkTextContent: {
+        backgroundColor: 'rgba(255, 255, 255, 0.75)',
+
+        nested: {
+          [darkMode]: {
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          },
+        },
+      },
+
+      linkTitle: {
+        color: '#000',
+
+        nested: {
+          ':hover': {
+            color: '#000',
+          },
+
+          [darkMode]: {
+            color: '#fff',
+
+            ':hover': {
+              color: '#fff',
+            },
+          },
+        },
+      },
+    },
+
+    // timestamp: {
+    //   color: 'hsl(212deg, 10%, 25%)',
+
+    //   [darkMode]: {
+    //     color: 'hsl(212deg, 10%, 85%)',
+    //   },
+    // },
+  },
 
   // details: {
   //   borderColor: 'hsl(240deg, 8%, 95%)',
@@ -407,7 +450,6 @@ export const theme = {
 
   emphasize: {
     color: '#000',
-
   },
 
   firstLastMarginZeroElements,

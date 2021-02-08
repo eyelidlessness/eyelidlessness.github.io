@@ -5,11 +5,6 @@ import {
 import { styled }   from '@/lib/styles';
 import { TopicTag } from './TopicTag';
 
-interface TopicTagListProps {
-  readonly link?:      boolean;
-  readonly topics:     readonly TopicLike[];
-}
-
 const StyledTopicTagList = styled('ul', {
   nested: {
     '&, & > li': {
@@ -39,11 +34,18 @@ const TopicTagListItem = styled('li', {
   flexShrink: 0,
 });
 
+interface TopicTagListProps {
+  readonly className?: string;
+  readonly link?:      boolean;
+  readonly topics:     readonly TopicLike[];
+}
+
 export const TopicTagList = ({
+  className,
   link = true,
   topics,
 }: TopicTagListProps) => (
-  <StyledTopicTagList>
+  <StyledTopicTagList className={ className }>
     { topics.map((topic) => {
       return (
         typeof topic === 'string'

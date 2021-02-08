@@ -14,7 +14,7 @@ import {
   Topic,
 } from '@/lib/content';
 import {
-  getFileHash,
+  getInitialFileHash,
   getInitialCommitDate,
 } from '@/lib/git';
 import { styled }              from '@/lib/styles';
@@ -112,7 +112,7 @@ export const getBlogPostStaticProps = <
   const descriptionRaw = mdxRaw`${renderToString(
     <>{ description }</>
   )}`;
-  const hash = getFileHash(path);
+  const hash = getInitialFileHash(path);
   const stat = {
     created: (
       getInitialCommitDate(path) ??
