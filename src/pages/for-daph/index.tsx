@@ -9,7 +9,7 @@ import { Head }       from '@/components/Head';
 import { Main }       from '@/components/Main';
 import { Topic }      from '@/lib/content';
 import {
-  getFileHash,
+  getInitialFileHash,
   getInitialCommitDate,
 } from '@/lib/git';
 
@@ -48,7 +48,7 @@ const IndexPage = ({
 
 export default definePage(IndexPage, {
   async getStaticProps({ path }) {
-    const hash = getFileHash(path);
+    const hash = getInitialFileHash(path);
     const stat = {
       created: (
         getInitialCommitDate(path) ??

@@ -1,13 +1,13 @@
-import { seo }         from 'microsite/head';
-import { definePage }  from 'microsite/page';
+import { seo }                from 'microsite/head';
+import { definePage }         from 'microsite/page';
 import {
   BlogArt,
   BlogArtDefs,
 } from '@/components/Blog';
-import { Head }        from '@/components/Head';
-import { Main }        from '@/components/Main';
-import { Topic }       from '@/lib/content';
-import { getFileHash } from '@/lib/git';
+import { Head }               from '@/components/Head';
+import { Main }               from '@/components/Main';
+import { Topic }              from '@/lib/content';
+import { getInitialFileHash } from '@/lib/git';
 
 interface HuhPageProps {
   readonly hash:   string;
@@ -36,7 +36,7 @@ const HuhPage = ({ hash, topics }: HuhPageProps) => {
 
 export default definePage(HuhPage, {
   async getStaticProps({ path }) {
-    const hash = getFileHash(path);
+    const hash = getInitialFileHash(path);
     const topics = [
       Topic.NEURODIVERGENCE,
       Topic.MENTAL_ILLNESS,

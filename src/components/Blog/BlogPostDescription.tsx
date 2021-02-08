@@ -63,7 +63,7 @@ export const BlogPostDescription = ({
   title,
   ...rest
 }: BlogPostDescriptionProps) => (
-  <BlogPostDescriptionOuter as={ as }>
+  <BlogPostDescriptionOuter as={ as } itemprop="description">
     { title
       ? (<BlogPostDescriptionTitle>{ title }</BlogPostDescriptionTitle>)
     : null }

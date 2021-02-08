@@ -1,74 +1,82 @@
-import fs             from 'fs';
 import { seo }        from 'microsite/head';
 import { definePage } from 'microsite/page';
 import {
-  BlogArt,
   BlogArtDefs,
+  BlogListing,
+  BlogPostProps,
 } from '@/components/Blog';
 import { Head }       from '@/components/Head';
 import { Main }       from '@/components/Main';
-import { Topic }      from '@/lib/content';
-import {
-  getFileHash,
-  getInitialCommitDate,
-} from '@/lib/git';
-import { styled }     from '@/lib/styles';
 
 interface IndexPageProps {
-  readonly hash: string;
-  readonly stat: {
-    readonly created: Date;
-  };
+  readonly posts: readonly BlogPostProps[];
 }
 
-const WhatTheArtLink = styled('a', {
-  display:  'inline-block',
-  fontSize: '2em',
-  margin:   '0 auto',
-});
-
 const IndexPage = ({
-  hash,
+  posts,
 }: IndexPageProps) => {
-  const title = 'Hello world';
-  const topics = [ Topic.TECHNOLOGY ] as const;
-
   return (
     <>
       <Head>
-        <seo.title>{ title } { ' ' } | Eyelidlessness</seo.title>
+        <seo.title>Eyelidlessness</seo.title>
         <seo.description>
-          Just a little sneak peak of my personal site and statically
-          generated art project.
+          Trevor Schmidt's tech blog
         </seo.description>
       </Head>
 
       <Main>
         <BlogArtDefs />
-        <BlogArt hash={ hash } title={ title } topics={ topics } />
+        <h1>Recent posts</h1>
 
-        <WhatTheArtLink href="/blog/2021/02/what-the-art-p1-why/">
-          What the art, part 1: Why?
-        </WhatTheArtLink>
+        <BlogListing posts={ posts } />
       </Main>
     </>
   );
 };
 
-export default definePage(IndexPage, {
-  async getStaticProps({ path }) {
-    const hash = getFileHash(path);
-    const stat = {
-      created: (
-        getInitialCommitDate(path) ??
-        fs.statSync(import.meta.url.replace(/^file:(\/\/)?/, '')).ctime
-      ),
+interface PostModule {
+  default?: {
+    getStaticProps?: (context: { path: string }) => {
+      props: Promise<BlogPostProps>;
     };
+  };
+}
+
+export default definePage(IndexPage, {
+  async getStaticProps() {
+    const url = import.meta?.url.replace(/^file:(\/\/)?/, '');
+
+    const { default: glob } = await import('globby');
+    const {
+      dirname,
+      resolve,
+    } = await import('path');
+
+    const basePath  = dirname(url);
+    const postsGlob = resolve(basePath, './blog/**/*.js');
+    const postFiles = await glob(postsGlob);
+
+    const posts = await Promise.all(postFiles.map(async (path) => {
+      const { default: postPage } = await import(path) as PostModule;
+      const postProps = await postPage?.getStaticProps?.({
+        path,
+      });
+
+      if (postProps == null) {
+        throw new Error(`Couldn't get post props for post at path: ${path}`);
+      }
+
+      const relativePath = path.replace(basePath, '').replace(/(\/index)?\.js$/, '/');
+
+      return {
+        ...postProps.props,
+        path: relativePath,
+      };
+    }));
 
     return {
       props: {
-        hash,
-        stat,
+        posts,
       },
     };
   },

@@ -109,7 +109,7 @@ const getSHA1Hash = (path: string) => {
   return sha1Hash.digest('hex');
 };
 
-export const getFileHash = (basePath: string) => {
+export const getInitialFileHash = (basePath: string) => {
   const path = resolveModulePath(basePath);
 
   return (
@@ -119,4 +119,20 @@ export const getFileHash = (basePath: string) => {
     }) ??
     getSHA1Hash(path)
   );
+};
+
+export const getCurrentCommitHash = () => {
+  const {
+    error,
+    stdout,
+  } = childProcess.spawnSync('git', [
+    'rev-parse',
+    'HEAD',
+  ]);
+
+  if (error) {
+    throw error;
+  }
+
+  return stdout.toString().trim();
 };

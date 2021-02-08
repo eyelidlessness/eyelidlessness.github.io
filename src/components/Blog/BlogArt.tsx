@@ -22,7 +22,6 @@ const BlogArtContainer = styled(FullBleedContainer, {
   height:   blogArtHeight,
   position: 'relative',
   width:    '100%',
-  zIndex:   -1,
 });
 
 const BlogArtGraphic = styled('svg', {

@@ -2,14 +2,12 @@ import {
   combineRules,
   createRenderer,
   IStyle,
-  TRule,
-  TRuleProps,
 } from 'fela';
 import { renderToString } from 'fela-tools';
 import module             from 'module';
 import {
   ComponentChildren,
-  ComponentProps,
+  ComponentType,
   ElementType,
   h,
 } from 'preact';
@@ -100,78 +98,59 @@ export const css = Object.assign(baseCSS, {
   global: renderer.renderStatic.bind(renderer) as typeof renderer.renderStatic,
 });
 
-// const styledComponentRule = Symbol('rule');
-const styles = Symbol('styles');
-
-export type StyledComponent<P> =
-  & ElementType<P>
-  & { readonly [styles]: readonly Style<P>[] };
-
-const isStyledComponent = <P>(
-  Component: ElementType<P>
-): Component is StyledComponent<P> => (
-  typeof Component === 'function' &&
-  Array.isArray((Component as StyledComponent<P>)[styles])
-);
-
 interface StyleableProps {
   className?: string;
 }
 
-interface StyledProps {
-  as?:       ElementType;
-  children?: any;
+interface BaseStyledProps extends StyleableProps {
+  as?: ElementType<StyleableProps>;
 }
 
-export const styled = <T extends ElementType<StyleableProps>>(
-  Component: T,
-  style:     Style<ComponentProps<T>>
+type StyledProps<P> =
+  & BaseStyledProps
+  & P extends { as: infer T }
+    ? T extends keyof JSX.IntrinsicElements
+      ? (
+        & { as: T }
+        & JSX.IntrinsicElements[T]
+      )
+    : T extends ComponentType<infer P2>
+      ? P2 extends StyleableProps
+        ? (
+          & { as: ComponentType<P2> }
+          & P2
+        )
+        : never
+      : P
+    : P;
+
+type StyledComponent<P> = ComponentType<
+  StyledProps<P>
+>;
+
+interface Styled {
+  <T extends keyof JSX.IntrinsicElements>(
+    Component: T,
+    style:     Style<JSX.IntrinsicElements[T]>
+  ): StyledComponent<
+    & JSX.IntrinsicElements[T]
+  >;
+
+  <P extends StyleableProps>(
+    Component: ComponentType<P>,
+    style:     Style<P>
+  ): StyledComponent<P>;
+}
+
+export const styled: Styled = <P extends StyleableProps>(
+  Component: ElementType<P>,
+  style:     Style<P>
 ) => {
-  const currentStyles: ReadonlyArray<Style<ComponentProps<T>>> = (
-    isStyledComponent(Component)
-      ? Component[styles]
-      : []
-  );
-  const currentRules = currentStyles.map((style) => (
-    typeof style === 'function'
-      ? style
-      : () => style
-  ));
+  const rule = typeof style === 'function'
+    ? style
+    : () => style;
 
-  const rules = [ ...currentRules, () => style ];
-  const rule = combineRules(...rules as Array<TRule<TRuleProps>>);
-
-  const allStyles = [ ...currentStyles, style ];
-
-  const InnerComponent: keyof JSX.IntrinsicElements = (
-    typeof Component === 'string'
-      ? Component as keyof JSX.IntrinsicElements
-      : 'div'
-  );
-
-  const BaseComponent = createComponent(rule, InnerComponent, Object.keys);
-
-  const toArray = (value: unknown) => (
-    Array.isArray(value)
-      ? value
-      : [ value ]
-  );
-
-  const StyledComponent = ({
-    as = Component,
-    children,
-    ...rest
-  }: Omit<ComponentProps<T>, keyof StyledProps> & StyledProps) => (
-    // @ts-ignore
-    h(BaseComponent, {
-      ...rest,
-      as,
-    }, ...toArray(children))
-  );
-
-  return Object.assign(StyledComponent, {
-    [styles]: allStyles,
-  });
+  return createComponent(rule, Component as ComponentType<P>, Object.keys);
 };
 
 export { combineRules };

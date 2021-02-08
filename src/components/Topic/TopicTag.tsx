@@ -9,8 +9,9 @@ import {
 } from '@/lib/styles';
 
 interface TopicTagProps {
-  readonly link?: boolean;
-  readonly topic: TopicLike;
+  readonly className?: string;
+  readonly link?:      boolean;
+  readonly topic:      TopicLike;
 }
 
 const BaseTopicTagOuter = styled('span', {
@@ -41,6 +42,7 @@ const TopicTagInner = styled(BaseTopicTagInner, {
 });
 
 export const TopicTag = ({
+  className,
   link = true,
   topic: topicLike,
 }: TopicTagProps) => {
@@ -69,6 +71,7 @@ export const TopicTag = ({
   return (
     <TopicTagOuter
       className={ [
+        className,
         theme.topicColorClassNames[topic] ?? '',
         theme.HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME,
       ].join(' ') }

@@ -4,7 +4,7 @@ import fs     from 'fs';
 import path   from 'path';
 import {
   getInitialCommitDate,
-  getFileHash,
+  getInitialFileHash,
 } from './log';
 
 const cwd = process.cwd();
@@ -28,14 +28,14 @@ it(`doesn't get a date for a file with no commit history`, (t) => {
 const validHashPattern = /^[0-9a-f]{40}$/;
 
 it('gets the initial commit hash of the file', (t) => {
-  const hash = getFileHash(packageJSONPath);
+  const hash = getInitialFileHash(packageJSONPath);
 
   t.assert(validHashPattern.test(hash));
   t.snapshot(hash);
 });
 
 it('gets a hash of the contents of a file with no commit history', (t) => {
-  const hash = getFileHash(knownUncommittedPath);
+  const hash = getInitialFileHash(knownUncommittedPath);
 
   const contents = fs.readFileSync(knownUncommittedPath).toString();
   const expected = crypto

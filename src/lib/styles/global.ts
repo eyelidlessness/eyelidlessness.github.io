@@ -1,5 +1,6 @@
 import {
   clamp,
+  cleanWhitespace,
   jsToCSS
 } from './functions';
 import { css }   from './styles';
@@ -55,157 +56,214 @@ const blockElements = Array.from(new Set([
   'pre',
 ] as const));
 
+export const criticalStyles = cleanWhitespace(`
+  @font-face {
+    font-display: fallback;
+    font-family:  Minipax;
+    font-style:   normal;
+    font-weight:  normal;
+
+    src:
+      local('__Minipax'),
+      url('/fonts/Minipax/regular.woff2') format('woff2'),
+      url('/fonts/Minipax/regular.woff')  format('woff'),
+      url('/fonts/Minipax/regular.ttf')   format('truetype');
+  }
+
+  html, body {
+    margin:     0;
+    max-width:  100%;
+    overflow-x: hidden;
+    padding:    0;
+  }
+
+  html {
+    box-sizing:       border-box;
+    font-size:        ${clamp(
+      `${theme.baseFontSizeRange.minEm}em`,
+      `${theme.baseFontSizeRange.fluidVw}vw`,
+      `${theme.baseFontSizeRange.maxEm}em`
+    )};
+    text-size-adjust:         100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  ${jsToCSS([ 'body' ], {
+    ...theme.document,
+    ...theme.prose,
+  })}
+
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+  ${headingElements.join(',')} {
+    font-family:             Minipax, Georgia, serif;
+    font-smooth:             always;
+    font-weight:             normal;
+    line-height:             0.9375;
+    margin-bottom:           1rem;
+    margin-top:              1rem;
+    padding-left:            1rem;
+    text-indent:             -1rem;
+    -webkit-font-smoothing:  antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+`);
+
 export const setGlobalStyles = () => {
-  css.global(`
-    ${blockElements.join(',')} {
-      display: block;
-    }
-
-    body, dl, p, ol, ul {
-      font-weight: normal;
-    }
-
-    ${headingElements.map((el) => `${el} small`).join(',')} {
-      color:          currentColor;
-      font-size:      0.875em;
-      vertical-align: 0.05em;
-    }
-
-    ${jsToCSS(emphasisElements, theme.emphasize)}
-
-    h1 {
-      font-size: ${clamp(
-        `${theme.headingRanges.h1.minEm}em`,
-        `${theme.headingRanges.h1.fluidVw}vw`,
-        `${theme.headingRanges.h1.maxEm}em`
-      )};
-    }
-
-    h2 {
-      font-size: ${clamp(
-        `${theme.headingRanges.h2.minEm}em`,
-        `${theme.headingRanges.h2.fluidVw}vw`,
-        `${theme.headingRanges.h2.maxEm}em`
-      )};
-    }
-
-    h3 {
-      font-size: ${clamp(
-        `${theme.headingRanges.h3.minEm}em`,
-        `${theme.headingRanges.h3.fluidVw}vw`,
-        `${theme.headingRanges.h3.maxEm}em`
-      )};
-    }
-
-    dl {
-      padding-inline-start: 1em;
-    }
-
-    ol, ul {
-      padding-inline-start: 2em;
-    }
-
-    details, ol, p, ul {
-      line-height: 1.618;
-      margin:      1em 0 1.5em;
-    }
-
-    figure {
-      margin:              0;
-      margin-block-end:    0;
-      margin-block-start:  0;
-      margin-inline-end:   0;
-      margin-inline-start: 0;
-    }
-
-    li {
-      margin: 0.5em 0;
-    }
-
-    ${jsToCSS([ 'pre' ], theme.pre)}
-
-    ${jsToCSS([ 'code' ], {
-      ...theme.code,
-
-      borderRadius: '0.1875rem',
-      display:      'inline-block',
-      fontSize:     '0.875em',
-      hyphens:      'auto',
-      lineHeight:   '1.5em',
-      overflowWrap: 'break-word',
-      padding:      '0.25rem 0.375rem 0',
-      wordWrap:     'break-word',
-
-      nested: {
-        '&:first-line': {
-          verticalAlign: '-0.5em',
-        },
-      },
-    })}
-
-    pre code {
-      background-color: transparent;
-      line-height:      1.325em;
-      margin:           0;
-      padding:          0;
-    }
-
-    ${theme.firstLastMarginZeroElements.map((el) => `${el}:first-child`).join(', ')} {
-      margin-top: 0;
-    }
-
-    ${theme.firstLastMarginZeroElements.map((el) => `${el}:last-child`).join(', ')} {
-      margin-bottom: 0;
-    }
-
-    ${jsToCSS([ 'a' ], {
-      ...theme.links,
-      fontWeight: 'bolder',
-    })}
-
-    ${jsToCSS([ 'aside', 'small' ], theme.deemphasize)}
-
-    img {
-      height:    auto;
-      max-width: 100%;
-    }
-
-    q {
-      font-style: italic;
-    }
-
-    q::before {
-      content: "“";
-    }
-
-    q::after {
-      content: "”";
-    }
-
-    sup {
-      line-height: 0;
-    }
-
-    sup a {
-      text-decoration: none;
-    }
-
-    ${theme.darkMode} {
-      ${jsToCSS([ 'body' ], {
-        ...theme[theme.darkMode].document,
-        ...theme[theme.darkMode].prose,
-      })}
-
-      body, dl, p, ol, ul {
-        font-weight:    300;
-        letter-spacing: 0.2px;
+  css.global(
+    cleanWhitespace(`
+      ${blockElements.join(',')} {
+        display: block;
       }
 
-      ${jsToCSS(emphasisElements, theme[theme.darkMode].emphasize)}
-      ${jsToCSS([ 'pre' ], theme[theme.darkMode].pre)}
-      ${jsToCSS([ 'code' ], theme[theme.darkMode].code)}
-      ${jsToCSS([ 'a' ], theme[theme.darkMode].links)}
-      ${jsToCSS([ 'aside', 'small' ], theme[theme.darkMode].deemphasize)}
-    }
-  `);
+      body, dl, p, ol, ul {
+        font-weight: normal;
+      }
+
+      ${headingElements.map((el) => `${el} small`).join(',')} {
+        color:          currentColor;
+        font-size:      0.875em;
+        vertical-align: 0.05em;
+      }
+
+      ${jsToCSS(emphasisElements, theme.emphasize)}
+
+      h1 {
+        font-size: ${clamp(
+          `${theme.headingRanges.h1.minEm}em`,
+          `${theme.headingRanges.h1.fluidVw}vw`,
+          `${theme.headingRanges.h1.maxEm}em`
+        )};
+      }
+
+      h2 {
+        font-size: ${clamp(
+          `${theme.headingRanges.h2.minEm}em`,
+          `${theme.headingRanges.h2.fluidVw}vw`,
+          `${theme.headingRanges.h2.maxEm}em`
+        )};
+      }
+
+      h3 {
+        font-size: ${clamp(
+          `${theme.headingRanges.h3.minEm}em`,
+          `${theme.headingRanges.h3.fluidVw}vw`,
+          `${theme.headingRanges.h3.maxEm}em`
+        )};
+      }
+
+      dl {
+        padding-inline-start: 1em;
+      }
+
+      ol, ul {
+        padding-inline-start: 2em;
+      }
+
+      details, ol, p, ul {
+        line-height: 1.618;
+        margin:      1em 0 1.5em;
+      }
+
+      figure {
+        margin:              0;
+        margin-block-end:    0;
+        margin-block-start:  0;
+        margin-inline-end:   0;
+        margin-inline-start: 0;
+      }
+
+      li {
+        margin: 0.5em 0;
+      }
+
+      ${jsToCSS([ 'pre' ], theme.pre)}
+
+      ${jsToCSS([ 'code' ], {
+        ...theme.code,
+
+        borderRadius: '0.1875rem',
+        display:      'inline-block',
+        fontSize:     '0.875em',
+        hyphens:      'auto',
+        lineHeight:   '1.5em',
+        overflowWrap: 'break-word',
+        padding:      '0.25rem 0.375rem 0',
+        wordWrap:     'break-word',
+
+        nested: {
+          '&:first-line': {
+            verticalAlign: '-0.5em',
+          },
+        },
+      })}
+
+      pre code {
+        background-color: transparent;
+        line-height:      1.325em;
+        margin:           0;
+        padding:          0;
+      }
+
+      ${theme.firstLastMarginZeroElements.map((el) => `${el}:first-child`).join(', ')} {
+        margin-top: 0;
+      }
+
+      ${theme.firstLastMarginZeroElements.map((el) => `${el}:last-child`).join(', ')} {
+        margin-bottom: 0;
+      }
+
+      ${jsToCSS([ 'a' ], {
+        ...theme.links,
+        fontWeight: 'bolder',
+      })}
+
+      ${jsToCSS([ 'aside', 'small' ], theme.deemphasize)}
+
+      img {
+        height:    auto;
+        max-width: 100%;
+      }
+
+      q {
+        font-style: italic;
+      }
+
+      q::before {
+        content: "“";
+      }
+
+      q::after {
+        content: "”";
+      }
+
+      sup {
+        line-height: 0;
+      }
+
+      sup a {
+        text-decoration: none;
+      }
+
+      ${theme.darkMode} {
+        ${jsToCSS([ 'body' ], {
+          ...theme[theme.darkMode].document,
+          ...theme[theme.darkMode].prose,
+        })}
+
+        body, dl, p, ol, ul {
+          font-weight:    300;
+          letter-spacing: 0.2px;
+        }
+
+        ${jsToCSS(emphasisElements, theme[theme.darkMode].emphasize)}
+        ${jsToCSS([ 'pre' ], theme[theme.darkMode].pre)}
+        ${jsToCSS([ 'code' ], theme[theme.darkMode].code)}
+        ${jsToCSS([ 'a' ], theme[theme.darkMode].links)}
+        ${jsToCSS([ 'aside', 'small' ], theme[theme.darkMode].deemphasize)}
+      }
+    `)
+  );
 };
