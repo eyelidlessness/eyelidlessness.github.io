@@ -353,21 +353,14 @@ export const theme = {
         },
       },
 
-      item: {
-        outlineColor: 'rgba(0, 0, 0, 0.1)',
-
-        nested: {
-          [darkMode]: {
-            outlineColor: '#000',
-          },
-        },
-      },
-
       itemAlt: {
-        backgroundColor: 'hsl(192deg, 45%, 96%)',
-        outlineColor:    'rgba(0, 0, 0, 0.15)',
+        backgroundColor: 'hsl(192deg, 15%, 97%)',
 
         nested: {
+          '& h2': {
+            backgroundColor: 'hsla(192deg, 15%, 97%, 0.75)',
+          },
+
           [`& .${blogListingDescriptionIdentifier}`]: {
             color:    'hsl(212deg, 10%, 20%)',
 
@@ -380,23 +373,29 @@ export const theme = {
 
           [darkMode]: {
             backgroundColor: 'hsl(192deg, 45%, 3%)',
-            outlineColor:    '#000',
+
+            nested: {
+              '& h2': {
+                backgroundColor: 'hsla(192deg, 45%, 3%, 0.75)',
+              },
+            },
           },
         },
       },
 
-      linkTextContent: {
-        backgroundColor: 'rgba(255, 255, 255, 0.75)',
+      // linkTextContent: {
+      //   backgroundColor: 'rgba(255, 255, 255, 0.75)',
 
-        nested: {
-          [darkMode]: {
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-          },
-        },
-      },
+      //   nested: {
+      //     [darkMode]: {
+      //       backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      //     },
+      //   },
+      // },
 
       linkTitle: {
-        color: '#000',
+        backgroundColor: 'hsla(192deg, 85%, 99%, 0.75)',
+        color:           '#000',
 
         nested: {
           ':hover': {
@@ -404,7 +403,8 @@ export const theme = {
           },
 
           [darkMode]: {
-            color: '#fff',
+            backgroundColor: 'hsla(192deg, 10%, 10%, 0.75)',
+            color:           '#fff',
 
             ':hover': {
               color: '#fff',
