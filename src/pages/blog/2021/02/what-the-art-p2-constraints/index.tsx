@@ -125,12 +125,10 @@ export default definePage(WhatTheArtPost, {
       ...context,
 
       description: mdx`
-        Today is the day! I'm finally ready to share a project I've
-        been working on. A labor of love. It's been a long time
-        coming—about four months! I've shared some details with
-        some close friends and family, but mostly been pretty
-        tight-lipped about it <small>other than a slightly premature
-        post teasing it on social media… 🙃</small> until now.
+        In part two in a three part series revealing my new site's
+        art project, I talk through some of the constraints I
+        chose for the project, the motivation behind them, and
+        how they were achieved in broad strokes.
       `,
 
       title: 'What the art, part 2: Constraints',
