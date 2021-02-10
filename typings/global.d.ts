@@ -4,17 +4,6 @@
  * ---------------------------------------------------------------------------
  */
 
-type ArrayType<T extends ReadonlyArray<any>> =
-  T extends Array<infer U>
-    ? U
-  : T extends ReadonlyArray<infer U>
-    ? U
-  : never;
-
-type Entries<T> = ReadonlyArray<{
-  [K in keyof T]-?: readonly [ key: K, value: T[K] ];
-}[keyof T]>;
-
 interface ObjectConstructor {
   entries<T>(o: T): Entries<T>;
 
@@ -33,6 +22,30 @@ type RecordType<T extends Readonly<Record<any, any>>> =
 interface Set<T> {
   has<V>(this: Set<T>, value: V): value is Extract<V & T, T>;
 }
+
+/*
+ * ---------------------------------------------------------------------------
+ * Some useful utility types
+ * ---------------------------------------------------------------------------
+ */
+
+type ArrayType<T extends ReadonlyArray<any>> =
+  T extends Array<infer U>
+    ? U
+  : T extends ReadonlyArray<infer U>
+    ? U
+  : never;
+
+type Entries<T> = ReadonlyArray<{
+  [K in keyof T]-?: readonly [ key: K, value: T[K] ];
+}[keyof T]>;
+
+type Equals<T, S> =
+  [T] extends [S]
+    ? [S] extends [T]
+      ? true
+      : false
+	  : false;
 
 type SetType<T extends ReadonlySet<any> | Set<any>> =
   T extends Set<infer U>
