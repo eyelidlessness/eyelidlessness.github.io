@@ -1,5 +1,5 @@
 import {
-  getEverything,
+  computeBasicArt,
 } from '@/lib/art';
 import {
   DEFAULT_TOPIC,
@@ -19,6 +19,7 @@ const GOLDEN_RATIO = 1.6180334 as const;
 
 const X_PADDING = 4 as const;
 const X_SCALE   = GOLDEN_RATIO * 5 as 8.090167;
+const Y_OFFSET  = 0.75 as const;
 const Y_PADDING = 0.15 as const;
 const Y_SCALE   = 1.5 as const;
 
@@ -71,28 +72,23 @@ export const BlogArt = (props: BlogArtProps) => {
     `${str}-${hash}`
   );
 
-  const everything = getEverything({
+  const {
+    segmentPaths,
+    xMax,
+    yMax,
+  } = computeBasicArt({
     hash,
     xPadding: X_PADDING,
     xScale:   X_SCALE,
+    yOffset:  Y_OFFSET,
     yPadding: Y_PADDING,
     yScale:   Y_SCALE,
   });
 
-  if (everything == null) {
-    return null;
-  }
-
-  const {
-    blurY,
-    glowOffset,
-    glowSize,
-    segmentPaths,
-    xMax,
-    yMax,
-  } = everything;
-
-  const viewBox = [ 0, 0, xMax, yMax ];
+  const blurY      = yMax * Y_OFFSET;
+  const glowSize   = yMax * Y_PADDING / 4;
+  const glowOffset = glowSize * 0.75;
+  const viewBox    = [ 0, 0, xMax, yMax ];
 
   return (
     <BlogArtContainer className={ className }>

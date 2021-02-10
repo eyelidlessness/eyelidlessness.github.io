@@ -623,7 +623,7 @@ const getSegmentPaths = <X extends number, Y extends number>({
   }, [] as readonly string[])
 );
 
-interface GetEverythingOptions<
+interface ComputeBasicArtOptions<
   T extends string,
   X extends number,
   Y extends number
@@ -636,7 +636,7 @@ interface GetEverythingOptions<
   readonly yScale?:   Y;
 }
 
-export const getEverything = <
+export const computeBasicArt = <
   T extends string,
   X extends number,
   Y extends number
@@ -644,10 +644,10 @@ export const getEverything = <
   hash,
   xPadding = 0,
   xScale   = 1 as X,
-  yOffset  = 0.75,
+  yOffset  = 0.5,
   yPadding = 0,
   yScale   = 1 as Y,
-}: GetEverythingOptions<T, X, Y>) => {
+}: ComputeBasicArtOptions<T, X, Y>) => {
   const basePoints   = toPointSequence(hash);
   const sortedPoints = sortBy(basePoints, (a, b) => (
     a.x > b.x
@@ -662,7 +662,7 @@ export const getEverything = <
 
   const xShift = xPadding / 2;
   const yRange = baseYMax - baseYMin;
-  const yShift = 0 - baseYMin;
+  const yShift = 0 - baseYMin + (yPadding / 2);
 
   const scaledPoints = sortedPoints.map((point) => scalePoint({
     xScale,
@@ -679,7 +679,7 @@ export const getEverything = <
     max: scaledYMax,
   } = yBounds(scaledPoints);
 
-  const yMax = scaledYMax * yScale;
+  const yMax = (scaledYMax + yPadding) * yScale;
 
   const naiveSegments = getSegments({
     points: scaledPoints,
@@ -711,17 +711,7 @@ export const getEverything = <
     yScale,
   });
 
-  const blurY = yOffsetBelowMidpoint
-    ? 0 + baseYCoordinate - yPadding
-    : yMax + baseYCoordinate - yPadding;
-
-  const glowSize = yMax * (yPadding / 4);
-  const glowOffset = glowSize * 0.75;
-
   return {
-    blurY,
-    glowOffset,
-    glowSize,
     segmentPaths,
     xMax,
     yMax,
