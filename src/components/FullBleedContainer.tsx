@@ -111,6 +111,9 @@ export const FullBleedContainer = styled('div', {
     '& > h3': {
       marginTop: 0,
     },
+    '& > hr': {
+      marginTop: 0,
+    },
     '& > ol': {
       marginTop: 0,
     },

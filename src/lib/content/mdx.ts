@@ -20,17 +20,24 @@ import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
 import remarkMDX                  from 'remark-mdx';
 import remarkMDXToPlainText       from 'remark-mdx-to-plain-text';
 import remarkSlug                 from 'remark-slug';
+import { Plugin }                 from 'unified';
 import { CodeBlock }              from '@/components/CodeBlock';
 import {
   Emoji,
   isEmojiProps,
 } from '@/components/Emoji';
+import { abbreviations }          from '@/lib/a11y';
 import { StylesProvider }         from '@/lib/styles';
+import { remarkDistinctAbbr }     from './abbr';
 import { syntaxHighlighting }     from './syntax';
 
 const _require = module.createRequire(import.meta.url);
 
-const remark = _require('remark');
+const remarkParse     = _require('rehype-parse')     as typeof import('rehype-parse');
+const rehypeRemark    = _require('rehype-remark')    as typeof import('rehype-remark') & Plugin;
+const remark          = _require('remark')           as typeof import('remark');
+const remarkAbbr      = _require('remark-abbr')      as typeof import('remark-abbr');
+const remarkStringify = _require('remark-stringify') as typeof import('remark-stringify');
 
 const Div = ({ className, children, ...rest }: JSX.IntrinsicElements['div']) => (
   className === 'language-id'
@@ -60,6 +67,8 @@ const defaultProps = {
   ],
   remarkPlugins: [
     syntaxHighlighting,
+    remarkAbbr,
+    remarkDistinctAbbr,
     remarkSlug,
     remarkSmartypants,
   ],
@@ -153,11 +162,47 @@ type TemplateTag<T> = (
   ...expressions: readonly any[]
 ) => T;
 
-export const mdx: TemplateTag<VNode> = (strings, ...expressions) => {
-  const str = joinTemplateLiteralStrings(strings, expressions);
+type CallableTemplateTagParams =
+  | Parameters<TemplateTag<any>>
+  | [ string ];
+
+const mdxAbbreviations = Object.entries(abbreviations)
+  .map(([ abbr, expansion ]) => (
+    `*[${abbr}]: ${expansion}`
+  ))
+  .join('\n');
+
+const getMDXString = (args: CallableTemplateTagParams) => {
+
+  const [ stringOrStrings, ...rest ] = args;
+
+  const baseStr = typeof stringOrStrings === 'string'
+    ? stringOrStrings
+    : joinTemplateLiteralStrings(stringOrStrings, rest);
+
+  return [
+    baseStr,
+    mdxAbbreviations,
+  ].join('\n\n');
+};
+
+export const mdx = (...args: CallableTemplateTagParams): VNode => {
+  const str = getMDXString(args);
 
   return h(StylesProvider, {},
     h(MDX, {}, str)
+  );
+};
+
+export const mdxInline = (...args: CallableTemplateTagParams): VNode => {
+  const str = getMDXString(args);
+
+  return h(StylesProvider, {},
+    h(MDX, {
+      components: {
+        p: Fragment,
+      },
+    }, str)
   );
 };
 
@@ -165,9 +210,13 @@ export const mdxRaw: TemplateTag<string> = (strings, ...expressions) => {
   const str = dedent(joinTemplateLiteralStrings(strings, expressions)).trim();
 
   return remark()
+    .use(remarkParse)
+    .use(rehypeRemark)
+    .use(remarkStringify)
     .use(remarkMDX)
     .use(remarkMDXToPlainText)
     .processSync(str)
     .contents
+    .toString()
     .trim();
 };

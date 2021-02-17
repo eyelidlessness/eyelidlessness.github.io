@@ -1,7 +1,4 @@
-import {
-  ComponentChildren,
-  ElementType,
-} from 'preact';
+import { ComponentProps }     from 'preact';
 import {
   styled,
   StylesProvider,
@@ -9,23 +6,20 @@ import {
 import { FullBleedContainer } from './FullBleedContainer';
 import { SiteHeader }         from './Site';
 
-type MainProps = JSX.IntrinsicElements['div'] & {
-  readonly as?:       ElementType;
-  readonly children?: ComponentChildren;
-}
+type MainProps =
+  & ComponentProps<typeof FullBleedContainer>
+  & { readonly isListing?: boolean; };
 
-const BaseMain = styled(FullBleedContainer, {
+const BaseMain = styled<MainProps>(FullBleedContainer, ({
+  isListing,
+}) => ({
+  marginTop:     isListing ? 0 : '1rem',
   paddingBottom: '4em',
-});
+}));
 
-export const Main = ({
-  as = 'main',
-  children,
-}: MainProps) => (
+export const Main = (props: MainProps) => (
   <StylesProvider>
     <SiteHeader />
-    <BaseMain as={ as }>
-      { children }
-    </BaseMain>
+    <BaseMain as="main" { ...props } />
   </StylesProvider>
 );

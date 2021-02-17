@@ -158,6 +158,12 @@ export const setGlobalStyles = () => {
         padding-inline-start: 1em;
       }
 
+      dl, dt, dd {
+        font-style: normal;
+        margin:     0;
+        padding:    0;
+      }
+
       ol, ul {
         padding-inline-start: 2em;
       }
@@ -175,6 +181,20 @@ export const setGlobalStyles = () => {
         margin-inline-start: 0;
       }
 
+      hr {
+        border: 0;
+        margin: 1.5em 0;
+      }
+
+      ${jsToCSS([ 'hr:after' ], {
+        ...theme.separator,
+
+        content:       '"✻ ✻ ✻"',
+        display:       'block',
+        letterSpacing: '0.5em',
+        textAlign:     'center',
+      })}
+
       li {
         margin: 0.5em 0;
       }
@@ -185,19 +205,13 @@ export const setGlobalStyles = () => {
         ...theme.code,
 
         borderRadius: '0.1875rem',
-        display:      'inline-block',
+        display:      'inline-flex',
         fontSize:     '0.875em',
         hyphens:      'auto',
         lineHeight:   '1.5em',
         overflowWrap: 'break-word',
-        padding:      '0.25rem 0.375rem 0',
+        padding:      '0.1111rem 0.3333rem 0',
         wordWrap:     'break-word',
-
-        nested: {
-          '&:first-line': {
-            verticalAlign: '-0.5em',
-          },
-        },
       })}
 
       pre code {
@@ -218,6 +232,12 @@ export const setGlobalStyles = () => {
       ${jsToCSS([ 'a' ], {
         ...theme.links,
         fontWeight: 'bolder',
+      })}
+
+      ${jsToCSS([ 'abbr' ], {
+        ...theme.abbreviation,
+
+        textDecoration: 'none',
       })}
 
       ${jsToCSS([ 'aside', 'small' ], theme.deemphasize)}
@@ -263,6 +283,7 @@ export const setGlobalStyles = () => {
         ${jsToCSS([ 'code' ], theme[theme.darkMode].code)}
         ${jsToCSS([ 'a' ], theme[theme.darkMode].links)}
         ${jsToCSS([ 'aside', 'small' ], theme[theme.darkMode].deemphasize)}
+        ${jsToCSS([ 'hr:after' ], theme[theme.darkMode].separator)}
       }
     `)
   );

@@ -9,6 +9,7 @@ import {
 } from '@/lib/styles';
 import {
   BlogArt,
+  BlogArtDefsUsage,
   blogArtHeight,
 } from './BlogArt';
 import { BlogPostProps }       from './BlogPost';
@@ -44,20 +45,17 @@ const BlogArticleList = styled(FullBleedContainer, {
 });
 
 const BlogArticleListItem = styled(FullBleedContainer, {
+  ...theme.blog.listing.item,
+
   minHeight: blogArtHeight,
   padding:   '1rem 0 1.5rem',
   position:  'relative',
 
   nested: {
-
     '&:last-child': {
       marginBottom: 0,
     },
   },
-});
-
-const BlogArticleListItemAlt = styled(BlogArticleListItem, {
-  ...theme.blog.listing.itemAlt,
 });
 
 const BlogPageArticleArt = styled(BlogArt, {
@@ -146,7 +144,7 @@ export const BlogListing = ({
       { Object.entries(grouped).map(([ year, groupPosts ]) => (
         <Fragment key={ year }>
           <BlogArticleList>
-            { groupPosts.map((post, index) => {
+            { groupPosts.map((post) => {
               const {
                 description,
                 hash,
@@ -158,14 +156,11 @@ export const BlogListing = ({
                 topics,
               } = post;
 
-              const ListItem = index % 2 === 0
-                ? BlogArticleListItemAlt
-                : BlogArticleListItem;
-
               return (
-                <ListItem key={ path }>
+                <BlogArticleListItem key={ path }>
                   <BlogPageArticleLink as={ 'a' } href={ path }>
                     <BlogPageArticleArt
+                      defsUsage={ BlogArtDefsUsage.NONE }
                       hash={ hash }
                       padded={ true }
                       title={ title }
@@ -192,7 +187,7 @@ export const BlogListing = ({
                   <p>
                     <ReadMoreLink href={ path }>Read more…</ReadMoreLink>
                   </p>
-                </ListItem>
+                </BlogArticleListItem>
               );
             }) }
           </BlogArticleList>

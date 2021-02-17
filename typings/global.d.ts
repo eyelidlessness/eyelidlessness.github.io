@@ -36,6 +36,19 @@ type ArrayType<T extends ReadonlyArray<any>> =
     ? U
   : never;
 
+type AtomicObject =
+  | Function
+  | Map<any, any>
+  | WeakMap<any, any>
+  | Set<any>
+  | WeakSet<any>
+  | Promise<any>
+  | Date
+  | RegExp
+  | Boolean
+  | Number
+  | String;
+
 type Entries<T> = ReadonlyArray<{
   [K in keyof T]-?: readonly [ key: K, value: T[K] ];
 }[keyof T]>;
@@ -45,7 +58,44 @@ type Equals<T, S> =
     ? [S] extends [T]
       ? true
       : false
-	  : false;
+    : false;
+
+type Identity<T> = T;
+
+type ImmutableArray<T extends ReadonlyArray<any>> = {
+  [P in Extract<keyof T, number>]: ReadonlyArray<Immutable<T[number]>>
+}[Extract<keyof T, number>];
+
+type ImmutableTuple<T extends ReadonlyArray<any>> = {
+  readonly [P in keyof T]: Immutable<T[P]>
+};
+
+type Immutable<T> =
+  T extends object
+    ? T extends AtomicObject
+      ? T
+    : T extends ReadonlyArray<any>
+      ? Array<T[number]> extends T
+        ? ImmutableArray<T>
+        : ImmutableTuple<T>
+      : { readonly [P in keyof T]: Immutable<T[P]> }
+    : T;
+
+type KnownKeys<T> =
+  {
+    [K in keyof T]:
+      string extends K
+        ? never
+      : number extends K
+        ? never
+        : K;
+  } extends { [_ in keyof T]: infer U }
+    ? U
+    : never;
+
+type Merge<T> = Identity<{
+  [K in keyof T]: T[K];
+}>;
 
 type SetType<T extends ReadonlySet<any> | Set<any>> =
   T extends Set<infer U>
@@ -53,6 +103,15 @@ type SetType<T extends ReadonlySet<any> | Set<any>> =
   : T extends ReadonlySet<infer U>
     ? U
   : never;
+
+type Primitive =
+  | BigInt
+  | boolean
+  | null
+  | number
+  | string
+  | symbol
+  | undefined;
 
 /*
  * ---------------------------------------------------------------------------

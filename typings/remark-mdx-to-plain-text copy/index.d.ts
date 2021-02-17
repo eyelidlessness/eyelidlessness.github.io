@@ -1,5 +1,5 @@
 declare module 'remark-mdx-to-plain-text' {
-  import { Plugin } from 'unist';
+  import { Plugin } from 'unified';
 
   const remarkMDXToPlainText: Plugin;
 

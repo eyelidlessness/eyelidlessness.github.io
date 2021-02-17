@@ -1,8 +1,9 @@
+import { ResumeSkillLevel } from '@/data/resume';
 import {
   DEFAULT_TOPIC,
   Topic,
 } from '@/lib/content/topics';
-import { cleanWhitespace } from './functions';
+import { cleanWhitespace }  from './functions';
 import {
   css,
   identifier,
@@ -315,6 +316,15 @@ export const theme = {
   baseFontSizeRange,
   darkMode,
 
+  abbreviation: {
+    backgroundImage: `linear-gradient(${[
+      'to top',
+      'hsl(64deg, 100%, 50%, 0.25)',
+      'hsl(64deg, 100%, 50%, 0.25) 0.5em',
+      'transparent 0.5em',
+    ].join(', ')})`,
+  },
+
   aside: {
     backgroundColor: 'hsl(53deg, 81%, 96%)',
     color:           'hsl(212deg, 10%, 35%)',
@@ -353,30 +363,32 @@ export const theme = {
         },
       },
 
-      itemAlt: {
-        backgroundColor: 'hsl(192deg, 15%, 97%)',
+      item: {
+        '&:nth-child(odd)': {
+          backgroundColor: 'hsl(192deg, 15%, 97%)',
 
-        nested: {
-          '& h2': {
-            backgroundColor: 'hsla(192deg, 15%, 97%, 0.75)',
-          },
+          nested: {
+            '& h2': {
+              backgroundColor: 'hsla(192deg, 15%, 97%, 0.75)',
+            },
 
-          [`& .${blogListingDescriptionIdentifier}`]: {
-            color:    'hsl(212deg, 10%, 20%)',
+            [`& .${blogListingDescriptionIdentifier}`]: {
+              color:    'hsl(212deg, 10%, 20%)',
 
-            nested: {
-              [darkMode]: {
-                color: 'hsl(212deg, 10%, 90%)',
+              nested: {
+                [darkMode]: {
+                  color: 'hsl(212deg, 10%, 90%)',
+                },
               },
             },
-          },
 
-          [darkMode]: {
-            backgroundColor: 'hsl(192deg, 45%, 3%)',
+            [darkMode]: {
+              backgroundColor: 'hsl(192deg, 45%, 3%)',
 
-            nested: {
-              '& h2': {
-                backgroundColor: 'hsla(192deg, 45%, 3%, 0.75)',
+              nested: {
+                '& h2': {
+                  backgroundColor: 'hsla(192deg, 45%, 3%, 0.75)',
+                },
               },
             },
           },
@@ -437,7 +449,7 @@ export const theme = {
   },
 
   code: {
-    backgroundColor: 'hsl(220deg, 10%, 94%)',
+    backgroundColor: 'hsl(200deg, 80%, 95%)',
     color:           'hsla(210deg, 12%, 0%, 95%)',
     fontFamily:      monospaceFont,
   },
@@ -466,11 +478,21 @@ export const theme = {
 
   firstLastMarginZeroElements,
 
+  gitHubLogo: {
+    fill: '#171515',
+
+    nested: {
+      [darkMode]: {
+        fill: '#fff',
+      },
+    },
+  },
+
   headingRanges,
 
   [darkMode]: {
     code: {
-      backgroundColor: 'hsl(220deg, 10%, 20%)',
+      backgroundColor: 'hsl(200deg, 60%, 15%)',
       color:           'hsla(210deg, 12%, 100%, 95%)',
     },
 
@@ -507,6 +529,10 @@ export const theme = {
       color: 'hsl(210deg, 10%, 90%)',
     },
 
+    separator: {
+      color: 'hsla(0deg, 0%, 100%, 0.2)',
+    },
+
     siteHeader: {
       pageLinks: {
         color: '#fff',
@@ -522,7 +548,7 @@ export const theme = {
     },
 
     siteLogo: {
-      color: 'hsl(336deg, 100%, 95%)',
+      color: 'hsl(336deg, 100%, 85%)',
     },
   },
 
@@ -611,8 +637,124 @@ export const theme = {
   //   },
   // },
 
+  resume: {
+    brief: {
+      backgroundColor: 'hsl(336deg, 100%, 97%)',
+
+      nested: {
+        [darkMode]: {
+          backgroundColor: 'hsl(336deg, 100%, 7%)',
+        },
+      },
+    },
+
+    contactList: {
+      link: {
+        nested: {
+          '&, &:active, &:hover, &:visited': {
+            color: 'hsla(210deg, 12%, 5%, 95%)'
+          },
+
+          [darkMode]: {
+            nested: {
+              '&, &:active, &:hover, &:visited': {
+                color: 'hsl(210deg, 10%, 90%)',
+              },
+            },
+          },
+        },
+      },
+    },
+
+    employment: {
+      backgroundColor: 'hsl(41deg, 58%, 98%)',
+
+      nested: {
+        [darkMode]: {
+          backgroundColor: 'hsl(41deg, 100%, 8%)',
+        },
+      },
+    },
+
+    skillLevel: {
+      [ResumeSkillLevel.BASIC]: {
+        backgroundColor: 'hsl(207deg, 25%, 83%)',
+
+        nested: {
+          [darkMode]: {
+            backgroundColor: 'hsl(207deg, 15%, 43%)',
+          },
+        },
+      },
+
+      [ResumeSkillLevel.INTERMEDIATE]: {
+        backgroundColor: 'hsl(188deg, 53%, 74%)',
+
+        nested: {
+          [darkMode]: {
+            backgroundColor: 'hsl(188deg, 53%, 34%)',
+          },
+        },
+      },
+
+      [ResumeSkillLevel.ADVANCED]: {
+        backgroundColor: 'hsl(188deg, 70%, 59%)',
+
+        nested: {
+          [darkMode]: {
+            backgroundColor: 'hsl(188deg, 80%, 39%)',
+          },
+        },
+      },
+
+      [ResumeSkillLevel.EXPERT]: {
+        backgroundColor: 'hsl(152deg, 100%, 39%)',
+
+        nested: {
+          [darkMode]: {
+            backgroundColor: 'hsl(152deg, 100%, 29%)',
+          },
+        },
+      },
+    },
+
+    // section: {
+    //   '&:nth-child(odd)': {
+    //     nested: {
+    //       backgroundColor: 'hsl(33deg, 100%, 97%)',
+
+    //       nested: {
+    //         [darkMode]: {
+    //           backgroundColor: 'hsl(33deg, 100%, 7%)',
+    //         },
+    //       },
+    //     },
+    //   },
+    // },
+  },
+
+  separator: {
+    color: 'hsla(0deg, 0%, 0%, 0.2)',
+  },
+
   siteHeader: {
     columns: siteHeaderColumns,
+
+    container: {
+      // backgroundColor: 'hsl(336deg, 100%, 98%)',
+      // // backgroundImage: cleanWhitespace(`linear-gradient(
+      // //   to bottom,
+      // //   hsla(336deg, 100%, 42%, 1),
+      // //   hsla(336deg, 100%, 42%, 1) 2px,
+      // //   transparent 2px
+      // // )`),
+
+      // nested: {
+      //   [darkMode]: {
+      //     backgroundColor: 'hsl(336deg, 100%, 7%)',
+      //   },
+      // },
+    },
 
     pageLinks: {
       color: '#000',
@@ -629,6 +771,7 @@ export const theme = {
 
   siteLogo: {
     color: 'hsl(336deg, 100%, 42%)',
+    // color: '#fff'
   },
 
   topicColorClassNames,
