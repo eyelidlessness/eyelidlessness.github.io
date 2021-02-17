@@ -206,7 +206,7 @@ export const resume = validateResume({
             Led and maintained a robust fault tolerance service layer
             between Treez end-user products and regulator reporting services.
             This ensured that frequent and widespread errors in the
-            regulatory agencies APIs did not result in a loss of compliance
+            regulatory agencies' APIs did not result in a loss of compliance
             for Treez customers.
           `,
 
