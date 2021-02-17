@@ -177,7 +177,7 @@ export const resume = validateResume({
         summary: `
           Treez provides a full seed-to-sale catalogue of tools for
           inventory & process management, regulatory reporting, B2B
-          sales, and point of sale to recreational & medical customers.
+          sales, and point of sale for the legal cannabis market.
         `,
 
         highlights: [
