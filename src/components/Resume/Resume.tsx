@@ -129,7 +129,7 @@ const ResumeFlexHeading = styled('h2', {
   fontSize:    clamp(
     `${theme.headingRanges.h3.minEm}em`,
     `${theme.headingRanges.h3.fluidVw}vw`,
-    `${theme.headingRanges.h3.maxEm}em`
+    `1.17778em`
   ),
   marginBottom: 0,
   paddingLeft:  0,
@@ -330,14 +330,48 @@ const ResumeEmploymentPosition = styled('div', {
 
 const ResumeEmploymentHighlightsList = styled('ul', {
   fontSize:           '0.88889em',
-  paddingInlineStart: '1.77778em',
+  paddingInlineStart: 0,
 });
 
 const ResumeEmploymentHighlightsListItem = styled('li', {
+  display:             'grid',
+  gridTemplateColumns: '1.25rem 1fr',
+  listStyle:           'none',
+
   nested: {
-    '&::marker': {
-      content:    '"›   "',
+    '&:before': {
+      content:    '"›"',
       fontWeight: 'bolder',
+      lineHeight: 1.2222,
+      textAlign:  'center',
+    },
+  },
+});
+
+const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
+  marginBottom:  '0.5rem',
+  paddingBottom: '1.5rem',
+  position:      'relative',
+
+  nested: {
+    '&:after': {
+      ...theme.resume.employment.separator,
+
+      bottom:     0,
+      content:    '""',
+      display:    'block',
+      gridColumn: '3 / 3',
+      left:       0,
+      position:   'absolute',
+      width:      '100%',
+    },
+
+    '&:last-child': {
+      marginBottom: 0,
+    },
+
+    '&:last-child:after': {
+      display: 'none',
     },
   },
 });
@@ -361,7 +395,7 @@ const ResumeEmploymentListItem = ({
   summary,
   ...props
 }: ResumeEmploymentListItemProps) => (
-  <ResumeTopLevelListingItem { ...props }>
+  <BaseResumeTopLevelListingItem { ...props }>
     <FlexHeader>
       <>{ employer }</>
       <ResumeTimeRange range={ [ start, end ] } />
@@ -386,11 +420,11 @@ const ResumeEmploymentListItem = ({
           </ResumeEmploymentHighlightsList>
         )
     )}
-  </ResumeTopLevelListingItem>
+  </BaseResumeTopLevelListingItem>
 );
 
 const BaseResumeEmployment = styled(ResumeSection, {
-  ...theme.resume.employment,
+  ...theme.resume.employment.container,
 
   marginTop: '1rem',
 });
