@@ -20,6 +20,7 @@ const months = [
   'December',
 ];
 
+
 const Time = styled('time', {
   nested: {
     [theme.darkMode]: {
@@ -29,28 +30,38 @@ const Time = styled('time', {
   ...theme.deemphasize,
 });
 
+export enum TimestampMode {
+  DEFAULT = 'DEFAULT',
+  META    = 'META',
+  SHORT   = 'SHORT',
+}
+
 type TimestampProps =
   & ComponentProps<typeof Time>
   & {
-    readonly date:   Date;
-    readonly short?: boolean;
+    readonly date:  Date;
+    readonly mode?: TimestampMode;
   };
 
 export const Timestamp = ({
   date,
-  short = false,
+  mode = TimestampMode.DEFAULT,
   ...rest
 }: TimestampProps) => {
   const month = date.getMonth() + 1;
   const year  = date.getFullYear();
 
-  const formatted = short
-    ? `${month}/${year}`
-    : [
-      date.getDate(),
-      months[month],
-      year,
-    ].join(' ');
+  const formatted = (
+    mode === TimestampMode.SHORT
+      ? `${month}/${year}`
+    : mode === TimestampMode.META
+      ? ''
+      : [
+        date.getDate(),
+        months[month],
+        year,
+      ].join(' ')
+  );
 
   return (
     <Time { ...rest } datetime={ date.toISOString() }>

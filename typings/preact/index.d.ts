@@ -16,7 +16,7 @@ declare module 'preact' {
     interface HTMLAttributes<RefType extends EventTarget = EventTarget> {
       datetime?:  string;
       itemprop?:  string;
-      itemscope?: string;
+      itemscope?: boolean;
       itemtype?:  string;
     }
   }

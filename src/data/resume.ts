@@ -372,6 +372,14 @@ export const resume = validateResume({
 
   projects,
   skills,
+
+  social: [
+    {
+      network: 'GitHub',
+      url:     'https://github.com/eyelidlessness',
+      user:    'eyelidlessness',
+    },
+  ],
 });
 
 export {

@@ -1,6 +1,6 @@
 import {
+  ComponentProps,
   ElementType,
-  toChildArray,
 } from 'preact';
 import {
   BlogArt,
@@ -11,7 +11,10 @@ import {
   GitHubLogo,
   GitHubLogoDefs,
 } from '@/components/GitHubLogo';
-import { Timestamp }          from '@/components/Timestamp';
+import {
+  Timestamp,
+  TimestampMode,
+} from '@/components/Timestamp';
 import {
   resume,
   ResumeProjectRole,
@@ -63,13 +66,55 @@ const ResumeHeader = styled(BaseFlex, {
   },
 });
 
-const ResumeEmailLink = styled('a', {
+const ResumeHeaderSection = styled(ResumeSection, {
+  padding: 0,
+});
+
+const ResumeHeaderLinksContainer = styled(Flex, {
+  flexWrap: 'wrap',
+  margin:   '0.1111rem 0 0',
+});
+
+const BaseResumeHeaderLink = styled('a', {
   ...theme.resume.contactList.link,
 
   fontSize:       '0.88889em',
+  fontWeight:     500,
   minWidth:       'auto',
   textDecoration: 'none',
 });
+
+const ResumeHeaderLinkInner = styled('span', {
+  nested: {
+    '@media print': {
+      nested: {
+        '& > *': {
+          display: 'none',
+        },
+
+        '&:after': {
+          content: 'attr(data-print-label)',
+        },
+      },
+    },
+  },
+});
+
+type ResumeHeaderLinkProps =
+  & ComponentProps<typeof BaseResumeHeaderLink>
+  & { readonly printLabel: string };
+
+const ResumeHeaderLink = ({
+  children,
+  printLabel,
+  ...props
+}: ResumeHeaderLinkProps) => (
+  <BaseResumeHeaderLink { ...props }>
+    <ResumeHeaderLinkInner data-print-label={ printLabel }>
+      <span>{ children }</span>
+    </ResumeHeaderLinkInner>
+  </BaseResumeHeaderLink>
+);
 
 const ResumeBrief = styled(FullBleedContainer, {
   ...theme.resume.brief,
@@ -203,8 +248,8 @@ const ResumeSkillsetListing = ({
   name,
   skills,
 }: ResumeSkillsListProps) => (
-  <div>
-    <ResumeFlexHeading>{ name }</ResumeFlexHeading>
+  <div itemscope itemtype="http://schema.org/ItemList">
+    <ResumeFlexHeading itemprop="name">{ name }</ResumeFlexHeading>
 
     <ResumeSkillsList>
       { skills.map(({
@@ -214,7 +259,7 @@ const ResumeSkillsetListing = ({
         const Marker = ResumeSkillLevelMarkers[level];
 
         return (
-          <ResumeSkillsListItem key={ name }>
+          <ResumeSkillsListItem key={ name } itemprop="itemListElement">
             <Marker
               role="img"
               title={ `Skill level: ${level}` }
@@ -232,37 +277,6 @@ const ResumeTopLevelListingItem = styled(FullBleedContainer, {
   padding: '1rem 0',
 });
 
-const FlexHeaderSecondary = styled('span', {
-  ...theme.deemphasize,
-
-  fontStyle: 'italic',
-
-  nested: {
-    [theme.darkMode]: {
-      ...theme[theme.darkMode].deemphasize,
-    },
-  },
-});
-
-type FlexHeaderProps = Omit<JSX.IntrinsicElements['div'], 'as' | 'start'>;
-
-const FlexHeader = ({
-  children,
-  ...props
-}: FlexHeaderProps) => {
-  const [ primary, ...secondaries ] = toChildArray(children);
-
-  return (
-    <ResumeHeader { ...props }>
-      <h3>{ primary }</h3>
-      { toChildArray(secondaries).map((secondary) => (
-        typeof secondary === 'string'
-          ? (<FlexHeaderSecondary>{ secondary }</FlexHeaderSecondary>)
-          : secondary
-      )) }
-    </ResumeHeader>
-  );
-};
 
 // TODO: the FRESH spec says this should be a summary of my achievements,
 // but so far I've summarized the business.
@@ -310,16 +324,28 @@ const ResumeTimeRange = ({
   if (start == end) {
     return (
       <BaseResumeTimeRange>
-        <ResumeTimestamp date={ startDate } short={ true } />
+        <ResumeTimestamp
+          date={ endDate }
+          itemprop="endDate"
+          mode={ TimestampMode.SHORT }
+        />
       </BaseResumeTimeRange>
     );
   }
 
   return (
     <BaseResumeTimeRange>
-      <ResumeTimestamp date={ startDate } short={ true } />
+      <ResumeTimestamp
+        date={ startDate }
+        itemprop="startDate"
+        mode={ TimestampMode.SHORT }
+      />
       { ' – ' }
-      <ResumeTimestamp date={ endDate } short={ true } />
+      <ResumeTimestamp
+        date={ endDate }
+        itemprop="endDate"
+        mode={ TimestampMode.SHORT }
+      />
     </BaseResumeTimeRange>
   );
 };
@@ -395,25 +421,38 @@ const ResumeEmploymentListItem = ({
   summary,
   ...props
 }: ResumeEmploymentListItemProps) => (
-  <BaseResumeTopLevelListingItem { ...props }>
-    <FlexHeader>
-      <>{ employer }</>
+  <BaseResumeTopLevelListingItem
+    as="section"
+    itemscope itemtype="https://schema.org/EmployeeRole"
+    { ...props }
+  >
+    <ResumeHeader>
+      <h3 itemprop="name">{ employer }</h3>
       <ResumeTimeRange range={ [ start, end ] } />
-    </FlexHeader>
-    <ResumeEmploymentPosition>{ position }</ResumeEmploymentPosition>
+    </ResumeHeader>
+    <ResumeEmploymentPosition itemprop="roleName">
+      { position }
+    </ResumeEmploymentPosition>
 
     {(
       summary == null
         ? null
-        : (<ResumeEmployerSummary>{ mdx(summary) }</ResumeEmployerSummary>)
+        : (
+            <ResumeEmployerSummary itemprop="description">
+              { mdx(summary) }
+            </ResumeEmployerSummary>
+          )
     )}
     {(
       highlights == null
         ? null
         : (
-          <ResumeEmploymentHighlightsList>
+          <ResumeEmploymentHighlightsList itemtype="http://schema.org/ItemList">
             { highlights.map((highlight) => (
-              <ResumeEmploymentHighlightsListItem key={ highlight }>
+              <ResumeEmploymentHighlightsListItem
+                key={ highlight }
+                itemprop="itemListElement"
+              >
                 { mdx(highlight) }
               </ResumeEmploymentHighlightsListItem>
             )) }
@@ -648,11 +687,26 @@ const BaseResume = styled(FullBleedContainer, {
   },
 });
 
+const ReaderModeTimestamp = styled(Timestamp, {
+  clip:       'rect(0 0 0 0)',
+  clipPath:   'inset(50%)',
+  height:     '1px',
+  overflow:   'hidden',
+  position:   'absolute',
+  whiteSpace: 'nowrap',
+  width:      '1px',
+});
+
+const shortURL = (url: string) => (
+  url.replace(/^https?:\/\/|\/$/g, '')
+);
+
 interface ResumeProps {
   readonly className?: string;
   readonly id?:        string;
   readonly meta:       BlogArtProps;
   readonly resume:     typeof resume;
+  readonly updated:    Date;
 }
 
 export const Resume = ({
@@ -660,29 +714,76 @@ export const Resume = ({
   id,
   meta,
   resume,
+  updated,
 }: ResumeProps) => {
   const {
-    contact: { email },
+    contact: {
+      email,
+      website,
+    },
     employment,
     info,
     name,
     projects,
     skills,
+    social,
   } = resume;
 
   return (
-    <BaseResume className={ className } id={ id }>
+    <BaseResume
+      className={ className }
+      id={ id }
+      itemscope
+      itemtype="http://schema.org/Person"
+    >
       <GitHubLogoDefs />
       <BlogArt { ...meta } />
 
-      <ResumeSection>
+      <ResumeHeaderSection>
         <ResumeHeader>
-          <h1>{ name }</h1>
-          <ResumeEmailLink href={ `mailto:${email}` }>{ email }</ResumeEmailLink>
+          <h1 itemprop="name">{ name }</h1>
+          <ReaderModeTimestamp
+            date={ updated }
+            itemprop="datePublished"
+            mode={ TimestampMode.META }
+          />
+
+          <ResumeHeaderLinksContainer>
+            <ResumeHeaderLink
+              href={ `mailto:${email}` }
+              itemprop="email"
+              printLabel={ email }
+            >
+              Email
+            </ResumeHeaderLink>
+
+            <ResumeHeaderLink
+              href={ website }
+              itemprop="url"
+              printLabel={ shortURL(website) }
+              rel="me"
+            >
+              Website
+            </ResumeHeaderLink>
+
+            { social.map(({
+              network,
+              url,
+            }) => (
+              <ResumeHeaderLink
+                href={ url }
+                itemprop="url"
+                printLabel={ shortURL(url) }
+                rel="me"
+              >
+                { network }
+              </ResumeHeaderLink>
+            )) }
+          </ResumeHeaderLinksContainer>
         </ResumeHeader>
 
-        <ResumeBrief>{ mdx(info.brief) }</ResumeBrief>
-      </ResumeSection>
+        <ResumeBrief itemprop="description">{ mdx(info.brief) }</ResumeBrief>
+      </ResumeHeaderSection>
 
       <ResumeSection aria-label="Skillsets">
         <ResumeSkillsetsContainer>

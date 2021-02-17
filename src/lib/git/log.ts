@@ -19,8 +19,9 @@ const resolveModulePath = (basePath: string) => (
 );
 
 enum GitFilter {
-  ALL   = '',
-  FIRST = '--diff-filter=A',
+  ALL     = '',
+  CURRENT = '--diff-filter=M',
+  FIRST   = '--diff-filter=A',
 }
 
 enum GitFormat {
@@ -87,6 +88,22 @@ export const getFormattedGitLogData = <T extends GitFilter = GitFilter.FIRST>(
 export const getInitialCommitDate = (basePath: string): Date | null => {
   const path = resolveModulePath(basePath);
   const logData = getFormattedGitLogData({
+    format: GitFormat.ISO_DATE,
+    path,
+  });
+  const date = new Date(logData ?? '');
+
+  if (isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
+};
+
+export const getCurrentCommitDate = (basePath: string): Date | null => {
+  const path = resolveModulePath(basePath);
+  const logData = getFormattedGitLogData({
+    filter: GitFilter.CURRENT,
     format: GitFormat.ISO_DATE,
     path,
   });
