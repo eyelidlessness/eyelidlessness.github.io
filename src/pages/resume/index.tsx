@@ -11,19 +11,25 @@ import {
 import { styled }     from '@/lib/styles';
 
 const ResumePageResume = styled(Resume, {
-  marginTop: '1rem',
+  marginTop: 0,
 });
 
 interface ResumePageProps {
   readonly description: string;
   readonly hash:        string;
-  readonly title:       string;
-  readonly topics:      readonly Topic[];
+
+  readonly stat: {
+    readonly updated: Date;
+  };
+
+  readonly title:  string;
+  readonly topics: readonly Topic[];
 }
 
 const ResumePage = ({
   description,
   hash,
+  stat: { updated },
   title,
   topics,
 }: ResumePageProps) => {
@@ -41,7 +47,12 @@ const ResumePage = ({
       </Head>
 
       <Main>
-        <ResumePageResume id="resume" meta={ meta } resume={ resume } />
+        <ResumePageResume
+          id="resume"
+          meta={ meta }
+          resume={ resume }
+          updated={ updated }
+        />
       </Main>
     </>
   );

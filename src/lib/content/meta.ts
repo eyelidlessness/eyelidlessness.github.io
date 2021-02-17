@@ -1,5 +1,6 @@
 import fs from 'fs';
 import {
+  getCurrentCommitDate,
   getInitialFileHash,
   getInitialCommitDate,
 } from '@/lib/git';
@@ -13,6 +14,10 @@ export const getPageMetadata = <Path extends string>(
     created: (
       getInitialCommitDate(path) ??
       fs.statSync(importURL.replace(/^file:(\/\/)?/, '')).ctime
+    ),
+    updated: (
+      getCurrentCommitDate(path) ??
+      fs.statSync(importURL.replace(/^file:(\/\/)?/, '')).mtime
     ),
   };
 

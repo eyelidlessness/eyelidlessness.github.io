@@ -8,7 +8,7 @@ const BaseResumeSection = styled(FullBleedContainer, {
   padding: '1rem 0 0',
 
   nested: {
-    '&:first-child': {
+    '&:first-child, &:nth-of-type(1)': {
       paddingTop: 0,
     },
   },
