@@ -3,7 +3,7 @@ import {
   theme,
 } from '@/lib/styles';
 
-const siteLogoDimensionsPx = {
+export const siteLogoDimensionsPx = {
   height: 60,
   width:  338,
 };

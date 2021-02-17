@@ -318,7 +318,7 @@ const renderTokens = (
   )
 );
 
-export const visitor = (
+const visitor = (
   highlighter: Highlighter,
   settings:    Readonly<ShikiTwoslashSettings> = {}
 ) => (node: RichNode) => {

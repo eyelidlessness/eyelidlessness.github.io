@@ -16,6 +16,7 @@ import {
   RendererProvider,
   Style,
 } from 'preact-fela';
+import { identity }       from '@/lib/helpers';
 import hashed             from './hashed';
 
 const _require = module.createRequire(import.meta.url);
@@ -88,8 +89,6 @@ export const StylesProvider = ({ children }: StylesProviderProps) => (
   h(RendererProvider, { renderer }, ...toArray(children))
 );
 
-const identity = <T>(value: T) => value;
-
 const baseCSS = <T>(value: T) => (
   renderer.renderRule(identity, value)
 );
@@ -108,21 +107,23 @@ interface BaseStyledProps extends StyleableProps {
 
 type StyledProps<P> =
   & BaseStyledProps
-  & P extends { as: infer T }
-    ? T extends keyof JSX.IntrinsicElements
-      ? (
-        & { as: T }
-        & JSX.IntrinsicElements[T]
-      )
-    : T extends ComponentType<infer P2>
-      ? P2 extends StyleableProps
+  & (
+    P extends { as: infer T }
+      ? T extends keyof JSX.IntrinsicElements
         ? (
-          & { as: ComponentType<P2> }
-          & P2
+          & { as: T }
+          & JSX.IntrinsicElements[T]
         )
-        : never
-      : P
-    : P;
+      : T extends ComponentType<infer P2>
+        ? P2 extends StyleableProps
+          ? (
+            & { as: ComponentType<P2> }
+            & Omit<P2, 'as'>
+          )
+          : never
+        : Omit<P, 'as'>
+      : Omit<P, 'as'>
+    );
 
 type StyledComponent<P> = ComponentType<
   StyledProps<P>

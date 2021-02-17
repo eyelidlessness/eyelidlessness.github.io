@@ -131,11 +131,12 @@ export default definePage(WhatTheArtPost, {
         how they were achieved in broad strokes.
       `,
 
-      title: 'What the art, part 2: Constraints',
+      importURL: import.meta.url,
+      title:     'What the art, part 2: Constraints',
 
       topics: [
-      Topic.ART,
-      Topic.TECHNOLOGY,
+        Topic.ART,
+        Topic.TECHNOLOGY,
       ],
     });
 

@@ -1,4 +1,3 @@
-import fs                      from 'fs';
 import { seo }                 from 'microsite/head';
 import { PathParams }          from 'microsite/page';
 import { StaticPropsContext }  from 'microsite/utils/router';
@@ -10,16 +9,12 @@ import { Main }                from '@/components/Main';
 import { Timestamp }           from '@/components/Timestamp';
 import { TopicTagList }        from '@/components/Topic/TopicTagList';
 import {
+  getPageMetadata,
   mdxRaw,
   Topic,
 } from '@/lib/content';
-import {
-  getInitialFileHash,
-  getInitialCommitDate,
-} from '@/lib/git';
 import { styled }              from '@/lib/styles';
 import { BlogArt }             from './BlogArt';
-import { BlogArtDefs }         from './BlogArtDefs';
 import { BlogPostDescription } from './BlogPostDescription';
 
 const BlogPostTitle = styled('h1', {
@@ -67,7 +62,6 @@ export const BlogPost = ({
 
     <Main as="article">
       <BlogPostHeading>
-        <BlogArtDefs />
         <BlogArt hash={ hash } title={ title } topics={ topics } />
 
         <BlogPostTitle>{ title }</BlogPostTitle>
@@ -94,6 +88,7 @@ interface DefineBlogPostOptions<
   P    extends AnyBlogPostProps<Path>
 > extends Omit<StaticPropsContext<P>, 'params'> {
   readonly description: ComponentChildren;
+  readonly importURL:   string;
   readonly title:       string;
   readonly topics:      readonly Topic[];
 }
@@ -104,21 +99,17 @@ export const getBlogPostStaticProps = <
 >(options: DefineBlogPostOptions<Path, P>) => {
   const {
     description,
+    importURL,
     path,
     title,
-    topics
+    topics,
   } = options;
+  const {
+    hash,
+    stat,
+  } = getPageMetadata(path, importURL);
 
-  const descriptionRaw = mdxRaw`${renderToString(
-    <>{ description }</>
-  )}`;
-  const hash = getInitialFileHash(path);
-  const stat = {
-    created: (
-      getInitialCommitDate(path) ??
-      fs.statSync(import.meta.url.replace(/^file:(\/\/)?/, '')).ctime
-    ),
-  };
+  const descriptionRaw = mdxRaw`${renderToString(<>{ description }</>)}`;
 
   return {
     description,

@@ -31,10 +31,30 @@ const Time = styled('time', {
 
 type TimestampProps =
   & ComponentProps<typeof Time>
-  & { readonly date: Date }
+  & {
+    readonly date:   Date;
+    readonly short?: boolean;
+  };
 
-export const Timestamp = ({ date, ...rest }: TimestampProps) => (
-  <Time { ...rest } datetime={ date.toISOString() }>
-    { date.getDate() } { months[date.getMonth() + 1] } { date.getFullYear() }
-  </Time>
-);
+export const Timestamp = ({
+  date,
+  short = false,
+  ...rest
+}: TimestampProps) => {
+  const month = date.getMonth() + 1;
+  const year  = date.getFullYear();
+
+  const formatted = short
+    ? `${month}/${year}`
+    : [
+      date.getDate(),
+      months[month],
+      year,
+    ].join(' ');
+
+  return (
+    <Time { ...rest } datetime={ date.toISOString() }>
+      { formatted }
+    </Time>
+  );
+};

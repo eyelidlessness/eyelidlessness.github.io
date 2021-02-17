@@ -1,89 +1,64 @@
+import { ComponentChildren } from 'preact';
+import { DevilsAlbatross }   from '@/components/DevilsAlbatross';
+import { GitHubLogo }        from '@/components/GitHubLogo';
 import {
   styled,
   theme,
 } from '@/lib/styles';
-import { SiteLogo } from './SiteLogo';
+import {
+  SiteLogo,
+  siteLogoDimensionsPx,
+} from './SiteLogo';
 
+const {
+  columns,
+  container,
+} = theme.siteHeader;
 
 const gridTemplateColumns = `
-  ${theme.siteHeader.columns[0]}
-  ${theme.siteHeader.columns[1]}
+  ${columns[0]}
+  ${columns[1]}
   min(
-    ${theme.siteHeader.columns[2][0]},
-    ${theme.siteHeader.columns[2][1]}
+    ${columns[2][0]},
+    ${columns[2][1]}
   )
-  ${theme.siteHeader.columns[3]}
-  ${theme.siteHeader.columns[4]}
+  ${columns[3]}
+  ${columns[4]}
 `.replace(/\s+/g, ' ');
 
 const BaseSiteHeader = styled('div', {
+  ...container,
+
   display:    'grid',
   gridColumn: '1 / -1',
   gridTemplateColumns,
-  padding: '1rem 0',
-});
-
-const wrapMediaQuery = '@media (min-width: 0)';
-
-const SiteHeaderNav = styled('nav', {
-  nested: {
-    [wrapMediaQuery]: {
-      // flexFlow:       'row wrap',
-      flexFlow:       'row',
-      justifyContent: 'space-between',
-    },
-  },
-
-  alignItems:     'center',
-  display:        'flex',
-  flexFlow:       'column',
-  justifyContent: 'center',
+  padding:    '1rem 0',
 });
 
 const SiteHeaderNavOuter = styled('div', {
-  display:        'grid',
-  gridColumn:     3,
-  justifyContent: 'stretch',
-  textAlign:      'center',
+  gridColumn: 3,
 });
 
 const SiteHeaderHomeLinkContainer = styled('div', {
-  nested: {
-    [wrapMediaQuery]: {
-      marginLeft:  0,
-      marginRight: '1em',
-    },
-  },
-
   margin: '0 auto',
 });
 
 const SiteHeaderHomeLink = styled('a', {
-  nested: {
-    [theme.darkMode]: {
-      color: 'hsl(336deg, 80%, 62%)',
-    },
-  },
-
   textDecoration: 'none',
 });
 
 const SiteHeaderPagesList = styled('ul', {
-  nested: {
-    [wrapMediaQuery]: {
-      marginLeft:  '1em',
-      marginRight: 0,
-      marginTop:   0,
-    },
-  },
-
-  alignItems:     'baseline',
+  alignItems:     'center',
   display:        'flex',
+  flexShrink:     0,
   justifyContent: 'center',
   listStyle:      'none',
-  margin:         '0.75rem auto 0',
+  marginBottom:   0,
+  marginTop:      0,
   padding:        0,
 });
+
+const listItemMarginRem = 1;
 
 const SiteHeaderPagesListItem = styled('li', {
   nested: {
@@ -96,19 +71,23 @@ const SiteHeaderPagesListItem = styled('li', {
     },
   },
 
-  display:   'inline-block',
-  listStyle: 'none',
-  margin:    '0 0 0 2rem',
-  padding:   0,
+  display:    'block',
+  flexShrink: 0,
+  listStyle:  'none',
+  margin:     `0 ${listItemMarginRem / 2}rem`,
+  padding:    0,
 });
 
 const SiteHeaderPageLink = styled('a', {
   ...theme.siteHeader.pageLinks,
 
-  fontSize:       '1.125em',
+  display:        'block',
+  fontSize:       'clamp(1em, 3vw, 1.125em)',
   fontWeight:     300,
   lineHeight:     1,
+  padding:        '0.25rem',
   textDecoration: 'none',
+  whiteSpace:     'nowrap',
 
   nested: {
     [theme.darkMode]: {
@@ -123,27 +102,79 @@ const SiteHeaderPageLink = styled('a', {
       textDecoration: 'underline',
     },
   },
-
 });
 
-export const SiteHeader = () => (
-  <BaseSiteHeader as="header">
-    <SiteHeaderNavOuter>
-      <SiteHeaderNav>
-        <SiteHeaderHomeLinkContainer>
-          <SiteHeaderHomeLink href="/">
-            <SiteLogo />
-          </SiteHeaderHomeLink>
-        </SiteHeaderHomeLinkContainer>
+const gitHubLogoMaxWidth = '1.5em';
 
-        { false && <SiteHeaderPagesList>
-          <SiteHeaderPagesListItem>
-            <SiteHeaderPageLink href="/blog/2021/02/what-the-art/">
-              Blog
-            </SiteHeaderPageLink>
-          </SiteHeaderPagesListItem>
-        </SiteHeaderPagesList>}
-      </SiteHeaderNav>
-    </SiteHeaderNavOuter>
-  </BaseSiteHeader>
-);
+const SiteHeaderGitHubLogo = styled(GitHubLogo, {
+  display: 'block',
+  width:   `clamp(1.125em, 4vw, ${gitHubLogoMaxWidth})`,
+});
+
+interface SiteLink {
+  readonly label:    ComponentChildren;
+  readonly location: string;
+}
+
+export const SiteHeader = () => {
+  const siteLinks: readonly SiteLink[] = [
+    {
+      label:    'Blog',
+      location: '/',
+    },
+
+    {
+      label:    'Hire Me',
+      location: '/resume/',
+    },
+
+    {
+      label:    'GitHub' ?? ( <SiteHeaderGitHubLogo /> ),
+      location: 'https://github.com/eyelidlessness',
+    }
+  ] as const;
+  const characterCount = siteLinks.reduce((acc, link) => (
+    typeof link.label === 'string'
+      ? acc + link.label.length
+      : acc
+  ), 0);
+
+  const gap = {
+    horizontal: '2rem',
+  };
+  const devilsBreakpoint = `${[
+    `${siteLogoDimensionsPx.width}px`,
+    gap.horizontal,
+    `${characterCount + 1}ch`,
+    gitHubLogoMaxWidth,
+    `${siteLinks.length * listItemMarginRem}rem`,
+  ].join(' + ')}`;
+
+  return (
+    <BaseSiteHeader as="header">
+      <SiteHeaderNavOuter>
+        <DevilsAlbatross
+          as="nav"
+          devilsBreakpoint={ devilsBreakpoint }
+          gap={ gap }
+        >
+          <SiteHeaderHomeLinkContainer>
+            <SiteHeaderHomeLink href="/">
+              <SiteLogo />
+            </SiteHeaderHomeLink>
+          </SiteHeaderHomeLinkContainer>
+
+          <SiteHeaderPagesList>
+          { siteLinks.map(({ location, label }) => (
+            <SiteHeaderPagesListItem>
+              <SiteHeaderPageLink href={ location }>
+                { label }
+              </SiteHeaderPageLink>
+            </SiteHeaderPagesListItem>
+          )) }
+          </SiteHeaderPagesList>
+        </DevilsAlbatross>
+      </SiteHeaderNavOuter>
+    </BaseSiteHeader>
+  );
+};

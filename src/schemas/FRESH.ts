@@ -1,8 +1,10 @@
 import {
-  createSchema as s,
-} from 'ts-json-validator';
+  s,
+  SchemaType,
+  UnknownType,
+} from '@/lib/schemas';
 
-const UnknownType = s({});
+export const FRESH_SCHEMA_FORMAT = 'FRESH@0.1.0';
 
 export const FRESHSchema = s({
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -28,7 +30,7 @@ export const FRESHSchema = s({
       ],
       properties: {
         format: s({
-          type: 'string',
+          const: FRESH_SCHEMA_FORMAT,
           description: `The canonical resume format and version. Should be 'FRESH@0.1.0'.`,
         }),
         version: s({
@@ -429,7 +431,6 @@ export const FRESHSchema = s({
 
         list: s({
           type: 'array',
-
           items: s({
             type: 'object',
             additionalProperties: UnknownType,
@@ -460,8 +461,8 @@ export const FRESHSchema = s({
                 description: `Number of years you've used the skill.`
               })
             }
-          })
-        })
+          }),
+        }),
       }
     }),
 
@@ -731,7 +732,7 @@ export const FRESHSchema = s({
 
           from: s({
             type: 'string',
-            description: 'Name of the awarding company, insitution, or individual.'
+            description: 'Name of the awarding company, institution, or individual.'
           }),
 
           summary: s({
@@ -1044,7 +1045,7 @@ export const FRESHSchema = s({
             description: 'Noteworthy achievements and/or highlights for this sample.',
             items: s({
               type: 'string',
-              description: `For ex, 'Implemented optimized search algorithm dervied from Slices of Pi'.`
+              description: `For ex, 'Implemented optimized search algorithm derived from Slices of Pi'.`
             })
           }),
 
@@ -1310,3 +1311,5 @@ export const FRESHSchema = s({
     })
   }
 });
+
+export type FRESHResume = SchemaType<typeof FRESHSchema>;

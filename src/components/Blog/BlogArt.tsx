@@ -1,4 +1,8 @@
 import {
+  fullBleedClassName,
+  FullBleedContainer,
+} from '@/components/FullBleedContainer';
+import {
   computeBasicArt,
 } from '@/lib/art';
 import {
@@ -10,10 +14,7 @@ import {
   styled,
   theme,
 } from '@/lib/styles';
-import {
-  fullBleedClassName,
-  FullBleedContainer,
-} from '@/components/FullBleedContainer';
+import { BlogArtStaticDefs } from './BlogArtDefs';
 
 const GOLDEN_RATIO = 1.6180334 as const;
 
@@ -48,10 +49,17 @@ const Segment = styled('path', {
   opacity:  0.85,
 });
 
+export enum BlogArtDefsUsage {
+  INLINE = 'inline',
+  NONE   = 'none',
+}
+
 export interface BlogArtProps {
   readonly className?: string;
+  readonly defsUsage?: BlogArtDefsUsage;
   readonly hash:       string;
   readonly padded?:    boolean;
+  readonly simple?:    boolean;
   readonly title:      string;
   readonly topics?:    readonly Topic[];
 }
@@ -59,7 +67,9 @@ export interface BlogArtProps {
 export const BlogArt = (props: BlogArtProps) => {
   const {
     className,
+    defsUsage = BlogArtDefsUsage.INLINE,
     hash,
+    simple = false,
     title,
     topics: baseTopics = [],
   } = props;
@@ -90,6 +100,48 @@ export const BlogArt = (props: BlogArtProps) => {
   const glowOffset = glowSize * 0.75;
   const viewBox    = [ 0, 0, xMax, yMax ];
 
+  if (simple) {
+    return (
+      <BlogArtContainer className={ className }>
+        <BlogArtGraphic
+          className={ fullBleedClassName }
+          preserveAspectRatio="none"
+          viewBox={ viewBox.join(' ') }
+        >
+          <title>
+            Generated art for the page or post titled
+            <i>{ title }</i>,
+            with the content or commit hash { hash } {
+              topics.length > 0
+                ? [ ', and the topics: ', topics.map(String).join(', ') ]
+                : null
+            }
+          </title>
+          <g
+            transform={ [
+              `translate(0, ${yMax * Y_PADDING})`,
+              `scale(1, ${1 - (Y_PADDING * 2)})`,
+            ].join(' ') }
+          >
+            { segmentPaths.map((path, index) => {
+              const topicIndex = index % topics.length;
+              const topic = topics[topicIndex];
+              const className = topicClassName(topic);
+
+              return (
+                <Segment
+                  key={ path }
+                  className={ className }
+                  d={ path }
+                />
+              );
+            }) }
+          </g>
+        </BlogArtGraphic>
+      </BlogArtContainer>
+    );
+  }
+
   return (
     <BlogArtContainer className={ className }>
       <BlogArtGraphic
@@ -108,6 +160,12 @@ export const BlogArt = (props: BlogArtProps) => {
         </title>
 
         <defs>
+          {(
+            defsUsage === BlogArtDefsUsage.INLINE
+              ? <BlogArtStaticDefs />
+              : null
+          )}
+
           <filter id={ id('blur') }>
             <feOffset
               in="SourceGraphic"

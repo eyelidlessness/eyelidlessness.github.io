@@ -116,7 +116,8 @@ export default definePage(WhatTheArtPost, {
         post teasing it on social media… 🙃</small> until now.
       `,
 
-      title: 'What the art, part 1: Why?',
+      importURL: import.meta.url,
+      title:     'What the art, part 1: Why?',
 
       topics: [
         Topic.ART,

@@ -5,7 +5,8 @@ import {
   Main,
   MicrositeScript,
 } from 'microsite/document';
-import { StylesProvider } from '@/lib/styles';
+import { resetAbbrContext } from '@/lib/content';
+import { StylesProvider }   from '@/lib/styles';
 
 const Document = () => {
   return (
@@ -29,6 +30,8 @@ let renderLock: Promise<RenderPageResult> | null = null;
 
 export default defineDocument(Document, {
   async prepare({ renderPage }) {
+    resetAbbrContext();
+
     await renderLock;
     renderLock = renderPage();
 

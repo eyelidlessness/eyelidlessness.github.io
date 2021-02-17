@@ -1,5 +1,5 @@
 declare module 'remark-mdx' {
-  import { Plugin } from 'unist';
+  import { Plugin } from 'unified';
 
   const remarkMDX: Plugin;
 

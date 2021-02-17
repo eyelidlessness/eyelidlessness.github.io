@@ -24,7 +24,7 @@ const IndexPage = ({
         </seo.description>
       </Head>
 
-      <Main>
+      <Main isListing={ true }>
         <BlogArtDefs />
 
         <BlogListing posts={ posts } />

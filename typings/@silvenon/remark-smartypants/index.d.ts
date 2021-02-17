@@ -1,5 +1,5 @@
 declare module '@silvenon/remark-smartypants' {
-  import { Plugin } from 'unist';
+  import { Plugin } from 'unified';
 
   const remarkSmartypants: Plugin;
 
