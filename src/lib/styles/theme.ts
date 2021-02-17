@@ -667,11 +667,23 @@ export const theme = {
     },
 
     employment: {
-      backgroundColor: 'hsl(41deg, 58%, 98%)',
+      container: {
+        backgroundColor: 'hsl(47deg, 58%, 98%)',
 
-      nested: {
-        [darkMode]: {
-          backgroundColor: 'hsl(41deg, 100%, 8%)',
+        nested: {
+          [darkMode]: {
+            backgroundColor: 'hsl(41deg, 100%, 8%)',
+          },
+        },
+      },
+
+      separator: {
+        borderBottom: '1px solid hsl(17deg, 78%, 90%)',
+
+        nested: {
+          [darkMode]: {
+            borderColor: 'hsl(17deg, 70%, 17%)',
+          },
         },
       },
     },
