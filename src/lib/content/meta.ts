@@ -17,7 +17,7 @@ export const getPageMetadata = <Path extends string>(
     ),
     updated: (
       getCurrentCommitDate(path) ??
-      fs.statSync(importURL.replace(/^file:(\/\/)?/, '')).mtime,
+      fs.statSync(importURL.replace(/^file:(\/\/)?/, '')).mtime
     ),
   };
 
