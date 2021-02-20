@@ -99,8 +99,8 @@ const pluginSocial = () => ({
         hash,
         social: {
           image: {
-            absolutePath,
             height,
+            publicPath,
             width,
           },
         },
@@ -130,10 +130,13 @@ const pluginSocial = () => ({
         width,
       });
 
-      mkdirSync(dirname(absolutePath), {
+      const baseDistPath = path.resolve(process.cwd(), './dist');
+      const distPath = path.resolve(baseDistPath, `.${publicPath}`);
+
+      mkdirSync(dirname(distPath), {
         recursive: true,
       });
-      writeFileSync(absolutePath, artRaster);
+      writeFileSync(distPath, artRaster);
     }
   },
 });
