@@ -11,6 +11,8 @@ import {
 } from '@/lib/content';
 import {
   clamp,
+  IRenderer,
+  renderer,
   styled,
   theme,
 } from '@/lib/styles';
@@ -39,10 +41,6 @@ const BlogArtGraphic = styled('svg', {
   width:    '100%',
 });
 
-const topicClassName = (topic: Topic = DEFAULT_TOPIC) => (
-  theme.topicColorClassNames[topic]
-);
-
 const Segment = styled('path', {
   fill:     'currentcolor',
   fillRule: 'nonzero',
@@ -55,23 +53,29 @@ export enum BlogArtDefsUsage {
 }
 
 export interface BlogArtProps {
-  readonly className?: string;
-  readonly defsUsage?: BlogArtDefsUsage;
-  readonly hash:       string;
-  readonly padded?:    boolean;
-  readonly simple?:    boolean;
-  readonly title:      string;
-  readonly topics?:    readonly Topic[];
+  readonly className?:     string;
+  readonly defsUsage?:     BlogArtDefsUsage;
+  readonly hash:           string;
+  readonly height?:        number;
+  readonly padded?:        boolean;
+  readonly rawSVG?:        boolean;
+  readonly styleRenderer?: IRenderer;
+  readonly title:          string;
+  readonly topics?:        readonly Topic[];
+  readonly width?:         number;
 }
 
 export const BlogArt = (props: BlogArtProps) => {
   const {
     className,
-    defsUsage = BlogArtDefsUsage.INLINE,
+    defsUsage          = BlogArtDefsUsage.INLINE,
     hash,
-    simple = false,
+    height,
+    rawSVG             = false,
+    styleRenderer      = renderer,
     title,
     topics: baseTopics = [],
+    width,
   } = props;
 
   const topics: readonly Topic[] = baseTopics.length < 2
@@ -100,206 +104,174 @@ export const BlogArt = (props: BlogArtProps) => {
   const glowOffset = glowSize * 0.75;
   const viewBox    = [ 0, 0, xMax, yMax ];
 
-  if (simple) {
-    return (
-      <BlogArtContainer className={ className }>
-        <BlogArtGraphic
-          className={ fullBleedClassName }
-          preserveAspectRatio="none"
-          viewBox={ viewBox.join(' ') }
-        >
-          <title>
-            Generated art for the page or post titled
-            <i>{ title }</i>,
-            with the content or commit hash { hash } {
-              topics.length > 0
-                ? [ ', and the topics: ', topics.map(String).join(', ') ]
-                : null
-            }
-          </title>
-          <g
-            transform={ [
-              `translate(0, ${yMax * Y_PADDING})`,
-              `scale(1, ${1 - (Y_PADDING * 2)})`,
-            ].join(' ') }
-          >
-            { segmentPaths.map((path, index) => {
-              const topicIndex = index % topics.length;
-              const topic = topics[topicIndex];
-              const className = topicClassName(topic);
+  const svg = (
+    <BlogArtGraphic
+      className={ fullBleedClassName }
+      height={ height }
+      preserveAspectRatio="none"
+      viewBox={ viewBox.join(' ') }
+      width={ width }
+    >
+      <title>
+        Generated art for the page or post titled
+        <i>{ title }</i>,
+        with the content or commit hash { hash } {
+          topics.length > 0
+            ? [ ', and the topics: ', topics.map(String).join(', ') ]
+            : null
+        }
+      </title>
 
-              return (
-                <Segment
-                  key={ path }
-                  className={ className }
-                  d={ path }
-                />
-              );
-            }) }
-          </g>
-        </BlogArtGraphic>
-      </BlogArtContainer>
-    );
+      <defs>
+        {(
+          defsUsage === BlogArtDefsUsage.INLINE
+            ? <BlogArtStaticDefs />
+            : null
+        )}
+
+        <filter id={ id('blur') }>
+          <feOffset
+            in="SourceGraphic"
+            dx="0"
+            dy={ glowOffset }
+            result="glowOffsetOut"
+          />
+
+          <feGaussianBlur
+            in="glowOffsetOut"
+            stdDeviation={ glowSize }
+            result="glowBlurOut"
+          />
+
+          <feBlend
+            in="SourceGraphic"
+            in2="glowBlurOut"
+            mode="color-dodge"
+          />
+        </filter>
+
+        <clipPath id={ id('blurOverlayClip') }>
+          <rect
+            x="0"
+            width={ xMax }
+            y={ blurY }
+            height={ yMax }
+          />
+        </clipPath>
+
+        <filter id={ id('blurOverlay') }>
+          <feOffset
+            result="glowOffsetOut"
+            in="SourceGraphic"
+            dx="0"
+            dy={ glowOffset }
+          />
+
+          <feGaussianBlur
+            result="glowBlurOut"
+            in="glowOffsetOut"
+            stdDeviation={ glowSize }
+          />
+        </filter>
+
+        <filter id={ id('blurUnderlay') }>
+          <feOffset
+            result="glowOffsetOut"
+            in="SourceGraphic"
+            dx="0"
+            dy={ glowOffset }
+          />
+
+          <feGaussianBlur
+            in="glowOffsetOut"
+            result="glowBlurOut"
+            stdDeviation={ glowSize }
+          />
+
+          <feTurbulence
+            type="turbulence"
+            baseFrequency="10"
+            numOctaves="2"
+            result="turbulence"
+          />
+
+          <feDisplacementMap
+            in="glowBlurOut"
+            in2="turbulence"
+            result="dither"
+            scale="25"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+
+          <feColorMatrix
+            in="dither"
+            result="saturated"
+            type="saturate"
+            values="5"
+          />
+
+          <feGaussianBlur
+            in="saturated"
+            result="saturatedBlurOut"
+            stdDeviation={ glowSize }
+          />
+        </filter>
+
+        <g id={ id('blobs') }>
+          { segmentPaths.map((path, index) => {
+            const topicIndex = index % topics.length;
+            const topic = topics[topicIndex];
+            const className = styleRenderer.renderRule(() => ({
+              ...theme.topicColors[topic],
+            }), Object.keys);
+
+            return (
+              <Segment
+                key={ path }
+                className={ className }
+                d={ path }
+                mask="url(#softVerticalFade)"
+              />
+            );
+          }) }
+        </g>
+      </defs>
+
+      <g
+        transform={ [
+          `translate(0, ${yMax * Y_PADDING})`,
+          `scale(1, ${1 - (Y_PADDING * 2)})`,
+        ].join(' ') }
+        filter={ `url(#${id('blur')})` }
+      >
+        <use
+          href={ `#${id('blobs')}` }
+          mask="url(#horizontalMidFade)"
+        />
+      </g>
+
+      <g
+        clip-path={ `url(#${id('blurOverlayClip')})` }
+        filter={ `url(#${id('blurOverlay')})` }
+        transform={ [
+          `translate(0, ${yMax * Y_PADDING})`,
+          `scale(1, ${1 - (Y_PADDING * 2)})`,
+        ].join(' ') }
+      >
+        <use
+          href={ `#${id('blobs')}` }
+          mask="url(#softVerticalFade)"
+        />
+      </g>
+    </BlogArtGraphic>
+  );
+
+  if (rawSVG) {
+    return svg;
   }
 
   return (
-    <BlogArtContainer className={ className }>
-      <BlogArtGraphic
-        className={ fullBleedClassName }
-        preserveAspectRatio="none"
-        viewBox={ viewBox.join(' ') }
-      >
-        <title>
-          Generated art for the page or post titled
-          <i>{ title }</i>,
-          with the content or commit hash { hash } {
-            topics.length > 0
-              ? [ ', and the topics: ', topics.map(String).join(', ') ]
-              : null
-          }
-        </title>
-
-        <defs>
-          {(
-            defsUsage === BlogArtDefsUsage.INLINE
-              ? <BlogArtStaticDefs />
-              : null
-          )}
-
-          <filter id={ id('blur') }>
-            <feOffset
-              in="SourceGraphic"
-              dx="0"
-              dy={ glowOffset }
-              result="glowOffsetOut"
-            />
-
-            <feGaussianBlur
-              in="glowOffsetOut"
-              stdDeviation={ glowSize }
-              result="glowBlurOut"
-            />
-
-            <feBlend
-              in="SourceGraphic"
-              in2="glowBlurOut"
-              mode="color-dodge"
-            />
-          </filter>
-
-          <clipPath id={ id('blurOverlayClip') }>
-            <rect
-              x="0"
-              width={ xMax }
-              y={ blurY }
-              height={ yMax }
-            />
-          </clipPath>
-
-          <filter id={ id('blurOverlay') }>
-            <feOffset
-              result="glowOffsetOut"
-              in="SourceGraphic"
-              dx="0"
-              dy={ glowOffset }
-            />
-
-            <feGaussianBlur
-              result="glowBlurOut"
-              in="glowOffsetOut"
-              stdDeviation={ glowSize }
-            />
-          </filter>
-
-          <filter id={ id('blurUnderlay') }>
-            <feOffset
-              result="glowOffsetOut"
-              in="SourceGraphic"
-              dx="0"
-              dy={ glowOffset }
-            />
-
-            <feGaussianBlur
-              in="glowOffsetOut"
-              result="glowBlurOut"
-              stdDeviation={ glowSize }
-            />
-
-            <feTurbulence
-              type="turbulence"
-              baseFrequency="10"
-              numOctaves="2"
-              result="turbulence"
-            />
-
-            <feDisplacementMap
-              in="glowBlurOut"
-              in2="turbulence"
-              result="dither"
-              scale="25"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-
-            <feColorMatrix
-              in="dither"
-              result="saturated"
-              type="saturate"
-              values="5"
-            />
-
-            <feGaussianBlur
-              in="saturated"
-              result="saturatedBlurOut"
-              stdDeviation={ glowSize }
-            />
-          </filter>
-
-          <g id={ id('blobs') }>
-            { segmentPaths.map((path, index) => {
-              const topicIndex = index % topics.length;
-              const topic = topics[topicIndex];
-              const className = topicClassName(topic);
-
-              return (
-                <Segment
-                  key={ path }
-                  className={ className }
-                  d={ path }
-                  mask="url(#softVerticalFade)"
-                />
-              );
-            }) }
-          </g>
-        </defs>
-
-        <g
-          transform={ [
-            `translate(0, ${yMax * Y_PADDING})`,
-            `scale(1, ${1 - (Y_PADDING * 2)})`,
-          ].join(' ') }
-          filter={ `url(#${id('blur')})` }
-        >
-          <use
-            href={ `#${id('blobs')}` }
-            mask="url(#horizontalMidFade)"
-          />
-        </g>
-
-        <g
-          clip-path={ `url(#${id('blurOverlayClip')})` }
-          filter={ `url(#${id('blurOverlay')})` }
-          transform={ [
-            `translate(0, ${yMax * Y_PADDING})`,
-            `scale(1, ${1 - (Y_PADDING * 2)})`,
-          ].join(' ') }
-        >
-          <use
-            href={ `#${id('blobs')}` }
-            mask="url(#softVerticalFade)"
-          />
-        </g>
-      </BlogArtGraphic>
-    </BlogArtContainer>
+    <BlogArtContainer className={ className }>{ svg }</BlogArtContainer>
   );
 };

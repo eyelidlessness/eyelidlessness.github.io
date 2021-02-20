@@ -13,11 +13,11 @@ const externalEntries = [
   'fela-utils',
   'globby',
   'md5',
+  'node-object-hash',
   'remark-mdx',
   'remark-mdx-to-plain-text',
+  'sharp',
   'strip-markdown',
-  // 'preact-fela',
-  // 'preact-render-to-string',
 ];
 
 // const styleEntries = glob.sync(path.resolve(cwd, './src/lib/styles/**/*.{ts,tsx}'));
@@ -54,6 +54,7 @@ const config = {
 
   plugins: [
     path.resolve(cwd, './plugins/fela.cjs'),
+    path.resolve(cwd, './plugins/social.cjs'),
   ],
 };
 

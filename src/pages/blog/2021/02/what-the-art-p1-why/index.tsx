@@ -20,7 +20,7 @@ const VerticallyCenterTopicTagChild = styled('span', {
   },
 });
 
-const WhatTheArtPost = (props: BlogPostProps) => (
+const WhatTheArtPost = (props: BlogPostProps<any>) => (
   <BlogPost { ...props }>
     {mdx`
       When I left my last job at the end of September, I knew I

@@ -8,26 +8,7 @@ import {
   theme,
 } from '@/lib/styles';
 
-interface TopicTagProps {
-  readonly className?: string;
-  readonly link?:      boolean;
-  readonly topic:      TopicLike;
-}
-
-const BaseTopicTagOuter = styled('span', {
-  ...theme.topicTagOuter,
-
-  backgroundColor: 'currentcolor',
-  borderRadius:    '0.25rem',
-  display:         'inline-block',
-  fontSize:        'max(15px, 0.7778em)',
-  fontWeight:      500,
-  lineHeight:      1,
-  overflow:        'hidden',
-  textDecoration:  'none',
-});
-
-const TopicTagLink = styled(BaseTopicTagOuter, {
+const TopicTagLink = styled('a', {
   ...theme.topicTagLink(theme.topicTagIdentifier.className),
 });
 
@@ -41,11 +22,17 @@ const TopicTagInner = styled(BaseTopicTagInner, {
   padding:    '0.325rem 0.625rem 0.325rem 0.5rem',
 });
 
-export const TopicTag = ({
+interface BaseTopicTagProps {
+  readonly className?: string;
+  readonly link?:      boolean;
+  readonly topic:      TopicLike;
+}
+
+export const BaseTopicTag = ({
   className,
   link = true,
   topic: topicLike,
-}: TopicTagProps) => {
+}: BaseTopicTagProps) => {
   const pathSegment = getHyphenatedTopicKey(topicLike);
   const topic = getTopic(topicLike);
 
@@ -58,21 +45,15 @@ export const TopicTag = ({
 
   const TopicTagOuter = link
     ? TopicTagLink
-    : BaseTopicTagOuter;
+    : 'span';
   const outerProps = link
-    ? {
-      as:   'a',
-      href: `/blog/topics/${pathSegment}/`,
-    } as const
-    : {
-      as: 'span',
-    } as const;
+    ? { href: `/blog/topics/${pathSegment}/` } as const
+    : {};
 
   return (
     <TopicTagOuter
       className={ [
         className,
-        theme.topicColorClassNames[topic] ?? '',
         theme.HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME,
       ].join(' ') }
 
@@ -84,3 +65,17 @@ export const TopicTag = ({
     </TopicTagOuter>
   );
 };
+
+export const TopicTag = styled(BaseTopicTag, (props) => ({
+  ...theme.topicTagOuter,
+  ...theme.topicColors[getTopic(props.topic)],
+
+  backgroundColor: 'currentcolor',
+  borderRadius:    '0.25rem',
+  display:         'inline-block',
+  fontSize:        'max(15px, 0.7778em)',
+  fontWeight:      500,
+  lineHeight:      1,
+  overflow:        'hidden',
+  textDecoration:  'none',
+}));

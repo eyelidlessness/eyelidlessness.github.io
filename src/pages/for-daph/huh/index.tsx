@@ -1,25 +1,24 @@
-import { seo }                from 'microsite/head';
-import { definePage }         from 'microsite/page';
+import { definePage } from 'microsite/page';
 import {
   BlogArt,
   BlogArtDefs,
 } from '@/components/Blog';
-import { Head }               from '@/components/Head';
-import { Main }               from '@/components/Main';
-import { Topic }              from '@/lib/content';
-import { getInitialFileHash } from '@/lib/git';
+import { Head }       from '@/components/Head';
+import { Main }       from '@/components/Main';
+import {
+  getPageMetadata,
+  PageMetadata,
+  Topic,
+} from '@/lib/content';
 
-interface HuhPageProps {
-  readonly hash:   string;
-  readonly topics: readonly Topic[];
-}
-
-const HuhPage = ({ hash, topics }: HuhPageProps) => {
+const HuhPage = (props: PageMetadata<any>) => {
+  const {
+    hash,
+    topics,
+  } = props;
   return (
     <>
-      <Head>
-        <seo.title>Huh | Eyelidlessness</seo.title>
-      </Head>
+      <Head meta={ props } />
 
       <Main>
         <BlogArtDefs />
@@ -28,7 +27,7 @@ const HuhPage = ({ hash, topics }: HuhPageProps) => {
           title={ 'Huh' }
           topics={ topics }
         />
-        <p><a href="/blog/2021/02/what-the-art/">What</a></p>
+        <p><a href="/blog/2021/02/what-the-art-p1-why/">What</a></p>
       </Main>
     </>
   );
@@ -36,16 +35,18 @@ const HuhPage = ({ hash, topics }: HuhPageProps) => {
 
 export default definePage(HuhPage, {
   async getStaticProps({ path }) {
-    const hash = getInitialFileHash(path);
+    const title = 'Huh';
     const topics = [
       Topic.NEURODIVERGENCE,
       Topic.MENTAL_ILLNESS,
       Topic.SUBSTANCE_ABUSE,
     ] as const;
+    const meta = getPageMetadata(path, import.meta.url, title, topics);
 
     return {
       props: {
-        hash,
+        ...meta,
+
         topics,
       },
     };
