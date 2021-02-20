@@ -1,6 +1,7 @@
 import {
   combineRules,
-  createRenderer,
+  createRenderer as baseCreateRenderer,
+  IRenderer,
   IStyle,
 } from 'fela';
 import { renderToString } from 'fela-tools';
@@ -30,29 +31,38 @@ const { default: pluginTypescript } = _require('fela-plugin-typescript');
 
 const devMode = import.meta.env?.MODE === 'development';
 
-export const identifier = createIdentifier();
+export const createRenderer = () => {
+  const identifier = createIdentifier();
 
-export const renderer = createRenderer({
-  devMode,
-  enhancers: [
-    hashed(),
+  const renderer = baseCreateRenderer({
+    devMode,
+    enhancers: [
+      hashed(),
+      identifier,
+    ],
+    plugins: [
+      pluginEmbedded(),
+      pluginSelectors(),
+      pluginTypescript(),
+    ],
+  });
+
+  return {
     identifier,
-  ],
-  plugins: [
-    pluginEmbedded(),
-    pluginSelectors(),
-    pluginTypescript(),
-  ],
-});
+    renderer,
+  };
+};
+
+export const {
+  identifier,
+  renderer,
+} = createRenderer();
 
 let currentStyles: string | null = null;
 
 if (
   !devMode &&
-  (
-    // import.meta.url.endsWith('/src/lib/styles/styles.js') ||
-    import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
-  )
+  import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
 ) {
   renderer.subscribe(async () => {
     currentStyles = renderToString(renderer);
@@ -85,9 +95,13 @@ interface StylesProviderProps {
   readonly children?: ComponentChildren;
 }
 
-export const StylesProvider = ({ children }: StylesProviderProps) => (
-  h(RendererProvider, { renderer }, ...toArray(children))
+export const createStylesProvider = (renderer: IRenderer) => (
+  ({ children }: StylesProviderProps) => (
+    h(RendererProvider, { renderer }, ...toArray(children))
+  )
 );
+
+export const StylesProvider = createStylesProvider(renderer);
 
 const baseCSS = <T>(value: T) => (
   renderer.renderRule(identity, value)
@@ -155,4 +169,7 @@ export const styled: Styled = <P extends StyleableProps>(
 };
 
 export { combineRules };
-export type { IStyle };
+export type {
+  IRenderer,
+  IStyle,
+};

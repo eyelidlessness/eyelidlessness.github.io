@@ -1,4 +1,3 @@
-import { seo }        from 'microsite/head';
 import { definePage } from 'microsite/page';
 import {
   BlogArtDefs,
@@ -7,42 +6,38 @@ import {
 } from '@/components/Blog';
 import { Head }       from '@/components/Head';
 import { Main }       from '@/components/Main';
+import {
+  getPageMetadata,
+  PageMetadata,
+} from '@/lib/content';
 
-interface IndexPageProps {
-  readonly posts: readonly BlogPostProps[];
+interface IndexPageProps extends PageMetadata<any> {
+  readonly description: string;
+  readonly posts:       readonly BlogPostProps<any>[];
 }
 
-const IndexPage = ({
-  posts,
-}: IndexPageProps) => {
-  return (
-    <>
-      <Head>
-        <seo.title>Eyelidlessness</seo.title>
-        <seo.description>
-          Trevor Schmidt's tech blog
-        </seo.description>
-      </Head>
+const IndexPage = (props: IndexPageProps) => (
+  <>
+    <Head meta={ props } />
 
-      <Main isListing={ true }>
-        <BlogArtDefs />
+    <Main isListing={ true }>
+      <BlogArtDefs />
 
-        <BlogListing posts={ posts } />
-      </Main>
-    </>
-  );
-};
+      <BlogListing posts={ props.posts } />
+    </Main>
+  </>
+);
 
 interface PostModule {
   default?: {
     getStaticProps?: (context: { path: string }) => {
-      props: Promise<BlogPostProps>;
+      props: Promise<BlogPostProps<any>>;
     };
   };
 }
 
 export default definePage(IndexPage, {
-  async getStaticProps() {
+  async getStaticProps({ path }) {
     const url = import.meta?.url.replace(/^file:(\/\/)?/, '');
 
     const { default: glob } = await import('globby');
@@ -73,8 +68,15 @@ export default definePage(IndexPage, {
       };
     }));
 
+    const title = 'Blog';
+    const description = `Trevor Schmidt's tech blog`;
+    const meta  = getPageMetadata(path, import.meta.url, title);
+
     return {
       props: {
+        ...meta,
+
+        description,
         posts,
       },
     };

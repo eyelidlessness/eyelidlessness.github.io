@@ -4,10 +4,7 @@ import {
   Topic,
 } from '@/lib/content/topics';
 import { cleanWhitespace }  from './functions';
-import {
-  css,
-  identifier,
-} from './styles';
+import { identifier }       from './styles';
 
 const vwRatio = 2;
 
@@ -186,127 +183,109 @@ const topicColorMapping = {
 
 const HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME = 'hover-inherit-topic-color';
 
-const topicColorClassNameEntries = [
-  [
-    Topic[DEFAULT_TOPIC],
-    css({
+const topicColors = {
+  [Topic[DEFAULT_TOPIC]]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.DEFAULT_TOPIC.light,
       },
 
       [darkMode]: {
-        '&, &.hover-inherit-topic-color:hover': {
-          color: topicColorMapping.DEFAULT_TOPIC.dark,
+        nested: {
+          '&, &.hover-inherit-topic-color:hover': {
+            color: topicColorMapping.DEFAULT_TOPIC.dark,
+          },
         },
       },
-    }),
-  ],
+    },
+  },
 
-  [
-    Topic.ABLEISM,
-    css({
+  [Topic.ABLEISM]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.ABLEISM,
       },
-    }),
-  ],
-  [
-    Topic.ART,
-    css({
+    },
+  },
+  [Topic.ART]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.ARTS_CRAFTS,
       },
-    }),
-  ],
-  [
-    Topic.LEMON,
-    css({
+    },
+  },
+  [Topic.LEMON]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.LEMON,
       },
-    }),
-  ],
-  [
-    Topic.MENTAL_ILLNESS,
-    css({
+    },
+  },
+  [Topic.MENTAL_ILLNESS]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.MENTAL_ILLNESS,
       },
-    }),
-  ],
-  [
-    Topic.NEURODIVERGENCE,
-    css({
+    },
+  },
+  [Topic.NEURODIVERGENCE]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.NEURODIVERGENCE,
       },
-    }),
-  ],
-  [
-    Topic.PHILOSOPHY,
-    css({
+    },
+  },
+  [Topic.PHILOSOPHY]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.PHILOSOPHY,
       },
-    }),
-  ],
-  [
-    Topic.POLITICS,
-    css({
+    },
+  },
+  [Topic.POLITICS]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.POLITICS,
       },
-    }),
-  ],
-  [
-    Topic.RACISM,
-    css({
+    },
+  },
+  [Topic.RACISM]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.RACISM,
       },
-    }),
-  ],
-  [
-    Topic.SEXISM,
-    css({
+    },
+  },
+  [Topic.SEXISM]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.SEXISM,
       },
-    }),
-  ],
-  [
-    Topic.SUBSTANCE_ABUSE,
-    css({
+    },
+  },
+  [Topic.SUBSTANCE_ABUSE]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.SUBSTANCE_ABUSE,
       },
-    }),
-  ],
-  [
-    Topic.TECHNOLOGY,
-    css({
+    },
+  },
+  [Topic.TECHNOLOGY]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.TECHNOLOGY,
       },
-    }),
-  ],
-  [
-    Topic.TRANSPHOBIA,
-    css({
+    },
+  },
+  [Topic.TRANSPHOBIA]: {
+    nested: {
       '&, &.hover-inherit-topic-color:hover': {
         color: topicColorMapping.TRANSPHOBIA,
       },
-    }),
-  ],
-] as const;
+    },
+  },
+};
 
-type TopicThemeKey =
-  | typeof DEFAULT_TOPIC
-  | string;
-
-export const topicColorClassNames = Object.fromEntries<TopicThemeKey, string>(
-  topicColorClassNameEntries
-);
 
 const blogListingDescriptionIdentifier = identifier();
 
@@ -786,7 +765,7 @@ export const theme = {
     // color: '#fff'
   },
 
-  topicColorClassNames,
+  topicColors,
 
   topicTagIdentifier: identifier(),
 

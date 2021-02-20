@@ -9,11 +9,7 @@ import {
   Topic,
 } from '@/lib/content';
 
-const fragmentURL = (path: string, fragment: string) => (
-  `./${path.replace(/\/index$/, '/')}#${fragment}`
-);
-
-const WhatTheArtPost = (props: BlogPostProps) => {
+const WhatTheArtPost = (props: BlogPostProps<any>) => {
   return (
     <BlogPost { ...props }>
       {mdx`
@@ -92,7 +88,7 @@ const WhatTheArtPost = (props: BlogPostProps) => {
            the outcome.
 
         [3]: https://en.wikipedia.org/wiki/SHA-1
-        [4]: ${fragmentURL(props.path, 'evolution')}
+        [4]: #evolution
 
         ## Evolution
 

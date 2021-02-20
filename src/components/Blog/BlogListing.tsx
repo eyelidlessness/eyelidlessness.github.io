@@ -15,10 +15,10 @@ import {
 import { BlogPostProps }       from './BlogPost';
 
 interface BlogPostsByYear {
-  readonly [key: number]: readonly BlogPostProps[];
+  readonly [key: number]: readonly BlogPostProps<any>[];
 }
 
-const groupByYear = (posts: readonly BlogPostProps[]) => (
+const groupByYear = (posts: readonly BlogPostProps<any>[]) => (
   posts.reduce<BlogPostsByYear>((acc, post) => {
     const year = post.stat.created.getFullYear();
     const group = acc[year] ?? [];
@@ -119,7 +119,7 @@ export enum BlogListingOrder {
 
 export interface BlogListingProps {
   readonly order?: BlogListingOrder;
-  readonly posts:  readonly BlogPostProps[];
+  readonly posts:  readonly BlogPostProps<any>[];
   readonly sort?:  BlogListingSort;
 }
 

@@ -1,5 +1,3 @@
-import fs             from 'fs';
-import { seo }        from 'microsite/head';
 import { definePage } from 'microsite/page';
 import {
   BlogArt,
@@ -7,40 +5,31 @@ import {
 } from '@/components/Blog';
 import { Head }       from '@/components/Head';
 import { Main }       from '@/components/Main';
-import { Topic }      from '@/lib/content';
 import {
-  getInitialFileHash,
-  getInitialCommitDate,
-} from '@/lib/git';
+  getPageMetadata,
+  PageMetadata,
+} from '@/lib/content';
 
-interface IndexPageProps {
-  readonly hash: string;
-  readonly stat: {
-    readonly created: Date;
-  };
+interface IndexPageProps extends PageMetadata<any> {
+  readonly description: string;
 }
 
-const IndexPage = ({
-  hash,
-}: IndexPageProps) => {
-  const title = 'Hello world';
-  const topics = [ Topic.TECHNOLOGY ] as const;
+const IndexPage = (props: IndexPageProps) => {
+  const {
+    hash,
+    title,
+    topics,
+  } = props;
 
   return (
     <>
-      <Head>
-        <seo.title>{ title } { ' ' } | Eyelidlessness</seo.title>
-        <seo.description>
-          Just a little sneak peak of my personal site and statically
-          generated art project.
-        </seo.description>
-      </Head>
+      <Head meta={ props } />
 
       <Main>
         <BlogArtDefs />
         <BlogArt hash={ hash } title={ title } topics={ topics } />
 
-        <p><a href="./for-daph/huh/" rel="preload">Huh</a></p>
+        <p><a href="/for-daph/huh/" rel="preload">Huh</a></p>
       </Main>
     </>
   );
@@ -48,18 +37,17 @@ const IndexPage = ({
 
 export default definePage(IndexPage, {
   async getStaticProps({ path }) {
-    const hash = getInitialFileHash(path);
-    const stat = {
-      created: (
-        getInitialCommitDate(path) ??
-        fs.statSync(import.meta.url.replace(/^file:(\/\/)?/, '')).ctime
-      ),
-    };
+    const title = 'Hello world';
+    const description = `Just a little sneak peak of my personal site and${
+      ' '} statically generated art project.`;
+
+    const meta = getPageMetadata(path, import.meta.url, title);
 
     return {
       props: {
-        hash,
-        stat,
+        ...meta,
+
+        description,
       },
     };
   },

@@ -1,4 +1,3 @@
-import { seo }                 from 'microsite/head';
 import { PathParams }          from 'microsite/page';
 import { StaticPropsContext }  from 'microsite/utils/router';
 import { ComponentChildren }   from 'preact';
@@ -11,6 +10,8 @@ import { TopicTagList }        from '@/components/Topic/TopicTagList';
 import {
   getPageMetadata,
   mdxRaw,
+  PageMetadata,
+  PageStat,
   Topic,
 } from '@/lib/content';
 import { styled }              from '@/lib/styles';
@@ -30,73 +31,72 @@ export interface BlogPostDescription {
   readonly descriptionRaw: string;
 }
 
-interface BlogPostFileStat {
-  readonly created: Date;
-}
-
-export interface BlogPostProps extends BlogPostDescription {
+export interface BlogPostProps<
+  Path extends string
+> extends BlogPostDescription, PageMetadata<Path> {
   readonly children?: ComponentChildren;
   readonly hash:      string;
-  readonly path:      string;
-  readonly stat:      BlogPostFileStat;
+  readonly path:      Path;
   readonly title:     string;
   readonly topics:    readonly Topic[];
 }
 
-export const BlogPost = ({
-  children,
-  description,
-  descriptionRaw,
-  hash,
-  stat: { created },
-  title,
-  topics,
-}: BlogPostProps) => (
-  <>
-    <Head>
-      <seo.title>{ title } | Eyelidlessness</seo.title>
-      <seo.description>
-        { descriptionRaw }
-      </seo.description>
-    </Head>
+export const BlogPost = <Path extends string>(props: BlogPostProps<Path>) => {
+  const {
+    children,
+    description,
+    descriptionRaw,
+    hash,
+    stat: { created },
+    title,
+    topics,
+  } = props;
 
-    <Main as="article">
-      <BlogPostHeading>
-        <BlogArt hash={ hash } title={ title } topics={ topics } />
+  return (
+    <>
+      <Head meta={ {
+        ...props,
+        description: descriptionRaw,
+      } } />
 
-        <BlogPostTitle>{ title }</BlogPostTitle>
-        <Timestamp date={ created } itemprop="datePublished" />
-        <TopicTagList link={ false } topics={ topics } />
-      </BlogPostHeading>
+      <Main as="article">
+        <BlogPostHeading>
+          <BlogArt hash={ hash } title={ title } topics={ topics } />
 
-      <BlogPostDescription>{ description }</BlogPostDescription>
+          <BlogPostTitle>{ title }</BlogPostTitle>
+          <Timestamp date={ created } itemprop="datePublished" />
+          <TopicTagList link={ false } topics={ topics } />
+        </BlogPostHeading>
 
-      { children }
-    </Main>
-  </>
-);
+        <BlogPostDescription>{ description }</BlogPostDescription>
+
+        { children }
+      </Main>
+    </>
+  );
+};
 
 type AnyBlogPostProps<Path extends string> =
   & PathParams<Path>
-  & Partial<Omit<BlogPostProps, 'children' | 'stat'>>
+  & Partial<Omit<BlogPostProps<Path>, 'children' | 'stat'>>
   & {
-    readonly stat?: Partial<BlogPostFileStat>;
+    readonly stat?: Partial<PageStat>;
   };
 
-interface DefineBlogPostOptions<
-  Path extends string,
-  P    extends AnyBlogPostProps<Path>
-> extends Omit<StaticPropsContext<P>, 'params'> {
+interface DefineBlogPostOptions<Path extends string> extends Omit<
+  StaticPropsContext<AnyBlogPostProps<Path>>,
+  'params'
+> {
   readonly description: ComponentChildren;
   readonly importURL:   string;
+  readonly path:        Path;
   readonly title:       string;
   readonly topics:      readonly Topic[];
 }
 
-export const getBlogPostStaticProps = <
-  Path extends string,
-  P    extends AnyBlogPostProps<Path>
->(options: DefineBlogPostOptions<Path, P>) => {
+export const getBlogPostStaticProps = async <Path extends string>(
+  options: DefineBlogPostOptions<Path>
+): Promise<BlogPostProps<Path>> => {
   const {
     description,
     importURL,
@@ -106,8 +106,10 @@ export const getBlogPostStaticProps = <
   } = options;
   const {
     hash,
+    host,
+    social,
     stat,
-  } = getPageMetadata(path, importURL);
+  } = getPageMetadata(path, importURL, title, topics, 'created');
 
   const descriptionRaw = mdxRaw`${renderToString(<>{ description }</>)}`;
 
@@ -115,7 +117,9 @@ export const getBlogPostStaticProps = <
     description,
     descriptionRaw,
     hash,
+    host,
     path,
+    social,
     stat,
     title,
     topics,

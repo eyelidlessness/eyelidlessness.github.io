@@ -24,6 +24,11 @@ enum GitFilter {
   FIRST   = '--diff-filter=A',
 }
 
+const singleResultGitFilters = new Set([
+  GitFilter.CURRENT,
+  GitFilter.FIRST,
+] as const);
+
 enum GitFormat {
   HASH     = '%H',
   ISO_DATE = '%aI',
@@ -55,12 +60,19 @@ export const getFormattedGitLogData = <T extends GitFilter = GitFilter.FIRST>(
     path   = cwd,
     remote = DEFAULT_REMOTE_REF,
   } = options;
+
+  const isSingle = singleResultGitFilters.has(filter);
+  const maxCountFlags = isSingle
+    ? [ '--max-count=1' ]
+    : [];
+
   const {
     error,
     stdout,
   } = childProcess.spawnSync('git', [
     'log',
     filter,
+    ...maxCountFlags,
     `--branches=${branch}`,
     `--format=${format}`,
     `--remotes=${remote}`,
@@ -78,16 +90,17 @@ export const getFormattedGitLogData = <T extends GitFilter = GitFilter.FIRST>(
     return null;
   }
 
-  if (filter === GitFilter.FIRST) {
+  if (isSingle) {
     return output as FormattedGitLogData<T>;
   }
 
   return output.split('\n') as FormattedGitLogData<T>;
 };
 
-export const getInitialCommitDate = (basePath: string): Date | null => {
+export const getCurrentCommitDate = (basePath: string): Date | null => {
   const path = resolveModulePath(basePath);
   const logData = getFormattedGitLogData({
+    filter: GitFilter.CURRENT,
     format: GitFormat.ISO_DATE,
     path,
   });
@@ -100,10 +113,9 @@ export const getInitialCommitDate = (basePath: string): Date | null => {
   return date;
 };
 
-export const getCurrentCommitDate = (basePath: string): Date | null => {
+export const getInitialCommitDate = (basePath: string): Date | null => {
   const path = resolveModulePath(basePath);
   const logData = getFormattedGitLogData({
-    filter: GitFilter.CURRENT,
     format: GitFormat.ISO_DATE,
     path,
   });
@@ -124,6 +136,19 @@ const getSHA1Hash = (path: string) => {
   sha1Hash.update(fileContents);
 
   return sha1Hash.digest('hex');
+};
+
+export const getCurrentFileHash = (basePath: string) => {
+  const path = resolveModulePath(basePath);
+
+  return (
+    getFormattedGitLogData({
+      filter: GitFilter.CURRENT,
+      format: GitFormat.HASH,
+      path,
+    }) ??
+    getSHA1Hash(path)
+  );
 };
 
 export const getInitialFileHash = (basePath: string) => {

@@ -97,6 +97,11 @@ type Merge<T> = Identity<{
   [K in keyof T]: T[K];
 }>;
 
+type PromiseType<T> =
+  T extends Promise<infer U>
+    ? U
+  : T;
+
 type SetType<T extends ReadonlySet<any> | Set<any>> =
   T extends Set<infer U>
     ? U
