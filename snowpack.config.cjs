@@ -53,8 +53,8 @@ const config = {
   },
 
   plugins: [
-    path.resolve(cwd, './plugins/fela.cjs'),
     path.resolve(cwd, './plugins/social.cjs'),
+    path.resolve(cwd, './plugins/fela.cjs'),
   ],
 };
 

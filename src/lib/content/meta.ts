@@ -61,16 +61,16 @@ const getPageSocialMetadata = (
   hashSeed:  any,
   imageType: RasterType = RasterType.PNG
 ): PageSocial => {
-  const publicBasePath = importURL.replace(
+  const imagesBasePath = importURL.replace(
     /^file:(\/\/)?(\/.*?)\/src\/.*$/,
-    '$2/public'
+    '$2/images'
   );
   const hash = socialImageNameHasher.hash(hashSeed);
   const absolutePath = path.resolve(
-    publicBasePath,
+    imagesBasePath,
     `${hash}.${imageType}`
   );
-  const publicPath = absolutePath.replace(/^.*?\/public\//, '/');
+  const publicPath = absolutePath.replace(/^.*?\/images\//, '/images/');
 
   return {
     image: {
