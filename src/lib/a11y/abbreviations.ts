@@ -28,6 +28,7 @@ const techAbbreviations = {
   nREPL:   'Clojure network REPL (Read–eval–print loop)',
   REPL:    'Read–eval–print loop',
   REST:    'Representational State Transfer',
+  'SHA-1': 'Secure Hash Algorithm 1',
   SQL:     'Structured Query Language',
   SVG:     'Scalable Vector Graphics',
   UI:      'User Interface',

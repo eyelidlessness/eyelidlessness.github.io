@@ -18,6 +18,7 @@ declare module 'preact' {
       itemprop?:  string;
       itemscope?: boolean;
       itemtype?:  string;
+      tabindex?:  number;
     }
   }
 }

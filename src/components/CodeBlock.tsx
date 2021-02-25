@@ -1,22 +1,34 @@
-import FullBleedSymbolBlock   from '@/components/FullBleedSymbolBlock';
 import {
-  clamp,
+  FullBleedContainer,
+  FullBleedScrollableOverflow,
+  FullBleedSymbolBlock,
+} from '@/components/FullBleed';
+import {
   styled,
   theme,
 } from '@/lib/styles';
-import { FullBleedContainer } from './FullBleedContainer';
 
 const ContentContainer = styled('pre', {
   fontSize: '1rem',
 });
 
-const InnerContainer = styled('div', {
-  gridColumn: '2 / 6',
+const maskImage = `linear-gradient(${[
+  'to right',
+  'transparent',
+  'transparent 1.5rem',
+  'black 2.5rem',
+  'black calc(100% - 1rem)',
+  'transparent,'
+].join(', ')})`;
+
+const InnerContainer = styled(FullBleedScrollableOverflow, {
+  paddingLeft:     'clamp(1.25em, 3.5vw, 3em)',
+  maskImage,
+  WebkitMaskImage: maskImage,
 });
 
 const OuterContainer = styled(FullBleedContainer, {
   ...theme.pre,
-  // width: '100vw', //
 
   nested: {
     [theme.darkMode]: {
@@ -25,22 +37,19 @@ const OuterContainer = styled(FullBleedContainer, {
 
     '& code': {
       backgroundColor: 'transparent',
+      hyphens:         'none',
+      overflowWrap:    'normal',
+      whiteSpace:      'pre',
+      wordWrap:        'normal',
     },
 
     '& pre': {
       backgroundColor: 'transparent',
       maxWidth:        '100%',
       margin:          0,
-      overflow:        'auto',
       outline:         'none',
-      padding:         [
-        '1rem',
-        `0`,
-        // '1rem',
-        // `${theme.mainGridSidePaddingRem * 3}rem`,
-      ].join(' '),
-
-      // WebkitOverflowScrolling: 'touch',
+      padding:         '1rem 0',
+      whiteSpace:      'pre',
     },
   },
 });
@@ -48,9 +57,9 @@ const OuterContainer = styled(FullBleedContainer, {
 const SymbolContainer = styled('div', {
   ...theme.codeBlock.symbol,
 
-  fontSize:   clamp('3.2em', '10vw', '4.5em'),
+  fontSize:   'clamp(3em, 7vw, 4em)',
+  marginLeft: '-0.3em',
   marginTop:  '-0.325em',
-  textIndent: '-0.25em',
 });
 
 export const CodeBlock = ({ children }: JSX.IntrinsicElements['pre']) => {

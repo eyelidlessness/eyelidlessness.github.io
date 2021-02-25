@@ -1,7 +1,7 @@
 import {
   fullBleedClassName,
   FullBleedContainer,
-} from '@/components/FullBleedContainer';
+} from '@/components/FullBleed';
 import {
   computeBasicArt,
 } from '@/lib/art';

@@ -9,6 +9,7 @@ import { Main }       from '@/components/Main';
 import {
   getPageMetadata,
   PageMetadata,
+  PageMetadataType,
 } from '@/lib/content';
 
 interface IndexPageProps extends PageMetadata<any> {
@@ -70,7 +71,12 @@ export default definePage(IndexPage, {
 
     const title = 'Blog';
     const description = `Trevor Schmidt's tech blog`;
-    const meta  = getPageMetadata(path, import.meta.url, title);
+    const meta  = getPageMetadata(
+      path,
+      import.meta.url,
+      title,
+      PageMetadataType.MUTABLE
+    );
 
     return {
       props: {

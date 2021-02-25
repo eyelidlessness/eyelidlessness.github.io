@@ -6,6 +6,7 @@ import { resume }     from '@/data/resume';
 import {
   getPageMetadata,
   PageMetadata,
+  PageMetadataType,
   Topic,
 } from '@/lib/content';
 import { styled }     from '@/lib/styles';
@@ -41,7 +42,13 @@ export default definePage(ResumePage, {
       Topic.TECHNOLOGY,
       Topic.ART,
     ];
-    const meta = getPageMetadata(path, import.meta.url, title, topics);
+    const meta = getPageMetadata(
+      path,
+      import.meta.url,
+      title,
+      PageMetadataType.IMMUTABLE,
+      topics
+    );
 
     return {
       props: {

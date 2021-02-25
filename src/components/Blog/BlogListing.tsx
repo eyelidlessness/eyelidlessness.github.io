@@ -1,5 +1,5 @@
 import { Fragment }            from 'preact';
-import { FullBleedContainer }  from '@/components/FullBleedContainer';
+import { FullBleedContainer }  from '@/components/FullBleed';
 import { Timestamp }           from '@/components/Timestamp';
 import { TopicTagList }        from '@/components/Topic/TopicTagList';
 import {

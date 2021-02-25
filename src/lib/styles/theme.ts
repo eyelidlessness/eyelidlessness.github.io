@@ -11,7 +11,7 @@ const vwRatio = 2;
 const baseFontSizeRange = {
   minEm:   1.0625,
   fluidVw: 1.0625 * vwRatio,
-  maxEm:   1.325,
+  maxEm:   1.25,
 } as const;
 
 const darkMode = '@media (prefers-color-scheme: dark)' as const;
@@ -305,26 +305,19 @@ export const theme = {
   },
 
   aside: {
-    backgroundColor: 'hsl(53deg, 81%, 96%)',
-    color:           'hsl(212deg, 10%, 35%)',
+    backgroundColor: 'hsl(192deg, 35%, 96.5%)',
+  },
 
-    nested: {
-      '& > h1': {
-        color: 'hsl(53deg, 13%, 26%)',
-      },
+  asideBlock: {
+    symbol: {
+      color: 'hsl(208deg, 35%, 81%)',
 
-      [darkMode]: {
-        backgroundColor: 'hsl(130deg,21%,14%)',
-        color:           'hsl(212deg, 3%, 80%)',
-
-        nested: {
-          '& > h1': {
-            color: 'hsl(130deg, 6%, 90%)',
-          },
+      nested: {
+        [darkMode]: {
+          color: 'hsl(208deg, 35%, 35%)',
         },
       },
     },
-
   },
 
   blog: {
@@ -414,6 +407,32 @@ export const theme = {
     // },
   },
 
+  description: {
+    backgroundColor: 'hsl(53deg, 81%, 96%)',
+    color:           'hsl(212deg, 10%, 35%)',
+
+    nested: {
+      '& > h1': {
+        color: 'hsl(53deg, 13%, 26%)',
+      },
+
+      '& p': {
+        lineHeight: 1.3333,
+      },
+
+      [darkMode]: {
+        backgroundColor: 'hsl(130deg,21%,14%)',
+        color:           'hsl(212deg, 3%, 80%)',
+
+        nested: {
+          '& > h1': {
+            color: 'hsl(130deg, 6%, 90%)',
+          },
+        },
+      },
+    },
+  },
+
   // details: {
   //   borderColor: 'hsl(240deg, 8%, 95%)',
 
@@ -470,6 +489,10 @@ export const theme = {
   headingRanges,
 
   [darkMode]: {
+    aside: {
+      backgroundColor: 'hsl(192deg, 15%, 13%)',
+    },
+
     code: {
       backgroundColor: 'hsl(200deg, 60%, 15%)',
       color:           'hsla(210deg, 12%, 100%, 95%)',
@@ -585,6 +608,8 @@ export const theme = {
 
   mainGridColumns,
   mainGridSidePaddingRem,
+
+  monospaceFont,
 
   pre: {
     color:           'hsl(210deg, 12%, 16%)',
@@ -845,5 +870,19 @@ export const theme = {
       ` 0     0 0       0.5px rgba(255, 255, 255, 0)`,
       ' 0     0 0       0.5px currentcolor',
     ].join(', '),
+  },
+
+  visualization: {
+    plot: {
+      axis: {
+        color: 'hsl(194deg, 8%, 67%)',
+
+        nested: {
+          [darkMode]: {
+            color: 'hsl(194deg, 8%, 50%)',
+          },
+        },
+      },
+    },
   },
 } as const;

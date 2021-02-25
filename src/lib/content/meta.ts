@@ -5,9 +5,9 @@ import { RasterType } from '@/lib/art';
 import { Topic }      from '@/lib/content/topics';
 import {
   getCurrentCommitDate,
-  getCurrentFileHash,
   getInitialCommitDate,
   getInitialFileHash,
+  getSHA1Hash,
 } from '@/lib/git';
 
 const SOCIAL_IMAGE_DIMENSIONS = {
@@ -54,8 +54,6 @@ const socialImageNameHasher = hasher({
   trim:   true,
 });
 
-type PageSocialStatKey = keyof PageStat;
-
 const getPageSocialMetadata = (
   importURL: string,
   hashSeed:  any,
@@ -82,42 +80,45 @@ const getPageSocialMetadata = (
   };
 };
 
-/**
- * @param statKey - Use 'updated' to get metadata relevant to the current state,
- *                  or 'created' to get the metadata for the state at first commit
- */
+export enum PageMetadataType {
+  IMMUTABLE = 'immutable',
+  MUTABLE   = 'mutable',
+}
+
 export const getPageMetadata = <Path extends string>(
   path:      Path,
   importURL: string,
   title:     string,
-  topics:    readonly Topic[]  = [ Topic.TECHNOLOGY ],
-  statKey:   PageSocialStatKey = 'updated'
+  type:      PageMetadataType,
+  topics:    readonly Topic[] = [ Topic.TECHNOLOGY ]
 ): PageMetadata<Path> => {
-  const isInitialStatKey = statKey === 'created';
-  const hash = isInitialStatKey
-    ? getInitialFileHash(path)
-    : getCurrentFileHash(path);
+  const isMutable  = type === PageMetadataType.MUTABLE;
+  const importPath = importURL.replace(/^file:(\/\/)?/, '');
+
+  const hash = isMutable
+    ? getSHA1Hash(importPath)
+    : getInitialFileHash(path);
 
   const stat = {
     created: (
       getInitialCommitDate(path) ??
-      fs.statSync(importURL.replace(/^file:(\/\/)?/, '')).ctime
+      fs.statSync(importPath).ctime
     ),
     updated: (
       getCurrentCommitDate(path) ??
-      fs.statSync(importURL.replace(/^file:(\/\/)?/, '')).mtime
+      fs.statSync(importPath).mtime
     ),
   };
 
-  const pageSocialHashSeed = isInitialStatKey
+  const pageSocialHashSeed = isMutable
     ? {
-      hash,
-      importURL,
-    }
-    : {
       importURL,
       stat,
       topics,
+    }
+    : {
+      hash,
+      importURL,
     };
 
   const social = getPageSocialMetadata(importURL, pageSocialHashSeed);

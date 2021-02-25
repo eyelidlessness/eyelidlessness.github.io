@@ -3,7 +3,7 @@ import {
   styled,
   StylesProvider,
 } from '@/lib/styles';
-import { FullBleedContainer } from './FullBleedContainer';
+import { FullBleedContainer } from './FullBleed';
 import { SiteHeader }         from './Site';
 
 type MainProps =

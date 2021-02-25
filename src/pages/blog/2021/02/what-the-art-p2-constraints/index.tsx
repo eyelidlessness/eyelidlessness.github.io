@@ -73,11 +73,10 @@ const WhatTheArtPost = (props: BlogPostProps<any>) => {
 
         2. Before I've committed to a feature branch, the post
            has no Git history at all. I've worked around this by
-           using a [SHA-1][3]
-           hash of the file contents on disk. This doesn't give
-           me a preview of the actual final product, if I were
-           to publish a given post at that point, but it does
-           have the benefit of letting me do a little bit of
+           using a SHA-1 hash of the file contents on disk. This
+           doesn't give me a preview of the actual final product,
+           if I were to publish a given post at that point, but it
+           does have the benefit of letting me do a little bit of
            quality control as I preview a post in progress!
 
         3. I never merge to \`main\` locally, so I have no
@@ -87,7 +86,6 @@ const WhatTheArtPost = (props: BlogPostProps<any>) => {
            removes a bit of incentive for me to overly control
            the outcome.
 
-        [3]: https://en.wikipedia.org/wiki/SHA-1
         [4]: #evolution
 
         ## Evolution
@@ -108,8 +106,9 @@ const WhatTheArtPost = (props: BlogPostProps<any>) => {
         any rendering changes to ensure I don't introduce yet
         another embarrassing body likeness.
 
-        Next: What the art? Implementation! <small>(still in
-        draft, hopefully up tomorrow!)</small>
+        Next: [What the art, part 3: Implementation][implementation]
+
+        [implementation]: /blog/2021/02/what-the-art-p3-implementation/
       `}
     </BlogPost>
   );

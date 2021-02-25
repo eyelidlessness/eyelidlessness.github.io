@@ -2,9 +2,24 @@ import childProcess from 'child_process';
 import crypto       from 'crypto';
 import fs           from 'fs';
 import path         from 'path';
+import { identity } from '@/lib/helpers';
 
 const cwd = process.cwd();
 
+/**
+ * Resolves runtime/build time modules to the original source file.
+ *
+ * @description
+ * There are different points at which a module's file path will be passed:
+ *
+ * 1. The site's build plugins
+ * 2. Microsite staging build
+ * 3. Microsite static rendering
+ *
+ * Each step provides different base paths, and each a compiled `.js` file
+ * extension. This resolves each of those cases to the original source file
+ * path in version control.
+ */
 const resolveModulePath = (basePath: string) => (
   basePath.startsWith('/')
     ? path.resolve(
@@ -13,9 +28,9 @@ const resolveModulePath = (basePath: string) => (
           .replace(/^.*?\/src\//, './src/')
           .replace(/\.js$/, '.tsx')
       )
-  : path.extname(basePath) == ''
-    ? path.resolve(cwd, './src/pages/', `${basePath}.tsx`)
-  : basePath
+    : path.extname(basePath) == ''
+      ? path.resolve(cwd, './src/pages/', `${basePath}.tsx`)
+      : basePath
 );
 
 enum GitFilter {
@@ -24,47 +39,36 @@ enum GitFilter {
   FIRST   = '--diff-filter=A',
 }
 
-const singleResultGitFilters = new Set([
-  GitFilter.CURRENT,
-  GitFilter.FIRST,
-] as const);
-
 enum GitFormat {
   HASH     = '%H',
   ISO_DATE = '%aI',
 }
 
-interface FormattedGitLogDataOptions {
+type GitLogEntryDecoder<T> = (str: string) => T;
+
+interface FormattedGitLogDataOptions<T> {
   readonly branch?: string;
+  readonly decode:  GitLogEntryDecoder<T>;
   readonly filter?: GitFilter;
   readonly format:  string;
   readonly path?:   string;
   readonly remote?: string;
 }
 
-type FormattedGitLogData<T extends GitFilter> =
-  T extends GitFilter.FIRST
-    ? string
-  : string[];
-
 const DEFAULT_REMOTE_REF = 'origin';
 const DEFAULT_BRANCH_REF = 'main';
 
-export const getFormattedGitLogData = <T extends GitFilter = GitFilter.FIRST>(
-  options: FormattedGitLogDataOptions
-) => {
+const getFormattedGitLogData = <T>(
+  options: FormattedGitLogDataOptions<T>
+): readonly T[] => {
   const {
     branch = DEFAULT_BRANCH_REF,
+    decode,
     filter = GitFilter.FIRST,
     format,
     path   = cwd,
     remote = DEFAULT_REMOTE_REF,
   } = options;
-
-  const isSingle = singleResultGitFilters.has(filter);
-  const maxCountFlags = isSingle
-    ? [ '--max-count=1' ]
-    : [];
 
   const {
     error,
@@ -72,7 +76,6 @@ export const getFormattedGitLogData = <T extends GitFilter = GitFilter.FIRST>(
   } = childProcess.spawnSync('git', [
     'log',
     filter,
-    ...maxCountFlags,
     `--branches=${branch}`,
     `--format=${format}`,
     `--remotes=${remote}`,
@@ -85,50 +88,45 @@ export const getFormattedGitLogData = <T extends GitFilter = GitFilter.FIRST>(
   }
 
   const output = stdout.toString().trim();
+  const entries = output === ''
+    ? []
+    : output.split('\n');
 
-  if (output === '') {
-    return null;
+  return entries.map<T>(decode);
+};
+
+const toDate = (str: string): Date | void => {
+  const date = new Date(str);
+
+  if (!isNaN(date.getTime())) {
+    return date;
   }
-
-  if (isSingle) {
-    return output as FormattedGitLogData<T>;
-  }
-
-  return output.split('\n') as FormattedGitLogData<T>;
 };
 
 export const getCurrentCommitDate = (basePath: string): Date | null => {
   const path = resolveModulePath(basePath);
-  const logData = getFormattedGitLogData({
+  const [ date = null ] = getFormattedGitLogData({
+    decode: toDate,
     filter: GitFilter.CURRENT,
     format: GitFormat.ISO_DATE,
     path,
   });
-  const date = new Date(logData ?? '');
-
-  if (isNaN(date.getTime())) {
-    return null;
-  }
 
   return date;
 };
 
 export const getInitialCommitDate = (basePath: string): Date | null => {
   const path = resolveModulePath(basePath);
-  const logData = getFormattedGitLogData({
+  const [ date = null ] = getFormattedGitLogData({
+    decode: toDate,
     format: GitFormat.ISO_DATE,
     path,
   });
-  const date = new Date(logData ?? '');
-
-  if (isNaN(date.getTime())) {
-    return null;
-  }
 
   return date;
 };
 
-const getSHA1Hash = (path: string) => {
+export const getSHA1Hash = (path: string) => {
   const fileContents = fs.readFileSync(path).toString();
 
   let sha1Hash = crypto.createHash('sha1');
@@ -140,27 +138,25 @@ const getSHA1Hash = (path: string) => {
 
 export const getCurrentFileHash = (basePath: string) => {
   const path = resolveModulePath(basePath);
+  const [ hash ] = getFormattedGitLogData({
+    decode: identity,
+    filter: GitFilter.CURRENT,
+    format: GitFormat.HASH,
+    path,
+  });
 
-  return (
-    getFormattedGitLogData({
-      filter: GitFilter.CURRENT,
-      format: GitFormat.HASH,
-      path,
-    }) ??
-    getSHA1Hash(path)
-  );
+  return hash ?? getSHA1Hash(path);
 };
 
 export const getInitialFileHash = (basePath: string) => {
   const path = resolveModulePath(basePath);
+  const [ hash ] = getFormattedGitLogData({
+    decode: identity,
+    format: GitFormat.HASH,
+    path,
+  });
 
-  return (
-    getFormattedGitLogData({
-      format: GitFormat.HASH,
-      path,
-    }) ??
-    getSHA1Hash(path)
-  );
+  return hash ?? getSHA1Hash(path);
 };
 
 export const getCurrentCommitHash = () => {

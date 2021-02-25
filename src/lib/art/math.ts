@@ -1,20 +1,22 @@
 import { sortBy } from '@/lib/collections';
 
-const hexValue = (value: string) => (
-  parseInt(value, 16)
-);
-
-const COORDINATE_MAX  = hexValue('ff')
-const COORDINATE_MIN  = hexValue('00')
+const COORDINATE_MAX  = parseInt('ff', 16);
+const COORDINATE_MIN  = parseInt('00', 16);
 const MID_POINT_TILT  = 0.05 as const;
 const MIN_SMOOTHING   = 0.15 as const;
 const SMOOTHING_RATIO = 0.05 as const;
 
-class InvalidHashError extends Error {
+export class InvalidHashError extends Error {
   constructor(hash: string) {
     super(`Invalid hash: ${hash}`);
   }
 }
+
+const validHashPattern = /^[0-9a-f]{40}$/i;
+
+const isValidHash = (value: string) => (
+  validHashPattern.test(value)
+);
 
 const hexChars = new Set([
   '0',
@@ -37,14 +39,14 @@ const hexChars = new Set([
 
 type HexChar = SetType<typeof hexChars>;
 
-type BuildTuple<
+type Tuple<
   T,
   Length extends number,
   Acc    extends readonly T[] = readonly []
 > =
     Acc extends { length: Length }
       ? Acc
-      : BuildTuple<T, Length, readonly [...Acc, T]>;
+      : Tuple<T, Length, readonly [...Acc, T]>;
 
 type HexCoordinate = `${HexChar}${HexChar}`;
 
@@ -53,9 +55,7 @@ interface HexPoint {
   readonly y: HexCoordinate;
 }
 
-const hexPointPattern = /([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])/g;
-
-type HexPointSequence = BuildTuple<HexPoint, 10>;
+type HexPointSequence = Tuple<HexPoint, 10>;
 
 const isHexPointSequence = (
   value: readonly HexPoint[]
@@ -63,15 +63,21 @@ const isHexPointSequence = (
   value.length === 10
 );
 
-const toHexPointSequence = (value: string): HexPointSequence => {
-  const matches = Array.from(value.matchAll(hexPointPattern) ?? []);
-  const points  = matches.map(([ , x, y ]) => ({
+const hexPointPattern = /([0-9a-f]{2})([0-9a-f]{2})/ig;
+
+export const toHexPointSequence = (hash: string): HexPointSequence => {
+  if (!isValidHash(hash)) {
+    throw new InvalidHashError(hash);
+  }
+
+  const matches = Array.from(hash.matchAll(hexPointPattern) ?? []);
+  const points  = matches.map(([ _, x, y ]) => ({
     x,
     y,
   } as HexPoint));
 
   if (!isHexPointSequence(points)) {
-    throw new InvalidHashError(value);
+    throw new InvalidHashError(hash);
   }
 
   return points;
@@ -85,14 +91,14 @@ type Coordinate =
     [isCoordinateSymbol]: true;
   };
 
-const coordinate = (value: number): Coordinate => (
+export const coordinate = (value: number): Coordinate => (
   Object.assign(value, {
     [isCoordinateSymbol]: true,
   } as const)
 );
 
 const toCoordinate = (value: HexCoordinate): Coordinate => {
-  const result = hexValue(value);
+  const result = parseInt(value, 16);
 
   if (result > COORDINATE_MAX || result < COORDINATE_MIN) {
     throw new Error(`Not a valid coordinate: ${value}`);
@@ -111,26 +117,26 @@ const toPoint = ({ x, y }: HexPoint): Point => ({
   y: toCoordinate(y),
 });
 
-type PointSequence = BuildTuple<Point, 10>;
+type PointSequence = Tuple<Point, 10>;
 
 const isPointSequence = (value: readonly Point[]): value is PointSequence => (
   value.length === 10
 );
 
-const toPointSequence = (value: string): PointSequence => {
-  const hexPoints = toHexPointSequence(value);
+export const toPointSequence = (hash: string): PointSequence => {
+  const hexPoints = toHexPointSequence(hash);
 
   try {
     const result = hexPoints.map(toPoint);
 
     if (!isPointSequence(result)) {
-      throw new InvalidHashError(value);
+      throw new InvalidHashError(hash);
     }
 
     return result;
   }
   catch {
-    throw new InvalidHashError(value);
+    throw new InvalidHashError(hash);
   }
 };
 

@@ -2,7 +2,7 @@ import { PathParams }          from 'microsite/page';
 import { StaticPropsContext }  from 'microsite/utils/router';
 import { ComponentChildren }   from 'preact';
 import { renderToString }      from 'preact-render-to-string';
-import { FullBleedContainer }  from '@/components/FullBleedContainer';
+import { FullBleedContainer }  from '@/components/FullBleed';
 import { Head }                from '@/components/Head';
 import { Main }                from '@/components/Main';
 import { Timestamp }           from '@/components/Timestamp';
@@ -11,6 +11,7 @@ import {
   getPageMetadata,
   mdxRaw,
   PageMetadata,
+  PageMetadataType,
   PageStat,
   Topic,
 } from '@/lib/content';
@@ -109,7 +110,13 @@ export const getBlogPostStaticProps = async <Path extends string>(
     host,
     social,
     stat,
-  } = getPageMetadata(path, importURL, title, topics, 'created');
+  } = getPageMetadata(
+    path,
+    importURL,
+    title,
+    PageMetadataType.IMMUTABLE,
+    topics
+  );
 
   const descriptionRaw = mdxRaw`${renderToString(<>{ description }</>)}`;
 

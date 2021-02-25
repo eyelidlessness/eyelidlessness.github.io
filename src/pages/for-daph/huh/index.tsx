@@ -8,6 +8,7 @@ import { Main }       from '@/components/Main';
 import {
   getPageMetadata,
   PageMetadata,
+  PageMetadataType,
   Topic,
 } from '@/lib/content';
 
@@ -41,7 +42,13 @@ export default definePage(HuhPage, {
       Topic.MENTAL_ILLNESS,
       Topic.SUBSTANCE_ABUSE,
     ] as const;
-    const meta = getPageMetadata(path, import.meta.url, title, topics);
+    const meta = getPageMetadata(
+      path,
+      import.meta.url,
+      title,
+      PageMetadataType.MUTABLE,
+      topics
+    );
 
     return {
       props: {

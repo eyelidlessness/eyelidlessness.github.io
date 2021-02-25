@@ -1,6 +1,7 @@
 /*
  * ---------------------------------------------------------------------------
- * Some of the built-in global types are far more restrictive than need be.
+ * Some of the built-in global types are far more restrictive than need be, or
+ * apparently not provided.
  * ---------------------------------------------------------------------------
  */
 
@@ -22,6 +23,11 @@ type RecordType<T extends Readonly<Record<any, any>>> =
 interface Set<T> {
   has<V>(this: Set<T>, value: V): value is Extract<V & T, T>;
 }
+
+type TemplateTag<T> = (
+  strings:        TemplateStringsArray,
+  ...expressions: readonly any[]
+) => T;
 
 /*
  * ---------------------------------------------------------------------------

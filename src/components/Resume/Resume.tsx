@@ -6,7 +6,7 @@ import {
   BlogArt,
   BlogArtProps,
 } from '@/components/Blog';
-import { FullBleedContainer } from '@/components/FullBleedContainer';
+import { FullBleedContainer } from '@/components/FullBleed';
 import {
   GitHubLogo,
   GitHubLogoDefs,

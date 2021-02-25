@@ -15,15 +15,13 @@ const BaseOuterContainer = styled(FullBleedContainer, {
 });
 
 const BaseInnerContainer = styled('div', {
-  alignContent: 'flex-start',
-  alignItems:   'flex-start',
-  display:      'flex',
-  gridColumn:   '2 / 5',
+  paddingLeft: '1rem',
 });
 
 const Symbol = styled('div', {
   flexGrow:   0,
   fontSize:   '9em',
+  gridColumn: '2',
   height:     0,
   lineHeight: '3.5rem',
   overflow:   'visible',
@@ -120,7 +118,7 @@ type PropsWithDefaults =
     >
   >;
 
-const FullBleedSymbolBlock = <
+export const FullBleedSymbolBlock = <
   O extends FullBleedSymbolBlockComponent,
   I extends FullBleedSymbolBlockComponent,
   C extends FullBleedSymbolBlockComponent,
@@ -141,14 +139,12 @@ const FullBleedSymbolBlock = <
 
   return (
     <BaseOuterContainer as={ OuterContainer } { ...outerContainerProps }>
+      <Symbol as={ SymbolContainer } role="presentation">
+        { symbol }
+      </Symbol>
       <BaseInnerContainer as={ InnerContainer }>
-        <Symbol as={ SymbolContainer } role="presentation">
-          { symbol }
-        </Symbol>
         <Content as={ ContentContainer }>{ children }</Content>
       </BaseInnerContainer>
     </BaseOuterContainer>
   );
 };
-
-export default FullBleedSymbolBlock;
