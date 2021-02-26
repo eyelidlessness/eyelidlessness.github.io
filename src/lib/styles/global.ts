@@ -114,6 +114,12 @@ export const criticalStyles = cleanWhitespace(`
 export const setGlobalStyles = () => {
   css.global(
     cleanWhitespace(`
+      @media (prefers-reduced-motion) {
+        * {
+          transition: none !important;
+        }
+      }
+
       ${blockElements.join(',')} {
         display: block;
       }

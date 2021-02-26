@@ -790,6 +790,34 @@ export const theme = {
     // color: '#fff'
   },
 
+  toggleSwitch: {
+    button: {
+      backgroundColor: '#fff',
+
+      nested: {
+        [darkMode]: {
+          backgroundColor: '#f9f9f9',
+        },
+      },
+    },
+
+    container: {
+      off: {
+        color: '#ddd',
+
+        nested: {
+          [darkMode]: {
+            color: '#666',
+          },
+        },
+      },
+
+      on: {
+        color: 'hsl(152deg, 100%, 39%)',
+      },
+    },
+  },
+
   topicColors,
 
   topicTagIdentifier: identifier(),

@@ -107,7 +107,7 @@ const toCoordinate = (value: HexCoordinate): Coordinate => {
   return coordinate(result);
 };
 
-interface Point {
+export interface Point {
   readonly x: Coordinate;
   readonly y: Coordinate;
 }
