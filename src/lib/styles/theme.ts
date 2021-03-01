@@ -304,6 +304,26 @@ export const theme = {
     ].join(', ')})`,
   },
 
+  artOverlay: {
+    backgroundColor: 'hsla(192deg, 85%, 99%, 0.7)',
+
+    nested: {
+      '@supports (backdrop-filter: blur(40px))': {
+        backgroundColor:      'hsla(192deg, 85%, 99%, 0.5)',
+        backdropFilter:       'blur(40px)',
+        WebkitBackdropFilter: 'blur(40px)',
+      },
+
+      [darkMode]: {
+        backgroundColor: 'hsla(192deg, 10%, 10%, 0.7)',
+
+        '@supports (backdrop-filter: blur(40px)': {
+          backgroundColor: 'hsla(192deg, 10%, 10%, 0.5)',
+        },
+      },
+    },
+  },
+
   aside: {
     backgroundColor: 'hsl(192deg, 35%, 96.5%)',
   },
@@ -753,24 +773,26 @@ export const theme = {
     color: 'hsla(0deg, 0%, 0%, 0.2)',
   },
 
+  scrollable: {
+    cover: (backgroundColor: string) => ({
+      backgroundImage: `linear-gradient(to right, ${[
+        'transparent',
+        `${backgroundColor} 1rem`,
+        backgroundColor,
+      ].join(', ')})`,
+    }),
+
+    shadow: {
+      backgroundImage: `linear-gradient(to left, ${[
+        'rgba(0, 0, 0, 0.3)',
+        'rgba(0, 0, 0, 0.00625) 0.2222rem',
+        'transparent 0.325rem',
+      ].join(', ')})` as string,
+    },
+  },
+
   siteHeader: {
     columns: siteHeaderColumns,
-
-    container: {
-      // backgroundColor: 'hsl(336deg, 100%, 98%)',
-      // // backgroundImage: cleanWhitespace(`linear-gradient(
-      // //   to bottom,
-      // //   hsla(336deg, 100%, 42%, 1),
-      // //   hsla(336deg, 100%, 42%, 1) 2px,
-      // //   transparent 2px
-      // // )`),
-
-      // nested: {
-      //   [darkMode]: {
-      //     backgroundColor: 'hsl(336deg, 100%, 7%)',
-      //   },
-      // },
-    },
 
     pageLinks: {
       color: '#000',

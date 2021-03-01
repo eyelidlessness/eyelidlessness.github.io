@@ -54,7 +54,7 @@ const pluginFela = () => ({
         page = (await import(pagePath)).default;
       }
       catch (error) {
-        console.trace(error);
+        console.trace(pagePath, error);
 
         throw error;
       }

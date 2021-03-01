@@ -1,7 +1,14 @@
 import hsluv                 from 'hsluv';
 import { definePage }        from 'microsite/page';
-import { ComponentChildren } from 'preact';
+import hasher                from 'node-object-hash';
 import {
+  ComponentChildren,
+  Fragment,
+} from 'preact';
+import {
+  blogArtDefaultParameters,
+  BLOG_ART_HEIGHT,
+  BlogArt,
   BlogPost,
   BlogPostProps,
   getBlogPostStaticProps,
@@ -10,21 +17,36 @@ import { CommentaryAside }   from '@/components/CommentaryAside';
 import {
   FullBleedContainer,
   FullBleedScrollableOverflow,
+  FullBleedScrollableOverflowProps,
 } from '@/components/FullBleed';
 import { VisiblyHidden }     from '@/components/VisiblyHidden';
 import {
+  AnyPointSequence,
+  COORDINATE_MAX,
+  COORDINATE_MIN,
+  HexChar,
+  hexChars,
+  HexPointSequence,
   InvalidHashError,
-  toPointSequence,
+  PointSequence,
+  ScalePointOptions,
+  scalePoint,
+  toFixed,
   toHexPointSequence,
+  toPointSequence,
+  yBounds,
 } from '@/lib/art';
 import {
+  CustomArtProps,
   mdx as baseMDX,
   Topic,
 } from '@/lib/content';
 import { sortBy }            from '@/lib/collections';
 import {
   identifier,
+  renderer,
   styled,
+  StylesProvider as DefaultStylesProvider,
   theme,
 } from '@/lib/styles';
 
@@ -40,6 +62,7 @@ const links = {
   ),
   artBoilerplate: repoURL('blob/main/src/lib/art/math.ts'),
   gitBoilerplate: repoURL('blob/main/src/lib/git/log.ts'),
+  goldenRatio:    'https://en.wikipedia.org/wiki/Golden_ratio',
   microsite:      'https://github.com/natemoo-re/microsite',
   originMain:     repoURL('tree/main'),
   p1:             '/blog/2021/02/what-the-art-p1-why/',
@@ -63,11 +86,11 @@ const ExampleHeading = styled('h3', {
   margin:     0,
 });
 
-const DEFAULT_UA_FONT_SIZE     = 16;
-const HASH_LENGTH              = 40;
+const DEFAULT_UA_FONT_SIZE = 16;
+const HASH_LENGTH          = 40;
 
-const MIN_FONT_SIZE_RATIO      = theme.baseFontSizeRange.minEm;
-const MAX_FONT_SIZE_RATIO      = theme.baseFontSizeRange.maxEm;
+const MIN_FONT_SIZE_RATIO = theme.baseFontSizeRange.minEm;
+const MAX_FONT_SIZE_RATIO = theme.baseFontSizeRange.maxEm;
 
 const HASH_EXAMPLE_LINE_HEIGHT = DEFAULT_UA_FONT_SIZE * MAX_FONT_SIZE_RATIO;
 const HASH_EXAMPLE_TEXT_OFFSET = HASH_EXAMPLE_LINE_HEIGHT / MIN_FONT_SIZE_RATIO;
@@ -125,6 +148,35 @@ const HashExample = ({
   );
 };
 
+const hsluvColors = '0123456789'.split('').map((value) => {
+  const offset = Number(value);
+
+  const hue = offset * 36;
+
+  return {
+    dark: {
+      emphasize: hsluv.hsluvToHex([ hue, 100, 35 ]),
+      hover:     hsluv.hsluvToHex([ hue, 100, 3 ]),
+      plot:      hsluv.hsluvToHex([ hue, 100, 74 ]),
+      x:         hsluv.hsluvToHex([ hue, 100, 84 ]),
+      y:         hsluv.hsluvToHex([ hue, 100, 74 ]),
+    },
+
+    light: {
+      emphasize: hsluv.hsluvToHex([ hue, 100, 80 ]),
+      hover:     hsluv.hsluvToHex([ hue, 100, 97 ]),
+      plot:      hsluv.hsluvToHex([ hue, 100, 64 ]),
+      x:         hsluv.hsluvToHex([ hue, 100, 54 ]),
+      y:         hsluv.hsluvToHex([ hue, 100, 44 ]),
+    },
+  };
+});
+
+const FlexText = styled('text', {
+  fill:       'currentcolor',
+  fontFamily: theme.monospaceFont,
+});
+
 interface BaseSHA1ExampleProps {
   readonly className?: string;
   readonly hash:       string;
@@ -149,17 +201,12 @@ const BaseSHA1Example = ({
 );
 
 const SHA1Example = styled(BaseSHA1Example, {
+  color:      hsluvColors[0].light.y,
   marginTop: '0.5rem',
-});
-
-const FlexText = styled('text', {
-  ...theme.code,
-
-  fill: 'currentcolor',
 
   nested: {
     [theme.darkMode]: {
-      ...theme[theme.darkMode].code,
+      color: hsluvColors[0].dark.x,
     },
   },
 });
@@ -204,6 +251,7 @@ type BaseFlexPointProps =
   & Sortable<JSX.IntrinsicElements['text']>
   & {
     readonly coordinate: 'x' | 'y';
+    readonly padLength:  number;
   };
 
 const flexPointClassName = identifier();
@@ -213,55 +261,32 @@ const BaseFlexPoint = ({
   className = '',
   coordinate,
   index,
+  padLength,
   sortedIndex,
   toggleClass,
   ...props
 }: BaseFlexPointProps) => (
   <FlexText { ...sortableProps(props, className, flexPointClassName) }>
     {( typeof children === 'string'
-        ? children.padStart(3, ' ')
+        ? children.padStart(padLength, ' ')
         : children
     )}
   </FlexText>
 );
-
-const flexPointColors = '0123456789'.split('').map((value) => {
-  const offset = Number(value);
-
-  const hue = offset * 36;
-
-  return {
-    dark: {
-      emphasize: hsluv.hsluvToHex([ hue, 100, 35 ]),
-      hover:     hsluv.hsluvToHex([ hue, 100, 3 ]),
-      plot:      hsluv.hsluvToHex([ hue, 100, 74 ]),
-      x:         hsluv.hsluvToHex([ hue, 100, 84 ]),
-      y:         hsluv.hsluvToHex([ hue, 100, 74 ]),
-    },
-
-    light: {
-      emphasize: hsluv.hsluvToHex([ hue, 100, 80 ]),
-      hover:     hsluv.hsluvToHex([ hue, 100, 97 ]),
-      plot:      hsluv.hsluvToHex([ hue, 100, 64 ]),
-      x:         hsluv.hsluvToHex([ hue, 100, 54 ]),
-      y:         hsluv.hsluvToHex([ hue, 100, 44 ]),
-    },
-  };
-});
 
 const FlexPoint = styled(BaseFlexPoint, ({
   coordinate,
   index,
   sortedIndex,
 }) => ({
-  '--sorted-color': flexPointColors[sortedIndex].light[coordinate],
-  color:            flexPointColors[index].light[coordinate],
+  '--sorted-color': hsluvColors[sortedIndex].light[coordinate],
+  color:            hsluvColors[index].light[coordinate],
   whiteSpace:       'pre',
 
   nested: {
     [theme.darkMode]: {
-      '--sorted-color': flexPointColors[sortedIndex].dark[coordinate],
-      color:            flexPointColors[index].dark[coordinate],
+      '--sorted-color': hsluvColors[sortedIndex].dark[coordinate],
+      color:            hsluvColors[index].dark[coordinate],
     },
   },
 }));
@@ -282,8 +307,8 @@ const FlexColumnBackground = styled(BaseFlexPointBackground, ({
   index,
   sortedIndex,
 }) => ({
-  '--sorted-color': flexPointColors[sortedIndex].light.hover,
-  color:            flexPointColors[index].light.hover,
+  '--sorted-color': hsluvColors[sortedIndex].light.hover,
+  color:            hsluvColors[index].light.hover,
   fill:             'currentcolor',
   opacity:          0,
   transition:       'opacity 0.1s ease-in-out',
@@ -291,8 +316,8 @@ const FlexColumnBackground = styled(BaseFlexPointBackground, ({
 
   nested: {
     [theme.darkMode]: {
-      '--sorted-color': flexPointColors[sortedIndex].dark.hover,
-      color:            flexPointColors[index].dark.hover,
+      '--sorted-color': hsluvColors[sortedIndex].dark.hover,
+      color:            hsluvColors[index].dark.hover,
     },
   },
 }));
@@ -300,10 +325,13 @@ const FlexColumnBackground = styled(BaseFlexPointBackground, ({
 type BasePlotPointProps =
   & Sortable<JSX.IntrinsicElements['circle']>
   & {
-    readonly cx:      number;
-    readonly cy:      number;
-    readonly sortedX: number;
-    readonly sortedY: number;
+    readonly cx:        number | string;
+    readonly cy:        number | string;
+    readonly pointSize: number;
+    readonly sortedX:   number;
+    readonly sortedY:   number;
+    readonly xShift:    number;
+    readonly yShift:    number;
   };
 
 const plotPointClassName = identifier();
@@ -311,9 +339,12 @@ const plotPointClassName = identifier();
 const BasePlotPoint = ({
   children,
   index,
+  pointSize,
   sortedIndex,
   sortedX,
   sortedY,
+  xShift,
+  yShift,
   ...props
 }: BasePlotPointProps) => (
   <circle { ...sortableProps(props, plotPointClassName) }>
@@ -326,14 +357,16 @@ const PlotPoint = styled(BasePlotPoint, ({
   sortedIndex,
   sortedX,
   sortedY,
+  // xShift,
+  // yShift,
 }) => ({
-  '--sorted-color':     flexPointColors[sortedIndex].light.plot,
-  '--sorted-stroke':    flexPointColors[sortedIndex].light.emphasize,
+  '--sorted-color':     hsluvColors[sortedIndex].light.plot,
+  '--sorted-stroke':    hsluvColors[sortedIndex].light.emphasize,
   '--sorted-transform': `translate(${sortedX}px, ${sortedY}px)`,
-  color:                flexPointColors[index].light.plot,
+  color:                hsluvColors[index].light.plot,
   fill:                 'currentcolor',
   paintOrder:           'stroke fill',
-  stroke:               flexPointColors[index].light.emphasize,
+  stroke:               hsluvColors[index].light.emphasize,
   strokeWidth:          0,
 
   transition: [
@@ -344,10 +377,10 @@ const PlotPoint = styled(BasePlotPoint, ({
 
   nested: {
     [theme.darkMode]: {
-      '--sorted-color':  flexPointColors[sortedIndex].dark.plot,
-      '--sorted-stroke': flexPointColors[sortedIndex].dark.emphasize,
-      color:             flexPointColors[index].dark.plot,
-      stroke:            flexPointColors[index].dark.emphasize,
+      '--sorted-color':  hsluvColors[sortedIndex].dark.plot,
+      '--sorted-stroke': hsluvColors[sortedIndex].dark.emphasize,
+      color:             hsluvColors[index].dark.plot,
+      stroke:            hsluvColors[index].dark.emphasize,
     },
   },
 }));
@@ -357,9 +390,9 @@ type ChoiceType = 'checkbox' | 'radio';
 type BaseChoiceData =
   & {
     readonly exampleId: number;
-    readonly index?:     unknown;
-    readonly suffix:     string;
-    readonly type:       ChoiceType;
+    readonly index?:    unknown;
+    readonly suffix:    string;
+    readonly type:      ChoiceType;
   }
   & (
     | { readonly type: 'checkbox' }
@@ -412,14 +445,26 @@ const BaseChoice = (props: BaseChoiceProps) => {
   );
 };
 
-const PlotPointEmphasisChoice = styled(BaseChoice, ({
+type BasePlotPointEmphasisChoiceProps =
+  & BaseChoiceProps
+  & { readonly pointSize: number };
+
+const BasePlotPointEmphasisChoice = ({
+  pointSize,
+  ...props
+}: BasePlotPointEmphasisChoiceProps) => (
+  <BaseChoice { ...props } />
+);
+
+const PlotPointEmphasisChoice = styled(BasePlotPointEmphasisChoice, ({
   exampleId,
   index,
+  pointSize,
   suffix,
 }) => ({
   nested: {
-    [`&:checked ~ svg #example-${exampleId}-${index}-${suffix}`]: {
-      strokeWidth: '9',
+    [`&:checked ~ * #example-${exampleId}-${index}-${suffix}`]: {
+      strokeWidth: pointSize * 2.5,
     },
 
     [`&:checked ~ * [for="example-${exampleId}-${index}-${suffix}"] rect`]: {
@@ -461,15 +506,10 @@ const HashNumber = ({ hash }: HashNumberProps) => {
   );
 };
 
-const hashPointsExampleMaskImage = `linear-gradient(${[
-  'to left',
-  'transparent',
-  'transparent 1rem',
-  'black 2.5rem',
-].join(', ')})`;
-
 const HashConversionOuter = styled(FullBleedContainer, {
   ...theme.pre,
+
+  marginBottom: '1.5rem',
 
   nested: {
     [theme.darkMode]: {
@@ -478,14 +518,40 @@ const HashConversionOuter = styled(FullBleedContainer, {
   },
 });
 
-const HashConversionScrollableOverflow = styled(FullBleedScrollableOverflow, {
-  maskImage:       hashPointsExampleMaskImage,
-  WebkitMaskImage: hashPointsExampleMaskImage,
-});
+const HashConversionScrollableOverflow = ({
+  children,
+  ...props
+}: FullBleedScrollableOverflowProps) => (
+  <FullBleedScrollableOverflow { ...props } shadow={ true }>
+    { children }
+  </FullBleedScrollableOverflow>
+);
 
 const HashConversionInner = styled('div', {
   display: 'flex',
-  padding: '0.5rem 0',
+
+  nested: {
+    '&:after': {
+      ...theme.scrollable.cover(theme.pre.backgroundColor),
+
+      content:    '""',
+      display:    'block',
+      flexShrink: 0,
+      height:     '100%',
+      left:       'calc(100% + 2rem)',
+      order:      10,
+      position:   'sticky',
+      width:      '2rem',
+
+      nested: {
+        [theme.darkMode]: {
+          ...theme.scrollable.cover(
+            theme[theme.darkMode].pre.backgroundColor
+          ),
+        },
+      },
+    },
+  },
 });
 
 type BaseHashPointConversionProps =
@@ -508,7 +574,9 @@ const HashPointConversion = styled(BaseHashPointConversion, ({ sortedIndex }) =>
   '--sorted-index': sortedIndex,
   display:          'inline-block',
   flexShrink:       0,
-  width:            '9ch',
+  paddingBottom:    '0.5rem',
+  paddingRight:     '1rem',
+  paddingTop:       '0.5rem',
   transition:       'order 0.05s ease-in-out',
 }));
 
@@ -648,261 +716,713 @@ const HashPointsExampleHeader = styled('div', {
   marginBottom:   '0.5rem',
 });
 
-const BaseHashPointsExample = styled(HashExampleGraphic, {
+const length = (value?: number | string) => (
+  typeof value === 'number'
+    ? `${value}px`
+    : value
+);
+
+const BaseHashPointsExample = styled(HashExampleGraphic, ({
+  height,
+  width,
+}) => ({
+  height:   length(height),
   overflow: 'visible',
-  width:    '9.2ch',
-});
+  width:    length(width),
+}));
 
 const HashPointsExampleContainer = styled(FullBleedContainer, {
   position: 'relative',
 });
 
 const HashPlotExample = styled('svg', {
-  marginBottom: '1rem',
-  width:        '32rem',
+  overflow:     'visible',
+  padding:      '1rem',
 });
 
-const hashPlotAxisLabelSize = 13;
+const HASH_PLOT_AXIS_LABEL_SIZE = 13;
 
 const HashPlotAxisLabel = styled('text', {
   ...theme.visualization.plot.axis,
 
   fontFamily: theme.monospaceFont,
-  fontSize:   `${hashPlotAxisLabelSize}px`,
+  fontSize:   `${HASH_PLOT_AXIS_LABEL_SIZE}px`,
   fill:       'currentcolor',
 });
 
-interface HashPointsExampleProps {
-  readonly exampleId: number;
-  readonly hash:      string;
+const HASH_PLOT_PADDING = 20;
+
+type HashPlotScaleOptions =
+  & Partial<ScalePointOptions<any, any>>
+  & {
+    readonly xRange?: number;
+    readonly yRange?: number;
+    readonly yMax?:   number;
+  };
+
+const defaultScaleOptions = {
+  xScale: 1,
+  xShift: 0,
+  yMax:   COORDINATE_MAX,
+  yScale: 1,
+  yShift: 0,
+} as const;
+
+type HashPlotPointSize =
+  | number
+  | 'data-driven';
+
+const dataDrivenRadiusHasher = hasher({
+  alg:    'sha1',
+  coerce: true,
+  sort:   true,
+  trim:   true,
+});
+
+const dataDrivenRadiusMin = 16;
+const dataDrivenRadiusMax = 128;
+
+const hexCharsList = Array.from(hexChars);
+
+const dataDrivenHexCharValues = hexCharsList.map((char) => (
+  parseInt(char ?? dataDrivenRadiusHasher.hash(char), 16)
+));
+
+const dataDrivenHexCharMin = Math.min(...dataDrivenHexCharValues);
+const dataDrivenHexCharMax = (
+  Math.max(...dataDrivenHexCharValues) - dataDrivenHexCharMin
+);
+
+type DataDrivenHexCharPointSizes = Record<HexChar, number>;
+
+const dataDrivenHexCharPointSizes = hexCharsList.reduce<
+  DataDrivenHexCharPointSizes
+>((acc, char, index) => {
+  const value = dataDrivenHexCharValues[index];
+  const scale = toFixed(
+    (
+      ((value - dataDrivenHexCharMin) / dataDrivenHexCharMax) *
+        (dataDrivenRadiusMax - dataDrivenRadiusMin)
+    ) + dataDrivenHexCharMin
+  , 2);
+
+  return {
+    ...acc,
+
+    [char]: scale,
+  };
+}, {} as DataDrivenHexCharPointSizes);
+
+interface HashPlotProps {
+  readonly className?:      string;
+  readonly exampleId:       number;
+  readonly height?:         number;
+  readonly hexPoints:       ReadonlyArray<ArrayType<HexPointSequence>>;
+  readonly pointSize?:      HashPlotPointSize;
+  readonly points:          AnyPointSequence;
+  readonly renderAxis?:     boolean;
+  readonly scaleOptions?:   HashPlotScaleOptions;
+  readonly sortIndexes:     readonly number[];
+  readonly sortToggleClass: string;
+  readonly width?:          number;
 }
+
+const HashPlot = ({
+  className,
+  exampleId,
+  hexPoints,
+  points,
+  pointSize  = 6,
+  renderAxis = true,
+  scaleOptions,
+  sortIndexes,
+  sortToggleClass,
+  ...props
+}: HashPlotProps) => {
+  const {
+    xScale,
+    xShift,
+    xRange = xScale * (COORDINATE_MAX + (xShift * 2)),
+    yMax,
+    yShift,
+    yScale,
+    yRange = yScale * (yMax + (yShift * 2)),
+  } = {
+    ...defaultScaleOptions,
+    ...scaleOptions,
+  } as Required<HashPlotScaleOptions>;
+  const pad    = (HASH_PLOT_PADDING * 2);
+  const height = props.height ?? yRange + pad;
+  const width  = props.width  ?? xRange + pad;
+
+  const axisYTop    = 0;
+  const axisYBottom = '100%';
+  const axisXLeft   = 0 - HASH_PLOT_AXIS_LABEL_SIZE
+  const axisXRight  = '100%';
+
+  const axisMaxLabel = COORDINATE_MAX.toString(16);
+  const baseAxisMin  = COORDINATE_MIN.toString(16);
+  const axisMinLabel = baseAxisMin.padStart(2, baseAxisMin);
+
+  const pointSizes = hexPoints.map(({ x, y }, index) => {
+    if (typeof pointSize === 'number') {
+      return pointSize;
+    }
+
+    const hexPointCoordinate = index % 2 === 0
+      ? x
+      : y;
+    const hexPointCoordinateChar = (
+      hexPointCoordinate[0]
+    ) as HexChar;
+
+    return typeof pointSize === 'number'
+      ? pointSize
+      : dataDrivenHexCharPointSizes[hexPointCoordinateChar];
+  });
+
+  const blurRadii = typeof pointSize === 'number'
+    ? null
+    : pointSizes.map((computedPointSize) => (
+        computedPointSize * 0.666 + 4
+      ));
+
+  const filterIds = blurRadii?.map((_, index) => (
+    `hash-plot-blur-${exampleId}-${index}`
+  ));
+
+  return (
+    <HashPlotExample
+      className={ className }
+      height={ height }
+      width={ width }
+    >
+      {(
+          blurRadii == null
+            ? null
+            : (
+                <defs>
+                  { blurRadii.map((radius, index) => (
+                    <filter id={ filterIds?.[index] }>
+                      <feGaussianBlur
+                        in="SourceGraphic"
+                        stdDeviation={ radius }
+                      />
+                    </filter>
+                  )) }
+                </defs>
+              )
+      )}
+      {( renderAxis
+          ? (<>
+              <HashPlotAxisLabel
+                x={ axisXLeft }
+                y={ axisYBottom }
+                transform={ `translate(0, ${HASH_PLOT_AXIS_LABEL_SIZE})`}
+              >
+                { axisMinLabel }
+              </HashPlotAxisLabel>
+
+              <HashPlotAxisLabel x={ axisXLeft } y={ axisYTop }>
+                { axisMaxLabel }
+              </HashPlotAxisLabel>
+
+              <HashPlotAxisLabel
+                x={ axisXRight }
+                y={ axisYBottom }
+                transform={ `translate(0, ${HASH_PLOT_AXIS_LABEL_SIZE})`}
+              >
+                { axisMaxLabel }
+              </HashPlotAxisLabel>
+            </>)
+          : null )}
+
+      { points.map(({
+        x: pointX,
+        y: pointY,
+      }, index) => {
+        const sortedIndex = sortIndexes[index];
+        const {
+          x: sortedX,
+          y: sortedY,
+        } = points[sortedIndex];
+
+        const cx = toFixed((pointX + xShift) / xRange * 100, 4);
+        const cy = 100 - toFixed((pointY - yShift) / yRange * 100, 4);
+
+        const sortedCx = toFixed((sortedX + xShift) / xRange * 100, 4);
+        const sortedCy = 100 - toFixed((sortedY - yShift) / yRange * 100, 4);
+
+        const pointSize = pointSizes[index];
+        const filterId  = filterIds?.[index];
+
+        const filterProps = filterId == null
+          ? {}
+          : {
+            filter: `url(#${filterId})`,
+          };
+
+        return (
+          <>
+            <PlotPoint
+              { ...filterProps }
+
+              id={ `example-${exampleId}-${index}-point` }
+              index={ index }
+              cx={ `${cx}%` }
+              cy={ `${cy}%` }
+              pointSize={ pointSize }
+              r={ pointSize }
+              sortedIndex={ sortIndexes[index] }
+              sortedX={ sortedCx - pointX }
+              sortedY={ sortedCy - sortedY }
+              xShift={ HASH_PLOT_PADDING }
+              yShift={ HASH_PLOT_PADDING }
+              toggleClass={ sortToggleClass }
+            />
+          </>
+        );
+      }) }
+    </HashPlotExample>
+  );
+};
+
+const HashPointsExamplePlotContainer = styled('div', {
+  marginBottom: '1rem',
+});
+
+const ScaledHashPlot = styled(HashPlot, {
+  gridColumn: '1 / -1',
+});
+
+const WidthRestrictedHashPlot = styled(HashPlot, {
+  width: '32rem',
+});
+
+interface BaseHashPointsExampleProps {
+  readonly exampleId:      number;
+  readonly hexPoints:      HexPointSequence;
+  readonly plotPointSize?: number;
+  readonly points:         PointSequence;
+  readonly renderAxis?:    boolean;
+  readonly scaleOptions?:  HashPlotScaleOptions;
+  readonly toggleSorting?: unknown;
+}
+
+type HashPointsExampleProps =
+  & BaseHashPointsExampleProps
+  & (
+    | { readonly scaleOptions:  HashPlotScaleOptions }
+    | { readonly toggleSorting: true }
+  );
 
 const HashPointsExample = ({
   exampleId,
-  hash,
+  hexPoints,
+  plotPointSize = 6,
+  points,
+  renderAxis,
+  scaleOptions = defaultScaleOptions,
+  toggleSorting: isUnsortedByDefault,
 }: HashPointsExampleProps) => {
-  const chunkLength      = 3;
-  const hashPoints       = toHexPointSequence(hash);
-  const hashChunksLength = hashPoints.length;
-  const hashChunksWidth  = getHashExampleWidth(hashChunksLength);
+  const isScaled = scaleOptions !== defaultScaleOptions;
 
-  const chunksHeight = (HASH_EXAMPLE_LINE_HEIGHT * 4);
+  const Container = isScaled
+    ? FullBleedContainer
+    : Fragment;
 
-  const charWidth             = 1 / hashChunksLength * hashChunksWidth;
-  const coordinateColumnWidth = chunkLength * charWidth;
-  const pointColumnWidth      = (coordinateColumnWidth * 2) + charWidth;
-  const yPointColumnOffset    = coordinateColumnWidth + charWidth;
+  const HashPlotComponent = isScaled
+    ? ScaledHashPlot
+    : WidthRestrictedHashPlot;
 
-  const labelYOffset = HASH_EXAMPLE_TEXT_OFFSET;
-  const hashYOffset  = labelYOffset * 2.5;
-  const pointYOffset = labelYOffset * 3.5;
+  const hashChunksHeight = isScaled
+    ? HASH_EXAMPLE_LINE_HEIGHT * 5
+    : HASH_EXAMPLE_LINE_HEIGHT * 4;
 
-  const backgroundPadding = charWidth / 2;
-  const backgroundWidth   = pointColumnWidth + (backgroundPadding * 2);
+  const labelYOffset  = HASH_EXAMPLE_TEXT_OFFSET;
+  const hashYOffset   = labelYOffset * 2.5;
+  const pointYOffset  = labelYOffset * 3.5;
+  const scaledYOffset = labelYOffset * 4.5;
 
-  const points = toPointSequence(hash);
+  const scaledPoints = points.map((point) => (
+    scalePoint(point, {
+      ...defaultScaleOptions,
+      ...scaleOptions,
+    })
+  ));
 
-  const sortedPoints = sortBy(points, (a, b) => (
-    a.x > b.x
+  const sortedPoints = sortBy(scaledPoints, (a, b) => (
+    Number(a.x) === Number(b.x)
+      ? 0
+    : Number(a.x) > Number(b.x)
       ? 1
       : -1
   ));
 
-  const sortIndexes = points.map((point) => (
+  const sortIndexes = scaledPoints.map((point) => (
     sortedPoints.indexOf(point) ?? -1
   ));
 
-  const plotsRange   = HASH_EXAMPLE_WIDTH;
-  const plotsPadding = 20;
-  const plotsSize    = plotsRange + (plotsPadding * 2);
-  const axisYTop     = hashPlotAxisLabelSize;
-  const axisYBottom  = axisYTop + plotsRange + plotsPadding;
-  const axisXRight   = plotsSize - hashPlotAxisLabelSize;
+  const renderHexPoints = isUnsortedByDefault
+    ? hexPoints as ReadonlyArray<ArrayType<HexPointSequence>>
+    : sortedPoints.map((point) => (
+      hexPoints[scaledPoints.indexOf(point)]
+    ));
+
+  const renderPoints: AnyPointSequence = isUnsortedByDefault
+    ? points
+    : sortedPoints;
+
+  const renderScaledPoints: AnyPointSequence = isUnsortedByDefault
+    ? scaledPoints
+    : sortedPoints;
 
   const sortToggleClass = identifier();
 
+  const hashPlotYMax = isScaled
+    ? 150
+    : COORDINATE_MAX;
+
+  const hashPlotScaleOptions = {
+    ...scaleOptions,
+
+    // yMax: isScaled ? 100 : COORDINATE_MAX,
+  };
+
   return (
-    <HashPointsExampleContainer>
-      <HashPointsExampleSortToggle
-        exampleId={ exampleId }
-        sortIndexes={ sortIndexes }
-        suffix="sort"
-        toggleClass={ sortToggleClass }
-      />
-
-      <HashPointsExampleHeader>
-        <ExampleHeading>Result:</ExampleHeading>
-
-        <HashPointsExampleSortToggleLabel exampleId={ exampleId } />
-      </HashPointsExampleHeader>
-
-      { points.map((_, index) => (
-        <PlotPointEmphasisChoice
-          checked={ index === 0 }
-          exampleId={ exampleId }
-          index={ index }
-          suffix="point"
-          type="radio"
-        />
-      )) }
-
-      <HashPlotExample viewBox={ `0 0 ${plotsSize} ${plotsSize}` }>
-        <HashPlotAxisLabel x="0" y={ axisYBottom }>
-          00
-        </HashPlotAxisLabel>
-        <HashPlotAxisLabel x="0" y={ axisYTop }>
-          ff
-        </HashPlotAxisLabel>
-        <HashPlotAxisLabel x={ axisXRight } y={ axisYBottom }>
-          ff
-        </HashPlotAxisLabel>
-
-        { points.map(({
-          x: pointX,
-          y: pointY,
-        }, index) => {
-          const sortedIndex = sortIndexes[index];
-          const {
-            x: sortedX,
-            y: sortedY,
-          } = points[sortedIndex];
-          const cx = plotsPadding + (pointX / 255 * plotsRange);
-          const cy = plotsSize - (pointY / 255 * plotsRange) - plotsPadding;
-
-          const sortedCx = plotsPadding + (sortedX / 255 * plotsRange);
-          const sortedCy = plotsSize - (sortedY / 255 * plotsRange) - plotsPadding;
-
-          return (
-            <PlotPoint
-              id={ `example-${exampleId}-${index}-point` }
-              index={ index }
-              cx={ cx }
-              cy={ cy }
-              r="3"
-              sortedIndex={ sortIndexes[index] }
-              sortedX={ sortedCx - pointX }
-              sortedY={ sortedCy - sortedY }
-              toggleClass={ sortToggleClass }
-            />
-          );
-        }) }
-      </HashPlotExample>
-
-      <HashConversionOuter>
-        <HashConversionScrollableOverflow>
-          <HashConversionInner>
-            { hashPoints.map(({
-              x: hashX,
-              y: hashY,
-            }, index) => {
-              const point = points[index];
-              const {
-                x: pointX,
-                y: pointY,
-              } = point;
-
-              return (
-                <HashPointConversion
-                  className={ `point-${index}` }
-                  for={ `example-${exampleId}-${index}-point` }
-                  sortedIndex={ sortIndexes[index] }
-                >
-                  <BaseHashPointsExample
-                    height={ chunksHeight }
-                    width={ hashChunksWidth }
-                  >
-                    <PointExampleGroup>
-                      <FlexColumnBackground
-                        index={ index }
-                        height={ chunksHeight }
-                        rx={ 3 }
-                        ry={ 3 }
-                        width={ backgroundWidth }
-                        x={ 0 - backgroundPadding }
-                        y={ 0 }
-                        sortedIndex={ sortIndexes[index] }
-                        toggleClass={ sortToggleClass }
-                      />
-
-                      <FlexPoint
-                        coordinate="x"
-                        index={ index }
-                        y={ labelYOffset }
-                        sortedIndex={ sortIndexes[index] }
-                        toggleClass={ sortToggleClass }
-                      >
-                        x
-                      </FlexPoint>
-
-                      <FlexPoint
-                        coordinate="y"
-                        index={ index }
-                        x={ yPointColumnOffset }
-                        y={ labelYOffset }
-                        sortedIndex={ sortIndexes[index] }
-                        toggleClass={ sortToggleClass }
-                      >
-                        y
-                      </FlexPoint>
-
-                      <FlexPoint
-                        coordinate="x"
-                        index={ index }
-                        y={ hashYOffset }
-                        sortedIndex={ sortIndexes[index] }
-                        toggleClass={ sortToggleClass }
-                      >
-                        { hashX }
-                      </FlexPoint>
-
-                      <FlexPoint
-                        coordinate="y"
-                        index={ index }
-                        x={ yPointColumnOffset }
-                        y={ hashYOffset }
-                        sortedIndex={ sortIndexes[index] }
-                        toggleClass={ sortToggleClass }
-                      >
-                        { hashY }
-                      </FlexPoint>
-
-                      <FlexPoint
-                        coordinate="x"
-                        index={ index }
-                        y={ pointYOffset }
-                        sortedIndex={ sortIndexes[index] }
-                        toggleClass={ sortToggleClass }
-                      >
-                        { String(pointX) }
-                      </FlexPoint>
-
-                      <FlexPoint
-                        coordinate="y"
-                        index={ index }
-                        x={ yPointColumnOffset }
-                        y={ pointYOffset }
-                        sortedIndex={ sortIndexes[index] }
-                        toggleClass={ sortToggleClass }
-                      >
-                        { String(pointY) }
-                      </FlexPoint>
-                    </PointExampleGroup>
-                  </BaseHashPointsExample>
-                </HashPointConversion>
+    <Container>
+      <HashPointsExampleContainer>
+        {( isUnsortedByDefault
+            ? (
+                <HashPointsExampleSortToggle
+                  exampleId={ exampleId }
+                  sortIndexes={ sortIndexes }
+                  suffix="sort"
+                  toggleClass={ sortToggleClass }
+                />
               )
-            }) }
-          </HashConversionInner>
-        </HashConversionScrollableOverflow>
-      </HashConversionOuter>
-    </HashPointsExampleContainer>
+            : null
+        )}
+
+        <HashPointsExampleHeader>
+          <ExampleHeading>Result:</ExampleHeading>
+
+          {( isUnsortedByDefault
+            ? (<HashPointsExampleSortToggleLabel exampleId={ exampleId } />)
+            : null )}
+        </HashPointsExampleHeader>
+
+        { renderPoints.map((_, index) => (
+          <PlotPointEmphasisChoice
+            checked={ index === 0 }
+            exampleId={ exampleId }
+            pointSize={ plotPointSize }
+            index={ index }
+            suffix="point"
+            type="radio"
+          />
+        )) }
+
+        <HashPointsExamplePlotContainer>
+          <HashPlotComponent
+            exampleId={ exampleId }
+            hexPoints={ renderHexPoints }
+            points={ renderPoints }
+            pointSize={ plotPointSize }
+            renderAxis={ renderAxis }
+            scaleOptions={ hashPlotScaleOptions }
+            sortIndexes={ sortIndexes }
+            sortToggleClass={ sortToggleClass }
+          />
+        </HashPointsExamplePlotContainer>
+
+        <HashConversionOuter>
+          <HashConversionScrollableOverflow>
+            <HashConversionInner>
+              { renderHexPoints.map(({
+                x: hashX,
+                y: hashY,
+              }, index) => {
+                const {
+                  x: pointX,
+                  y: pointY,
+                } = renderPoints[index];
+                const {
+                  x: scaledX,
+                  y: scaledY,
+                } = renderScaledPoints[index];
+
+                const coordinateValues = [
+                  hashX,
+                  hashY,
+                  pointX,
+                  pointY,
+                  ...(
+                    isScaled
+                      ? [
+                        scaledX,
+                        scaledY,
+                      ]
+                      : []
+                  ),
+                ] as const;
+
+                const chunkLength = Math.max(
+                  String(COORDINATE_MAX).length,
+                  ...coordinateValues.map((coordinate) => (
+                    String(coordinate).length
+                  ))
+                );
+
+                const hashChunksLength = hexPoints.length;
+                const hashChunksWidth  = getHashExampleWidth(hashChunksLength);
+
+                const charWidth             = 1 / hashChunksLength * hashChunksWidth;
+                const coordinateColumnWidth = chunkLength * charWidth;
+                const pointColumnWidth      = (coordinateColumnWidth * 2) + charWidth;
+                const yPointColumnOffset    = coordinateColumnWidth + charWidth;
+
+                const hashChunkBgPadding = charWidth / 2;
+                const hashChunkWidth     = pointColumnWidth + (hashChunkBgPadding * 2);
+
+                return (
+                  <HashPointConversion
+                    className={ `point-${index}` }
+                    for={ `example-${exampleId}-${index}-point` }
+                    sortedIndex={ sortIndexes[index] }
+                  >
+                    <BaseHashPointsExample
+                      height={ hashChunksHeight }
+                      width={ hashChunkWidth }
+                    >
+                      <PointExampleGroup>
+                        <FlexColumnBackground
+                          index={ index }
+                          height={ hashChunksHeight }
+                          rx={ 3 }
+                          ry={ 3 }
+                          width={ hashChunkWidth }
+                          x={ 0 - hashChunkBgPadding }
+                          y={ 0 }
+                          sortedIndex={ sortIndexes[index] }
+                          toggleClass={ sortToggleClass }
+                        />
+
+                        <FlexPoint
+                          coordinate="x"
+                          index={ index }
+                          y={ labelYOffset }
+                          padLength={ chunkLength }
+                          sortedIndex={ sortIndexes[index] }
+                          toggleClass={ sortToggleClass }
+                        >
+                          x
+                        </FlexPoint>
+
+                        <FlexPoint
+                          coordinate="y"
+                          index={ index }
+                          x={ yPointColumnOffset }
+                          y={ labelYOffset }
+                          padLength={ chunkLength }
+                          sortedIndex={ sortIndexes[index] }
+                          toggleClass={ sortToggleClass }
+                        >
+                          y
+                        </FlexPoint>
+
+                        <FlexPoint
+                          coordinate="x"
+                          index={ index }
+                          y={ hashYOffset }
+                          padLength={ chunkLength }
+                          sortedIndex={ sortIndexes[index] }
+                          toggleClass={ sortToggleClass }
+                        >
+                          { hashX }
+                        </FlexPoint>
+
+                        <FlexPoint
+                          coordinate="y"
+                          index={ index }
+                          x={ yPointColumnOffset }
+                          y={ hashYOffset }
+                          padLength={ chunkLength }
+                          sortedIndex={ sortIndexes[index] }
+                          toggleClass={ sortToggleClass }
+                        >
+                          { hashY }
+                        </FlexPoint>
+
+                        <FlexPoint
+                          coordinate="x"
+                          index={ index }
+                          y={ pointYOffset }
+                          padLength={ chunkLength }
+                          sortedIndex={ sortIndexes[index] }
+                          toggleClass={ sortToggleClass }
+                        >
+                          { String(parseInt(hashX, 16)) }
+                        </FlexPoint>
+
+                        <FlexPoint
+                          coordinate="y"
+                          index={ index }
+                          x={ yPointColumnOffset }
+                          y={ pointYOffset }
+                          padLength={ chunkLength }
+                          sortedIndex={ sortIndexes[index] }
+                          toggleClass={ sortToggleClass }
+                        >
+                          { String(parseInt(hashY, 16)) }
+                        </FlexPoint>
+
+                        {( isScaled
+                            ? (
+                                <>
+                                  <FlexPoint
+                                    coordinate="x"
+                                    index={ index }
+                                    y={ scaledYOffset }
+                                    padLength={ chunkLength }
+                                    sortedIndex={ sortIndexes[index] }
+                                    toggleClass={ sortToggleClass }
+                                  >
+                                    { String(scaledX) }
+                                  </FlexPoint>
+
+                                  <FlexPoint
+                                    coordinate="y"
+                                    index={ index }
+                                    padLength={ chunkLength }
+                                    x={ yPointColumnOffset }
+                                    y={ scaledYOffset }
+                                    sortedIndex={ sortIndexes[index] }
+                                    toggleClass={ sortToggleClass }
+                                  >
+                                    { String(scaledY) }
+                                  </FlexPoint>
+                                </>
+                              )
+                            : null )}
+                      </PointExampleGroup>
+                    </BaseHashPointsExample>
+                  </HashPointConversion>
+                )
+              }) }
+            </HashConversionInner>
+          </HashConversionScrollableOverflow>
+        </HashConversionOuter>
+      </HashPointsExampleContainer>
+    </Container>
+  );
+};
+
+const CustomArt = ({
+  className,
+  hash,
+  height,
+  identifier: identifier_ = identifier,
+  StylesProvider          = DefaultStylesProvider,
+  styleRenderer           = renderer,
+  width,
+}: CustomArtProps) => {
+  const hexPoints  = toHexPointSequence(hash);
+  const basePoints = toPointSequence(hash, hexPoints);
+
+  const { min: baseYMin } = yBounds(basePoints);
+  const {
+    xPadding,
+    xScale,
+    yPadding,
+    yScale,
+  } = blogArtDefaultParameters;
+
+  // const yMax   = 100;
+  const xShift = xPadding / 2;
+  const yShift = baseYMin + (yPadding / 2);
+
+  const scaleOptions = {
+    xScale,
+    xShift,
+    // yMax,
+    yScale,
+    yShift,
+  };
+
+  const sortedPoints = sortBy(basePoints, (a, b) => (
+    a.x === b.x
+      ? 0
+    : a.x > b.x
+      ? 1
+      : -1
+  ));
+
+  const scaledPoints: AnyPointSequence = sortedPoints.map((point) => (
+    scalePoint(point, scaleOptions)
+  ));
+
+  const sortIndexes = scaledPoints.map((_, index) => index);
+
+  const sortToggleClass = identifier_();
+
+  const hashPlotClassName = styleRenderer.renderRule(() => ({
+    gridColumn: '1 / -1',
+    height:     BLOG_ART_HEIGHT,
+    padding:    '0 !important',
+    width:      '100%',
+  }), Object.keys);
+
+  const renderHexPoints = scaledPoints.map((point) => (
+    hexPoints[scaledPoints.indexOf(point)]
+  ));
+
+  return (
+    <StylesProvider>
+      <HashPlot
+        className={ [
+          className,
+          hashPlotClassName,
+        ].join(' ') }
+        exampleId={ 0 }
+        height={ height }
+        hexPoints={ renderHexPoints }
+        points={ scaledPoints }
+        pointSize={ 'data-driven' }
+        renderAxis={ false }
+        scaleOptions={ scaleOptions }
+        sortIndexes={ sortIndexes }
+        sortToggleClass={ sortToggleClass }
+        width={ width }
+      />
+    </StylesProvider>
   );
 };
 
 const WhatTheArt3Post = (props: BlogPostProps<any>) => {
-  const { hash } = props;
+  const {
+    hash,
+    title,
+    topics,
+  } = props;
+
+  const hexPoints = toHexPointSequence(hash);
+  const points    = toPointSequence(hash, hexPoints);
+
+  const worstCase = '000000ffff00ffffa0b0c0d0e0f0102030405060';
+
+  const wcHexPoints = toHexPointSequence(worstCase);
+  const wcPoints = toPointSequence(hash, wcHexPoints);
+
+  const scaleOptions = {
+    xShift: blogArtDefaultParameters.xPadding / 2,
+    xScale: blogArtDefaultParameters.xScale,
+    yShift: blogArtDefaultParameters.yPadding / 2,
+    yScale: blogArtDefaultParameters.yScale,
+  };
 
   return (
-    <BlogPost { ...props }>
+    <BlogPost { ...props } CustomArt={ CustomArt }>
       {mdx`
         Previous:
 
@@ -959,7 +1479,7 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
           return hash ?? getSHA1Hash(path);
         };
 
-        getInitialFileHash(__filename);
+        const hash = getInitialFileHash(path);
         ~~~
       `}
 
@@ -977,6 +1497,11 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
 
       {mdx`
         ~~~typescript
+        export const COORDINATE_MAX  = parseInt('ff', 16);
+        export const COORDINATE_MIN  = parseInt('00', 16);
+
+        // ...
+
         const hexPointPattern = /([0-9a-f]{2})([0-9a-f]{2})/ig;
 
         export const toHexPointSequence = (hash: string): HexPointSequence => {
@@ -1009,9 +1534,10 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
           return coordinate(result);
         };
 
-        export const toPointSequence = (hash: string): PointSequence => {
-          const hexPoints = toHexPointSequence(hash);
-
+        export const toPointSequence = (
+          hash:      string,
+          hexPoints: HexPointSequence
+        ): PointSequence => {
           try {
             const result = hexPoints.map(toPoint);
 
@@ -1026,7 +1552,8 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
           }
         };
 
-        toPointSequence(hash);
+        const hexPoints  = toHexPointSequence(hash);
+        const basePoints = toPointSequence(hash, hexPoints);
         ~~~
 
         While I can't predict the initial commit hash on \`main/origin\`
@@ -1039,28 +1566,106 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
         along the \`x\` axis.
 
         ~~~typescript
-        sortBy(basePoints, (a, b) => (
-          a.x > b.x
+        const sortedPoints = sortBy(basePoints, ({ x: a }, { x: b }) => (
+          a === b
+            ? 0
+          : a > b
             ? 1
             : -1
         ));
         ~~~
 
-        I've left sorting off by default in the example, so you can see the
-        order before and after.
+        Sorting is off by default in the example, to allow readers to toggle
+        the before/after state.
       `}
 
-      <HashPointsExample exampleId={ 1 } hash={ hash } />
+      <HashPointsExample
+        exampleId={ 1 }
+        hexPoints={ hexPoints }
+        points={ points }
+        toggleSorting={ true }
+      />
+
+      <h2>Aspect ratio & padding adjustments</h2>
+
+      {mdx`
+        Of course, the final art rendering isn't square, it's much wider than
+        it is tall. With some adjustments for very small & very large
+        viewports, its aspect ratio is roughly five times the
+        [golden ratio][goldenRatio], plus a small amount of padding—on the
+        \`x\` axis to begin and end the blobs on the art's baseline, and on the
+        \`y\` axis to leave some room for overshoot once the curves are
+        computed.
+
+        ~~~typescript
+        export const scalePoint = <
+          X extends number,
+          Y extends number
+        >({ x, y }: Point, {
+          xScale,
+          xShift,
+          yScale,
+          yShift,
+        }: ScalePointOptions<X, Y>): ScaledPoint<X, Y> => ({
+          x: scaledCoordinate(
+            (x + xShift) * xScale,
+            xScale
+          ),
+          y: scaledCoordinate(
+            (y + yShift) * yScale,
+            yScale
+          ),
+        });
+
+        const scaledPoints = sortedPoints.map((point) => (
+          scalePoint(point, {
+            xScale: ${scaleOptions.xScale},
+            xShift: ${scaleOptions.xShift},
+            yScale: ${scaleOptions.yScale},
+            yShift: ${scaleOptions.yShift},
+          });
+        ));
+        ~~~
+      `}
+
+      <HashPointsExample
+        exampleId={ 2 }
+        hexPoints={ hexPoints }
+        points={ points }
+        renderAxis={ false }
+        scaleOptions={ scaleOptions }
+      />
+
+      {/* <hr />
+
+      <HashPointsExample
+        exampleId={ 3 }
+        hexPoints={ wcHexPoints }
+        points={ wcPoints }
+        renderAxis={ false }
+        toggleSorting={ true }
+      />
+
+      <HashPointsExample
+        exampleId={ 4 }
+        hexPoints={ wcHexPoints }
+        points={ wcPoints }
+        renderAxis={ false }
+        scaleOptions={ scaleOptions }
+      /> */}
+
+      <BlogArt hash={ hash } title={ title } topics={ topics } />
+      {/* <BlogArt hash={ worstCase } title={ title } topics={ topics } /> */}
     </BlogPost>
   );
-}
+};
 
 export default definePage(WhatTheArt3Post, {
   async getStaticProps(context) {
-    const props = await getBlogPostStaticProps({
+    const baseProps = await getBlogPostStaticProps({
       ...context,
 
-      description: mdx`
+      description: baseMDX`
         For the final part in a series introducing my new site's
         art project, I walk through some of the more interesting
         parts of how the art is generated.
@@ -1075,6 +1680,12 @@ export default definePage(WhatTheArt3Post, {
         Topic.NEURODIVERGENCE,
       ],
     });
+
+    const props = {
+      ...baseProps,
+
+      CustomArt,
+    };
 
     return { props };
   },

@@ -10,7 +10,6 @@ import {
 import { renderToString } from 'preact-render-to-string';
 import sharp              from 'sharp';
 import {
-  createStylesProvider,
   IRenderer,
   theme,
 } from '@/lib/styles';
@@ -37,10 +36,8 @@ export const generateRasterFromSVG = async (
     type,
     width,
   } = options;
-  const StylesProvider = createStylesProvider(styleRenderer);
   const rendered = renderToString(
-    h(StylesProvider, {},
-      h(Fragment, {}, node), {})
+    h(Fragment, {}, node)
   ).trim();
 
   if (!rendered.startsWith('<svg')) {
@@ -71,13 +68,23 @@ export const generateRasterFromSVG = async (
     [type]()
     .toBuffer();
 
-  return await sharp(base)
-    .composite([
-      {
-        blend: 'over',
-        input: imageBuffer,
-      },
-    ])
-    [type]()
-    .toBuffer();
+  try {
+    return await sharp(base)
+      .composite([
+        {
+          blend: 'over',
+          input: imageBuffer,
+        },
+      ])
+      [type]()
+      .toBuffer();
+  }
+  catch (error) {
+    console.trace(
+      'unexpected error',
+      error,
+      'rendered svg',
+      rendered
+    );
+  }
 };

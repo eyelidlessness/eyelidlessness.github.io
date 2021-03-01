@@ -160,16 +160,29 @@ const withAbbreviations = (str: string) => ([
   mdxAbbreviations,
 ].join('\n\n'));
 
-const getMDXString = ([ first, ...rest ]: CallableTemplateTagParams) => {
+interface GetMDXStringOptions {
+  readonly includeAbbreviations: boolean;
+}
+
+const getMDXString = (
+  [ first, ...rest ]: CallableTemplateTagParams,
+  {
+    includeAbbreviations = true,
+  }: GetMDXStringOptions
+) => {
   const raw = typeof first === 'string'
     ? [ first, ...rest ].join('')
     : String.raw(first, ...rest);
 
-  return withAbbreviations(raw);
+  if (includeAbbreviations) {
+    return withAbbreviations(raw);
+  }
+
+  return raw;
 };
 
 export const mdx = (...args: CallableTemplateTagParams): VNode => {
-  const str = getMDXString(args);
+  const str = getMDXString(args, { includeAbbreviations: true });
 
   return preactH(StylesProvider, {},
     preactH(MDX, {}, str)
@@ -177,7 +190,7 @@ export const mdx = (...args: CallableTemplateTagParams): VNode => {
 };
 
 export const mdxInline = (...args: CallableTemplateTagParams): VNode => {
-  const str = getMDXString(args);
+  const str = getMDXString(args, { includeAbbreviations: true });
 
   return preactH(StylesProvider, {},
     preactH(MDX, {
@@ -189,7 +202,7 @@ export const mdxInline = (...args: CallableTemplateTagParams): VNode => {
 };
 
 export const mdxRaw: TemplateTag<string> = (...args) => {
-  const str = getMDXString(args);
+  const str = getMDXString(args, { includeAbbreviations: false });
 
   return remark()
     .use(remarkParse)

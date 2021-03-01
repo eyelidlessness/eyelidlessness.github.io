@@ -177,7 +177,8 @@ const expectedPointSequences = {
 
 validHashes.forEach(([ key, validHash ]) => {
   it(`gets a numeric point sequence (${key})`, (assert) => {
-    const pointSequence = toPointSequence(validHash);
+    const hexPoints     = toHexPointSequence(validHash);
+    const pointSequence = toPointSequence(validHash, hexPoints);
 
     const expected = key in expectedPointSequences
       ? expectedPointSequences[key as keyof typeof expectedPointSequences]

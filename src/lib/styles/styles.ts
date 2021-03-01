@@ -111,7 +111,7 @@ export const css = Object.assign(baseCSS, {
   global: renderer.renderStatic.bind(renderer) as typeof renderer.renderStatic,
 });
 
-interface StyleableProps {
+export interface StyleableProps {
   className?: string;
 }
 

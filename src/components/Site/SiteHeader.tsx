@@ -10,10 +10,7 @@ import {
   siteLogoDimensionsPx,
 } from './SiteLogo';
 
-const {
-  columns,
-  container,
-} = theme.siteHeader;
+const { columns } = theme.siteHeader;
 
 const gridTemplateColumns = `
   ${columns[0]}
@@ -26,13 +23,15 @@ const gridTemplateColumns = `
   ${columns[4]}
 `.replace(/\s+/g, ' ');
 
-const BaseSiteHeader = styled('div', {
-  ...container,
+const BaseSiteHeader = styled('header', {
+  ...theme.artOverlay,
 
   display:    'grid',
   gridColumn: '1 / -1',
   gridTemplateColumns,
   padding:    '1rem 0',
+  position:   'relative',
+  zIndex:     1,
 });
 
 const SiteHeaderNavOuter = styled('div', {
@@ -151,7 +150,7 @@ export const SiteHeader = () => {
   ].join(' + ')}`;
 
   return (
-    <BaseSiteHeader as="header">
+    <BaseSiteHeader>
       <SiteHeaderNavOuter>
         <DevilsAlbatross
           as="nav"

@@ -1,3 +1,4 @@
+import { ComponentProps } from 'preact';
 import {
   css,
   styled,
@@ -65,3 +66,7 @@ export const FullBleedContainer = styled('div', {
 
   ...fullBleedStyles,
 });
+
+export type FullBleedContainerProps = ComponentProps<
+  typeof FullBleedContainer
+>;

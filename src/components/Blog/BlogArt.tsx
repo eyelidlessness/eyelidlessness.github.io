@@ -4,6 +4,7 @@ import {
 } from '@/components/FullBleed';
 import {
   computeBasicArt,
+  toFixed,
 } from '@/lib/art';
 import {
   DEFAULT_TOPIC,
@@ -21,15 +22,15 @@ import { BlogArtStaticDefs } from './BlogArtDefs';
 const GOLDEN_RATIO = 1.6180334 as const;
 
 const X_PADDING = 4 as const;
-const X_SCALE   = GOLDEN_RATIO * 5 as 8.090167;
+const X_SCALE   = toFixed(GOLDEN_RATIO * 5, 6) as 8.090167;
 const Y_OFFSET  = 0.75 as const;
 const Y_PADDING = 0.15 as const;
 const Y_SCALE   = 1.5 as const;
 
-export const blogArtHeight = clamp('6rem', `${100 / X_SCALE}vw`, '10rem');
+export const BLOG_ART_HEIGHT = clamp('6rem', `${100 / X_SCALE}vw`, '10rem');
 
 const BlogArtContainer = styled(FullBleedContainer, {
-  height:   blogArtHeight,
+  height:   BLOG_ART_HEIGHT,
   position: 'relative',
   width:    '100%',
 });
@@ -51,6 +52,14 @@ export enum BlogArtDefsUsage {
   INLINE = 'inline',
   NONE   = 'none',
 }
+
+export const blogArtDefaultParameters = {
+  xPadding: X_PADDING,
+  xScale:   X_SCALE,
+  yOffset:  Y_OFFSET,
+  yPadding: Y_PADDING,
+  yScale:   Y_SCALE,
+};
 
 export interface BlogArtProps {
   readonly className?:     string;
@@ -91,16 +100,12 @@ export const BlogArt = (props: BlogArtProps) => {
     xMax,
     yMax,
   } = computeBasicArt({
+    ...blogArtDefaultParameters,
     hash,
-    xPadding: X_PADDING,
-    xScale:   X_SCALE,
-    yOffset:  Y_OFFSET,
-    yPadding: Y_PADDING,
-    yScale:   Y_SCALE,
   });
 
   const blurY      = yMax * Y_OFFSET;
-  const glowSize   = yMax * Y_PADDING / 4;
+  const glowSize   = yMax * Y_PADDING / 10.24;
   const glowOffset = glowSize * 0.75;
   const viewBox    = [ 0, 0, xMax, yMax ];
 

@@ -1,8 +1,10 @@
-import fs             from 'fs';
-import hasher         from 'node-object-hash';
-import path           from 'path';
-import { RasterType } from '@/lib/art';
-import { Topic }      from '@/lib/content/topics';
+import fs                from 'fs';
+import hasher            from 'node-object-hash';
+import path              from 'path';
+import { ComponentType } from 'preact';
+import { BlogArtProps }  from '@/components/Blog';
+import { RasterType }    from '@/lib/art';
+import { Topic }         from '@/lib/content/topics';
 import {
   getCurrentCommitDate,
   getInitialCommitDate,
@@ -37,14 +39,20 @@ export interface PageStat {
   readonly updated: Date;
 }
 
+export interface CustomArtProps extends BlogArtProps {
+  readonly identifier?:     () => string;
+  readonly StylesProvider?: ComponentType;
+}
+
 export interface PageMetadata<Path extends string> {
-  readonly hash:   string;
-  readonly host:   string;
-  readonly path:   Path;
-  readonly stat:   PageStat;
-  readonly social: PageSocial;
-  readonly title:  string;
-  readonly topics: readonly Topic[];
+  readonly CustomArt?: ComponentType<CustomArtProps>;
+  readonly hash:       string;
+  readonly host:       string;
+  readonly path:       Path;
+  readonly stat:       PageStat;
+  readonly social:     PageSocial;
+  readonly title:      string;
+  readonly topics:     readonly Topic[];
 }
 
 const socialImageNameHasher = hasher({

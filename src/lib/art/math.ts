@@ -1,7 +1,12 @@
 import { sortBy } from '@/lib/collections';
 
-const COORDINATE_MAX  = parseInt('ff', 16);
-const COORDINATE_MIN  = parseInt('00', 16);
+export const toFixed = (value: number, fractionalDigits: number) => (
+  Number(value.toFixed(fractionalDigits))
+);
+
+export const COORDINATE_MAX = parseInt('ff', 16);
+export const COORDINATE_MIN = parseInt('00', 16);
+
 const MID_POINT_TILT  = 0.05 as const;
 const MIN_SMOOTHING   = 0.15 as const;
 const SMOOTHING_RATIO = 0.05 as const;
@@ -18,7 +23,7 @@ const isValidHash = (value: string) => (
   validHashPattern.test(value)
 );
 
-const hexChars = new Set([
+export const hexChars = new Set([
   '0',
   '1',
   '2',
@@ -37,7 +42,7 @@ const hexChars = new Set([
   'f',
 ] as const);
 
-type HexChar = SetType<typeof hexChars>;
+export type HexChar = SetType<typeof hexChars>;
 
 type Tuple<
   T,
@@ -55,7 +60,7 @@ interface HexPoint {
   readonly y: HexCoordinate;
 }
 
-type HexPointSequence = Tuple<HexPoint, 10>;
+export type HexPointSequence = Tuple<HexPoint, 10>;
 
 const isHexPointSequence = (
   value: readonly HexPoint[]
@@ -117,15 +122,16 @@ const toPoint = ({ x, y }: HexPoint): Point => ({
   y: toCoordinate(y),
 });
 
-type PointSequence = Tuple<Point, 10>;
+export type PointSequence = Tuple<Point, 10>;
 
 const isPointSequence = (value: readonly Point[]): value is PointSequence => (
   value.length === 10
 );
 
-export const toPointSequence = (hash: string): PointSequence => {
-  const hexPoints = toHexPointSequence(hash);
-
+export const toPointSequence = (
+  hash:      string,
+  hexPoints: HexPointSequence
+): PointSequence => {
   try {
     const result = hexPoints.map(toPoint);
 
@@ -156,7 +162,13 @@ interface VerticallyPositioned {
   readonly y: AnyCoordinate;
 }
 
-const yBounds = (points: readonly VerticallyPositioned[]) => (
+export interface AnyPoint extends VerticallyPositioned {
+  readonly x: AnyCoordinate;
+}
+
+export type AnyPointSequence = readonly AnyPoint[];
+
+export const yBounds = (points: readonly VerticallyPositioned[]) => (
   points.reduce(({ max, min }, { y }) => ({
     max: Math.max(max, y),
     min: Math.min(min, y),
@@ -170,17 +182,15 @@ const scaledCoordinate = <Scale>(
   value: number,
   scale: Scale
 ): ScaledCoordinate<Scale> => (
-  Object.assign(value, {
+  Object.assign(toFixed(value, 2), {
     [scaledCoordinateSymbol]: scale,
   } as const)
 );
 
-interface ScalePointOptions<X extends number, Y extends number> {
-  readonly point:  Point;
+export interface ScalePointOptions<X extends number, Y extends number> {
   readonly xScale: X;
   readonly xShift: number;
   readonly yScale: Y;
-  readonly yRange: number;
   readonly yShift: number;
 }
 
@@ -189,20 +199,21 @@ interface ScaledPoint<X extends number, Y extends number> {
   readonly y: ScaledCoordinate<Y>;
 }
 
-const scalePoint = <X extends number, Y extends number>({
-  point: { x, y },
+export const scalePoint = <
+  X extends number,
+  Y extends number
+>({ x, y }: Point, {
   xScale,
   xShift,
-  yRange,
   yScale,
   yShift,
 }: ScalePointOptions<X, Y>): ScaledPoint<X, Y> => ({
   x: scaledCoordinate(
-    COORDINATE_MAX * ((x + xShift) / COORDINATE_MAX) * xScale,
+    (x + xShift) * xScale,
     xScale
   ),
   y: scaledCoordinate(
-    ((y + yShift) / yRange * 100),
+    (y + yShift) * yScale,
     yScale
   ),
 });
@@ -654,30 +665,27 @@ export const computeBasicArt = <
   yPadding = 0,
   yScale   = 1 as Y,
 }: ComputeBasicArtOptions<T, X, Y>) => {
-  const basePoints   = toPointSequence(hash);
-  const sortedPoints = sortBy(basePoints, (a, b) => (
-    a.x > b.x
+  const hexPoints    = toHexPointSequence(hash);
+  const basePoints   = toPointSequence(hash, hexPoints);
+  const sortedPoints = sortBy(basePoints, ({ x: a }, { x: b }) => (
+    Number(a) === Number(b)
+      ? 0
+    : Number(a) > Number(b)
       ? 1
       : -1
   ));
 
-  const {
-    max: baseYMax,
-    min: baseYMin,
-  } = yBounds(sortedPoints);
-
   const xShift = xPadding / 2;
-  const yRange = baseYMax - baseYMin;
-  const yShift = 0 - baseYMin + (yPadding / 2);
+  const yShift = yPadding / 2;
 
-  const scaledPoints = sortedPoints.map((point) => scalePoint({
-    xScale,
-    xShift,
-    yRange,
-    yScale,
-    yShift,
-    point,
-  }));
+  const scaledPoints = sortedPoints.map((point) => (
+    scalePoint(point, {
+      xScale,
+      xShift,
+      yScale,
+      yShift,
+    })
+  ));
 
   const xMax = (COORDINATE_MAX + xPadding) * xScale;
 

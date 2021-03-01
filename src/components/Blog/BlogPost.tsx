@@ -15,9 +15,17 @@ import {
   PageStat,
   Topic,
 } from '@/lib/content';
-import { styled }              from '@/lib/styles';
+import {
+  styled,
+  StylesProvider,
+  theme,
+} from '@/lib/styles';
 import { BlogArt }             from './BlogArt';
 import { BlogPostDescription } from './BlogPostDescription';
+
+const BlogPostHeadingContent = styled(FullBleedContainer, {
+  ...theme.artOverlay,
+});
 
 const BlogPostTitle = styled('h1', {
   marginBottom: '0.25rem',
@@ -45,6 +53,7 @@ export interface BlogPostProps<
 export const BlogPost = <Path extends string>(props: BlogPostProps<Path>) => {
   const {
     children,
+    CustomArt,
     description,
     descriptionRaw,
     hash,
@@ -62,11 +71,23 @@ export const BlogPost = <Path extends string>(props: BlogPostProps<Path>) => {
 
       <Main as="article">
         <BlogPostHeading>
-          <BlogArt hash={ hash } title={ title } topics={ topics } />
+          {( CustomArt == null
+              ? (<BlogArt hash={ hash } title={ title } topics={ topics } />)
+              : (
+                  <CustomArt
+                    hash={ hash }
+                    StylesProvider={ StylesProvider }
+                    title={ title }
+                    topics={ topics }
+                  />
+                )
+          )}
 
-          <BlogPostTitle>{ title }</BlogPostTitle>
-          <Timestamp date={ created } itemprop="datePublished" />
-          <TopicTagList link={ false } topics={ topics } />
+          <BlogPostHeadingContent>
+            <BlogPostTitle>{ title }</BlogPostTitle>
+            <Timestamp date={ created } itemprop="datePublished" />
+            <TopicTagList link={ false } topics={ topics } />
+          </BlogPostHeadingContent>
         </BlogPostHeading>
 
         <BlogPostDescription>{ description }</BlogPostDescription>
@@ -84,7 +105,7 @@ type AnyBlogPostProps<Path extends string> =
     readonly stat?: Partial<PageStat>;
   };
 
-interface DefineBlogPostOptions<Path extends string> extends Omit<
+interface GetBLogPostStaticPropsOptions<Path extends string> extends Omit<
   StaticPropsContext<AnyBlogPostProps<Path>>,
   'params'
 > {
@@ -96,7 +117,7 @@ interface DefineBlogPostOptions<Path extends string> extends Omit<
 }
 
 export const getBlogPostStaticProps = async <Path extends string>(
-  options: DefineBlogPostOptions<Path>
+  options: GetBLogPostStaticPropsOptions<Path>
 ): Promise<BlogPostProps<Path>> => {
   const {
     description,
@@ -106,6 +127,7 @@ export const getBlogPostStaticProps = async <Path extends string>(
     topics,
   } = options;
   const {
+    CustomArt,
     hash,
     host,
     social,
@@ -121,6 +143,7 @@ export const getBlogPostStaticProps = async <Path extends string>(
   const descriptionRaw = mdxRaw`${renderToString(<>{ description }</>)}`;
 
   return {
+    CustomArt,
     description,
     descriptionRaw,
     hash,
