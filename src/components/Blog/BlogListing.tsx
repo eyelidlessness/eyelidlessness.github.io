@@ -80,11 +80,11 @@ const BlogArticleArtContainer = styled('div', {
 const linkTextContentClassName = css({
   // ...theme.blog.listing.linkTextContent,
 
-  backdropFilter:       'blur(1rem)',
+  backdropFilter:       'blur(0.25rem)',
   justifySelf:          'start',
   marginLeft:           '-0.5rem',
   marginRight:          '-0.5rem',
-  WebkitBackdropFilter: 'blur(1rem)',
+  WebkitBackdropFilter: 'blur(0.25rem)',
 });
 
 const BlogPageArticleTitle = styled('h2', {
@@ -171,6 +171,7 @@ export const BlogListing = ({
                         defsUsage={ BlogArtDefsUsage.NONE }
                         hash={ hash }
                         padded={ true }
+                        renderType="listing"
                         title={ title }
                         topics={ topics }
                       />

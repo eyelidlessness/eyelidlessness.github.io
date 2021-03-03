@@ -21,15 +21,23 @@ import {
 } from '@/components/FullBleed';
 import { VisiblyHidden }     from '@/components/VisiblyHidden';
 import {
+  AnyPoint,
   AnyPointSequence,
   COORDINATE_MAX,
   COORDINATE_MIN,
+  CubicBezierPoints,
+  cubicBezierPoints,
+  getNaiveSegments,
+  getNonPhallicSegments,
   HexChar,
   hexChars,
   HexPointSequence,
   InvalidHashError,
+  MIN_SMOOTHING,
+  SMOOTHING_RATIO,
   PointSequence,
   ScalePointOptions,
+  SegmentList,
   scalePoint,
   toFixed,
   toHexPointSequence,
@@ -39,12 +47,14 @@ import {
 import {
   CustomArtProps,
   mdx as baseMDX,
+  SOCIAL_IMAGE_DIMENSIONS,
   Topic,
 } from '@/lib/content';
 import { sortBy }            from '@/lib/collections';
 import {
   identifier,
   renderer,
+  rgba,
   styled,
   StylesProvider as DefaultStylesProvider,
   theme,
@@ -61,6 +71,7 @@ const links = {
     'what-the-art-p2-constraints/index.tsx#L146-L147'
   ),
   artBoilerplate: repoURL('blob/main/src/lib/art/math.ts'),
+  bezierCurves:   'https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Cubic_B%C3%A9zier_curves',
   gitBoilerplate: repoURL('blob/main/src/lib/git/log.ts'),
   goldenRatio:    'https://en.wikipedia.org/wiki/Golden_ratio',
   microsite:      'https://github.com/natemoo-re/microsite',
@@ -158,6 +169,7 @@ const hsluvColors = '0123456789'.split('').map((value) => {
       emphasize: hsluv.hsluvToHex([ hue, 100, 35 ]),
       hover:     hsluv.hsluvToHex([ hue, 100, 3 ]),
       plot:      hsluv.hsluvToHex([ hue, 100, 74 ]),
+      selected:  hsluv.hsluvToHex([ hue, 100, 74 ]),
       x:         hsluv.hsluvToHex([ hue, 100, 84 ]),
       y:         hsluv.hsluvToHex([ hue, 100, 74 ]),
     },
@@ -166,6 +178,7 @@ const hsluvColors = '0123456789'.split('').map((value) => {
       emphasize: hsluv.hsluvToHex([ hue, 100, 80 ]),
       hover:     hsluv.hsluvToHex([ hue, 100, 97 ]),
       plot:      hsluv.hsluvToHex([ hue, 100, 64 ]),
+      selected:  hsluv.hsluvToHex([ hue, 100, 64 ]),
       x:         hsluv.hsluvToHex([ hue, 100, 54 ]),
       y:         hsluv.hsluvToHex([ hue, 100, 44 ]),
     },
@@ -299,25 +312,31 @@ const BaseFlexPointBackground = ({
   sortedIndex,
   toggleClass,
   ...props
-}: Sortable<Sortable<JSX.IntrinsicElements['rect']>>) => (
-  <rect { ...sortableProps(props, flexPointBackgroundClassName) }>{ children }</rect>
+}: Sortable<JSX.IntrinsicElements['rect']>) => (
+  <rect { ...sortableProps(props, flexPointBackgroundClassName) }>
+    { children }
+  </rect>
 );
 
 const FlexColumnBackground = styled(BaseFlexPointBackground, ({
   index,
   sortedIndex,
 }) => ({
-  '--sorted-color': hsluvColors[sortedIndex].light.hover,
-  color:            hsluvColors[index].light.hover,
-  fill:             'currentcolor',
-  opacity:          0,
-  transition:       'opacity 0.1s ease-in-out',
-  zIndex:           -1,
+  '--selected-color':        hsluvColors[index].light.selected,
+  '--selected-sorted-color': hsluvColors[sortedIndex].light.selected,
+  '--sorted-color':          hsluvColors[sortedIndex].light.hover,
+  color:                     hsluvColors[index].light.hover,
+  fill:                      'currentcolor',
+  opacity:                   0,
+  transition:                'opacity 0.1s ease-in-out',
+  zIndex:                    -1,
 
   nested: {
     [theme.darkMode]: {
-      '--sorted-color': hsluvColors[sortedIndex].dark.hover,
-      color:            hsluvColors[index].dark.hover,
+      '--selected-color':        hsluvColors[index].light.selected,
+      '--selected-sorted-color': hsluvColors[sortedIndex].dark.selected,
+      '--sorted-color':          hsluvColors[sortedIndex].dark.hover,
+      color:                     hsluvColors[index].dark.hover,
     },
   },
 }));
@@ -325,13 +344,15 @@ const FlexColumnBackground = styled(BaseFlexPointBackground, ({
 type BasePlotPointProps =
   & Sortable<JSX.IntrinsicElements['circle']>
   & {
-    readonly cx:        number | string;
-    readonly cy:        number | string;
-    readonly pointSize: number;
-    readonly sortedX:   number;
-    readonly sortedY:   number;
-    readonly xShift:    number;
-    readonly yShift:    number;
+    readonly cx:              number | string;
+    readonly cy:              number | string;
+    readonly isControlPoint?: boolean;
+    readonly isSegment:       boolean;
+    readonly pointSize:       number;
+    readonly sortedX:         number;
+    readonly sortedY:         number;
+    readonly xShift:          number;
+    readonly yShift:          number;
   };
 
 const plotPointClassName = identifier();
@@ -339,6 +360,8 @@ const plotPointClassName = identifier();
 const BasePlotPoint = ({
   children,
   index,
+  isControlPoint,
+  isSegment,
   pointSize,
   sortedIndex,
   sortedX,
@@ -352,38 +375,154 @@ const BasePlotPoint = ({
   </circle>
 );
 
+const segmentTransition = 'stroke-width 0.1s ease-in-out, color 0.1s ease-in-out';
+
 const PlotPoint = styled(BasePlotPoint, ({
   index,
+  isControlPoint,
+  isSegment,
   sortedIndex,
   sortedX,
   sortedY,
   // xShift,
   // yShift,
-}) => ({
-  '--sorted-color':     hsluvColors[sortedIndex].light.plot,
-  '--sorted-stroke':    hsluvColors[sortedIndex].light.emphasize,
-  '--sorted-transform': `translate(${sortedX}px, ${sortedY}px)`,
-  color:                hsluvColors[index].light.plot,
-  fill:                 'currentcolor',
-  paintOrder:           'stroke fill',
-  stroke:               hsluvColors[index].light.emphasize,
-  strokeWidth:          0,
+}) => (
+  isControlPoint
+    ? {
+      '--emphasized-color':       '#666',
+      // '--emphasized-r':           '3',
+      '--emphasized-stroke-width': 0,
+      color:                       'transparent',
+      fill:                        'currentcolor',
+      stroke:                      'currentcolor',
+      // r:                           '3',
+      strokeWidth:                 0,
 
-  transition: [
-    'fill',
-    'stroke',
-    'stroke-width',
-  ].map((property) => `${property} 0.1s ease-in-out`).join(', '),
+      nested: {
+        [theme.darkMode]: {
+          '--emphasized-color': '#ccc',
+          color:                'transparent',
+        },
+      },
+    }
 
-  nested: {
-    [theme.darkMode]: {
-      '--sorted-color':  hsluvColors[sortedIndex].dark.plot,
-      '--sorted-stroke': hsluvColors[sortedIndex].dark.emphasize,
-      color:             hsluvColors[index].dark.plot,
-      stroke:            hsluvColors[index].dark.emphasize,
-    },
-  },
-}));
+  : isSegment
+    ? {
+      '--emphasized-color': hsluvColors[index].light.plot,
+      // '--emphasized-r':     '6',
+      color:                '#dadada',
+      fill:                 'currentcolor',
+      stroke:               hsluvColors[index].light.plot,
+      strokeWidth:          0,
+      // r:                    '4',
+      transition:           segmentTransition,
+
+      nested: {
+        [theme.darkMode]: {
+          '--emphasized-color': hsluvColors[index].dark.plot,
+          color:                '#666',
+        },
+      },
+    }
+
+    : {
+      // '--emphasized-r':            pointSize,
+      '--emphasized-color':        hsluvColors[index].light.plot,
+      '--emphasized-sorted-color': hsluvColors[sortedIndex].light.plot,
+      '--sorted-color':            hsluvColors[sortedIndex].light.plot,
+      '--sorted-stroke':           hsluvColors[sortedIndex].light.emphasize,
+      '--sorted-transform':        `translate(${sortedX}px, ${sortedY}px)`,
+      color:                       hsluvColors[index].light.plot,
+      fill:                        'currentcolor',
+      paintOrder:                  'stroke fill',
+      stroke:                      hsluvColors[index].light.emphasize,
+      strokeWidth:                 0,
+
+      transition: [
+        'fill',
+        'stroke',
+        'stroke-width',
+      ].map((property) => `${property} 0.1s ease-in-out`).join(', '),
+
+      nested: {
+        [theme.darkMode]: {
+          '--sorted-color':  hsluvColors[sortedIndex].dark.plot,
+          '--sorted-stroke': hsluvColors[sortedIndex].dark.emphasize,
+          color:             hsluvColors[index].dark.plot,
+          stroke:            hsluvColors[index].dark.emphasize,
+        },
+      },
+    }
+));
+
+type SegmentLinePathProps<P> =
+  & Indexed<P>
+  & {
+    readonly isPath?: boolean;
+    readonly topic?:  Topic;
+  };
+
+const topicColorStyles = (index: number, topic?: Topic) => (
+  topic == null
+    ? {
+      color: hsluvColors[index].light.plot,
+
+      nested: {
+        [theme.darkMode]: {
+          color: hsluvColors[index].dark.plot,
+        },
+      },
+    }
+    : theme.topicColors[topic]
+);
+
+const segmentLinePathStyles = ({
+  index,
+  isPath,
+  topic,
+}: SegmentLinePathProps<{}>) => ({
+  ...topicColorStyles(index, topic),
+  ...(isPath ? {
+    // '--emphasized-stroke-width': 10,
+    fill:                        'none',
+  } : {}),
+
+  stroke:      'currentcolor',
+  strokeWidth: 3,
+  transition:  segmentTransition,
+});
+
+type BaseSegmentLineProps = SegmentLinePathProps<JSX.IntrinsicElements['line']>;
+
+const BaseSegmentLine = ({
+  index,
+  isPath,
+  topic,
+  ...props
+}: BaseSegmentLineProps) => (
+  <line { ...props } />
+);
+
+const SegmentLine = styled<BaseSegmentLineProps>(
+  BaseSegmentLine,
+  segmentLinePathStyles
+);
+
+type BaseSegmentPathProps = SegmentLinePathProps<JSX.IntrinsicElements['path']>;
+
+const BaseSegmentPath = ({
+  index,
+  isPath,
+  topic,
+  ...props
+}: BaseSegmentPathProps) => (
+  <path { ...props } />
+);
+
+const SegmentPath = styled<BaseSegmentPathProps>(
+  BaseSegmentPath,
+  segmentLinePathStyles
+);
 
 type ChoiceType = 'checkbox' | 'radio';
 
@@ -437,8 +576,8 @@ const BaseChoice = (props: BaseChoiceProps) => {
       { ...checkedProps }
       as="input"
       className={ className }
-      name={ `example-${exampleId}-${suffix}` }
       id={ id }
+      name={ `example-${exampleId}-${suffix}` }
       type={ type }
       value={ value }
     />
@@ -467,8 +606,30 @@ const PlotPointEmphasisChoice = styled(BasePlotPointEmphasisChoice, ({
       strokeWidth: pointSize * 2.5,
     },
 
-    [`&:checked ~ * [for="example-${exampleId}-${index}-${suffix}"] rect`]: {
+    [`&:checked ~ * .example-${exampleId}-${index}-${suffix}`]: {
+      color:       'var(--emphasized-color)',
+      strokeWidth: 'var(--emphasized-stroke-width, 3)',
+    },
+
+    [`&:checked ~ * .example-${exampleId}-${index}-line`]: {
+      // strokeWidth: 'var(--emphasized-stroke-width, 5)',
+    },
+
+    [`&:checked ~ * [for="example-${exampleId}-${index}-${suffix}"] .${(
+      flexPointBackgroundClassName
+    )}`]: {
       opacity: 1,
+      color:   'var(--selected-color)',
+    },
+
+    [`&:checked ~ * [for="example-${exampleId}-${index}-${suffix}"] text`]: {
+      color: '#fff',
+
+      nested: {
+        [theme.darkMode]: {
+          color: rgba(255, 255, 255, 0.9),
+        },
+      },
     },
   },
 }));
@@ -522,32 +683,48 @@ const HashConversionScrollableOverflow = ({
   children,
   ...props
 }: FullBleedScrollableOverflowProps) => (
-  <FullBleedScrollableOverflow { ...props } shadow={ true }>
+  <FullBleedScrollableOverflow { ...props } shadow={ {
+    darkMask:    [ 0, 0, 0, 1 ],
+    darkScroll:  [ 0, 164, 255, 0.75 ],
+    lightMask:   [ 255, 255, 255, 1 ],
+    lightScroll: [ 124, 128, 131, 0.75 ],
+  } }>
     { children }
   </FullBleedScrollableOverflow>
 );
 
 const HashConversionInner = styled('div', {
-  display: 'flex',
+  alignItems: 'stretch',
+  display:    'flex',
 
   nested: {
     '&:after': {
-      ...theme.scrollable.cover(theme.pre.backgroundColor),
+      content:         '""',
+      backgroundImage: `linear-gradient(${[
+        'to left',
+        'rgba(255,255,255,1)',
+        'rgba(255,255,255,1) 3rem',
+        'rgba(255,255,255,0) 4rem',
+      ].join(', ')})`,
+      backgroundSize:  '4rem 100%',
+      boxShadow:       '2rem 0 0 #fff',
+      display:         'block',
+      flexShrink:      0,
+      marginLeft:      'auto',
+      order:           10,
+      width:           '2rem',
+    },
 
-      content:    '""',
-      display:    'block',
-      flexShrink: 0,
-      height:     '100%',
-      left:       'calc(100% + 2rem)',
-      order:      10,
-      position:   'sticky',
-      width:      '2rem',
-
+    [theme.darkMode]: {
       nested: {
-        [theme.darkMode]: {
-          ...theme.scrollable.cover(
-            theme[theme.darkMode].pre.backgroundColor
-          ),
+        '&:after': {
+          backgroundImage: `linear-gradient(${[
+            'to left',
+            'rgba(0,0,0,1)',
+            'rgba(0,0,0,1) 3rem',
+            'rgba(0,0,0,0) 4rem',
+          ].join(', ')})`,
+          boxShadow:       '2rem 0 0 #000',
         },
       },
     },
@@ -685,11 +862,13 @@ const BaseHashPointsExampleSortToggle = ({
 const HashPointsExampleSortToggle = styled(BaseHashPointsExampleSortToggle, {
   nested: {
     [`&:checked ~ * .${flexPointClassName}`]: {
-      color: 'var(--sorted-color)',
+      color:  'var(--sorted-color)',
+      stroke: 'var(--sorted-stroke)',
     },
 
     [`&:checked ~ * .${flexPointBackgroundClassName}`]: {
-      color: 'var(--sorted-color)',
+      '--selected-color': 'var(--selected-sorted-color)',
+      color:              'var(--sorted-color)',
     },
 
     [`&:checked ~ * .${hashPointClassName}`]: {
@@ -697,9 +876,10 @@ const HashPointsExampleSortToggle = styled(BaseHashPointsExampleSortToggle, {
     },
 
     [`&:checked ~ * .${plotPointClassName}`]: {
-      color:  'var(--sorted-color)',
+      color:  'var(--sorted-color, var(--emphasized-sorted-color))',
+      // r:      'var(--emphasized-r)',
       stroke: 'var(--sorted-stroke)',
-    },
+    } as any,
 
     [`&:checked ~ * .${toggleSwitchClassName}`]: {
       ...theme.toggleSwitch.container.on,
@@ -756,11 +936,13 @@ type HashPlotScaleOptions =
   & Partial<ScalePointOptions<any, any>>
   & {
     readonly xRange?: number;
+    readonly xMax?:   number;
     readonly yRange?: number;
     readonly yMax?:   number;
   };
 
 const defaultScaleOptions = {
+  xMax:   COORDINATE_MAX,
   xScale: 1,
   xShift: 0,
   yMax:   COORDINATE_MAX,
@@ -813,6 +995,11 @@ const dataDrivenHexCharPointSizes = hexCharsList.reduce<
   };
 }, {} as DataDrivenHexCharPointSizes);
 
+type RenderCurves =
+  | 'all'
+  | 'first'
+  | 'only';
+
 interface HashPlotProps {
   readonly className?:      string;
   readonly exampleId:       number;
@@ -821,9 +1008,13 @@ interface HashPlotProps {
   readonly pointSize?:      HashPlotPointSize;
   readonly points:          AnyPointSequence;
   readonly renderAxis?:     boolean;
+  readonly renderCurves?:   RenderCurves;
+  readonly renderSegments?: boolean;
   readonly scaleOptions?:   HashPlotScaleOptions;
+  readonly segments?:       SegmentList<any, any>;
   readonly sortIndexes:     readonly number[];
   readonly sortToggleClass: string;
+  readonly topics?:         readonly Topic[];
   readonly width?:          number;
 }
 
@@ -832,11 +1023,15 @@ const HashPlot = ({
   exampleId,
   hexPoints,
   points,
-  pointSize  = 6,
-  renderAxis = true,
+  pointSize      = 6,
+  renderAxis     = true,
+  renderCurves,
+  renderSegments = false,
   scaleOptions,
+  segments,
   sortIndexes,
   sortToggleClass,
+  topics,
   ...props
 }: HashPlotProps) => {
   const {
@@ -891,103 +1086,410 @@ const HashPlot = ({
     `hash-plot-blur-${exampleId}-${index}`
   ));
 
+  const defs = blurRadii == null
+    ? null
+    : (
+        <defs>
+          { blurRadii.map((radius, index) => (
+            <filter id={ filterIds?.[index] }>
+              <feGaussianBlur
+                in="SourceGraphic"
+                stdDeviation={ radius }
+              />
+            </filter>
+          )) }
+        </defs>
+      );
+
+  const axis = renderAxis
+    ? (<>
+        <HashPlotAxisLabel
+          x={ axisXLeft }
+          y={ axisYBottom }
+          transform={ `translate(0, ${HASH_PLOT_AXIS_LABEL_SIZE})`}
+        >
+          { axisMinLabel }
+        </HashPlotAxisLabel>
+
+        <HashPlotAxisLabel x={ axisXLeft } y={ axisYTop }>
+          { axisMaxLabel }
+        </HashPlotAxisLabel>
+
+        <HashPlotAxisLabel
+          x={ axisXRight }
+          y={ axisYBottom }
+          transform={ `translate(0, ${HASH_PLOT_AXIS_LABEL_SIZE})`}
+        >
+          { axisMaxLabel }
+        </HashPlotAxisLabel>
+      </>)
+    : null;
+
+  const plotPoint = ({
+    x: pointX,
+    y: pointY,
+  }: ArrayType<typeof points>, index: number) => {
+    const sortedIndex = sortIndexes[index];
+    const {
+      x: sortedX,
+      y: sortedY,
+    } = points[sortedIndex];
+
+    const cx = toFixed((pointX + xShift) / xRange * 100, 4);
+    const cy = 100 - toFixed((pointY - yShift) / yRange * 100, 4);
+
+    const sortedCx = toFixed((sortedX + xShift) / xRange * 100, 4);
+    const sortedCy = 100 - toFixed((sortedY - yShift) / yRange * 100, 4);
+
+    const pointSize = pointSizes[index];
+    const filterId  = filterIds?.[index];
+
+    const filterProps = filterId == null
+      ? {}
+      : {
+        filter: `url(#${filterId})`,
+      };
+
+    return {
+      cx,
+      cy,
+      sortedCx,
+      sortedCy,
+      pointSize,
+      filterId,
+      filterProps,
+    };
+  };
+
+  const PositionedPoint = ({
+    index,
+    isControlPoint = false,
+    point,
+    pointSize: pointSizeOverride,
+  }: {
+    index:           number;
+    isControlPoint?: boolean;
+    point:           AnyPoint;
+    pointSize?:      number;
+  }) => {
+    const {
+      cx,
+      cy,
+      sortedCx,
+      sortedCy,
+      pointSize,
+      filterProps,
+    } = plotPoint(point, index);
+    const isSegment = Boolean(renderSegments || renderCurves);
+    const identifierProps = isSegment
+      ? { className: `example-${exampleId}-${index}-point` }
+      : { id: `example-${exampleId}-${index}-point` };
+
+    return (
+      <PlotPoint
+        { ...filterProps }
+        { ...identifierProps }
+
+        cx={ `${cx}%` }
+        cy={ `${cy}%` }
+        index={ index }
+        isControlPoint={ isControlPoint }
+        isSegment={ isSegment }
+        pointSize={ pointSizeOverride ?? pointSize }
+        r={ pointSizeOverride ?? pointSize }
+        sortedIndex={ sortIndexes[index] }
+        sortedX={ sortedCx - point.x }
+        sortedY={ sortedCy - sortedCy }
+        toggleClass={ sortToggleClass }
+        xShift={ HASH_PLOT_PADDING }
+        yShift={ HASH_PLOT_PADDING }
+      />
+    )
+  };
+
+  const renderedPoints = renderSegments
+    ? null
+    : points.map((point, index) => (
+      <PositionedPoint index={ index } point={ point } />
+    ));
+
+  const renderedSegments = renderSegments
+    ? segments?.map(([ start, mid, end ], index) => {
+      const {
+        cx: startX,
+        cy: startY,
+      } = plotPoint(start, index);
+
+      const {
+        cx: midX,
+        cy: midY,
+      } = plotPoint(mid, index);
+
+      const {
+        cx: endX,
+        cy: endY,
+      } = plotPoint(end, index);
+
+      const topic = topics?.[index % topics?.length ?? 0];
+
+      return (
+        <g>
+          <PositionedPoint index={ index } point={ start } />
+          <PositionedPoint index={ index } point={ mid } />
+          <PositionedPoint index={ index } point={ end } />
+
+          <SegmentLine
+            className={ `example-${exampleId}-${index}-line` }
+            index={ index }
+            topic={ topic }
+            x1={ `${startX}%` }
+            x2={ `${midX}%` }
+            y1={ `${startY}%` }
+            y2={ `${midY}%` }
+          />
+
+          <SegmentLine
+            className={ `example-${exampleId}-${index}-line` }
+            index={ index }
+            topic={ topic }
+            x1={ `${midX}%` }
+            x2={ `${endX}%` }
+            y1={ `${midY}%` }
+            y2={ `${endY}%` }
+          />
+        </g>
+      );
+    })
+    : null;
+
+  const curves = () => {
+    if (segments == null || renderCurves == null) {
+      return {
+        curvePoints:    null,
+        renderedCurves: null,
+      };
+    }
+
+    const renderableSegments = (
+      renderCurves === 'all' || renderCurves === 'only'
+    )
+      ? segments
+      : [ segments[0] ];
+
+    const segmentData = renderableSegments.map((segment) => {
+      const [
+        baseStartPoint,
+        baseMidPoint,
+        baseEndPoint,
+      ] = segment;
+
+      const { x: startX } = baseStartPoint;
+      const { y: midY }       = baseMidPoint;
+      const { x: endX }   = baseEndPoint;
+
+      const width = endX - startX;
+
+      const smoothing = width === 0
+        ? 0
+        : Math.max(midY / width * SMOOTHING_RATIO, MIN_SMOOTHING);
+
+      const cubicPoints = segment?.reduce<
+        ReadonlyArray<CubicBezierPoints<any, any>>
+      >((
+        acc,
+        point,
+        index
+      ) => {
+        if (index === 0) {
+          return acc;
+        }
+
+        const segmentPoints = cubicBezierPoints<any, any>({
+          index,
+          point,
+          points: segment,
+          smoothing,
+          xScale,
+          yScale,
+        });
+
+        return [
+          ...acc,
+          segmentPoints,
+        ];
+      }, []);
+
+      return {
+        cubicPoints,
+        segment,
+      };
+    });
+
+    const curvesContainerStyles = {
+      overflow: 'visible',
+    };
+
+    const CurvesContainer =  renderCurves === 'only'
+      ? styled(HashPlotExample, curvesContainerStyles)
+      : styled('svg', curvesContainerStyles);
+
+    const curvesContainerClassProps = renderCurves === 'only'
+      ? { className }
+      : undefined;
+
+    const curvesContainerHeight = renderCurves === 'only'
+      ? height
+      : '100%';
+
+    const curvesContainerWidth = renderCurves === 'only'
+      ? width
+      : '100%';
+
+    return {
+      curvePoints: (
+        <>
+          { segmentData.map(({
+            cubicPoints,
+            segment,
+          }, index) => {
+            const [
+              baseStartPoint,
+              baseMidPoint,
+              baseEndPoint,
+            ] = segment;
+
+            return (
+              <g>
+                <PositionedPoint
+                  index={ index }
+                  point={ baseStartPoint }
+                  pointSize={ 4 }
+                />
+                <PositionedPoint
+                  index={ index }
+                  point={ baseMidPoint }
+                  pointSize={ 4 }
+                />
+                <PositionedPoint
+                  index={ index }
+                  point={ baseEndPoint }
+                  pointSize={ 4 }
+                />
+
+                { cubicPoints.map(([ controlStart, controlEnd ]) => {
+                  return (
+                    <>
+                      <PositionedPoint
+                        index={ index }
+                        isControlPoint={ true }
+                        point={ controlStart }
+                        pointSize={ 3 }
+                      />
+                      <PositionedPoint
+                        index={ index }
+                        isControlPoint={ true }
+                        point={ controlEnd }
+                        pointSize={ 3 }
+                      />
+                    </>
+                  );
+                })}
+              </g>
+            );
+          }) }
+        </>
+      ),
+
+      renderedCurves: (
+        <CurvesContainer
+          { ...curvesContainerClassProps }
+          height={ curvesContainerHeight }
+          width={ curvesContainerWidth }
+          preserveAspectRatio="none"
+          viewBox={ `0 0 ${width} ${height}` }
+        >
+          { segmentData.map(({
+            cubicPoints,
+            segment,
+          }, index) => {
+            const [
+              baseStartPoint,
+              baseMidPoint,
+              baseEndPoint,
+            ] = segment;
+
+            return cubicPoints.map(([ controlStart, controlEnd ], curveIndex) => {
+              const start = curveIndex === 0
+                ? baseStartPoint
+                : baseMidPoint;
+              const end = curveIndex === 0
+                ? baseMidPoint
+                : baseEndPoint;
+
+              const curvePoints = [
+                start,
+                controlStart,
+                controlEnd,
+                end,
+              ];
+
+              const d = curvePoints.map((point, curvePointIndex) => {
+                const { cx, cy } = plotPoint(point, index);
+                const x = cx / 100 * width;
+                const y = cy / 100 * height;
+
+                const command = curvePointIndex === 0
+                  ? 'M '
+                : curvePointIndex === 1
+                  ? 'C '
+                  : '';
+
+                return `${command} ${x},${y}`;
+              }).join(' ');
+
+              const topic = topics?.[index % topics?.length ?? 0];
+
+              return (
+                <SegmentPath
+                  d={ d }
+                  index={ index }
+                  isPath={ true }
+                  topic={ topic }
+                />
+              );
+            });
+          }) }
+        </CurvesContainer>
+      ),
+    };
+  };
+
+  const {
+    curvePoints,
+    renderedCurves,
+  } = curves();
+
+  if (renderCurves === 'only') {
+    return renderedCurves;
+  }
+
   return (
     <HashPlotExample
       className={ className }
       height={ height }
       width={ width }
     >
-      {(
-          blurRadii == null
-            ? null
-            : (
-                <defs>
-                  { blurRadii.map((radius, index) => (
-                    <filter id={ filterIds?.[index] }>
-                      <feGaussianBlur
-                        in="SourceGraphic"
-                        stdDeviation={ radius }
-                      />
-                    </filter>
-                  )) }
-                </defs>
-              )
-      )}
-      {( renderAxis
-          ? (<>
-              <HashPlotAxisLabel
-                x={ axisXLeft }
-                y={ axisYBottom }
-                transform={ `translate(0, ${HASH_PLOT_AXIS_LABEL_SIZE})`}
-              >
-                { axisMinLabel }
-              </HashPlotAxisLabel>
-
-              <HashPlotAxisLabel x={ axisXLeft } y={ axisYTop }>
-                { axisMaxLabel }
-              </HashPlotAxisLabel>
-
-              <HashPlotAxisLabel
-                x={ axisXRight }
-                y={ axisYBottom }
-                transform={ `translate(0, ${HASH_PLOT_AXIS_LABEL_SIZE})`}
-              >
-                { axisMaxLabel }
-              </HashPlotAxisLabel>
-            </>)
-          : null )}
-
-      { points.map(({
-        x: pointX,
-        y: pointY,
-      }, index) => {
-        const sortedIndex = sortIndexes[index];
-        const {
-          x: sortedX,
-          y: sortedY,
-        } = points[sortedIndex];
-
-        const cx = toFixed((pointX + xShift) / xRange * 100, 4);
-        const cy = 100 - toFixed((pointY - yShift) / yRange * 100, 4);
-
-        const sortedCx = toFixed((sortedX + xShift) / xRange * 100, 4);
-        const sortedCy = 100 - toFixed((sortedY - yShift) / yRange * 100, 4);
-
-        const pointSize = pointSizes[index];
-        const filterId  = filterIds?.[index];
-
-        const filterProps = filterId == null
-          ? {}
-          : {
-            filter: `url(#${filterId})`,
-          };
-
-        return (
-          <>
-            <PlotPoint
-              { ...filterProps }
-
-              id={ `example-${exampleId}-${index}-point` }
-              index={ index }
-              cx={ `${cx}%` }
-              cy={ `${cy}%` }
-              pointSize={ pointSize }
-              r={ pointSize }
-              sortedIndex={ sortIndexes[index] }
-              sortedX={ sortedCx - pointX }
-              sortedY={ sortedCy - sortedY }
-              xShift={ HASH_PLOT_PADDING }
-              yShift={ HASH_PLOT_PADDING }
-              toggleClass={ sortToggleClass }
-            />
-          </>
-        );
-      }) }
+      { defs }
+      { axis }
+      { renderedPoints }
+      { renderedSegments }
+      { curvePoints }
+      { renderedCurves }
     </HashPlotExample>
   );
 };
 
-const HashPointsExamplePlotContainer = styled('div', {
+const HashPointsExamplePlotContainer = styled(FullBleedContainer, {
   marginBottom: '1rem',
 });
 
@@ -1000,13 +1502,16 @@ const WidthRestrictedHashPlot = styled(HashPlot, {
 });
 
 interface BaseHashPointsExampleProps {
-  readonly exampleId:      number;
-  readonly hexPoints:      HexPointSequence;
-  readonly plotPointSize?: number;
-  readonly points:         PointSequence;
-  readonly renderAxis?:    boolean;
-  readonly scaleOptions?:  HashPlotScaleOptions;
-  readonly toggleSorting?: unknown;
+  readonly exampleId:       number;
+  readonly hexPoints:       HexPointSequence;
+  readonly plotPointSize?:  number;
+  readonly points:          PointSequence;
+  readonly renderAxis?:     boolean;
+  readonly renderCurves?:   RenderCurves;
+  readonly renderScaled?:   boolean;
+  readonly renderSegments?: boolean;
+  readonly scaleOptions?:   HashPlotScaleOptions;
+  readonly toggleSorting?:  unknown;
 }
 
 type HashPointsExampleProps =
@@ -1022,20 +1527,30 @@ const HashPointsExample = ({
   plotPointSize = 6,
   points,
   renderAxis,
-  scaleOptions = defaultScaleOptions,
+  renderCurves,
+  renderScaled  = true,
+  renderSegments,
+  scaleOptions:  baseScaleOptions = defaultScaleOptions,
   toggleSorting: isUnsortedByDefault,
 }: HashPointsExampleProps) => {
-  const isScaled = scaleOptions !== defaultScaleOptions;
-
-  const Container = isScaled
+  const Container = renderScaled
     ? FullBleedContainer
     : Fragment;
 
-  const HashPlotComponent = isScaled
+  const HashPlotComponent = renderScaled
     ? ScaledHashPlot
     : WidthRestrictedHashPlot;
 
-  const hashChunksHeight = isScaled
+  const renderOnlyHex = Boolean(renderCurves || renderSegments);
+
+  const renderCalculations = (
+    !renderOnlyHex &&
+    renderScaled
+  );
+
+  const hashChunksHeight = renderOnlyHex
+    ? HASH_EXAMPLE_LINE_HEIGHT * 3
+  : renderCalculations
     ? HASH_EXAMPLE_LINE_HEIGHT * 5
     : HASH_EXAMPLE_LINE_HEIGHT * 4;
 
@@ -1044,11 +1559,13 @@ const HashPointsExample = ({
   const pointYOffset  = labelYOffset * 3.5;
   const scaledYOffset = labelYOffset * 4.5;
 
+  const scaleOptions = {
+    ...defaultScaleOptions,
+    ...baseScaleOptions,
+  };
+
   const scaledPoints = points.map((point) => (
-    scalePoint(point, {
-      ...defaultScaleOptions,
-      ...scaleOptions,
-    })
+    scalePoint(point, scaleOptions)
   ));
 
   const sortedPoints = sortBy(scaledPoints, (a, b) => (
@@ -1079,9 +1596,27 @@ const HashPointsExample = ({
 
   const sortToggleClass = identifier();
 
-  const hashPlotYMax = isScaled
-    ? 150
-    : COORDINATE_MAX;
+  const {
+    xScale,
+    xShift,
+    yScale,
+  } = scaleOptions;
+  const xPadding = xShift * 2;
+  const xMax     = (COORDINATE_MAX + xPadding) * xScale;
+
+  const naiveSegments = getNaiveSegments({
+    points: renderScaledPoints as any,
+    xMax,
+    xScale,
+    yScale,
+  });
+
+  const segments = getNonPhallicSegments({
+    segments: naiveSegments,
+    xMax,
+    xScale,
+    yScale,
+  });
 
   const hashPlotScaleOptions = {
     ...scaleOptions,
@@ -1130,7 +1665,10 @@ const HashPointsExample = ({
             points={ renderPoints }
             pointSize={ plotPointSize }
             renderAxis={ renderAxis }
+            renderCurves={ renderCurves }
+            renderSegments={ renderSegments }
             scaleOptions={ hashPlotScaleOptions }
+            segments={ segments }
             sortIndexes={ sortIndexes }
             sortToggleClass={ sortToggleClass }
           />
@@ -1158,7 +1696,7 @@ const HashPointsExample = ({
                   pointX,
                   pointY,
                   ...(
-                    isScaled
+                    renderScaled
                       ? [
                         scaledX,
                         scaledY,
@@ -1167,12 +1705,16 @@ const HashPointsExample = ({
                   ),
                 ] as const;
 
-                const chunkLength = Math.max(
-                  String(COORDINATE_MAX).length,
-                  ...coordinateValues.map((coordinate) => (
-                    String(coordinate).length
-                  ))
-                );
+                const hexLength = String(COORDINATE_MAX).length;
+
+                const chunkLength = renderOnlyHex
+                  ? hexLength
+                  : Math.max(
+                    hexLength,
+                    ...coordinateValues.map((coordinate) => (
+                      String(coordinate).length
+                    ))
+                  );
 
                 const hashChunksLength = hexPoints.length;
                 const hashChunksWidth  = getHashExampleWidth(hashChunksLength);
@@ -1254,30 +1796,34 @@ const HashPointsExample = ({
                           { hashY }
                         </FlexPoint>
 
-                        <FlexPoint
-                          coordinate="x"
-                          index={ index }
-                          y={ pointYOffset }
-                          padLength={ chunkLength }
-                          sortedIndex={ sortIndexes[index] }
-                          toggleClass={ sortToggleClass }
-                        >
-                          { String(parseInt(hashX, 16)) }
-                        </FlexPoint>
+                        {( !renderOnlyHex
+                          ? (<>
+                              <FlexPoint
+                                coordinate="x"
+                                index={ index }
+                                y={ pointYOffset }
+                                padLength={ chunkLength }
+                                sortedIndex={ sortIndexes[index] }
+                                toggleClass={ sortToggleClass }
+                              >
+                                { String(parseInt(hashX, 16)) }
+                              </FlexPoint>
 
-                        <FlexPoint
-                          coordinate="y"
-                          index={ index }
-                          x={ yPointColumnOffset }
-                          y={ pointYOffset }
-                          padLength={ chunkLength }
-                          sortedIndex={ sortIndexes[index] }
-                          toggleClass={ sortToggleClass }
-                        >
-                          { String(parseInt(hashY, 16)) }
-                        </FlexPoint>
+                              <FlexPoint
+                                coordinate="y"
+                                index={ index }
+                                x={ yPointColumnOffset }
+                                y={ pointYOffset }
+                                padLength={ chunkLength }
+                                sortedIndex={ sortIndexes[index] }
+                                toggleClass={ sortToggleClass }
+                              >
+                                { String(parseInt(hashY, 16)) }
+                              </FlexPoint>
+                            </>)
+                            : null )}
 
-                        {( isScaled
+                        {( renderScaled
                             ? (
                                 <>
                                   <FlexPoint
@@ -1318,29 +1864,58 @@ const HashPointsExample = ({
   );
 };
 
+const CurvePointText = ({ index }: Indexed<{}>) => (
+  <>
+    <code>P<sub>{ index }</sub></code>:&nbsp;
+    <code>{'{'}&nbsp;x<sub>{ index }</sub>,&nbsp;y<sub>{ index }</sub>&nbsp;{'}'}</code>
+  </>
+);
+
 const CustomArt = ({
-  className,
+  className:  propsClassName,
   hash,
-  height,
+  height:     propsHeight,
   identifier: identifier_ = identifier,
+  renderType,
   StylesProvider          = DefaultStylesProvider,
   styleRenderer           = renderer,
-  width,
+  topics,
+  width:      propsWidth,
 }: CustomArtProps) => {
   const hexPoints  = toHexPointSequence(hash);
   const basePoints = toPointSequence(hash, hexPoints);
 
-  const { min: baseYMin } = yBounds(basePoints);
   const {
-    xPadding,
+    xPadding: defaultXPadding,
     xScale,
-    yPadding,
+    yPadding: defaultYPadding,
     yScale,
   } = blogArtDefaultParameters;
 
+  const isMeta = renderType === 'meta';
+
+  const {
+    height: socialHeight,
+    width:  socialWidth,
+  } = SOCIAL_IMAGE_DIMENSIONS;
+
+  const xPadding = isMeta
+    ? socialWidth * 0.1
+    : defaultXPadding;
+  const yPadding = isMeta
+    ? socialHeight * 0.35
+    : defaultYPadding;
+
+  const height = isMeta
+    ? socialHeight * 0.65
+    : propsHeight;
+  const width  = isMeta
+    ? socialWidth * 0.9
+    : propsWidth;
+
   // const yMax   = 100;
   const xShift = xPadding / 2;
-  const yShift = baseYMin + (yPadding / 2);
+  const yShift = yPadding / 2;
 
   const scaleOptions = {
     xScale,
@@ -1364,35 +1939,53 @@ const CustomArt = ({
 
   const sortIndexes = scaledPoints.map((_, index) => index);
 
-  const sortToggleClass = identifier_();
-
-  const hashPlotClassName = styleRenderer.renderRule(() => ({
-    gridColumn: '1 / -1',
-    height:     BLOG_ART_HEIGHT,
-    padding:    '0 !important',
-    width:      '100%',
-  }), Object.keys);
-
   const renderHexPoints = scaledPoints.map((point) => (
     hexPoints[scaledPoints.indexOf(point)]
   ));
 
+  const xMax = (COORDINATE_MAX + xPadding) * xScale;
+
+  const sortToggleClass = identifier_();
+
+  const naiveSegments = getNaiveSegments({
+    points: scaledPoints as any,
+    xMax,
+    xScale,
+    yScale,
+  });
+
+  const segments = getNonPhallicSegments({
+    segments: naiveSegments,
+    xMax,
+    xScale,
+    yScale,
+  });
+
+  const hashPlotClassName = styleRenderer.renderRule(() => ({
+    gridColumn: '1 / -1',
+    height:     BLOG_ART_HEIGHT,
+    width:      '100%',
+  }), Object.keys);
+
+  const className = isMeta
+    ? propsClassName
+    : `${propsClassName} ${hashPlotClassName}`;
+
   return (
     <StylesProvider>
       <HashPlot
-        className={ [
-          className,
-          hashPlotClassName,
-        ].join(' ') }
-        exampleId={ 0 }
+        className={ className }
+        exampleId={ -1 }
         height={ height }
         hexPoints={ renderHexPoints }
         points={ scaledPoints }
-        pointSize={ 'data-driven' }
         renderAxis={ false }
+        renderCurves="only"
         scaleOptions={ scaleOptions }
+        segments={ segments }
         sortIndexes={ sortIndexes }
         sortToggleClass={ sortToggleClass }
+        topics={ topics }
         width={ width }
       />
     </StylesProvider>
@@ -1409,17 +2002,43 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
   const hexPoints = toHexPointSequence(hash);
   const points    = toPointSequence(hash, hexPoints);
 
-  const worstCase = '000000ffff00ffffa0b0c0d0e0f0102030405060';
+  const sortedPoints = sortBy(points, ({ x: a }, { x: b }) => (
+    Number(a) === Number(b)
+      ? 0
+    : Number(a) > Number(b)
+      ? 1
+      : -1
+  ));
 
-  const wcHexPoints = toHexPointSequence(worstCase);
-  const wcPoints = toPointSequence(hash, wcHexPoints);
+  const {
+    xPadding,
+    xScale,
+    yPadding,
+    yScale,
+  } = blogArtDefaultParameters;
+
+  const xShift = xPadding / 2;
+  const yShift = yPadding / 2;
 
   const scaleOptions = {
-    xShift: blogArtDefaultParameters.xPadding / 2,
-    xScale: blogArtDefaultParameters.xScale,
-    yShift: blogArtDefaultParameters.yPadding / 2,
-    yScale: blogArtDefaultParameters.yScale,
+    xShift,
+    xScale,
+    yShift,
+    yScale,
   };
+
+  const scaledPoints = sortedPoints.map((point) => (
+    scalePoint(point, scaleOptions)
+  ));
+
+  const {
+    // max: scaledYMax,
+  } = yBounds(scaledPoints);
+  // const yMax = (scaledYMax + yPadding) * yScale;
+
+  const escapeInterpolation = (expr: string) => (
+    '${' + expr + '}'
+  );
 
   return (
     <BlogPost { ...props } CustomArt={ CustomArt }>
@@ -1528,7 +2147,7 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
           const result = parseInt(value, 16);
 
           if (result > COORDINATE_MAX || result < COORDINATE_MIN) {
-            throw new Error(\`Not a valid coordinate: \${value}\`);
+            throw new Error(\`Not a valid coordinate: ${escapeInterpolation('value')}\`);
           }
 
           return coordinate(result);
@@ -1567,9 +2186,9 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
 
         ~~~typescript
         const sortedPoints = sortBy(basePoints, ({ x: a }, { x: b }) => (
-          a === b
+          Number(a) === Number(b)
             ? 0
-          : a > b
+          : Number(a) > Number(b)
             ? 1
             : -1
         ));
@@ -1583,6 +2202,7 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
         exampleId={ 1 }
         hexPoints={ hexPoints }
         points={ points }
+        renderScaled={ false }
         toggleSorting={ true }
       />
 
@@ -1592,9 +2212,10 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
         Of course, the final art rendering isn't square, it's much wider than
         it is tall. With some adjustments for very small & very large
         viewports, its aspect ratio is roughly five times the
-        [golden ratio][goldenRatio], plus a small amount of padding—on the
-        \`x\` axis to begin and end the blobs on the art's baseline, and on the
-        \`y\` axis to leave some room for overshoot once the curves are
+        [golden ratio][goldenRatio] (there's no significance to this other than
+        that it was the first ratio I tried), plus a small amount of padding—on
+        the \`x\` axis to begin and end the blobs on the art's baseline, and on
+        the \`y\` axis to leave some room for overshoot once the curves are
         computed.
 
         ~~~typescript
@@ -1606,24 +2227,17 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
           xShift,
           yScale,
           yShift,
-        }: ScalePointOptions<X, Y>): ScaledPoint<X, Y> => ({
-          x: scaledCoordinate(
-            (x + xShift) * xScale,
-            xScale
-          ),
-          y: scaledCoordinate(
-            (y + yShift) * yScale,
-            yScale
-          ),
-        });
+        }: ScalePointOptions<X, Y>): ScaledPoint<X, Y> => (
+          scaledPoint({
+            x: (x + xShift) * xScale,
+            xScale,
+            y: (y + yShift) * yScale,
+            yScale,
+          })
+        );
 
         const scaledPoints = sortedPoints.map((point) => (
-          scalePoint(point, {
-            xScale: ${scaleOptions.xScale},
-            xShift: ${scaleOptions.xShift},
-            yScale: ${scaleOptions.yScale},
-            yShift: ${scaleOptions.yShift},
-          });
+          scalePoint(point, scaleOptions)
         ));
         ~~~
       `}
@@ -1636,26 +2250,538 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
         scaleOptions={ scaleOptions }
       />
 
-      {/* <hr />
+      <h2>Connecting the dots</h2>
+
+      {mdx`
+        In the final art rendering, each point is joined into overlapping
+        curves, each segment curving from approximately the previous point's
+        \`x\` (or \`0\`) at the \`y\` the baseline to the following point's
+        \`x\` (or \`xMax\`), also at the baseline.
+
+        ~~~typescript
+        export const getNaiveSegments = <
+          X extends number,
+          Y extends number
+        >({
+          points,
+          xMax,
+          xScale,
+          yScale,
+        }: GetSegmentsOptions<X, Y>): SegmentList<X, Y> => (
+          [
+            scaledPoint({
+              x: 0,
+              xScale,
+              y: 0,
+              yScale,
+            }),
+            ...points,
+            scaledPoint({
+              x: xMax,
+              xScale,
+              y: 0,
+                yScale,
+            }),
+          ].reduce<SegmentList<X, Y>>((
+            acc,
+            mid,
+            index,
+            points
+          ) => {
+            if (index === 0 || index === points.length - 1) {
+              return acc;
+            }
+
+            const baseline = scaledCoordinate(0, yScale);
+
+            const segment = [
+              {
+                x: points[index - 1].x,
+                y: baseline,
+              },
+              mid,
+              {
+                x: points[index + 1].x,
+                y: baseline,
+              },
+            ] as const;
+
+            return [
+              ...acc,
+              segment,
+            ];
+          }, [])
+        );
+
+        const naiveSegments = getNaiveSegments({
+          points: scaledPoints,
+          xMax,
+        });
+        ~~~
+
+        Why are they _naïve_ segments? As I mentioned in Constraints, I
+        discovered during development that sometimes certain hashes would
+        create shapes which were inappropriate for the kind of content I wanted
+        on my site. So after constructing these naïve segments, I walk through
+        them again in hopes of detecting that scenario.
+
+        I should add a caveat: this was entirely a process trial and error, and
+        produced some moderately ugly "magic" code. I try not to write code like
+        this, but if you're making art sometimes you've gotta break a few eggs!
+
+        ~~~typescript
+        /**
+         * Generating art will be risk-free fun, I thought...
+         */
+        export const getNonPhallicSegments = <X extends number, Y extends number>({
+          segments,
+          xMax,
+          xScale,
+          yScale,
+        }: GetNonPhallicSegmentsOptions<X, Y>): SegmentList<X, Y> => (
+          segments.map<Segment<X, Y>>((segment) => {
+            const [
+              { x: startX, y: startY },
+              { x: midX,   y: midY },
+              { x: endX,   y: endY },
+            ] = segment;
+
+            const width           = endX - startX;
+            const ratio           = midY / width;
+            const maxRatio        = 6;
+            const ratioAdjustment = maxRatio / ratio;
+
+            if (ratioAdjustment < 1) {
+              const ratioAdjustmentX    = ratioAdjustment * 0.2;
+              const adjustmentX         = ratioAdjustmentX * startX;
+              const ratioAdjustedStartX = startX - adjustmentX;
+              const ratioAdjustedEndX   = endX   + adjustmentX;
+
+              const overshootX = (
+                ratioAdjustedStartX < 0
+                  ? Math.abs(ratioAdjustedStartX)
+                : ratioAdjustedEndX > xMax
+                  ? xMax - ratioAdjustedEndX
+                  : 0
+              );
+
+              const adjustedStartX = ratioAdjustedStartX + overshootX;
+              const adjustedEndX   = ratioAdjustedEndX   + overshootX;
+
+              const ratioAdjustmentY = ratioAdjustment * 0.3;
+
+              const adjustedMidX = midX + overshootX;
+              const adjustmentY  = ratioAdjustmentY * midY;
+              const adjustedMidY = midY - adjustmentY;
+
+              return [
+                scaledPoint({
+                  x: adjustedStartX,
+                  xScale,
+                  y: startY,
+                  yScale,
+                }),
+                scaledPoint({
+                  x: adjustedMidX,
+                  xScale,
+                  y: adjustedMidY,
+                  yScale,
+                }),
+                scaledPoint({
+                  x: adjustedEndX,
+                  xScale,
+                  y: endY,
+                  yScale,
+                }),
+              ];
+            }
+
+            return segment;
+          })
+        );
+
+        const segments = getNonPhallicSegments({
+          segments: naiveSegments,
+          xMax,
+          xScale,
+          yScale,
+        });
+        ~~~
+      `}
 
       <HashPointsExample
         exampleId={ 3 }
-        hexPoints={ wcHexPoints }
-        points={ wcPoints }
+        hexPoints={ hexPoints }
+        points={ points }
         renderAxis={ false }
-        toggleSorting={ true }
+        renderSegments={ true }
+        scaleOptions={ scaleOptions }
       />
+
+      <h2>My trig crash course</h2>
+
+      {mdx`
+        We're coming near the end! But before I get to the final step, I needed
+        to be able to generate [cubic Bézier curves][bezierCurves] for each
+        segment.
+      `}
+
+      <CommentaryAside>
+        {mdx`
+          I had to ~~learn~~ copy & paste some math to generate the curves. I
+          did take the time to learn what the math is are actually doing while
+          writing this post, but I've never taken a trigonometry course, so I'm
+          probably not the best person to explain it in great detail, but I'll
+          give it a shot.
+        `}
+      </CommentaryAside>
+
+      {mdx`
+        A single cubic Bézier curve is defined by:
+      `}
+
+      <ul>
+        <li>
+          A starting point <CurvePointText index={ 0 } />
+        </li>
+        <li>
+          A starting control point <CurvePointText index={ 1 } />
+        </li>
+        <li>
+          An ending control point <CurvePointText index={ 2 } />
+        </li>
+        <li>
+          An ending point <CurvePointText index={ 3 } />
+        </li>
+      </ul>
+
+      {mdx`
+        The control points determine how far the curve extends, and how fast
+        it arrives at the ending point. Here's how I calculate those curves.
+        This is a fair bit of code, but the important bits are the
+        \`curveLine\` function—which calculates an angled line to the control
+        point, and the \`curveControlPoint\` function which calculates the
+        control point's position from that line.
+
+        ~~~typescript
+        const curveLine = <X extends number, Y extends number>(
+          { x: x0, y: y0 }: ScaledPoint<X, Y>,
+          { x: x1, y: y1 }: ScaledPoint<X, Y>
+        ) => {
+          const xLength = x1 - x0;
+          const yLength = y1 - y0;
+
+          return {
+            angle:  Math.atan2(yLength, xLength),
+            length: Math.sqrt((xLength ** 2) + (yLength ** 2)),
+          };
+        };
+
+        const curveControlPoint = <X extends number, Y extends number>({
+          current,
+          previous,
+          next,
+          reverse,
+          smoothing,
+          xScale,
+          yScale,
+        }: CurveControlPointOptions<X, Y>): ScaledPoint<X, Y> => {
+          const reverseCompensation = reverse
+            ? Math.PI
+            : 0;
+          const opposedLine = curveLine(previous, next);
+
+          const angle  = opposedLine.angle  + reverseCompensation;
+          const length = opposedLine.length * smoothing;
+
+          const { x: xCurrent, y: yCurrent } = current;
+
+          const x = xCurrent + (Math.cos(angle) * length);
+          const y = yCurrent + (Math.sin(angle) * length);
+
+          return {
+            x: scaledCoordinate(x, xScale),
+            y: scaledCoordinate(y, yScale),
+          };
+        };
+
+        export const cubicBezierPoints = <X extends number, Y extends number>({
+          index,
+          point,
+          points,
+          smoothing,
+          xScale,
+          yScale,
+        }: CubicBezierPointsOptions<X, Y>): CubicBezierPoints<X, Y> => {
+          const startCurrent = points[index - 1];
+
+          if (startCurrent == null) {
+            throw new Error(
+              'Cannot build cubic bezier points, no point before the provided index.'
+            );
+          }
+
+          const startPrevious = points[index - 2] ?? startCurrent;
+          const startControl = curveControlPoint({
+            current:  startCurrent,
+            previous: startPrevious,
+            next:     point,
+            reverse:  false,
+            smoothing,
+            xScale,
+            yScale,
+          });
+
+          const previous = startCurrent;
+          const next = points[index + 1] ?? point;
+          const endControl = curveControlPoint({
+            current:  point,
+            previous: previous,
+            next,
+            reverse:  true,
+            smoothing,
+            xScale,
+            yScale,
+          });
+
+          return [ startControl, endControl, point ];
+        };
+
+        const cubicPoints = segments.map((segment) => (
+          segment.reduce((acc, point, index) => {
+            if (index === 0) {
+              return acc;
+            }
+
+            const segmentPoints = cubicBezierPoints({
+              index,
+              point,
+              points: segment,
+              smoothing,
+              xScale,
+              yScale,
+            });
+
+            return [
+              ...acc,
+              segmentPoints,
+            ]
+          }, []);
+        ));
+        ~~~
+      `}
 
       <HashPointsExample
         exampleId={ 4 }
-        hexPoints={ wcHexPoints }
-        points={ wcPoints }
+        hexPoints={ hexPoints }
+        points={ points }
         renderAxis={ false }
+        renderCurves="all"
         scaleOptions={ scaleOptions }
-      /> */}
+      />
+
+      <h2>Now, the magic happens</h2>
+
+      {mdx`
+        Now that I can get those smooth curves, I put on the final touches.
+        Again, this is a fair bit of code, but essentially what's happening
+        is that for each segment, I calculate a _slightly adjusted_ curve
+        above the \`y\` axis baseline, then a _slightly differently adjusted_
+        curve approximately mirroring it below the same baseline.
+
+        These adjustments were chosen to fit a general theme in the site
+        design, where most everything is laid out slightly to the left
+        (assuming you're on a screen large enough for that to kick in), and
+        to add just a little more visual variety than the curves alone.
+
+        ~~~typescript
+        const getCubicPoints = <X extends number, Y extends number>({
+          segment,
+          smoothing,
+          xScale,
+          yScale,
+        }: GetCubicPointsOptions<X, Y>) => (
+          segment.reduce<readonly string[]>((
+            acc:    readonly string[],
+            point:  ScaledPoint<X, Y>,
+            index:  number
+          ) => {
+            if (index === 0) {
+              return acc;
+            }
+
+            const segmentPoints = cubicBezierPoints({
+              index,
+              point,
+              points: segment,
+              smoothing,
+              xScale,
+              yScale,
+            });
+
+            const result = segmentPoints.map((point) => (
+              \`${escapeInterpolation('point.x')},${escapeInterpolation('point.y')}\`
+            )).join(' ');
+
+            return [
+              ...acc,
+              \`C ${escapeInterpolation('result')}\`,
+            ];
+          }, [])
+        );
+
+        export const getSegmentPaths = <X extends number, Y extends number>({
+          baseYCoordinate,
+          isBaselineBelowMidpoint,
+          segments,
+          xScale,
+          yMax,
+          yScale,
+          yTilt = false,
+        }: GetSegmentPathsOptions<X, Y>) => (
+          segments.reduce((
+            acc,
+            segment,
+            index,
+            segments
+          ) => {
+            const { length } = segments;
+            const [
+              baseStartPoint,
+              baseMidPoint,
+              baseEndPoint,
+            ] = segment;
+
+            const { x: startX, y: baseStartY } = baseStartPoint;
+            const { x: midX,   y: midY }       = baseMidPoint;
+            const { x: endX,   y: baseEndY }   = baseEndPoint;
+
+            const width = endX - startX;
+
+            const smoothing = width === 0
+              ? 0
+              : Math.max(midY / width * SMOOTHING_RATIO, MIN_SMOOTHING);
+
+            const Y_TILT = yTilt
+              ? 0.1
+              : 0;
+
+            const Y_TILT_NEG = 1 - Y_TILT;
+            const Y_TILT_POS = 1 + Y_TILT;
+
+            const startYTilt = index % 2 === 0
+              ? Y_TILT_NEG
+              : Y_TILT_POS;
+
+            const startY = isBaselineBelowMidpoint
+              ? baseStartY + baseYCoordinate
+              : yMax - baseStartY + baseYCoordinate;
+
+            const startPoint: ScaledPoint<X, Y> = {
+              x: startX,
+              y: scaledCoordinate(startY * startYTilt, yScale),
+            };
+
+            const endYTilt = index % 2 === 0
+              ? Y_TILT_NEG
+              : Y_TILT_POS;
+
+            const endY = isBaselineBelowMidpoint
+              ? baseEndY + baseYCoordinate
+              : yMax - baseEndY + baseYCoordinate;
+
+            const endPoint: ScaledPoint<X, Y> = {
+              x: scaledCoordinate(endX, xScale),
+              y: scaledCoordinate(endY * endYTilt, yScale),
+            };
+
+            const startMidXDistance = midX - startX;
+            const midEndXDistance = endX - midX;
+
+            const forwardMidPointXAdjustment = midEndXDistance > startMidXDistance
+              ? 0
+              : 0 - ((midX - startX) * MID_POINT_TILT);
+
+            const midPointYAdjustment = (length - index) * (yScale / 100 * yMax);
+
+            const forwardMidPoint: ScaledPoint<X, Y> = {
+              x: scaledCoordinate(midX + forwardMidPointXAdjustment, xScale),
+              y: scaledCoordinate(midY - midPointYAdjustment, yScale),
+            };
+
+            const forwardSegment: Segment<X, Y> = [
+              startPoint,
+              forwardMidPoint,
+              endPoint,
+            ];
+
+            const forwardPoints = getCubicPoints({
+              segment: forwardSegment,
+              smoothing,
+              xScale,
+              yScale,
+            });
+
+            const reverseMidPointXAdjustment = midEndXDistance > startMidXDistance
+              ? (endX - midX) * MID_POINT_TILT
+              : 0;
+
+            const reverseMidPoint: ScaledPoint<X, Y> = {
+              x: scaledCoordinate(midX + reverseMidPointXAdjustment, xScale),
+              y: scaledCoordinate(yMax - midPointYAdjustment, yScale),
+            };
+
+            const reverseSegment: Segment<X, Y> = [
+              endPoint,
+              reverseMidPoint,
+              startPoint,
+            ];
+
+            const reversePoints = getCubicPoints({
+              segment: reverseSegment,
+              smoothing,
+              xScale,
+              yScale,
+            });
+
+            return [
+              ...acc,
+              [
+                \`M ${escapeInterpolation('startPoint.x')},${escapeInterpolation('startPoint.y')}\`,
+                ...forwardPoints,
+                ...reversePoints,
+                'Z',
+              ].join(' '),
+            ];
+          }, [] as readonly string[])
+        );
+
+        const segmentPaths = getSegmentPaths({
+          baseYCoordinate,
+          segments,
+          xScale,
+          yMax,
+          isBaselineBelowMidpoint,
+          yScale,
+        });
+        ~~~
+      `}
 
       <BlogArt hash={ hash } title={ title } topics={ topics } />
-      {/* <BlogArt hash={ worstCase } title={ title } topics={ topics } /> */}
+
+      <h2>My mistake</h2>
+
+      {mdx`
+        One thing that was challenging building both the original art
+        project, as well as the examples for this post, is that I'm working
+        with numerical data, which I expect to go _up_ as it increases, but
+        SVG renders higher numbers on the \`y\` axis _down_. I've gotten
+        so frequently so turned around by this that, well, the final art
+        rendering shows I never quite got it right! But I like how it looks,
+        and I don't want to mess with that for now.
+
+        Sometimes technically incorrect is the best kind of correct.
+      `}
     </BlogPost>
   );
 };
@@ -1666,9 +2792,9 @@ export default definePage(WhatTheArt3Post, {
       ...context,
 
       description: baseMDX`
-        For the final part in a series introducing my new site's
-        art project, I walk through some of the more interesting
-        parts of how the art is generated.
+        The final part in a series introducing my new site's art project.
+        I walk through some of the more interesting parts of how the art
+        is generated.
       `,
 
       importURL: import.meta.url,

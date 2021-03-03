@@ -17,6 +17,8 @@ const pluginSocial = () => ({
   name: 'plugin-social',
 
   async optimize({ buildDirectory }) {
+    console.time('social');
+
     const glob  = require('globby');
     const path  = require('path');
 
@@ -129,8 +131,13 @@ const pluginSocial = () => ({
 
       const rasterElement = (
         CustomArt != null
-          ? h(CustomArt, artProps)
-          : h(StylesProvider, {}, h(BlogArt, artProps))
+          ? h(CustomArt, {
+              ...artProps,
+              renderType: 'meta',
+            })
+          : h(StylesProvider, {},
+              h(BlogArt, artProps)
+            )
       );
 
       try {
@@ -156,6 +163,8 @@ const pluginSocial = () => ({
         throw error;
       }
     }
+
+    console.timeEnd('social');
   },
 });
 

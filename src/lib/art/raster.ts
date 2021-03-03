@@ -19,6 +19,7 @@ export enum RasterType {
 }
 
 interface GenerateRasterFromSVGOptions {
+  readonly debug?:        boolean;
   readonly height:        number;
   readonly styleRenderer: IRenderer;
   readonly svg:           ComponentChildren;
@@ -30,6 +31,7 @@ export const generateRasterFromSVG = async (
   options: GenerateRasterFromSVGOptions
 ) => {
   const {
+    debug,
     height,
     styleRenderer,
     svg: node,
@@ -55,6 +57,10 @@ export const generateRasterFromSVG = async (
     /<\/svg>(<undefined><\/undefined>)?/,
     `${styles}</svg>`
   );
+
+  if (debug) {
+    console.log('styled', styled);
+  }
 
   const imageBuffer = Buffer.from(styled);
   const base = await sharp({

@@ -4,12 +4,11 @@ export const toFixed = (value: number, fractionalDigits: number) => (
   Number(value.toFixed(fractionalDigits))
 );
 
-export const COORDINATE_MAX = parseInt('ff', 16);
-export const COORDINATE_MIN = parseInt('00', 16);
-
-const MID_POINT_TILT  = 0.05 as const;
-const MIN_SMOOTHING   = 0.15 as const;
-const SMOOTHING_RATIO = 0.05 as const;
+export const COORDINATE_MAX  = parseInt('ff', 16);
+export const COORDINATE_MIN  = parseInt('00', 16);
+export const MID_POINT_TILT  = 0.05 as const;
+export const MIN_SMOOTHING   = 0.15 as const;
+export const SMOOTHING_RATIO = 0.05 as const;
 
 export class InvalidHashError extends Error {
   constructor(hash: string) {
@@ -170,8 +169,8 @@ export type AnyPointSequence = readonly AnyPoint[];
 
 export const yBounds = (points: readonly VerticallyPositioned[]) => (
   points.reduce(({ max, min }, { y }) => ({
-    max: Math.max(max, y),
-    min: Math.min(min, y),
+    max: Math.max(Number(max), Number(y)),
+    min: Math.min(Number(min), Number(y)),
   }), {
     max: -Infinity,
     min: Infinity,
@@ -199,6 +198,26 @@ interface ScaledPoint<X extends number, Y extends number> {
   readonly y: ScaledCoordinate<Y>;
 }
 
+interface ScaleablePoint<X extends number, Y extends number> {
+  readonly x:      number;
+  readonly xScale: X;
+  readonly y:      number;
+  readonly yScale: Y;
+}
+
+const scaledPoint = <
+  X extends number,
+  Y extends number
+>({
+  x,
+  xScale,
+  y,
+  yScale,
+}: ScaleablePoint<X, Y>): ScaledPoint<X, Y> => ({
+  x: scaledCoordinate(x, xScale),
+  y: scaledCoordinate(y, yScale),
+});
+
 export const scalePoint = <
   X extends number,
   Y extends number
@@ -207,16 +226,14 @@ export const scalePoint = <
   xShift,
   yScale,
   yShift,
-}: ScalePointOptions<X, Y>): ScaledPoint<X, Y> => ({
-  x: scaledCoordinate(
-    (x + xShift) * xScale,
-    xScale
-  ),
-  y: scaledCoordinate(
-    (y + yShift) * yScale,
-    yScale
-  ),
-});
+}: ScalePointOptions<X, Y>): ScaledPoint<X, Y> => (
+  scaledPoint({
+    x: (x + xShift) * xScale,
+    xScale,
+    y: (y + yShift) * yScale,
+    yScale,
+  })
+);
 
 interface GetSegmentsOptions<X extends number, Y extends number> {
   readonly points: ReadonlyArray<ScaledPoint<X, Y>>;
@@ -231,7 +248,12 @@ type Segment<X extends number, Y extends number> = readonly [
   end:   ScaledPoint<X, Y>,
 ];
 
-const getSegments = <
+export type SegmentList<
+  X extends number,
+  Y extends number
+> = ReadonlyArray<Segment<X, Y>>
+
+export const getNaiveSegments = <
   X extends number,
   Y extends number
 >({
@@ -239,37 +261,43 @@ const getSegments = <
   xMax,
   xScale,
   yScale,
-}: GetSegmentsOptions<X, Y>) => (
-  points.reduce<
-    ReadonlyArray<Segment<X, Y>>
-  >((
+}: GetSegmentsOptions<X, Y>): SegmentList<X, Y> => (
+  [
+    scaledPoint({
+      x: 0,
+      xScale,
+      y: 0,
+      yScale,
+    }),
+    ...points,
+    scaledPoint({
+      x: xMax,
+      xScale,
+      y: 0,
+         yScale,
+    }),
+  ].reduce<SegmentList<X, Y>>((
     acc,
     mid,
     index,
     points
   ) => {
-    const { x: previousX } = points[index - 1] ?? {
-      x: scaledCoordinate(0, xScale),
-    };
-    const { x: nextX } = points[index + 1] ?? {
-      x: scaledCoordinate(xMax, xScale),
-    };
-
-    const y = scaledCoordinate(0, yScale);
-
-    const start = {
-      x: previousX,
-      y,
-    };
-    const end = {
-      x: nextX,
-      y,
+    if (index === 0 || index === points.length - 1) {
+      return acc;
     }
 
+    const baseline = scaledCoordinate(0, yScale);
+
     const segment = [
-      start,
+      {
+        x: points[index - 1].x,
+        y: baseline,
+      },
       mid,
-      end,
+      {
+        x: points[index + 1].x,
+        y: baseline,
+      },
     ] as const;
 
     return [
@@ -280,7 +308,7 @@ const getSegments = <
 );
 
 interface GetNonPhallicSegmentsOptions<X extends number, Y extends number> {
-  readonly segments: ReadonlyArray<Segment<X, Y>>;
+  readonly segments: SegmentList<X, Y>;
   readonly xMax:     number;
   readonly xScale:   X;
   readonly yScale:   Y;
@@ -289,22 +317,22 @@ interface GetNonPhallicSegmentsOptions<X extends number, Y extends number> {
 /**
  * Generating art will be risk-free fun, I thought...
  */
-const getNonPhallicSegments = <X extends number, Y extends number>({
+export const getNonPhallicSegments = <X extends number, Y extends number>({
   segments,
   xMax,
   xScale,
   yScale,
-}: GetNonPhallicSegmentsOptions<X, Y>) => (
+}: GetNonPhallicSegmentsOptions<X, Y>): SegmentList<X, Y> => (
   segments.map<Segment<X, Y>>((segment) => {
     const [
-      start,
-      { x: midX, y: height },
-      { x: endX, y: endY },
+      { x: startX, y: startY },
+      { x: midX,   y: midY },
+      { x: endX,   y: endY },
     ] = segment;
-    const { x: startX, y: startY } = start;
-    const width = endX - startX;
-    const ratio = height / width;
-    const maxRatio = 6;
+
+    const width           = endX - startX;
+    const ratio           = midY / width;
+    const maxRatio        = 6;
     const ratioAdjustment = maxRatio / ratio;
 
     if (ratioAdjustment < 1) {
@@ -314,11 +342,11 @@ const getNonPhallicSegments = <X extends number, Y extends number>({
       const ratioAdjustedEndX   = endX   + adjustmentX;
 
       const overshootX = (
-        ratioAdjustedStartX < 0 ?
-          Math.abs(ratioAdjustedStartX) :
-        ratioAdjustedEndX > xMax ?
-          xMax - ratioAdjustedEndX :
-        0
+        ratioAdjustedStartX < 0
+          ? Math.abs(ratioAdjustedStartX)
+        : ratioAdjustedEndX > xMax
+          ? xMax - ratioAdjustedEndX
+          : 0
       );
 
       const adjustedStartX = ratioAdjustedStartX + overshootX;
@@ -326,27 +354,29 @@ const getNonPhallicSegments = <X extends number, Y extends number>({
 
       const ratioAdjustmentY = ratioAdjustment * 0.3;
 
-      const adjustedMidX   = midX   + overshootX;
-      const adjustmentY    = ratioAdjustmentY * height;
-      const adjustedHeight = height - adjustmentY;
-
-      const start = {
-        x: scaledCoordinate(adjustedStartX, xScale),
-        y: scaledCoordinate(startY,         yScale),
-      };
-      const mid = {
-        x: scaledCoordinate(adjustedMidX,   xScale),
-        y: scaledCoordinate(adjustedHeight, yScale),
-      };
-      const end = {
-        x: scaledCoordinate(adjustedEndX, xScale),
-        y: scaledCoordinate(endY,         yScale),
-      };
+      const adjustedMidX = midX + overshootX;
+      const adjustmentY  = ratioAdjustmentY * midY;
+      const adjustedMidY = midY - adjustmentY;
 
       return [
-        start,
-        mid,
-        end,
+        scaledPoint({
+          x: adjustedStartX,
+          xScale,
+          y: startY,
+          yScale,
+        }),
+        scaledPoint({
+          x: adjustedMidX,
+          xScale,
+          y: adjustedMidY,
+          yScale,
+        }),
+        scaledPoint({
+          x: adjustedEndX,
+          xScale,
+          y: endY,
+          yScale,
+        }),
       ];
     }
 
@@ -405,7 +435,7 @@ const curveControlPoint = <X extends number, Y extends number>({
   };
 };
 
-type CubicBezierPoints<X extends number, Y extends number> = readonly [
+export type CubicBezierPoints<X extends number, Y extends number> = readonly [
   controlA: ScaledPoint<X, Y>,
   controlB: ScaledPoint<X, Y>,
   point:    ScaledPoint<X, Y>,
@@ -420,7 +450,7 @@ interface CubicBezierPointsOptions<X extends number, Y extends number> {
   readonly yScale:    Y;
 }
 
-const cubicBezierPoints = <X extends number, Y extends number>({
+export const cubicBezierPoints = <X extends number, Y extends number>({
   index,
   point,
   points,
@@ -431,9 +461,9 @@ const cubicBezierPoints = <X extends number, Y extends number>({
   const startCurrent = points[index - 1];
 
   if (startCurrent == null) {
-    throw new Error(`
-      Cannot build cubic bezier points, no point before the provided index.
-    `.trim());
+    throw new Error(
+      'Cannot build cubic bezier points, no point before the provided index.'
+    );
   }
 
   const startPrevious = points[index - 2] ?? startCurrent;
@@ -505,21 +535,21 @@ const getCubicPoints = <X extends number, Y extends number>({
 );
 
 interface GetSegmentPathsOptions<X extends number, Y extends number> {
-  readonly baseYCoordinate:      number;
-  readonly segments:             ReadonlyArray<Segment<X, Y>>;
-  readonly xScale:               X;
-  readonly yMax:                 number;
-  readonly yOffsetBelowMidpoint: boolean;
-  readonly yScale:               Y;
-  readonly yTilt?:               boolean;
+  readonly baseYCoordinate:         number;
+  readonly isBaselineBelowMidpoint: boolean;
+  readonly segments:                SegmentList<X, Y>;
+  readonly xScale:                  X;
+  readonly yMax:                    number;
+  readonly yScale:                  Y;
+  readonly yTilt?:                  boolean;
 }
 
-const getSegmentPaths = <X extends number, Y extends number>({
+export const getSegmentPaths = <X extends number, Y extends number>({
   baseYCoordinate,
+  isBaselineBelowMidpoint,
   segments,
   xScale,
   yMax,
-  yOffsetBelowMidpoint,
   yScale,
   yTilt = false,
 }: GetSegmentPathsOptions<X, Y>) => (
@@ -557,7 +587,7 @@ const getSegmentPaths = <X extends number, Y extends number>({
       ? Y_TILT_NEG
       : Y_TILT_POS;
 
-    const startY = yOffsetBelowMidpoint
+    const startY = isBaselineBelowMidpoint
       ? baseStartY + baseYCoordinate
       : yMax - baseStartY + baseYCoordinate;
 
@@ -570,7 +600,7 @@ const getSegmentPaths = <X extends number, Y extends number>({
       ? Y_TILT_NEG
       : Y_TILT_POS;
 
-    const endY = yOffsetBelowMidpoint
+    const endY = isBaselineBelowMidpoint
       ? baseEndY + baseYCoordinate
       : yMax - baseEndY + baseYCoordinate;
 
@@ -695,33 +725,32 @@ export const computeBasicArt = <
 
   const yMax = (scaledYMax + yPadding) * yScale;
 
-  const naiveSegments = getSegments({
+  const naiveSegments = getNaiveSegments({
     points: scaledPoints,
     xMax,
     xScale,
     yScale,
   });
 
-  // Generating art will be risk-free fun, I thought...
-  const nonPhallicSegments = getNonPhallicSegments({
+  const segments = getNonPhallicSegments({
     segments: naiveSegments,
     xMax,
     xScale,
     yScale,
   });
 
-  const yOffsetBelowMidpoint = yOffset > 0.5;
+  const isBaselineBelowMidpoint = yOffset > 0.5;
 
-  const baseYCoordinate = yOffsetBelowMidpoint
+  const baseYCoordinate = isBaselineBelowMidpoint
     ? yMax * yOffset
     : -1 * yMax * yOffset;
 
   const segmentPaths = getSegmentPaths({
     baseYCoordinate,
-    segments: nonPhallicSegments,
+    segments,
     xScale,
     yMax,
-    yOffsetBelowMidpoint,
+    isBaselineBelowMidpoint,
     yScale,
   });
 

@@ -76,6 +76,7 @@ export const BlogPost = <Path extends string>(props: BlogPostProps<Path>) => {
               : (
                   <CustomArt
                     hash={ hash }
+                    renderType="post"
                     StylesProvider={ StylesProvider }
                     title={ title }
                     topics={ topics }

@@ -12,7 +12,7 @@ import {
   getSHA1Hash,
 } from '@/lib/git';
 
-const SOCIAL_IMAGE_DIMENSIONS = {
+export const SOCIAL_IMAGE_DIMENSIONS = {
   height: 630,
   width:  1200,
 } as const;
@@ -41,6 +41,7 @@ export interface PageStat {
 
 export interface CustomArtProps extends BlogArtProps {
   readonly identifier?:     () => string;
+  readonly renderType:      'listing' | 'meta' | 'post';
   readonly StylesProvider?: ComponentType;
 }
 

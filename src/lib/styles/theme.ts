@@ -317,7 +317,7 @@ export const theme = {
       [darkMode]: {
         backgroundColor: 'hsla(192deg, 10%, 10%, 0.7)',
 
-        '@supports (backdrop-filter: blur(40px)': {
+        '@supports (backdrop-filter: blur(40px))': {
           backgroundColor: 'hsla(192deg, 10%, 10%, 0.5)',
         },
       },
@@ -544,7 +544,7 @@ export const theme = {
     pre: {
       color:           'hsla(210deg, 12%, 100%, 90%)',
       backgroundColor: '#000',
-      outline:         'none',
+      borderColor:     '#000',
     },
 
     prose: {
@@ -634,7 +634,9 @@ export const theme = {
   pre: {
     color:           'hsl(210deg, 12%, 16%)',
     backgroundColor: '#fff',
-    outline:         '1px solid #eee',
+    borderColor:     '#dbdbdb',
+    borderStyle:     'solid',
+    borderWidth:     '0.5px 0',
   },
 
   prose: {
@@ -783,10 +785,11 @@ export const theme = {
     }),
 
     shadow: {
-      backgroundImage: `linear-gradient(to left, ${[
-        'rgba(0, 0, 0, 0.3)',
-        'rgba(0, 0, 0, 0.00625) 0.2222rem',
-        'transparent 0.325rem',
+      backgroundImage: `linear-gradient(${[
+        'to left',
+        'rgba(0,0,0,0.3)',
+        'rgba(0,0,0,0.125) 1px',
+        'transparent 5px',
       ].join(', ')})` as string,
     },
   },

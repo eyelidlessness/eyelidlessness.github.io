@@ -58,21 +58,26 @@ export const {
   renderer,
 } = createRenderer();
 
-let currentStyles: string | null = null;
+// let currentStyles: () => string = () => '';
 
-if (
-  !devMode &&
-  import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
-) {
-  renderer.subscribe(async () => {
-    currentStyles = renderToString(renderer);
-  });
-}
+// if (
+//   !devMode &&
+//   import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
+// ) {
+//   renderer.subscribe(async () => {
+//     currentStyles = () => renderToString(renderer);
+//   });
+// }
 
 export const writeCurrentStyles = async () => {
-  if (!devMode && currentStyles != null) {
-    const fs = await import(`${'fs'}`);
-    const path = await import(`${'path'}`);
+  // if (!devMode && currentStyles != null) {
+  if (
+    !devMode &&
+    import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
+  ) {
+    const currentStyles = renderToString(renderer);
+    const fs            = await import(`${'fs'}`);
+    const path          = await import(`${'path'}`);
 
     const cssPath = path.resolve(
       path.dirname(import.meta.url.replace(/^file:/, '')),

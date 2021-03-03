@@ -1,3 +1,4 @@
+import { ComponentProps } from 'preact';
 import {
   FullBleedContainer,
   FullBleedScrollableOverflow,
@@ -12,27 +13,74 @@ const ContentContainer = styled('pre', {
   fontSize: '1rem',
 });
 
-const maskImage = `linear-gradient(${[
-  'to right',
-  'transparent',
-  'transparent 1.5rem',
-  'black 2.5rem',
-  'black calc(100% - 1rem)',
-  'transparent,'
-].join(', ')})`;
+// const maskImage = `linear-gradient(${[
+//   'to right',
+//   'transparent',
+//   'transparent 1.5rem',
+//   'black 2.5rem',
+//   'black calc(100% - 1rem)',
+//   'transparent,'
+// ].join(', ')})`;
 
-const InnerContainer = styled(FullBleedScrollableOverflow, {
-  paddingLeft:     'clamp(1.25em, 3.5vw, 3em)',
-  maskImage,
-  WebkitMaskImage: maskImage,
+const BaseInnerContainer = styled(FullBleedScrollableOverflow, {
+  backgroundAttachment: 'local',
+  backgroundImage: `linear-gradient(${[
+    'to left',
+    'rgba(255,255,255,1)',
+    'rgba(255,255,255,1) 5rem',
+    'rgba(255,255,255,0) 6rem',
+  ].join(',')})`,
+  backgroundPosition: 'calc(100% + 4rem) 0',
+  backgroundRepeat:   'no-repeat',
+  backgroundSize:     '6rem',
+  paddingLeft:        'clamp(1.25em, 3.5vw, 3em)',
+
+  nested: {
+    [theme.darkMode]: {
+      backgroundImage: `linear-gradient(${[
+        'to left',
+        'rgba(0,0,0,1)',
+        'rgba(0,0,0,1) 5rem',
+        'rgba(0,0,0,0) 6rem',
+      ].join(',')})`,
+    },
+  },
+  // maskImage,
+  // WebkitMaskImage: maskImage,
 });
+
+const InnerContainer = (props: ComponentProps<typeof BaseInnerContainer>) => (
+  <BaseInnerContainer
+    // shadow={ {
+    //   darkMask:    [ 0, 0, 0, 1 ],
+    //   darkScroll:  [ 0, 164, 255, 0.75 ],
+    //   lightMask:   [ 255, 255, 255, 1 ],
+    //   lightScroll: [ 124, 128, 131, 0.75 ],
+    // } }
+    { ...props }
+  />
+);
 
 const OuterContainer = styled(FullBleedContainer, {
   ...theme.pre,
 
+  backgroundImage: `linear-gradient(${[
+    'to left',
+    'rgba(124, 128, 131, 0.75)',
+    'rgba(124, 128, 131, 0.75) 0.5px',
+    'rgba(124, 128, 131, 0)    5px',
+  ].join(',')})`,
+
   nested: {
     [theme.darkMode]: {
       ...theme[theme.darkMode].pre,
+
+      backgroundImage: `linear-gradient(${[
+        'to left',
+        'rgba(0, 164, 255, 0.75)',
+        'rgba(0, 164, 255, 0.75) 0.5px',
+        'rgba(0, 164, 255, 0)    5px',
+      ].join(',')})`,
     },
 
     '& code': {
@@ -45,9 +93,9 @@ const OuterContainer = styled(FullBleedContainer, {
 
     '& pre': {
       backgroundColor: 'transparent',
+      border:          0,
       maxWidth:        '100%',
       margin:          0,
-      outline:         'none',
       padding:         '1rem 0',
       whiteSpace:      'pre',
     },
