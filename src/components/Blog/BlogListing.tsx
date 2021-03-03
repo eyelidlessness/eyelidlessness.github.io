@@ -1,5 +1,5 @@
 import { Fragment }            from 'preact';
-import { FullBleedContainer }  from '@/components/FullBleedContainer';
+import { FullBleedContainer }  from '@/components/FullBleed';
 import { Timestamp }           from '@/components/Timestamp';
 import { TopicTagList }        from '@/components/Topic/TopicTagList';
 import {
@@ -10,7 +10,7 @@ import {
 import {
   BlogArt,
   BlogArtDefsUsage,
-  blogArtHeight,
+  BLOG_ART_HEIGHT,
 } from './BlogArt';
 import { BlogPostProps }       from './BlogPost';
 
@@ -47,7 +47,7 @@ const BlogArticleList = styled(FullBleedContainer, {
 const BlogArticleListItem = styled(FullBleedContainer, {
   ...theme.blog.listing.item,
 
-  minHeight: blogArtHeight,
+  minHeight: BLOG_ART_HEIGHT,
   padding:   '1rem 0 1.5rem',
   position:  'relative',
 
@@ -58,27 +58,33 @@ const BlogArticleListItem = styled(FullBleedContainer, {
   },
 });
 
-const BlogPageArticleArt = styled(BlogArt, {
-  left:     0,
-  position: 'absolute',
-  top:      '1rem',
+const BlogPageArticleLink = styled(FullBleedContainer, {
+  paddingTop:     `calc(${BLOG_ART_HEIGHT} - max(2.5rem, 4.16667vw))`,
+  textDecoration: 'none',
 });
 
-const BlogPageArticleLink = styled(FullBleedContainer, {
-  fontWeight:     'normal',
-  gridColumn:     '2 / -2',
-  paddingTop:     `calc(${blogArtHeight} - max(2.5rem, 4.16667vw))`,
-  textDecoration: 'none',
+const BlogPageArticleContent = styled(FullBleedContainer, {
+  fontWeight: 'normal',
+  gridColumn: '2 / -2',
+  position:   'relative',
+});
+
+const BlogArticleArtContainer = styled('div', {
+  gridColumn: '1 / -1',
+  left:       0,
+  position:   'absolute',
+  top:        '1rem',
+  width:      '100%',
 });
 
 const linkTextContentClassName = css({
   // ...theme.blog.listing.linkTextContent,
 
-  backdropFilter:       'blur(1rem)',
+  backdropFilter:       'blur(0.25rem)',
   justifySelf:          'start',
   marginLeft:           '-0.5rem',
   marginRight:          '-0.5rem',
-  WebkitBackdropFilter: 'blur(1rem)',
+  WebkitBackdropFilter: 'blur(0.25rem)',
 });
 
 const BlogPageArticleTitle = styled('h2', {
@@ -146,6 +152,7 @@ export const BlogListing = ({
           <BlogArticleList>
             { groupPosts.map((post) => {
               const {
+                CustomArt: BlogArticleListItemArt = BlogArt,
                 description,
                 hash,
                 path,
@@ -159,21 +166,24 @@ export const BlogListing = ({
               return (
                 <BlogArticleListItem key={ path }>
                   <BlogPageArticleLink as={ 'a' } href={ path }>
-                    <BlogPageArticleArt
-                      defsUsage={ BlogArtDefsUsage.NONE }
-                      hash={ hash }
-                      padded={ true }
-                      title={ title }
-                      topics={ topics }
-                    />
+                    <BlogArticleArtContainer>
+                      <BlogArticleListItemArt
+                        defsUsage={ BlogArtDefsUsage.NONE }
+                        hash={ hash }
+                        padded={ true }
+                        renderType="listing"
+                        title={ title }
+                        topics={ topics }
+                      />
+                    </BlogArticleArtContainer>
 
-                    <BlogPageArticleTitle className={ linkTextContentClassName }>
-                      { title }
-                    </BlogPageArticleTitle>
+                    <BlogPageArticleContent>
+                      <BlogPageArticleTitle className={ linkTextContentClassName }>
+                        { title }
+                      </BlogPageArticleTitle>
 
-                    <BlogPageArticleTimestamp
-                      date={ created }
-                    />
+                      <BlogPageArticleTimestamp date={ created } />
+                    </BlogPageArticleContent>
                   </BlogPageArticleLink>
 
                   <BlogListingTopicTagList link={ false } topics={ topics } />

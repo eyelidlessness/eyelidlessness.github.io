@@ -13,6 +13,7 @@ import module                     from 'module';
 import {
   ElementType,
   Fragment,
+  h as preactH,
   toChildArray,
   VNode,
 } from 'preact';
@@ -44,7 +45,7 @@ const Div = ({ className, children, ...rest }: JSX.IntrinsicElements['div']) => 
     ? null
   : className === 'code-container'
     ? h(Fragment, rest, ...toChildArray(children))
-  : h<any>('div' as any, {
+  : preactH<any>('div' as any, {
       className,
       ...rest,
     }, ...toChildArray(children))
@@ -52,8 +53,8 @@ const Div = ({ className, children, ...rest }: JSX.IntrinsicElements['div']) => 
 
 const Span = ({ children, ...props }: JSX.IntrinsicElements['span']) => (
   isEmojiProps(props, children)
-    ? h(Emoji, props, children)
-    : h('span' as any, props, children)
+    ? preactH(Emoji, props, children)
+    : preactH('span' as any, props, children)
 );
 
 const defaultProps = {
@@ -144,27 +145,9 @@ export const MDX = <
   return fn(h, ...values);
 };
 
-const joinTemplateLiteralStrings = (
-  strings:     TemplateStringsArray,
-  expressions: readonly any[]
-) => {
-  const [ first, ...rest ] = strings;
-
-  return expressions.reduce((acc, value, index) => ([
-    ...acc,
-    value,
-    rest[index],
-  ]), [ first ]).join('');
-};
-
-type TemplateTag<T> = (
-  strings:        TemplateStringsArray,
-  ...expressions: readonly any[]
-) => T;
-
 type CallableTemplateTagParams =
   | Parameters<TemplateTag<any>>
-  | [ string ];
+  | readonly string[];
 
 const mdxAbbreviations = Object.entries(abbreviations)
   .map(([ abbr, expansion ]) => (
@@ -172,33 +155,45 @@ const mdxAbbreviations = Object.entries(abbreviations)
   ))
   .join('\n');
 
-const getMDXString = (args: CallableTemplateTagParams) => {
+const withAbbreviations = (str: string) => ([
+  str,
+  mdxAbbreviations,
+].join('\n\n'));
 
-  const [ stringOrStrings, ...rest ] = args;
+interface GetMDXStringOptions {
+  readonly includeAbbreviations: boolean;
+}
 
-  const baseStr = typeof stringOrStrings === 'string'
-    ? stringOrStrings
-    : joinTemplateLiteralStrings(stringOrStrings, rest);
+const getMDXString = (
+  [ first, ...rest ]: CallableTemplateTagParams,
+  {
+    includeAbbreviations = true,
+  }: GetMDXStringOptions
+) => {
+  const raw = typeof first === 'string'
+    ? [ first, ...rest ].join('')
+    : String.raw(first, ...rest);
 
-  return [
-    baseStr,
-    mdxAbbreviations,
-  ].join('\n\n');
+  if (includeAbbreviations) {
+    return withAbbreviations(raw);
+  }
+
+  return raw;
 };
 
 export const mdx = (...args: CallableTemplateTagParams): VNode => {
-  const str = getMDXString(args);
+  const str = getMDXString(args, { includeAbbreviations: true });
 
-  return h(StylesProvider, {},
-    h(MDX, {}, str)
+  return preactH(StylesProvider, {},
+    preactH(MDX, {}, str)
   );
 };
 
 export const mdxInline = (...args: CallableTemplateTagParams): VNode => {
-  const str = getMDXString(args);
+  const str = getMDXString(args, { includeAbbreviations: true });
 
-  return h(StylesProvider, {},
-    h(MDX, {
+  return preactH(StylesProvider, {},
+    preactH(MDX, {
       components: {
         p: Fragment,
       },
@@ -206,8 +201,8 @@ export const mdxInline = (...args: CallableTemplateTagParams): VNode => {
   );
 };
 
-export const mdxRaw: TemplateTag<string> = (strings, ...expressions) => {
-  const str = dedent(joinTemplateLiteralStrings(strings, expressions)).trim();
+export const mdxRaw: TemplateTag<string> = (...args) => {
+  const str = getMDXString(args, { includeAbbreviations: false });
 
   return remark()
     .use(remarkParse)

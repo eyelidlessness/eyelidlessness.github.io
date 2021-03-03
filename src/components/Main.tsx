@@ -3,21 +3,15 @@ import {
   styled,
   StylesProvider,
 } from '@/lib/styles';
-import { FullBleedContainer } from './FullBleedContainer';
+import { FullBleedContainer } from './FullBleed';
 import { SiteHeader }         from './Site';
 
-type MainProps =
-  & ComponentProps<typeof FullBleedContainer>
-  & { readonly isListing?: boolean; };
-
-const BaseMain = styled<MainProps>(FullBleedContainer, ({
-  isListing,
-}) => ({
-  marginTop:     isListing ? 0 : '1rem',
+const BaseMain = styled(FullBleedContainer, {
+  paddingTop:    0,
   paddingBottom: '4em',
-}));
+});
 
-export const Main = (props: MainProps) => (
+export const Main = (props: ComponentProps<typeof FullBleedContainer>) => (
   <StylesProvider>
     <SiteHeader />
     <BaseMain as="main" { ...props } />

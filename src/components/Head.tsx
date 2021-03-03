@@ -43,6 +43,9 @@ export const Head = ({
         __html: criticalStyles,
       }} />
 
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@eyelidlessenss" />
+
       <seo.image
         alt={ title }
         height={ socialImage.height }

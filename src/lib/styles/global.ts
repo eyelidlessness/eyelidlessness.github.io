@@ -114,6 +114,12 @@ export const criticalStyles = cleanWhitespace(`
 export const setGlobalStyles = () => {
   css.global(
     cleanWhitespace(`
+      @media (prefers-reduced-motion) {
+        * {
+          transition: none !important;
+        }
+      }
+
       ${blockElements.join(',')} {
         display: block;
       }
@@ -216,6 +222,7 @@ export const setGlobalStyles = () => {
 
       pre code {
         background-color: transparent;
+        display:          block;
         line-height:      1.325em;
         margin:           0;
         padding:          0;
@@ -242,7 +249,23 @@ export const setGlobalStyles = () => {
 
       ${jsToCSS([ 'aside', 'small' ], theme.deemphasize)}
 
-      img {
+      ${jsToCSS([ 'aside' ], {
+        ...theme.aside,
+
+        fontSize: '0.8889em',
+        margin:   '1rem 0',
+        padding:  '0.8889rem',
+
+        '& p': {
+          lineHeight: 1.3333,
+        },
+      })}
+
+      ${emphasisElements.map((el) => `aside ${el}`).join(', ')} {
+        color: inherit;
+      }
+
+      img, svg {
         height:    auto;
         max-width: 100%;
       }
@@ -283,6 +306,7 @@ export const setGlobalStyles = () => {
         ${jsToCSS([ 'code' ], theme[theme.darkMode].code)}
         ${jsToCSS([ 'a' ], theme[theme.darkMode].links)}
         ${jsToCSS([ 'aside', 'small' ], theme[theme.darkMode].deemphasize)}
+        ${jsToCSS([ 'aside' ], theme[theme.darkMode].aside)}
         ${jsToCSS([ 'hr:after' ], theme[theme.darkMode].separator)}
       }
     `)

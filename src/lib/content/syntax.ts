@@ -2,38 +2,37 @@ import {
   // twoslasher,
   TwoSlashReturn,
 } from '@typescript/twoslash';
+import { IStyle }           from 'fela';
 import path                 from 'path';
+import { VNode }            from 'preact';
 import { renderToString }   from 'preact-render-to-string';
 import {
   getHighlighter,
   loadTheme,
   IThemedToken,
 } from 'shiki';
-import { Highlighter }      from 'shiki/dist/highlighter';
 import {
-  commonLangAliases,
-  commonLangIds,
-  otherLangIds,
-  TLang,
+  BUNDLED_LANGUAGES,
+  Lang,
 } from 'shiki-languages';
 import {
   renderers,
-  runTwoSlash,
-  ShikiTwoslashSettings,
+  // runTwoSlash,
+  // ShikiTwoslashSettings,
 } from 'shiki-twoslash';
 import visit                from 'unist-util-visit';
 import { Node }             from 'unist';
 import { IRawThemeSetting } from 'vscode-textmate';
 import {
+  css,
   styled,
   StylesProvider,
   theme,
 } from '@/lib/styles';
-import { VNode }            from 'preact';
 
 interface RichNode extends Node {
   children:  Node[];
-  lang:      TLang;
+  lang:      Lang;
   meta?:     string[] | null;
   twoslash?: TwoSlashReturn;
   type:      string;
@@ -106,11 +105,9 @@ const [
   getHighlighter({ theme: lightTheme }),
 ]);
 
-const allLanguages = new Set([
-  ...commonLangAliases,
-  ...commonLangIds,
-  ...otherLangIds,
-]);
+const allLanguages = new Set(BUNDLED_LANGUAGES.map((language) => (
+  language.id
+)));
 
 const twoslashLanguages = new Set([
   'ts',
@@ -118,191 +115,82 @@ const twoslashLanguages = new Set([
   'typescript',
 ]);
 
-interface ThemeMatches {
-  readonly byName:  Record<string, IRawThemeSetting['settings']>;
-  readonly byScope: Record<string, IRawThemeSetting['settings']>;
-}
-
-/**
- * Look at this monstrosity!
- */
-const getThemeMatches = (
-  code:     string,
-  language: TLang
-) => {
-  const [
-    light,
-    dark,
-  ] = [ lightHighlighter, darkHighlighter ].map((highlighter) => {
-    const lines = highlighter.codeToThemedTokens(code, language);
-
-    return lines.reduce<ThemeMatches>((acc, line) => (
-      line.reduce((acc, token) => ({
-        ...acc,
-
-        ...token.explanation?.reduce((acc, explanation) => ({
-          ...acc,
-
-          ...explanation.scopes.reduce((acc, { themeMatches }) => ({
-            ...acc,
-
-            ...themeMatches.reduce((acc, { name, scope, settings }) => ({
-              ...acc,
-
-              byName: name == null
-                ? acc.byName
-                : {
-                  ...acc.byName,
-
-                  [name]: settings,
-                },
-
-              byScope: Array.isArray(scope)
-                ? {
-                  ...acc.byScope,
-
-                  ...scope.reduce((acc, scope) => ({
-                    ...acc,
-
-                    [scope]: settings,
-                  }), acc.byScope),
-                }
-              : typeof scope === 'string'
-                ? {
-                  ...acc.byScope,
-
-                  [scope]: settings,
-                }
-                : acc.byScope,
-            }), {
-              ...acc,
-
-              byName:  {
-                ...acc.byName,
-              },
-              byScope: {
-                ...acc.byScope,
-              },
-            })
-          }), acc)
-        }), acc)
-      }), acc)
-    ), {
-      byName:  {},
-      byScope: {},
-    });
-  }) as [ light: ThemeMatches, dark: ThemeMatches ];
-
-  return {
-    dark,
-    light,
-  };
-};
-
-interface RenderThemeMatches {
-  readonly dark:  ThemeMatches;
-  readonly light: ThemeMatches;
-}
-
-/**
- * This, too, is a monstrosity!
- */
-const renderToken = (token: IThemedToken, themeMatches: RenderThemeMatches): VNode => {
-  const {
-    content,
-    explanation,
-  } = token;
-  const {
-    dark,
-    light,
-  } = themeMatches;
-
-  const styles = explanation?.reduce((acc, explanation) => ({
+const getTokenStyles = (token: IThemedToken): IStyle | void => (
+  token.explanation?.reduce((acc, explanation) => ({
     ...acc,
 
     ...explanation.scopes.reduce((acc, { themeMatches }) => ({
       ...acc,
 
-      ...themeMatches.reduce((acc, {
-        name,
-        scope,
-        // settings,
-      }) => {
-        const lightStyles = getSettingStyles({
-          ...(name == null
-            ? {}
-            : light.byName[name]
-          ),
+      ...themeMatches.reduce((acc, { settings }) => ({
+        ...acc,
+        ...getSettingStyles(settings),
+      }), acc)
+    }), acc)
+  }), {
+    color: token.color,
+  })
+);
 
-          ...(Array.isArray(scope)
-            ? (scope.reduce((acc, scope) => ({
-              ...acc,
-              ...light.byScope[scope],
-            }), {}))
-          : typeof scope === 'string'
-            ? light.byScope[scope]
-            : {}),
-        });
-        const darkStyles = getSettingStyles({
-          ...(name == null
-            ? {}
-            : dark.byName[name]
-          ),
+const renderToken = (
+  lightToken: IThemedToken,
+  darkToken:  IThemedToken,
+  props:      JSX.IntrinsicElements['span'] = {}
+): VNode => {
+  const lightStyles = getTokenStyles(lightToken);
 
-          ...(Array.isArray(scope)
-            ? (scope.reduce((acc, scope) => ({
-              ...acc,
-              ...dark.byScope[scope],
-            }), {}))
-          : typeof scope === 'string'
-            ? dark.byScope[scope]
-            : {}),
-        });
+  const baseDarkStyles = getTokenStyles(darkToken);
+  const darkStyles = baseDarkStyles == null
+    ? null
+    : {
+      nested: {
+        [theme.darkMode]: baseDarkStyles,
+      },
+    };
 
-        const baseStyles = {
-          ...acc,
+  const { content } = lightToken;
 
-          ...lightStyles,
-        };
-
-        const nested = Object.keys(darkStyles).length > 0
-          ? {
-            nested: {
-              [theme.darkMode]: darkStyles,
-            },
-          }
-          : {};
-
-        return {
-          ...baseStyles,
-          ...nested,
-        };
-      }, {})
-    }), {})
-  }), {}) ?? {};
-
-  const Component = Object.keys(styles).length > 0
-    ? styled('span', styles)
-    : 'span';
-
-  if (content.replace(/\s+/, '') === '' || Component == null) {
-    return h('span', {}, content);
+  if (lightStyles == null && darkStyles == null) {
+    return h('span', props, content);
   }
 
-  return h(Component, {}, content);
+  const styles = {
+    ...lightStyles,
+    ...darkStyles,
+  };
+
+  const Component = styled('span', styles);
+
+  return h(Component, props, content);
+};
+
+const lastLineTokenClassName = css({
+  paddingRight: '1rem',
+});
+
+const lastLineProps = {
+  className: lastLineTokenClassName,
 };
 
 const renderTokens = (
-  lines:        readonly IThemedToken[][],
-  themeMatches: RenderThemeMatches
+  lightLines: readonly IThemedToken[][],
+  darkLines:  readonly IThemedToken[][]
 ) => (
   renderToString(
     h(StylesProvider, {},
       h('pre', {},
         h('code', {},
-          ...lines.reduce<Array<VNode | string>>((acc, line, index) => {
-            const tokens = line.map((token) => renderToken(token, themeMatches));
-            const separator = index === 0
+          ...lightLines.reduce<Array<VNode | string>>((acc, line, lineIndex) => {
+            const tokens = line.map((lightToken, columnIndex) => {
+              const darkToken = darkLines[lineIndex][columnIndex];
+
+              const props = columnIndex === line.length - 1
+                ? lastLineProps
+                : {};
+
+              return renderToken(lightToken, darkToken, props);
+            });
+            const separator = lineIndex === 0
               ? ''
               : '\n';
 
@@ -318,19 +206,16 @@ const renderTokens = (
   )
 );
 
-const visitor = (
-  highlighter: Highlighter,
-  settings:    Readonly<ShikiTwoslashSettings> = {}
-) => (node: RichNode) => {
+const visitor = (node: RichNode) => {
   const {
     lang:  baseLanguage,
     value: baseCode,
     meta,
   } = node;
-  const shouldDisableTwoslash = !!process?.env?.TWOSLASH_DISABLE;
+  const shouldDisableTwoslash = Boolean(process?.env?.TWOSLASH_DISABLE) || true;
 
   if (!shouldDisableTwoslash) {
-    runTwoSlashOnNode(settings, node);
+    // runTwoSlashOnNode(settings, node);
   }
 
   // Shiki doesn't respect json5 as an input, so switch it
@@ -347,10 +232,10 @@ const visitor = (
     value = renderers.plainTextRenderer(code, {});
   }
   else {
-    const tokens = highlighter.codeToThemedTokens(code, language);
-    const themeMatches = getThemeMatches(code, language);
+    const lightLines = lightHighlighter.codeToThemedTokens(code, language);
+    const darkLines  = darkHighlighter.codeToThemedTokens(code, language);
 
-    value = renderTokens(tokens, themeMatches);
+    value = renderTokens(lightLines, darkLines);
   }
 
   if (twoslashLanguages.has(language) && !meta?.includes('ignore')) {
@@ -370,19 +255,19 @@ const visitor = (
  * Runs twoslash across an AST node, switching out the text content, and lang
  * and adding a `twoslash` property to the node.
  */
-const runTwoSlashOnNode = (settings: ShikiTwoslashSettings, node: RichNode) => {
-  if (node.meta?.includes('twoslash')) {
-    const results = runTwoSlash(node.value, node.lang, settings);
+// const runTwoSlashOnNode = (settings: ShikiTwoslashSettings, node: RichNode) => {
+//   if (node.meta?.includes('twoslash')) {
+//     const results = runTwoSlash(node.value, node.lang, settings);
 
-    node.value    = results.code;
-    node.lang     = results.extension as TLang;
-    node.twoslash = results;
-  }
-};
+//     node.value    = results.code;
+//     node.lang     = results.extension as Lang;
+//     node.twoslash = results;
+//   }
+// };
 
 export const syntaxHighlighting = () => {
   const transform = (markdownAST: any) => {
-    visit(markdownAST, 'code', visitor(lightHighlighter));
+    visit(markdownAST, 'code', visitor);
   };
 
   return transform;

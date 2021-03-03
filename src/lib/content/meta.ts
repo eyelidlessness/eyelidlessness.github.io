@@ -1,16 +1,18 @@
-import fs             from 'fs';
-import hasher         from 'node-object-hash';
-import path           from 'path';
-import { RasterType } from '@/lib/art';
-import { Topic }      from '@/lib/content/topics';
+import fs                from 'fs';
+import hasher            from 'node-object-hash';
+import path              from 'path';
+import { ComponentType } from 'preact';
+import { BlogArtProps }  from '@/components/Blog';
+import { RasterType }    from '@/lib/art';
+import { Topic }         from '@/lib/content/topics';
 import {
   getCurrentCommitDate,
-  getCurrentFileHash,
   getInitialCommitDate,
   getInitialFileHash,
+  getSHA1Hash,
 } from '@/lib/git';
 
-const SOCIAL_IMAGE_DIMENSIONS = {
+export const SOCIAL_IMAGE_DIMENSIONS = {
   height: 630,
   width:  1200,
 } as const;
@@ -37,14 +39,21 @@ export interface PageStat {
   readonly updated: Date;
 }
 
+export interface CustomArtProps extends BlogArtProps {
+  readonly identifier?:     () => string;
+  readonly renderType:      'listing' | 'meta' | 'post';
+  readonly StylesProvider?: ComponentType;
+}
+
 export interface PageMetadata<Path extends string> {
-  readonly hash:   string;
-  readonly host:   string;
-  readonly path:   Path;
-  readonly stat:   PageStat;
-  readonly social: PageSocial;
-  readonly title:  string;
-  readonly topics: readonly Topic[];
+  readonly CustomArt?: ComponentType<CustomArtProps>;
+  readonly hash:       string;
+  readonly host:       string;
+  readonly path:       Path;
+  readonly stat:       PageStat;
+  readonly social:     PageSocial;
+  readonly title:      string;
+  readonly topics:     readonly Topic[];
 }
 
 const socialImageNameHasher = hasher({
@@ -53,8 +62,6 @@ const socialImageNameHasher = hasher({
   sort:   true,
   trim:   true,
 });
-
-type PageSocialStatKey = keyof PageStat;
 
 const getPageSocialMetadata = (
   importURL: string,
@@ -82,42 +89,45 @@ const getPageSocialMetadata = (
   };
 };
 
-/**
- * @param statKey - Use 'updated' to get metadata relevant to the current state,
- *                  or 'created' to get the metadata for the state at first commit
- */
+export enum PageMetadataType {
+  IMMUTABLE = 'immutable',
+  MUTABLE   = 'mutable',
+}
+
 export const getPageMetadata = <Path extends string>(
   path:      Path,
   importURL: string,
   title:     string,
-  topics:    readonly Topic[]  = [ Topic.TECHNOLOGY ],
-  statKey:   PageSocialStatKey = 'updated'
+  type:      PageMetadataType,
+  topics:    readonly Topic[] = [ Topic.TECHNOLOGY ]
 ): PageMetadata<Path> => {
-  const isInitialStatKey = statKey === 'created';
-  const hash = isInitialStatKey
-    ? getInitialFileHash(path)
-    : getCurrentFileHash(path);
+  const isMutable  = type === PageMetadataType.MUTABLE;
+  const importPath = importURL.replace(/^file:(\/\/)?/, '');
+
+  const hash = isMutable
+    ? getSHA1Hash(importPath)
+    : getInitialFileHash(path);
 
   const stat = {
     created: (
       getInitialCommitDate(path) ??
-      fs.statSync(importURL.replace(/^file:(\/\/)?/, '')).ctime
+      fs.statSync(importPath).ctime
     ),
     updated: (
       getCurrentCommitDate(path) ??
-      fs.statSync(importURL.replace(/^file:(\/\/)?/, '')).mtime
+      fs.statSync(importPath).mtime
     ),
   };
 
-  const pageSocialHashSeed = isInitialStatKey
+  const pageSocialHashSeed = isMutable
     ? {
-      hash,
-      importURL,
-    }
-    : {
       importURL,
       stat,
       topics,
+    }
+    : {
+      hash,
+      importURL,
     };
 
   const social = getPageSocialMetadata(importURL, pageSocialHashSeed);

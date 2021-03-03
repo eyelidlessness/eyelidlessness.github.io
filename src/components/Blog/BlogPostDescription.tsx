@@ -7,13 +7,13 @@ import {
   ComponentChildren,
   ElementType,
 } from 'preact';
-import { FullBleedContainer } from '@/components/FullBleedContainer';
+import { FullBleedContainer } from '@/components/FullBleed';
 
 const BlogPostDescriptionOuter = styled(FullBleedContainer, {
-  ...theme.aside,
+  ...theme.description,
 
   nested: {
-    ...theme.aside.nested,
+    ...theme.description.nested,
 
     '&:last-child': {
       marginBottom: 0,

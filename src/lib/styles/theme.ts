@@ -11,7 +11,7 @@ const vwRatio = 2;
 const baseFontSizeRange = {
   minEm:   1.0625,
   fluidVw: 1.0625 * vwRatio,
-  maxEm:   1.325,
+  maxEm:   1.25,
 } as const;
 
 const darkMode = '@media (prefers-color-scheme: dark)' as const;
@@ -304,27 +304,40 @@ export const theme = {
     ].join(', ')})`,
   },
 
-  aside: {
-    backgroundColor: 'hsl(53deg, 81%, 96%)',
-    color:           'hsl(212deg, 10%, 35%)',
+  artOverlay: {
+    backgroundColor: 'hsla(192deg, 85%, 99%, 0.7)',
 
     nested: {
-      '& > h1': {
-        color: 'hsl(53deg, 13%, 26%)',
+      '@supports (backdrop-filter: blur(40px))': {
+        backgroundColor:      'hsla(192deg, 85%, 99%, 0.5)',
+        backdropFilter:       'blur(40px)',
+        WebkitBackdropFilter: 'blur(40px)',
       },
 
       [darkMode]: {
-        backgroundColor: 'hsl(130deg,21%,14%)',
-        color:           'hsl(212deg, 3%, 80%)',
+        backgroundColor: 'hsla(192deg, 10%, 10%, 0.7)',
 
-        nested: {
-          '& > h1': {
-            color: 'hsl(130deg, 6%, 90%)',
-          },
+        '@supports (backdrop-filter: blur(40px))': {
+          backgroundColor: 'hsla(192deg, 10%, 10%, 0.5)',
         },
       },
     },
+  },
 
+  aside: {
+    backgroundColor: 'hsl(192deg, 35%, 96.5%)',
+  },
+
+  asideBlock: {
+    symbol: {
+      color: 'hsl(208deg, 35%, 81%)',
+
+      nested: {
+        [darkMode]: {
+          color: 'hsl(208deg, 35%, 35%)',
+        },
+      },
+    },
   },
 
   blog: {
@@ -414,6 +427,32 @@ export const theme = {
     // },
   },
 
+  description: {
+    backgroundColor: 'hsl(53deg, 81%, 96%)',
+    color:           'hsl(212deg, 10%, 35%)',
+
+    nested: {
+      '& > h1': {
+        color: 'hsl(53deg, 13%, 26%)',
+      },
+
+      '& p': {
+        lineHeight: 1.3333,
+      },
+
+      [darkMode]: {
+        backgroundColor: 'hsl(130deg,21%,14%)',
+        color:           'hsl(212deg, 3%, 80%)',
+
+        nested: {
+          '& > h1': {
+            color: 'hsl(130deg, 6%, 90%)',
+          },
+        },
+      },
+    },
+  },
+
   // details: {
   //   borderColor: 'hsl(240deg, 8%, 95%)',
 
@@ -470,6 +509,10 @@ export const theme = {
   headingRanges,
 
   [darkMode]: {
+    aside: {
+      backgroundColor: 'hsl(192deg, 15%, 13%)',
+    },
+
     code: {
       backgroundColor: 'hsl(200deg, 60%, 15%)',
       color:           'hsla(210deg, 12%, 100%, 95%)',
@@ -501,7 +544,7 @@ export const theme = {
     pre: {
       color:           'hsla(210deg, 12%, 100%, 90%)',
       backgroundColor: '#000',
-      outline:         'none',
+      borderColor:     '#000',
     },
 
     prose: {
@@ -586,10 +629,14 @@ export const theme = {
   mainGridColumns,
   mainGridSidePaddingRem,
 
+  monospaceFont,
+
   pre: {
     color:           'hsl(210deg, 12%, 16%)',
     backgroundColor: '#fff',
-    outline:         '1px solid #eee',
+    borderColor:     '#dbdbdb',
+    borderStyle:     'solid',
+    borderWidth:     '0.5px 0',
   },
 
   prose: {
@@ -728,24 +775,27 @@ export const theme = {
     color: 'hsla(0deg, 0%, 0%, 0.2)',
   },
 
+  scrollable: {
+    cover: (backgroundColor: string) => ({
+      backgroundImage: `linear-gradient(to right, ${[
+        'transparent',
+        `${backgroundColor} 1rem`,
+        backgroundColor,
+      ].join(', ')})`,
+    }),
+
+    shadow: {
+      backgroundImage: `linear-gradient(${[
+        'to left',
+        'rgba(0,0,0,0.3)',
+        'rgba(0,0,0,0.125) 1px',
+        'transparent 5px',
+      ].join(', ')})` as string,
+    },
+  },
+
   siteHeader: {
     columns: siteHeaderColumns,
-
-    container: {
-      // backgroundColor: 'hsl(336deg, 100%, 98%)',
-      // // backgroundImage: cleanWhitespace(`linear-gradient(
-      // //   to bottom,
-      // //   hsla(336deg, 100%, 42%, 1),
-      // //   hsla(336deg, 100%, 42%, 1) 2px,
-      // //   transparent 2px
-      // // )`),
-
-      // nested: {
-      //   [darkMode]: {
-      //     backgroundColor: 'hsl(336deg, 100%, 7%)',
-      //   },
-      // },
-    },
 
     pageLinks: {
       color: '#000',
@@ -763,6 +813,34 @@ export const theme = {
   siteLogo: {
     color: 'hsl(336deg, 100%, 42%)',
     // color: '#fff'
+  },
+
+  toggleSwitch: {
+    button: {
+      backgroundColor: '#fff',
+
+      nested: {
+        [darkMode]: {
+          backgroundColor: '#f9f9f9',
+        },
+      },
+    },
+
+    container: {
+      off: {
+        color: '#ddd',
+
+        nested: {
+          [darkMode]: {
+            color: '#666',
+          },
+        },
+      },
+
+      on: {
+        color: 'hsl(152deg, 100%, 39%)',
+      },
+    },
   },
 
   topicColors,
@@ -845,5 +923,19 @@ export const theme = {
       ` 0     0 0       0.5px rgba(255, 255, 255, 0)`,
       ' 0     0 0       0.5px currentcolor',
     ].join(', '),
+  },
+
+  visualization: {
+    plot: {
+      axis: {
+        color: 'hsl(194deg, 8%, 67%)',
+
+        nested: {
+          [darkMode]: {
+            color: 'hsl(194deg, 8%, 50%)',
+          },
+        },
+      },
+    },
   },
 } as const;

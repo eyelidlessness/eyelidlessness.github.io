@@ -10,7 +10,6 @@ import {
 import { renderToString } from 'preact-render-to-string';
 import sharp              from 'sharp';
 import {
-  createStylesProvider,
   IRenderer,
   theme,
 } from '@/lib/styles';
@@ -20,6 +19,7 @@ export enum RasterType {
 }
 
 interface GenerateRasterFromSVGOptions {
+  readonly debug?:        boolean;
   readonly height:        number;
   readonly styleRenderer: IRenderer;
   readonly svg:           ComponentChildren;
@@ -31,16 +31,15 @@ export const generateRasterFromSVG = async (
   options: GenerateRasterFromSVGOptions
 ) => {
   const {
+    debug,
     height,
     styleRenderer,
     svg: node,
     type,
     width,
   } = options;
-  const StylesProvider = createStylesProvider(styleRenderer);
   const rendered = renderToString(
-    h(StylesProvider, {},
-      h(Fragment, {}, node), {})
+    h(Fragment, {}, node)
   ).trim();
 
   if (!rendered.startsWith('<svg')) {
@@ -59,6 +58,10 @@ export const generateRasterFromSVG = async (
     `${styles}</svg>`
   );
 
+  if (debug) {
+    console.log('styled', styled);
+  }
+
   const imageBuffer = Buffer.from(styled);
   const base = await sharp({
     create: {
@@ -71,13 +74,23 @@ export const generateRasterFromSVG = async (
     [type]()
     .toBuffer();
 
-  return await sharp(base)
-    .composite([
-      {
-        blend: 'over',
-        input: imageBuffer,
-      },
-    ])
-    [type]()
-    .toBuffer();
+  try {
+    return await sharp(base)
+      .composite([
+        {
+          blend: 'over',
+          input: imageBuffer,
+        },
+      ])
+      [type]()
+      .toBuffer();
+  }
+  catch (error) {
+    console.trace(
+      'unexpected error',
+      error,
+      'rendered svg',
+      rendered
+    );
+  }
 };

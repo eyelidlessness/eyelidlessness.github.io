@@ -17,6 +17,8 @@ const pluginSocial = () => ({
   name: 'plugin-social',
 
   async optimize({ buildDirectory }) {
+    console.time('social');
+
     const glob  = require('globby');
     const path  = require('path');
 
@@ -31,8 +33,12 @@ const pluginSocial = () => ({
     const documentPath = path.resolve(buildDirectory, 'src/pages/_document.js');
 
     const stylesPath = path.resolve(buildDirectory, 'src/lib/styles/styles.js');
+
     /** @type {import('../src/lib/styles/styles')} */
-    const { createRenderer } = await import(stylesPath);
+    const {
+      createRenderer,
+      createStylesProvider,
+    } = await import(stylesPath);
 
     const rasterPath = path.resolve(buildDirectory, 'src/lib/art/raster.js');
     /** @type {import('../src/lib/art/raster')} */
@@ -45,6 +51,7 @@ const pluginSocial = () => ({
       buildDirectory,
       'src/components/Blog/BlogArt.js'
     );
+
     /** @type {import('../src/components/Blog/BlogArt')} */
     const {
       BlogArt,
@@ -64,7 +71,7 @@ const pluginSocial = () => ({
         page = (await import(pagePath)).default;
       }
       catch (error) {
-        console.trace(error);
+        console.trace(pagePath, error);
 
         throw error;
       }
@@ -94,8 +101,10 @@ const pluginSocial = () => ({
       const {
         renderer: styleRenderer,
       } = createRenderer();
+      const StylesProvider = createStylesProvider(styleRenderer);
 
       const {
+        CustomArt,
         hash,
         social: {
           image: {
@@ -108,36 +117,54 @@ const pluginSocial = () => ({
         topics,
       } = props;
 
-      const artRaster = await generateRasterFromSVG({
-        height,
+      const artProps = {
+        defsUsage: BlogArtDefsUsage.INLINE,
+        hash,
+        height:    280,
+        rawSVG:    true,
         styleRenderer,
+        StylesProvider,
+        title,
+        topics,
+        width:     1200,
+      };
 
-        svg: (
-          h(BlogArt, {
-            defsUsage: BlogArtDefsUsage.INLINE,
-            hash,
-            height: 280,
-            rawSVG:    true,
-            styleRenderer,
-            title,
-            topics,
-            width:  1200,
-          })
-        ),
+      const rasterElement = (
+        CustomArt != null
+          ? h(CustomArt, {
+              ...artProps,
+              renderType: 'meta',
+            })
+          : h(StylesProvider, {},
+              h(BlogArt, artProps)
+            )
+      );
 
-        type: RasterType.PNG,
+      try {
+        const artRaster = await generateRasterFromSVG({
+          height,
+          styleRenderer,
+          svg:  rasterElement,
+          type: RasterType.PNG,
+          width,
+        });
 
-        width,
-      });
+        const baseDistPath = path.resolve(process.cwd(), './dist');
+        const distPath = path.resolve(baseDistPath, `.${publicPath}`);
 
-      const baseDistPath = path.resolve(process.cwd(), './dist');
-      const distPath = path.resolve(baseDistPath, `.${publicPath}`);
+        mkdirSync(dirname(distPath), {
+          recursive: true,
+        });
+        writeFileSync(distPath, artRaster);
+      }
+      catch (error) {
+        console.trace('unexpected error', pagePath, error, 'el', rasterElement);
 
-      mkdirSync(dirname(distPath), {
-        recursive: true,
-      });
-      writeFileSync(distPath, artRaster);
+        throw error;
+      }
     }
+
+    console.timeEnd('social');
   },
 });
 
