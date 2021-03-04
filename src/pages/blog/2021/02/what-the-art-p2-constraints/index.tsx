@@ -1,5 +1,6 @@
 import { definePage } from 'microsite/page';
 import {
+  BlogMetadataType,
   BlogPost,
   BlogPostProps,
   getBlogPostStaticProps,
@@ -108,7 +109,7 @@ const WhatTheArtPost = (props: BlogPostProps<any>) => {
 
         Next: [What the art, part 3: Implementation][implementation]
 
-        [implementation]: /blog/2021/02/what-the-art-p3-implementation/
+        [implementation]: /blog/2021/03/what-the-art-p3-implementation/
       `}
     </BlogPost>
   );
@@ -133,6 +134,8 @@ export default definePage(WhatTheArtPost, {
         Topic.ART,
         Topic.TECHNOLOGY,
       ],
+
+      type: BlogMetadataType.IMMUTABLE,
     });
 
     return { props };

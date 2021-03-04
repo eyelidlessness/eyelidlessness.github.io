@@ -1,5 +1,6 @@
 import { definePage } from 'microsite/page';
 import {
+  BlogMetadataType,
   BlogPost,
   BlogPostProps,
   getBlogPostStaticProps,
@@ -125,6 +126,8 @@ export default definePage(WhatTheArtPost, {
         Topic.NEURODIVERGENCE,
         Topic.MENTAL_ILLNESS,
       ],
+
+      type: BlogMetadataType.IMMUTABLE,
     });
 
     return { props };

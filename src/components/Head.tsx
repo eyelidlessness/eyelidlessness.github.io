@@ -24,6 +24,7 @@ export const Head = ({
   meta: {
     description,
     host,
+    redirect,
     social: {
       image: socialImage,
     },
@@ -31,6 +32,19 @@ export const Head = ({
   },
   ...rest
 }: HeadProps) => {
+  if (redirect) {
+    return (
+      <BaseHead { ...rest }>
+        <seo.title>Redirecting to { redirect }</seo.title>
+
+        <meta
+          http-equiv="refresh"
+          content={ `0; URL=${redirect}` }
+        />
+        <link rel="canonical" href={ redirect } />
+      </BaseHead>
+    )
+  }
 
   return (
     <BaseHead { ...rest }>

@@ -51,7 +51,7 @@ export default definePage(IndexPage, {
     const postsGlob = resolve(basePath, './blog/**/*.js');
     const postFiles = await glob(postsGlob);
 
-    const posts = await Promise.all(postFiles.map(async (path) => {
+    const postResults = await Promise.all(postFiles.map(async (path) => {
       const { default: postPage } = await import(path) as PostModule;
       const postProps = await postPage?.getStaticProps?.({
         path,
@@ -68,6 +68,9 @@ export default definePage(IndexPage, {
         path: relativePath,
       };
     }));
+    const posts = postResults.filter((post) => (
+      post.redirect == null
+    ));
 
     const title = 'Blog';
     const description = `Trevor Schmidt's tech blog`;
