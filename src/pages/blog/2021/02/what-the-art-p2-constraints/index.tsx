@@ -109,7 +109,7 @@ const WhatTheArtPost = (props: BlogPostProps<any>) => {
 
         Next: [What the art, part 3: Implementation][implementation]
 
-        [implementation]: /blog/2021/03/what-the-art-p3-implementation/
+        [implementation]: /blog/2021/03/what-the-art-part3-implementation/
       `}
     </BlogPost>
   );
