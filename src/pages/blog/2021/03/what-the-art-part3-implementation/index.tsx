@@ -333,7 +333,7 @@ const FlexColumnBackground = styled(BaseFlexPointBackground, ({
 
   nested: {
     [theme.darkMode]: {
-      '--selected-color':        hsluvColors[index].light.selected,
+      '--selected-color':        hsluvColors[index].dark.selected,
       '--selected-sorted-color': hsluvColors[sortedIndex].dark.selected,
       '--sorted-color':          hsluvColors[sortedIndex].dark.hover,
       color:                     hsluvColors[index].dark.hover,
