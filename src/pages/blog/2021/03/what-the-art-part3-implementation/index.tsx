@@ -483,13 +483,14 @@ const segmentLinePathStyles = ({
 }: SegmentLinePathProps<{}>) => ({
   ...topicColorStyles(index, topic),
   ...(isPath ? {
-    // '--emphasized-stroke-width': 10,
-    fill:                        'none',
-  } : {}),
+    fill: 'none',
+    strokeWidth: 4,
+  } : {
+    strokeWidth: 2,
+  }),
 
-  stroke:      'currentcolor',
-  strokeWidth: 3,
-  transition:  segmentTransition,
+  stroke:     'currentcolor',
+  transition: segmentTransition,
 });
 
 type BaseSegmentLineProps = SegmentLinePathProps<JSX.IntrinsicElements['line']>;
@@ -545,8 +546,8 @@ const choiceId = ({
   type,
 }: BaseChoiceData) => (
   type === 'radio'
-    ? `example-${exampleId}-${index}-${suffix}`
-    : `example-${exampleId}-${suffix}`
+    ? `example-${exampleId}-${index}-${suffix}-choice`
+    : `example-${exampleId}-${suffix}-choice`
 );
 
 type BaseChoiceProps =
@@ -615,14 +616,14 @@ const PlotPointEmphasisChoice = styled(BasePlotPointEmphasisChoice, ({
       // strokeWidth: 'var(--emphasized-stroke-width, 5)',
     },
 
-    [`&:checked ~ * [for="example-${exampleId}-${index}-${suffix}"] .${(
+    [`&:checked ~ * [for="example-${exampleId}-${index}-${suffix}-choice"] .${(
       flexPointBackgroundClassName
     )}`]: {
       opacity: 1,
       color:   'var(--selected-color)',
     },
 
-    [`&:checked ~ * [for="example-${exampleId}-${index}-${suffix}"] text`]: {
+    [`&:checked ~ * [for="example-${exampleId}-${index}-${suffix}-choice"] text`]: {
       color: '#fff',
 
       nested: {
@@ -685,7 +686,7 @@ const HashConversionScrollableOverflow = ({
 }: FullBleedScrollableOverflowProps) => (
   <FullBleedScrollableOverflow { ...props } shadow={ {
     darkMask:    [ 0, 0, 0, 1 ],
-    darkScroll:  [ 0, 164, 255, 0.75 ],
+    darkScroll:  [ 230, 179, 213, 0.75 ],
     lightMask:   [ 255, 255, 255, 1 ],
     lightScroll: [ 124, 128, 131, 0.75 ],
   } }>
@@ -1730,7 +1731,7 @@ const HashPointsExample = ({
                 return (
                   <HashPointConversion
                     className={ `point-${index}` }
-                    for={ `example-${exampleId}-${index}-point` }
+                    for={ `example-${exampleId}-${index}-point-choice` }
                     sortedIndex={ sortIndexes[index] }
                   >
                     <BaseHashPointsExample
@@ -1823,7 +1824,7 @@ const HashPointsExample = ({
                             </>)
                             : null )}
 
-                        {( renderScaled
+                        {( renderScaled && !renderOnlyHex
                             ? (
                                 <>
                                   <FlexPoint
@@ -1913,14 +1914,12 @@ const CustomArt = ({
     ? socialWidth * 0.9
     : propsWidth;
 
-  // const yMax   = 100;
   const xShift = xPadding / 2;
   const yShift = yPadding / 2;
 
   const scaleOptions = {
     xScale,
     xShift,
-    // yMax,
     yScale,
     yShift,
   };
@@ -2429,7 +2428,7 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
       <CommentaryAside>
         {mdx`
           I had to ~~learn~~ copy & paste some math to generate the curves. I
-          did take the time to learn what the math is are actually doing while
+          did take the time to learn what the math is actually doing while
           writing this post, but I've never taken a trigonometry course, so I'm
           probably not the best person to explain it in great detail, but I'll
           give it a shot.
@@ -2780,7 +2779,7 @@ const WhatTheArt3Post = (props: BlogPostProps<any>) => {
         rendering shows I never quite got it right! But I like how it looks,
         and I don't want to mess with that for now.
 
-        Sometimes technically incorrect is the best kind of correct.
+        Sometimes technically incorrect is the best kind of correct!
 
         * * *
 
