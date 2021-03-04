@@ -169,7 +169,7 @@ const hsluvColors = '0123456789'.split('').map((value) => {
       emphasize: hsluv.hsluvToHex([ hue, 100, 35 ]),
       hover:     hsluv.hsluvToHex([ hue, 100, 3 ]),
       plot:      hsluv.hsluvToHex([ hue, 100, 74 ]),
-      selected:  hsluv.hsluvToHex([ hue, 100, 74 ]),
+      selected:  hsluv.hsluvToHex([ hue, 100, 64 ]),
       x:         hsluv.hsluvToHex([ hue, 100, 84 ]),
       y:         hsluv.hsluvToHex([ hue, 100, 74 ]),
     },
@@ -333,7 +333,7 @@ const FlexColumnBackground = styled(BaseFlexPointBackground, ({
 
   nested: {
     [theme.darkMode]: {
-      '--selected-color':        hsluvColors[index].light.selected,
+      '--selected-color':        hsluvColors[index].dark.selected,
       '--selected-sorted-color': hsluvColors[sortedIndex].dark.selected,
       '--sorted-color':          hsluvColors[sortedIndex].dark.hover,
       color:                     hsluvColors[index].dark.hover,
