@@ -2811,7 +2811,6 @@ export default definePage(WhatTheArt3Post, {
       `,
 
       importURL: import.meta.url,
-      redirect:  '/blog/2021/03/what-the-art-p3-implementation/',
       title:     'What the art, part 3: Implementation',
 
       topics: [

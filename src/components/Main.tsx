@@ -11,9 +11,20 @@ const BaseMain = styled(FullBleedContainer, {
   paddingBottom: '4em',
 });
 
-export const Main = (props: ComponentProps<typeof FullBleedContainer>) => (
+type MainProps =
+  & ComponentProps<typeof FullBleedContainer>
+  & { readonly redirect?: string };
+
+export const Main = ({
+  redirect,
+  ...props
+}: MainProps) => (
   <StylesProvider>
-    <SiteHeader />
-    <BaseMain as="main" { ...props } />
+    { redirect == null
+      ? (<>
+        <SiteHeader />
+        <BaseMain as="main" { ...props } />
+      </>)
+      : <></> }
   </StylesProvider>
 );

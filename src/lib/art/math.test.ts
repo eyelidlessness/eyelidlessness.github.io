@@ -2,7 +2,7 @@ import it   from 'ava';
 import path from 'path';
 import {
   getCurrentFileHash,
-  getInitialFileHash,
+  getInitialFileMergeHash,
 } from '@/lib/git';
 import {
   coordinate,
@@ -15,7 +15,7 @@ const knownFile = path.resolve(process.cwd(), './tsconfig.json');
 
 const validHashes = Object.entries({
   current: getCurrentFileHash(knownFile),
-  initial: getInitialFileHash(knownFile),
+  initial: getInitialFileMergeHash(knownFile),
   lower:   '551a45d948ae04ea44ebec4895fee6f9c83f05f1',
   upper:   'C0A6A0B1A80898B178FAD939D6E31BA378ED10F6',
 });

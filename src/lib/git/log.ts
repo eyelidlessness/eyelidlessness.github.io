@@ -34,9 +34,10 @@ const resolveModulePath = (basePath: string) => (
 );
 
 enum GitFilter {
-  ALL     = '',
-  CURRENT = '--diff-filter=M',
-  FIRST   = '--diff-filter=A',
+  ALL         = '',
+  CURRENT     = '--diff-filter=M',
+  FIRST       = '--diff-filter=A',
+  FIRST_MERGE = '--full-history --reverse --merges',
 }
 
 enum GitFormat {
@@ -75,12 +76,12 @@ const getFormattedGitLogData = <T>(
     stdout,
   } = childProcess.spawnSync('git', [
     'log',
-    filter,
+    ...filter.split(' '),
     `--branches=${branch}`,
     `--format=${format}`,
     `--remotes=${remote}`,
     '--',
-    path
+    path,
   ]);
 
   if (error) {
@@ -126,6 +127,18 @@ export const getInitialCommitDate = (basePath: string): Date | null => {
   return date;
 };
 
+export const getInitialMergeDate = (basePath: string): Date | null => {
+  const path = resolveModulePath(basePath);
+  const [ date = null ] = getFormattedGitLogData({
+    decode: toDate,
+    filter: GitFilter.FIRST_MERGE,
+    format: GitFormat.ISO_DATE,
+    path,
+  });
+
+  return date;
+};
+
 export const getSHA1Hash = (path: string) => {
   const fileContents = fs.readFileSync(path).toString();
 
@@ -152,6 +165,18 @@ export const getInitialFileHash = (basePath: string) => {
   const path = resolveModulePath(basePath);
   const [ hash ] = getFormattedGitLogData({
     decode: identity,
+    format: GitFormat.HASH,
+    path,
+  });
+
+  return hash ?? getSHA1Hash(path);
+};
+
+export const getInitialFileMergeHash = (basePath: string) => {
+  const path = resolveModulePath(basePath);
+  const [ hash ] = getFormattedGitLogData({
+    decode: identity,
+    filter: GitFilter.FIRST_MERGE,
     format: GitFormat.HASH,
     path,
   });

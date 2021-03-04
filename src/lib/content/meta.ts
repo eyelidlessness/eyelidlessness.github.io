@@ -8,7 +8,9 @@ import { Topic }         from '@/lib/content/topics';
 import {
   getCurrentCommitDate,
   getInitialCommitDate,
+  getInitialMergeDate,
   getInitialFileHash,
+  getInitialFileMergeHash,
   getSHA1Hash,
 } from '@/lib/git';
 
@@ -50,6 +52,7 @@ export interface PageMetadata<Path extends string> {
   readonly hash:       string;
   readonly host:       string;
   readonly path:       Path;
+  readonly redirect?:  string;
   readonly stat:       PageStat;
   readonly social:     PageSocial;
   readonly title:      string;
@@ -90,8 +93,9 @@ const getPageSocialMetadata = (
 };
 
 export enum PageMetadataType {
-  IMMUTABLE = 'immutable',
-  MUTABLE   = 'mutable',
+  IMMUTABLE       = 'immutable',
+  IMMUTABLE_MERGE = 'immutable-merge',
+  MUTABLE         = 'mutable',
 }
 
 export const getPageMetadata = <Path extends string>(
@@ -101,16 +105,23 @@ export const getPageMetadata = <Path extends string>(
   type:      PageMetadataType,
   topics:    readonly Topic[] = [ Topic.TECHNOLOGY ]
 ): PageMetadata<Path> => {
-  const isMutable  = type === PageMetadataType.MUTABLE;
-  const importPath = importURL.replace(/^file:(\/\/)?/, '');
+  const isMutable        = type === PageMetadataType.MUTABLE;
+  const isImmutableMerge = type === PageMetadataType.IMMUTABLE_MERGE;
+  const importPath       = importURL.replace(/^file:(\/\/)?/, '');
 
   const hash = isMutable
     ? getSHA1Hash(importPath)
+  : isImmutableMerge
+    ? getInitialFileMergeHash(path)
     : getInitialFileHash(path);
 
   const stat = {
     created: (
-      getInitialCommitDate(path) ??
+      (
+        isImmutableMerge
+          ? getInitialMergeDate(path)
+          : getInitialCommitDate(path)
+      ) ??
       fs.statSync(importPath).ctime
     ),
     updated: (

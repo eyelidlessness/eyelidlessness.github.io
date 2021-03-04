@@ -57,6 +57,7 @@ export const BlogPost = <Path extends string>(props: BlogPostProps<Path>) => {
     description,
     descriptionRaw,
     hash,
+    redirect,
     stat: { created },
     title,
     topics,
@@ -69,7 +70,7 @@ export const BlogPost = <Path extends string>(props: BlogPostProps<Path>) => {
         description: descriptionRaw,
       } } />
 
-      <Main as="article">
+      <Main as="article" redirect={ redirect }>
         <BlogPostHeading>
           {( CustomArt == null
               ? (<BlogArt hash={ hash } title={ title } topics={ topics } />)
@@ -106,26 +107,39 @@ type AnyBlogPostProps<Path extends string> =
     readonly stat?: Partial<PageStat>;
   };
 
-interface GetBLogPostStaticPropsOptions<Path extends string> extends Omit<
+export type BlogMetadataType =
+  | PageMetadataType.IMMUTABLE
+  | PageMetadataType.IMMUTABLE_MERGE;
+
+export const BlogMetadataType = {
+  IMMUTABLE:       PageMetadataType.IMMUTABLE,
+  IMMUTABLE_MERGE: PageMetadataType.IMMUTABLE_MERGE,
+} as const;
+
+interface GetBlogPostStaticPropsOptions<Path extends string> extends Omit<
   StaticPropsContext<AnyBlogPostProps<Path>>,
   'params'
 > {
   readonly description: ComponentChildren;
   readonly importURL:   string;
   readonly path:        Path;
+  readonly redirect?:   string;
   readonly title:       string;
   readonly topics:      readonly Topic[];
+  readonly type?:       BlogMetadataType;
 }
 
 export const getBlogPostStaticProps = async <Path extends string>(
-  options: GetBLogPostStaticPropsOptions<Path>
+  options: GetBlogPostStaticPropsOptions<Path>
 ): Promise<BlogPostProps<Path>> => {
   const {
     description,
     importURL,
     path,
+    redirect,
     title,
     topics,
+    type = BlogMetadataType.IMMUTABLE_MERGE,
   } = options;
   const {
     CustomArt,
@@ -137,7 +151,7 @@ export const getBlogPostStaticProps = async <Path extends string>(
     path,
     importURL,
     title,
-    PageMetadataType.IMMUTABLE,
+    type,
     topics
   );
 
@@ -150,6 +164,7 @@ export const getBlogPostStaticProps = async <Path extends string>(
     hash,
     host,
     path,
+    redirect,
     social,
     stat,
     title,
