@@ -7,6 +7,9 @@
       "console": "integratedTerminal",
       "name": "Start",
       "autoAttachChildProcesses": true,
+      "env": {
+        "EYELIDLESSNESS_HOST": "http://omfgssd.local:5000"
+      },
       "runtimeExecutable": "yarn",
       "runtimeArgs": [
         "run",

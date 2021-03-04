@@ -77,9 +77,9 @@ const OuterContainer = styled(FullBleedContainer, {
 
       backgroundImage: `linear-gradient(${[
         'to left',
-        'rgba(0, 164, 255, 0.75)',
-        'rgba(0, 164, 255, 0.75) 0.5px',
-        'rgba(0, 164, 255, 0)    5px',
+        'rgba(230, 179, 213, 0.75)',
+        'rgba(230, 179, 213, 0.75) 0.5px',
+        'rgba(230, 179, 213, 0)    5px',
       ].join(',')})`,
     },
 

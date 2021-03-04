@@ -483,13 +483,14 @@ const segmentLinePathStyles = ({
 }: SegmentLinePathProps<{}>) => ({
   ...topicColorStyles(index, topic),
   ...(isPath ? {
-    // '--emphasized-stroke-width': 10,
-    fill:                        'none',
-  } : {}),
+    fill: 'none',
+    strokeWidth: 4,
+  } : {
+    strokeWidth: 2,
+  }),
 
-  stroke:      'currentcolor',
-  strokeWidth: 3,
-  transition:  segmentTransition,
+  stroke:     'currentcolor',
+  transition: segmentTransition,
 });
 
 type BaseSegmentLineProps = SegmentLinePathProps<JSX.IntrinsicElements['line']>;
@@ -685,7 +686,7 @@ const HashConversionScrollableOverflow = ({
 }: FullBleedScrollableOverflowProps) => (
   <FullBleedScrollableOverflow { ...props } shadow={ {
     darkMask:    [ 0, 0, 0, 1 ],
-    darkScroll:  [ 0, 164, 255, 0.75 ],
+    darkScroll:  [ 230, 179, 213, 0.75 ],
     lightMask:   [ 255, 255, 255, 1 ],
     lightScroll: [ 124, 128, 131, 0.75 ],
   } }>
