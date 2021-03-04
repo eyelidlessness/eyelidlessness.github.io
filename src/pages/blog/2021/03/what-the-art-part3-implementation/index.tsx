@@ -67,8 +67,8 @@ const repoURL = (...segments: readonly string[]) => ([
 
 const links = {
   blame: repoURL(
-    'src/pages/blog/2021/02',
-    'what-the-art-p2-constraints/index.tsx#L146-L147'
+    'blame/9216eb05cd375fccc7e9b06a98bb9c1b110a97d0/src/pages/blog/2021/02',
+    'what-the-art-p2-constraints/index.tsx#L111-L112'
   ),
   artBoilerplate: repoURL('blob/main/src/lib/art/math.ts'),
   bezierCurves:   'https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Cubic_B%C3%A9zier_curves',
