@@ -344,15 +344,17 @@ const FlexColumnBackground = styled(BaseFlexPointBackground, ({
 type BasePlotPointProps =
   & Sortable<JSX.IntrinsicElements['circle']>
   & {
-    readonly cx:              number | string;
-    readonly cy:              number | string;
-    readonly isControlPoint?: boolean;
-    readonly isSegment:       boolean;
-    readonly pointSize:       number;
-    readonly sortedX:         number;
-    readonly sortedY:         number;
-    readonly xShift:          number;
-    readonly yShift:          number;
+    readonly cx:                      number | string;
+    readonly cy:                      number | string;
+    readonly isControlPoint?:         boolean;
+    readonly isSegment:               boolean;
+    readonly pointSize:               number;
+    readonly sortedX:                 number;
+    readonly sortedY:                 number;
+    readonly sortedTranslateXPercent: number;
+    readonly sortedTranslateyPercent: number;
+    readonly xShift:                  number;
+    readonly yShift:                  number;
   };
 
 const plotPointClassName = identifier();
@@ -366,6 +368,8 @@ const BasePlotPoint = ({
   sortedIndex,
   sortedX,
   sortedY,
+  sortedTranslateXPercent,
+  sortedTranslateyPercent,
   xShift,
   yShift,
   ...props
@@ -382,8 +386,8 @@ const PlotPoint = styled(BasePlotPoint, ({
   isControlPoint,
   isSegment,
   sortedIndex,
-  sortedX,
-  sortedY,
+  sortedTranslateXPercent,
+  sortedTranslateyPercent,
   // xShift,
   // yShift,
 }) => (
@@ -429,27 +433,37 @@ const PlotPoint = styled(BasePlotPoint, ({
       // '--emphasized-r':            pointSize,
       '--emphasized-color':        hsluvColors[index].light.plot,
       '--emphasized-sorted-color': hsluvColors[sortedIndex].light.plot,
-      '--sorted-color':            hsluvColors[sortedIndex].light.plot,
-      '--sorted-stroke':           hsluvColors[sortedIndex].light.emphasize,
-      '--sorted-transform':        `translate(${sortedX}px, ${sortedY}px)`,
+
+      '--unsorted-transform': `translate(${[
+        `${sortedTranslateXPercent}%`,
+        `${sortedTranslateyPercent}%`,
+      ].join(',')})`,
+
+      '--sorted-color':  hsluvColors[sortedIndex].light.plot,
+      '--sorted-stroke': hsluvColors[sortedIndex].light.emphasize,
+
       color:                       hsluvColors[index].light.plot,
       fill:                        'currentcolor',
       paintOrder:                  'stroke fill',
       stroke:                      hsluvColors[index].light.emphasize,
       strokeWidth:                 0,
-
-      transition: [
-        'fill',
-        'stroke',
-        'stroke-width',
-      ].map((property) => `${property} 0.1s ease-in-out`).join(', '),
+      transition: Object.entries({
+        fill:           '0.1s',
+        stroke:         '0.1s',
+        'stroke-width': '0.1s',
+        transform:      '0.2s',
+      }).map(([ property, duration ]) => (
+        `${property} ${duration} ease-in-out`
+      )).join(', '),
 
       nested: {
         [theme.darkMode]: {
-          '--sorted-color':  hsluvColors[sortedIndex].dark.plot,
-          '--sorted-stroke': hsluvColors[sortedIndex].dark.emphasize,
-          color:             hsluvColors[index].dark.plot,
-          stroke:            hsluvColors[index].dark.emphasize,
+          '--emphasized-color':        hsluvColors[index].dark.plot,
+          '--emphasized-sorted-color': hsluvColors[sortedIndex].dark.plot,
+          '--sorted-color':            hsluvColors[sortedIndex].dark.plot,
+          '--sorted-stroke':           hsluvColors[sortedIndex].dark.emphasize,
+          color:                       hsluvColors[index].dark.plot,
+          stroke:                      hsluvColors[index].dark.emphasize,
         },
       },
     }
@@ -876,10 +890,15 @@ const HashPointsExampleSortToggle = styled(BaseHashPointsExampleSortToggle, {
       order: 'var(--sorted-index)' as any,
     },
 
+    [`& ~ * .${plotPointClassName}`]: {
+      transform: 'var(--unsorted-transform)',
+    } as any,
+
     [`&:checked ~ * .${plotPointClassName}`]: {
-      color:  'var(--sorted-color, var(--emphasized-sorted-color))',
-      // r:      'var(--emphasized-r)',
-      stroke: 'var(--sorted-stroke)',
+      '--emphasized-color': 'var(--emphasized-sorted-color)',
+      color:                'var(--sorted-color)',
+      stroke:               'var(--sorted-stroke)',
+      transform:            'translate(0, 0)',
     } as any,
 
     [`&:checked ~ * .${toggleSwitchClassName}`]: {
@@ -1142,6 +1161,9 @@ const HashPlot = ({
     const sortedCx = toFixed((sortedX + xShift) / xRange * 100, 4);
     const sortedCy = 100 - toFixed((sortedY - yShift) / yRange * 100, 4);
 
+    const sortedTranslateXPercent = 0 - toFixed(cx - sortedCx, 4);
+    const sortedTranslateyPercent = 0 - toFixed(cy - sortedCy, 4);
+
     const pointSize = pointSizes[index];
     const filterId  = filterIds?.[index];
 
@@ -1154,11 +1176,13 @@ const HashPlot = ({
     return {
       cx,
       cy,
-      sortedCx,
-      sortedCy,
-      pointSize,
       filterId,
       filterProps,
+      pointSize,
+      sortedCx,
+      sortedCy,
+      sortedTranslateXPercent,
+      sortedTranslateyPercent,
     };
   };
 
@@ -1176,15 +1200,25 @@ const HashPlot = ({
     const {
       cx,
       cy,
+      filterProps,
+      pointSize,
       sortedCx,
       sortedCy,
-      pointSize,
-      filterProps,
+      sortedTranslateXPercent,
+      sortedTranslateyPercent,
     } = plotPoint(point, index);
     const isSegment = Boolean(renderSegments || renderCurves);
+    const sortedIndex = sortIndexes[index];
     const identifierProps = isSegment
       ? { className: `example-${exampleId}-${index}-point` }
-      : { id: `example-${exampleId}-${index}-point` };
+      : {
+          className: [
+            `example-${exampleId}-${index}-point`,
+            `example-${exampleId}-${sortedIndex}-sorted-point`,
+          ].join(' '),
+
+          id: `example-${exampleId}-${index}-point`,
+        };
 
     return (
       <PlotPoint
@@ -1198,9 +1232,11 @@ const HashPlot = ({
         isSegment={ isSegment }
         pointSize={ pointSizeOverride ?? pointSize }
         r={ pointSizeOverride ?? pointSize }
-        sortedIndex={ sortIndexes[index] }
+        sortedIndex={ sortedIndex }
         sortedX={ sortedCx - point.x }
         sortedY={ sortedCy - sortedCy }
+        sortedTranslateXPercent={ sortedTranslateXPercent }
+        sortedTranslateyPercent={ sortedTranslateyPercent }
         toggleClass={ sortToggleClass }
         xShift={ HASH_PLOT_PADDING }
         yShift={ HASH_PLOT_PADDING }
@@ -1577,9 +1613,15 @@ const HashPointsExample = ({
       : -1
   ));
 
-  const sortIndexes = scaledPoints.map((point) => (
-    sortedPoints.indexOf(point) ?? -1
+  const sortIndexes = scaledPoints.map((point, index) => (
+    isUnsortedByDefault
+      ? sortedPoints.indexOf(point) ?? -1
+      : index
   ));
+
+  // const inverseSortIndexes = sortedPoints.map((point) => (
+  //   scaledPoints.indexOf(point) ?? -1
+  // ));
 
   const renderHexPoints = isUnsortedByDefault
     ? hexPoints as ReadonlyArray<ArrayType<HexPointSequence>>
@@ -1628,6 +1670,17 @@ const HashPointsExample = ({
   return (
     <Container>
       <HashPointsExampleContainer>
+        { renderPoints.map((_, index) => (
+          <PlotPointEmphasisChoice
+            checked={ index === 0 }
+            exampleId={ exampleId }
+            pointSize={ plotPointSize }
+            index={ index }
+            suffix="point"
+            type="radio"
+          />
+        )) }
+
         {( isUnsortedByDefault
             ? (
                 <HashPointsExampleSortToggle
@@ -1647,17 +1700,6 @@ const HashPointsExample = ({
             ? (<HashPointsExampleSortToggleLabel exampleId={ exampleId } />)
             : null )}
         </HashPointsExampleHeader>
-
-        { renderPoints.map((_, index) => (
-          <PlotPointEmphasisChoice
-            checked={ index === 0 }
-            exampleId={ exampleId }
-            pointSize={ plotPointSize }
-            index={ index }
-            suffix="point"
-            type="radio"
-          />
-        )) }
 
         <HashPointsExamplePlotContainer>
           <HashPlotComponent
