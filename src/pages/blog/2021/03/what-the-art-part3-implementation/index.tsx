@@ -386,8 +386,6 @@ const PlotPoint = styled(BasePlotPoint, ({
   isControlPoint,
   isSegment,
   sortedIndex,
-  sortedX,
-  sortedY,
   sortedTranslateXPercent,
   sortedTranslateyPercent,
   // xShift,
