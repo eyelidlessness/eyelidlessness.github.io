@@ -80,11 +80,11 @@ const BlogArticleArtContainer = styled('div', {
 const linkTextContentClassName = css({
   // ...theme.blog.listing.linkTextContent,
 
-  backdropFilter:       'blur(0.25rem)',
+  backdropFilter:       'blur(0.25rem) saturate(5)',
   justifySelf:          'start',
   marginLeft:           '-0.5rem',
   marginRight:          '-0.5rem',
-  WebkitBackdropFilter: 'blur(0.25rem)',
+  WebkitBackdropFilter: 'blur(0.25rem) saturate(5)',
 });
 
 const BlogPageArticleTitle = styled('h2', {

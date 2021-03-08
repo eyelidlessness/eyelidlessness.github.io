@@ -13,6 +13,7 @@ import {
   PageMetadata,
   PageMetadataType,
   PageStat,
+  PageSocial,
   Topic,
 } from '@/lib/content';
 import {
@@ -104,7 +105,8 @@ type AnyBlogPostProps<Path extends string> =
   & PathParams<Path>
   & Partial<Omit<BlogPostProps<Path>, 'children' | 'stat'>>
   & {
-    readonly stat?: Partial<PageStat>;
+    readonly social?: PageSocial;
+    readonly stat?:   Partial<PageStat>;
   };
 
 export type BlogMetadataType =
