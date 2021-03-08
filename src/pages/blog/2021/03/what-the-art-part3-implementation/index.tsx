@@ -47,7 +47,6 @@ import {
 import {
   CustomArtProps,
   mdx as baseMDX,
-  SOCIAL_IMAGE_DIMENSIONS,
   Topic,
 } from '@/lib/content';
 import { sortBy }            from '@/lib/collections';
@@ -492,20 +491,16 @@ const topicColorStyles = (index: number, topic?: Topic) => (
 
 const segmentLinePathStyles = ({
   index,
-  isPath,
   topic,
 }: SegmentLinePathProps<{}>) => ({
   ...topicColorStyles(index, topic),
-  ...(isPath ? {
-    fill: 'none',
-    strokeWidth: 4,
-  } : {
-    strokeWidth: 2,
-  }),
 
-  stroke:     'currentcolor',
-  transition: segmentTransition,
-});
+  fill:         'none',
+  strokeWidth:  2,
+  stroke:       'currentcolor',
+  transition:   segmentTransition,
+  vectorEffect: 'non-scaling-stroke',
+} as const);
 
 type BaseSegmentLineProps = SegmentLinePathProps<JSX.IntrinsicElements['line']>;
 
@@ -1917,13 +1912,13 @@ const CurvePointText = ({ index }: Indexed<{}>) => (
 const CustomArt = ({
   className:  propsClassName,
   hash,
-  height:     propsHeight,
+  height,
   identifier: identifier_ = identifier,
   renderType,
   StylesProvider          = DefaultStylesProvider,
   styleRenderer           = renderer,
   topics,
-  width:      propsWidth,
+  width,
 }: CustomArtProps) => {
   const hexPoints  = toHexPointSequence(hash);
   const basePoints = toPointSequence(hash, hexPoints);
@@ -1937,24 +1932,24 @@ const CustomArt = ({
 
   const isMeta = renderType === 'meta';
 
-  const {
-    height: socialHeight,
-    width:  socialWidth,
-  } = SOCIAL_IMAGE_DIMENSIONS;
+  // const {
+  //   height: socialHeight,
+  //   width:  socialWidth,
+  // } = SOCIAL_IMAGE_DIMENSIONS;
 
   const xPadding = isMeta
-    ? socialWidth * 0.1
+    ? 0
     : defaultXPadding;
   const yPadding = isMeta
-    ? socialHeight * 0.35
+    ? 0
     : defaultYPadding;
 
-  const height = isMeta
-    ? socialHeight * 0.65
-    : propsHeight;
-  const width  = isMeta
-    ? socialWidth * 0.9
-    : propsWidth;
+  // const height = isMeta
+  //   ? socialHeight * 0.65
+  //   : propsHeight;
+  // const width  = isMeta
+  //   ? socialWidth * 0.9
+  //   : propsWidth;
 
   const xShift = xPadding / 2;
   const yShift = yPadding / 2;
@@ -2002,10 +1997,57 @@ const CustomArt = ({
     yScale,
   });
 
+  const pathStyles = isMeta
+    ? {
+      path: {
+        strokeWidth:     '4px !important',
+        transform:       'scale(.95)',
+        transformOrigin: '50% 50%',
+      },
+    }
+    : null;
+
+  const padding = isMeta
+    ? '0 !important'
+    : '0 0 1rem !important';
+
+  const defaultRenderHeight = BLOG_ART_HEIGHT;
+  const defaultRenderWidth  = '100%';
+
+  const toPx = (value?: number | string) => (
+    typeof value === 'number'
+      ? `${value}px`
+      : value
+  );
+  const scaled = <T extends number | string>(value: T, ratio: number) => (
+    typeof value === 'number'
+      ? value * ratio
+      : value
+  );
+
+  const renderHeight = isMeta
+    ? scaled(height ?? defaultRenderHeight, 0.95)
+    : BLOG_ART_HEIGHT;
+  const renderWidth = isMeta
+    ? scaled(width ?? defaultRenderWidth, 0.95)
+    : '100%';
+
+  const graphicHeight = isMeta && height != null
+    ? scaled(height, 0.95)
+    : height;
+  const graphicWidth = isMeta && width != null
+    ? scaled(width, 0.95)
+    : width;
+
   const hashPlotClassName = styleRenderer.renderRule(() => ({
     gridColumn: '1 / -1',
-    height:     BLOG_ART_HEIGHT,
-    width:      '100%',
+    height:     toPx(renderHeight),
+    padding,
+    width:      toPx(renderWidth),
+
+    nested: {
+      ...pathStyles,
+    },
   }), Object.keys);
 
   const className = isMeta
@@ -2017,7 +2059,7 @@ const CustomArt = ({
       <HashPlot
         className={ className }
         exampleId={ -1 }
-        height={ height }
+        height={ graphicHeight }
         hexPoints={ renderHexPoints }
         points={ scaledPoints }
         renderAxis={ false }
@@ -2027,7 +2069,7 @@ const CustomArt = ({
         sortIndexes={ sortIndexes }
         sortToggleClass={ sortToggleClass }
         topics={ topics }
-        width={ width }
+        width={ graphicWidth }
       />
     </StylesProvider>
   );

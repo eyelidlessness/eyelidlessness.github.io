@@ -17,7 +17,9 @@ import {
 export const SOCIAL_IMAGE_DIMENSIONS = {
   height: 630,
   width:  1200,
-} as const;
+};
+
+export type PageSocialImageDimensions = typeof SOCIAL_IMAGE_DIMENSIONS;
 
 const HOST = (
   process.env.EYELIDLESSNESS_HOST ??
@@ -32,7 +34,7 @@ type PageSocialImage =
     readonly publicPath:   string;
   };
 
-interface PageSocial {
+export interface PageSocial {
   readonly image: PageSocialImage;
 }
 
@@ -69,7 +71,8 @@ const socialImageNameHasher = hasher({
 const getPageSocialMetadata = (
   importURL: string,
   hashSeed:  any,
-  imageType: RasterType = RasterType.PNG
+  imageType: RasterType = RasterType.PNG,
+  imageDimensions       = SOCIAL_IMAGE_DIMENSIONS
 ): PageSocial => {
   const imagesBasePath = importURL.replace(
     /^file:(\/\/)?(\/.*?)\/src\/.*$/,
@@ -87,7 +90,7 @@ const getPageSocialMetadata = (
       absolutePath,
       imageType,
       publicPath,
-      ...SOCIAL_IMAGE_DIMENSIONS,
+      ...imageDimensions,
     },
   };
 };

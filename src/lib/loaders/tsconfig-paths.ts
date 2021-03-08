@@ -1,5 +1,5 @@
-import path    from 'path';
-import ts      from 'typescript';
+import path from 'path';
+import ts   from 'typescript';
 
 const relativePrefix = /^[./]/;
 
