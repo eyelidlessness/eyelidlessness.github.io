@@ -1,0 +1,6 @@
+User-agent: Googlebot
+Disallow: /googleed555cee7910a526.html
+
+User-agent: *
+Disallow: /googleed555cee7910a526.html
+Allow: /
