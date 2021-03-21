@@ -469,10 +469,10 @@ const PlotPoint = styled(BasePlotPoint, ({
 ));
 
 type SegmentLinePathProps<P> =
-  & Indexed<P>
+  & Indexed<Omit<P, 'fill'>>
   & {
-    readonly isPath?: boolean;
-    readonly topic?:  Topic;
+    readonly fill?:  boolean;
+    readonly topic?: Topic;
   };
 
 const topicColorStyles = (index: number, topic?: Topic) => (
@@ -490,14 +490,25 @@ const topicColorStyles = (index: number, topic?: Topic) => (
 );
 
 const segmentLinePathStyles = ({
+  fill,
   index,
   topic,
 }: SegmentLinePathProps<{}>) => ({
   ...topicColorStyles(index, topic),
 
-  fill:         'none',
-  strokeWidth:  2,
-  stroke:       'currentcolor',
+  ...(fill
+    ? {
+      fill:        'currentcolor',
+      fillOpacity: 0.15,
+      mask:        'url(#curvesVerticalFade)',
+      strokeWidth: 0,
+    }
+    : {
+      fill:        'none',
+      strokeWidth: 2,
+      stroke:      'currentcolor',
+    }),
+
   transition:   segmentTransition,
   vectorEffect: 'non-scaling-stroke',
 } as const);
@@ -505,8 +516,8 @@ const segmentLinePathStyles = ({
 type BaseSegmentLineProps = SegmentLinePathProps<JSX.IntrinsicElements['line']>;
 
 const BaseSegmentLine = ({
+  fill,
   index,
-  isPath,
   topic,
   ...props
 }: BaseSegmentLineProps) => (
@@ -521,8 +532,8 @@ const SegmentLine = styled<BaseSegmentLineProps>(
 type BaseSegmentPathProps = SegmentLinePathProps<JSX.IntrinsicElements['path']>;
 
 const BaseSegmentPath = ({
+  fill,
   index,
-  isPath,
   topic,
   ...props
 }: BaseSegmentPathProps) => (
@@ -1440,6 +1451,25 @@ const HashPlot = ({
           preserveAspectRatio="none"
           viewBox={ `0 0 ${width} ${height}` }
         >
+          <defs>
+            <linearGradient id="curvesVerticalFadeGradient" y2="1" x2="0">
+              <stop offset="0" stop-color="white" stop-opacity="1" />
+              <stop offset="0.25" stop-color="white" stop-opacity=".75" />
+              <stop offset="1" stop-color="white" stop-opacity="0" />
+            </linearGradient>
+
+            <mask
+              id="curvesVerticalFade"
+              maskContentUnits="objectBoundingBox"
+            >
+              <rect
+                fill="url(#curvesVerticalFadeGradient)"
+                height="1"
+                width="1"
+              />
+            </mask>
+          </defs>
+
           { segmentData.map(({
             cubicPoints,
             segment,
@@ -1450,7 +1480,10 @@ const HashPlot = ({
               baseEndPoint,
             ] = segment;
 
-            return cubicPoints.map(([ controlStart, controlEnd ], curveIndex) => {
+            const curvesPoints = cubicPoints.map((
+              [ controlStart, controlEnd ],
+              curveIndex
+            ) => {
               const start = curveIndex === 0
                 ? baseStartPoint
                 : baseMidPoint;
@@ -1458,38 +1491,89 @@ const HashPlot = ({
                 ? baseMidPoint
                 : baseEndPoint;
 
-              const curvePoints = [
+              return [
                 start,
                 controlStart,
                 controlEnd,
                 end,
               ];
+            });
 
-              const d = curvePoints.map((point, curvePointIndex) => {
-                const { cx, cy } = plotPoint(point, index);
-                const x = cx / 100 * width;
-                const y = cy / 100 * height;
+            const StrokePath = () => (
+              <>
+                { curvesPoints.map((curvePoints) => {
+                  const d = curvePoints.map((point, curvePointIndex) => {
+                    const { cx, cy } = plotPoint(point, index);
+                    const x = cx / 100 * width;
+                    const y = cy / 100 * height;
 
-                const command = curvePointIndex === 0
-                  ? 'M '
-                : curvePointIndex === 1
-                  ? 'C '
-                  : '';
+                    const command = curvePointIndex === 0
+                      ? 'M '
+                    : curvePointIndex === 1
+                      ? 'C '
+                      : '';
 
-                return `${command} ${x},${y}`;
-              }).join(' ');
+                    return `${command} ${x},${y}`;
+                  }).join(' ');
+
+                  const topic = topics?.[index % topics?.length ?? 0];
+
+                  return (
+                    <SegmentPath
+                      d={ d }
+                      index={ index }
+                      topic={ topic }
+                    />
+                  );
+                }) }
+              </>
+            );
+
+            const FillPath = () => {
+              const d = curvesPoints
+              .map((curvePoints, curveIndex) => {
+                const d = curvePoints.map((point, curvePointIndex) => {
+                  if (curveIndex > 0 && curvePointIndex === 0) {
+                    return '';
+                  }
+
+                  const { cx, cy } = plotPoint(point, index);
+                  const x = cx / 100 * width;
+                  const y = cy / 100 * height;
+
+                  const command = (
+                    curvePointIndex === 0
+                      ? 'M '
+                    : curvePointIndex === 1
+                      ? 'C '
+                      : ''
+                  );
+
+                  return `${command} ${x},${y}`;
+                }).join(' ');
+
+                return d;
+              })
+              .join(' ');
 
               const topic = topics?.[index % topics?.length ?? 0];
 
               return (
                 <SegmentPath
                   d={ d }
+                  fill={ true }
                   index={ index }
-                  isPath={ true }
                   topic={ topic }
                 />
               );
-            });
+            };
+
+            return (
+              <>
+                <StrokePath />
+                <FillPath />
+              </>
+            );
           }) }
         </CurvesContainer>
       ),
