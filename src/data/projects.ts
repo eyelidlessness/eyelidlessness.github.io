@@ -6,9 +6,30 @@ export enum ProjectCategory {
 export enum ProjectRole {
   CONTRIBUTOR = 'Contributor',
   CREATOR     = 'Creator',
+  DEVELOPER   = 'Developer',
 }
 
 export const projects = [
+  {
+    title:    'Enketo',
+    category: ProjectCategory.OPEN_SOURCE,
+
+    description: `
+      "Web forms evolved. Deploy and conduct surveys that work without a
+      connection, on any device."
+    `,
+
+    summary: `
+      Ongoing maintenance, developer experience improvements & helping
+      determine the future direction of Enketo projects.
+    `,
+
+    repo: 'https://github.com/enketo',
+    role: ProjectRole.DEVELOPER,
+
+    start: '2021-04',
+  },
+
   {
     title:    'Eyelidlessness',
     category: ProjectCategory.PUBLIC_ACCESS,
@@ -29,7 +50,6 @@ export const projects = [
     role: ProjectRole.CREATOR,
 
     start: '2020-10',
-    end:   '2021-02',
   },
 
   {
@@ -53,7 +73,6 @@ export const projects = [
     role: ProjectRole.CONTRIBUTOR,
 
     start: '2021-01',
-    end:   '2021-02',
   },
 
   {
@@ -426,3 +445,10 @@ export const projects = [
     end:   '2015-01',
   },
 ] as const;
+
+export type ProjectTimestamp = `${number}${number}${number}${number}-${number}${number}`;
+
+export type ProjectData = ArrayType<typeof projects> & {
+  readonly end?:  ProjectTimestamp;
+  readonly start: ProjectTimestamp,
+};

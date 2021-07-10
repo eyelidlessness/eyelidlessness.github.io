@@ -829,7 +829,7 @@ const HashPointsExampleSortToggleLabelText = styled('span', {
 
 const sortToggleLabelClassName = identifier();
 
-type HashPointsExampleSortToggleLabel =
+type HashPointsExampleSortToggleLabelProps =
   & Omit<JSX.IntrinsicElements['label'], 'as'>
   & Omit<BaseChoiceData, 'suffix' | 'type'>;
 
@@ -837,7 +837,7 @@ const HashPointsExampleSortToggleLabel = ({
   children,
   exampleId,
   ...baseProps
-}: HashPointsExampleSortToggleLabel) => {
+}: HashPointsExampleSortToggleLabelProps) => {
   const suffix = 'sort';
 
   const id = choiceId({

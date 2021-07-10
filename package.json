@@ -7,7 +7,7 @@
   "scripts": {
     "start": "yarn run build:watch & yarn run test:watch",
     "build": "microsite build",
-    "build:watch": "yarn run serve --listen ${SERVE_PORT:-'5000'} & yarn build --no-clean & chokidar \"src/**/*.{ts,tsx}\" -c 'microsite build --no-clean'",
+    "build:watch": "yarn serve --listen ${SERVE_PORT:-'5000'} & yarn build & chokidar \"src/**/*.{cjs,css,md,mdx,mjs,js,jsx,ts,tsx}\" -c 'pkill -f microsite; yarn build'",
     "serve": "mkdir -p ./dist && serve ./dist",
     "test": "./scripts/test.js --once",
     "test:watch": "./scripts/test.js",
