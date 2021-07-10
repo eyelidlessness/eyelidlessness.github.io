@@ -16,6 +16,10 @@ import {
   TimestampMode,
 } from '@/components/Timestamp';
 import {
+  ProjectData,
+  ProjectTimestamp,
+} from '@/data/projects';
+import {
   resume,
   ResumeProjectRole,
   ResumeSkillLevel,
@@ -312,26 +316,27 @@ const ResumeEmploymentHeading = styled('h2', {
 });
 
 interface ResumeEmploymentTimeRangeProps {
-  readonly range: readonly [ start: string, end: string ];
+  readonly range: readonly [ start: ProjectTimestamp, end?: ProjectTimestamp ];
 }
 
 const ResumeTimeRange = ({
   range: [ start, end ],
 }: ResumeEmploymentTimeRangeProps) => {
   const startDate = dateStringToDate(start);
-  const endDate   = dateStringToDate(end);
 
-  if (start == end) {
+  if (start == end || end == null) {
     return (
       <BaseResumeTimeRange>
         <ResumeTimestamp
-          date={ endDate }
+          date={ startDate }
           itemprop="endDate"
           mode={ TimestampMode.SHORT }
         />
       </BaseResumeTimeRange>
     );
   }
+
+  const endDate = dateStringToDate(end);
 
   return (
     <BaseResumeTimeRange>
@@ -405,10 +410,10 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
 type ResumeEmploymentListItemProps =
   & {
     readonly employer:    string;
-    readonly end:         string;
+    readonly end:         ProjectTimestamp;
     readonly highlights?: readonly string[];
     readonly position:    string;
-    readonly start:       string;
+    readonly start:       ProjectTimestamp;
     readonly summary?:    string;
   };
 
@@ -536,14 +541,8 @@ const ResumeProjectDescription = styled('div', {
   margin:   '0.5rem 0',
 });
 
-type ResumeProjectData = ArrayType<(
-  typeof resume['projects'] extends infer T
-    ? T
-    : typeof resume['projects']
-)>;
-
 interface ResumeProjectProps {
-  readonly project: ResumeProjectData;
+  readonly project: ProjectData;
 }
 
 const ResumeProject = ({
@@ -612,12 +611,12 @@ const ResumeProjectSet = styled('div', {
 
 
 interface ResumeProjectSets {
-  readonly creator:     readonly ResumeProjectData[];
-  readonly contributor: readonly ResumeProjectData[];
+  readonly creator:     readonly ProjectData[];
+  readonly contributor: readonly ProjectData[];
 }
 
 interface ResumeProjectsProps {
-  readonly projects: readonly ResumeProjectData[];
+  readonly projects: readonly ProjectData[];
 }
 
 const ResumeProjects = ({ projects }: ResumeProjectsProps) => {

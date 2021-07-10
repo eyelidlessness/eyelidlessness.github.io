@@ -639,6 +639,18 @@ export const theme = {
     borderWidth:     '0.5px 0',
   },
 
+  projects: {
+    current: {
+      backgroundColor: 'hsl(244deg 100% 98%)',
+
+      nested: {
+        [darkMode]: {
+          backgroundColor: 'hsl(244deg 30% 13%)',
+        },
+      },
+    },
+  },
+
   prose: {
     color:      'hsla(210deg, 12%, 5%, 95%)',
     fontFamily: proseFontFamily,
