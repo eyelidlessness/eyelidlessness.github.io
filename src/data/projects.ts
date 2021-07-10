@@ -9,7 +9,26 @@ export enum ProjectRole {
   DEVELOPER   = 'Developer',
 }
 
-export const projects = [
+export const projects =  [
+  {
+    title:    'Astro',
+    category: ProjectCategory.OPEN_SOURCE,
+
+    description: `
+      "Build faster websites with less client-side Javascript"
+    `,
+
+    summary: `
+      Collaborate with core contributors to add support for rendering
+      [SolidJS](https://www.solidjs.com/) components.
+    `,
+
+    repo: 'https://github.com/snowpackjs/astro',
+    role: ProjectRole.CONTRIBUTOR,
+
+    start: '2021-07',
+  },
+
   {
     title:    'Enketo',
     category: ProjectCategory.OPEN_SOURCE,
