@@ -1993,7 +1993,7 @@ const CurvePointText = ({ index }: Indexed<{}>) => (
   </>
 );
 
-const CustomArt = ({
+export const CustomArt = ({
   className:  propsClassName,
   hash,
   height,
