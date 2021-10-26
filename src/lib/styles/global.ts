@@ -90,7 +90,7 @@ export const criticalStyles = cleanWhitespace(`
 
   ${jsToCSS([ 'html', 'body' ], {
     ...theme.document,
-  }
+  })}
 
   ${jsToCSS([ 'body' ], {
     ...theme.prose,
