@@ -88,8 +88,11 @@ export const criticalStyles = cleanWhitespace(`
     -webkit-text-size-adjust: 100%;
   }
 
-  ${jsToCSS([ 'body' ], {
+  ${jsToCSS([ 'html', 'body' ], {
     ...theme.document,
+  }
+
+  ${jsToCSS([ 'body' ], {
     ...theme.prose,
   })}
 
@@ -291,8 +294,11 @@ export const setGlobalStyles = () => {
       }
 
       ${theme.darkMode} {
-        ${jsToCSS([ 'body' ], {
+        ${jsToCSS([ 'html', 'body' ], {
           ...theme[theme.darkMode].document,
+        })}
+
+        ${jsToCSS([ 'body' ], {
           ...theme[theme.darkMode].prose,
         })}
 
