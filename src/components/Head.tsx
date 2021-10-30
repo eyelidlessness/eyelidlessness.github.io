@@ -5,6 +5,7 @@ import {
 import {
   criticalStyles,
   setGlobalStyles,
+  theme,
 } from '@/lib/styles';
 import { Favicons }     from './Favicons';
 import { PageMetadata } from '@/lib/content';
@@ -53,6 +54,9 @@ export const Head = ({
         ? (<seo.description>{ description }</seo.description>)
         : <></>
       )}
+
+      <meta name="theme-color" content={ theme.siteLogo.color } />
+
       <style dangerouslySetInnerHTML={{
         __html: criticalStyles,
       }} />
