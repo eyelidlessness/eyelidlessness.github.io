@@ -1,4 +1,5 @@
 import {
+  renderer,
   styled,
   theme,
 } from '@/lib/styles';
@@ -36,6 +37,28 @@ const transparent = ([ r, g, b ]: RGBA) => (
   `rgba(${[ r, g, b, 0].join(',')})`
 );
 
+const backgroundSizes = [
+  '12rem 100%',
+  'auto',
+];
+
+const backgroundSize = backgroundSizes.join(', ');
+
+const backgroundSizeAlt = backgroundSizes.map((size) => (
+  size.replace('100%', '100.1%')
+)).join(', ');
+
+const safariScrollShadowFix = renderer.renderKeyframe(() => ({
+  '0%': {
+    backgroundSize,
+  },
+  '100%': {
+    backgroundSize: backgroundSizeAlt,
+  },
+}), {});
+
+const shadowSizePx = '5px';
+
 const shadowImages = (scroll?: RGBA, mask?: RGBA) => (
   scroll != null && mask != null
     ? {
@@ -43,13 +66,14 @@ const shadowImages = (scroll?: RGBA, mask?: RGBA) => (
           `linear-gradient(${[
             'to left',
             `rgba(${mask.join(',')})`,
-            `${transparent(mask)} 2rem`,
+            `rgba(${mask.join(',')}) calc(11rem + ${shadowSizePx})`,
+            `${transparent(mask)} 12rem`,
           ].join(', ')})`,
           `linear-gradient(${[
             'to left',
             `rgba(${scroll.join(',')})`,
             `rgba(${scroll.join(',')}) 0.5px`,
-            `${transparent(scroll)} 5px`,
+            `${transparent(scroll)} ${shadowSizePx}`,
           ].join(', ')})`,
         ].join(', '),
       }
@@ -75,7 +99,7 @@ const shadowStyles = (shadow?: FullBleedScrollableOverflowShadowMask) => {
     dark:  null,
     light: null,
   };
-}
+};
 
 export const FullBleedScrollableOverflow = styled(
   BaseFullBleedScrollableOverflow,
@@ -94,12 +118,14 @@ export const FullBleedScrollableOverflow = styled(
     return {
       ...light,
 
+      // '@keyframes': {},
+
       backgroundAttachment: 'local, scroll',
-      backgroundPosition:   '100% 0, 0 0',
+      backgroundPosition:   'calc(100% + 11rem) 0, 0 0',
       backgroundRepeat:     'no-repeat',
-      backgroundSize:       '1rem, auto',
-      paddingRight:         theme.mainGridSidePaddingRem,
-      overflowX:            'auto',
+      backgroundSize,
+      paddingRight: theme.mainGridSidePaddingRem,
+      overflowX:    'auto',
 
       nested: {
         ...darkStyles,
@@ -107,7 +133,27 @@ export const FullBleedScrollableOverflow = styled(
         '& > *': {
           gridColumn: '3 / -1',
         },
+
+        '@media not all and (min-resolution: .001dpcm)': {
+          nested: {
+            '@supports (-webkit-appearance: none)': {
+              animationName:           safariScrollShadowFix,
+              animationDuration:       '1000s',
+              animationIterationCount: 'infinite',
+            },
+          },
+        },
+
+        '@media (hover: hover)': {
+          animationPlayState: 'paused',
+
+          nested: {
+            '&:active, &:focus, &:hover': {
+              animationPlayState: 'running',
+            },
+          },
+        },
       },
-    };
+    } as const;
   }
 );
