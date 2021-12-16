@@ -53,9 +53,5 @@ export const Favicons = () => (
       name="msapplication-config"
       content="/favicons/browserconfig.xml"
     />
-    <meta
-      name="theme-color"
-      content="#ffffff"
-    />
   </>
 );
