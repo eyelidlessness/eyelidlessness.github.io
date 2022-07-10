@@ -34,6 +34,7 @@ const BaseInnerContainer = styled(FullBleedScrollableOverflow, {
   // backgroundPosition: 'calc(100% + 4rem) 0',
   // backgroundRepeat:   'no-repeat',
   // backgroundSize:     '12rem 100%',
+  maxHeight:          'min(42.25rem, 80vh)',
   paddingLeft:        'clamp(1.25em, 3.5vw, 3em)',
 
   nested: {

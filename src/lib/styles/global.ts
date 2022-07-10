@@ -259,8 +259,10 @@ export const setGlobalStyles = () => {
         margin:   '1rem 0',
         padding:  '0.8889rem',
 
-        '& p': {
-          lineHeight: 1.3333,
+        nested: {
+          '& a': {
+            fontWeight: 600,
+          },
         },
       })}
 

@@ -29,7 +29,7 @@ const BaseSiteHeader = styled('header', {
   display:    'grid',
   gridColumn: '1 / -1',
   gridTemplateColumns,
-  padding:    '1rem 0',
+  padding:    'clamp(0.5rem, 5vmin, 3rem) 0',
   position:   'relative',
   zIndex:     1,
 });

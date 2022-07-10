@@ -213,12 +213,12 @@ const BaseSHA1Example = ({
 );
 
 const SHA1Example = styled(BaseSHA1Example, {
-  color:      hsluvColors[0].light.y,
+  color:      hsluvColors[9].light.x,
   marginTop: '0.5rem',
 
   nested: {
     [theme.darkMode]: {
-      color: hsluvColors[0].dark.x,
+      color: hsluvColors[9].dark.y,
     },
   },
 });
