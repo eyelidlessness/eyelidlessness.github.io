@@ -127,10 +127,18 @@ export const siteHeaderColumns = [
 ] as const;
 
 const monospaceFonts = [
-  '"Consolas"',
-  '"Bitstream Vera Sans Mono"',
-  '"Courier New"',
-  'Courier',
+  'ui-monospace',
+  'Menlo',
+  'Monaco',
+  'Cascadia Mono',
+  'Segoe UI Mono',
+  'Roboto Mono',
+  'Oxygen Mono',
+  'Ubuntu Monospace',
+  'Source Code Pro',
+  'Fira Mono',
+  'Droid Sans Mono',
+  'Courier New',
   'monospace',
 ] as const;
 
@@ -345,7 +353,7 @@ export const theme = {
       descriptionIdentifier: blogListingDescriptionIdentifier,
 
       description: {
-        color:    'hsl(212deg, 10%, 35%)',
+        color:    'hsl(212deg, 10%, 15%)',
         fontSize: '0.9375em',
 
         nested: {
@@ -442,7 +450,7 @@ export const theme = {
 
       [darkMode]: {
         backgroundColor: 'hsl(130deg,21%,14%)',
-        color:           'hsl(212deg, 3%, 80%)',
+        color:           '#f1f3f2',
 
         nested: {
           '& > h1': {
@@ -486,7 +494,7 @@ export const theme = {
   },
 
   deemphasize: {
-    color:    'hsl(212deg, 10%, 35%)',
+    color:    'hsl(212deg, 50%, 25%)',
     fontSize: '0.9375em',
   },
 
@@ -510,7 +518,14 @@ export const theme = {
 
   [darkMode]: {
     aside: {
-      backgroundColor: 'hsl(192deg, 15%, 13%)',
+      backgroundColor: 'hsl(192deg, 55%, 11%)',
+
+      nested: {
+        '& a': {
+          color: 'hsla(205deg, 100%, 90%, 90%)',
+          textDecorationColor: 'hsla(205deg, 100%, 78%, 120%)',
+        },
+      },
     },
 
     code: {
@@ -523,7 +538,7 @@ export const theme = {
     },
 
     deemphasize: {
-      color: 'hsl(212deg, 10%, 75%)',
+      color: 'hsl(202deg, 20%, 95%)',
     },
 
     emphasize: {
@@ -532,12 +547,12 @@ export const theme = {
 
     links: {
       '&:hover': {
-        color: 'hsl(205deg, 76%, 70%)',
+        color: 'hsl(195deg, 90%, 68%)',
       },
 
       '&, &:active, &:visited, & code': {
-        color:               'hsl(205deg, 56%, 70%)',
-        textDecorationColor: 'hsla(205deg, 56%, 70%, 50%)',
+        color:               'hsl(205deg, 100%, 78%)',
+        textDecorationColor: 'hsla(205deg, 100%, 78%, 50%)',
       },
     },
 
@@ -548,7 +563,7 @@ export const theme = {
     },
 
     prose: {
-      color: 'hsl(210deg, 10%, 90%)',
+      color: 'hsl(190deg, 80%, 95%)',
     },
 
     separator: {
