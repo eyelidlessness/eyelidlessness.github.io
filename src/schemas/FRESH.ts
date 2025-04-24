@@ -11,7 +11,9 @@ import {
   todo,
   union,
 } from '@/lib/schemas';
-import type { Static } from '@sinclair/typebox';
+import type { Static, TSchema } from '@sinclair/typebox';
+
+type Infer<Schema extends TSchema> = Immutable<Static<Schema>>;
 
 export const FRESH_SCHEMA_FORMAT = 'FRESH@0.1.0';
 
@@ -26,7 +28,7 @@ const meta = object({
   description: `The 'meta' section contains metadata information for the resume, including the resume version, schema, and any other fields required by tools.`,
 });
 
-export type FRESHResumeMeta = Static<typeof meta>;
+export type FRESHResumeMeta = Infer<typeof meta>;
 
 const info = partial(object({
   label: string({
@@ -48,7 +50,7 @@ const info = partial(object({
   description: `The 'info' section contains basic summary information for the candidate, including an optional label or job title, candidate photo, summary, and quote.`,
 }));
 
-export type FRESHResumeInfo = Static<typeof info>;
+export type FRESHResumeInfo = Infer<typeof info>;
 
 const relocation = partial(object({
   willing: union([boolean(), string()], {
@@ -61,7 +63,7 @@ const relocation = partial(object({
   }),
 }));
 
-export type FRESHResumeDispositionRelocation = Static<typeof relocation>;
+export type FRESHResumeDispositionRelocation = Infer<typeof relocation>;
 
 const disposition = partial(object({
   travel: integer({
@@ -86,7 +88,7 @@ const disposition = partial(object({
   description: `The disposition section describes the candidate's overall attitude towards new employment opportunities including: travel, relocation, schedule, desired type of work, and the like.`,
 }));
 
-export type FRESHResumeDisposition = Static<typeof disposition>;
+export type FRESHResumeDisposition = Infer<typeof disposition>;
 
 const contactOther = array(partial(object({
   label: string({
@@ -100,7 +102,7 @@ const contactOther = array(partial(object({
   }),
 })));
 
-export type FRESHResumeContactOther = Static<typeof contactOther>;
+export type FRESHResumeContactOther = Infer<typeof contactOther>;
 
 const contact = partial(object({
   email: string({
@@ -121,7 +123,7 @@ const contact = partial(object({
   description: `The 'contact' section contains the candidate's contact information, including phone numbers, emails, websites, IMs, and custom contact types.`,
 }));
 
-export type FRESHResumeContact = Static<typeof contact>;
+export type FRESHResumeContact = Infer<typeof contact>;
 
 const location = partial(object({
   address: string({
@@ -143,7 +145,7 @@ const location = partial(object({
   description: `The 'location' section, when present, contains the candidate's location and address info.`,
 }));
 
-export type FRESHResumeLocation = Static<typeof location>;
+export type FRESHResumeLocation = Infer<typeof location>;
 
 const employmentHistory = array(object({
   employer: string({
@@ -183,7 +185,7 @@ const employmentHistory = array(object({
   })),
 }));
 
-export type FRESHResumeEmploymentHistory = Static<typeof employmentHistory>;
+export type FRESHResumeEmploymentHistory = Infer<typeof employmentHistory>;
 
 const employment = partial(object({
   summary: string({
@@ -195,7 +197,7 @@ const employment = partial(object({
   description: `The 'employment' section describes the candidate's formal employment history.`,
 }));
 
-export type FRESHResumeEmployment = Static<typeof employment>;
+export type FRESHResumeEmployment = Infer<typeof employment>;
 
 const projectMedia = array(object({
   category: string({
@@ -213,7 +215,7 @@ const projectMedia = array(object({
   description: 'Media associated with this project.',
 });
 
-export type FRESHResumeProjectMedia = Static<typeof projectMedia>;
+export type FRESHResumeProjectMedia = Infer<typeof projectMedia>;
 
 const projects = array(object({
   title: string({
@@ -266,7 +268,7 @@ const projects = array(object({
   description: `The 'projects' section describes the candidate's project history -- not the jobs the candidate has worked but the specific projects and enterprises the candidate has created or been involved in, whether paid or unpaid.`,
 });
 
-export type FRESHResumeProjects = Static<typeof projects>;
+export type FRESHResumeProjects = Infer<typeof projects>;
 
 export type FRESHResumeProject = FRESHResumeProjects[number];
 
@@ -304,7 +306,7 @@ const skills = partial(object({
   description: `A description of the candidate's formal skills and capabilities.`,
 }));
 
-export type FRESHResumeSkills = Static<typeof skills>;
+export type FRESHResumeSkills = Infer<typeof skills>;
 
 const educationHistory = array(object({
   title: optional(string({
@@ -358,7 +360,7 @@ const educationHistory = array(object({
   })),
 }));
 
-export type FRESHResumeEducationHistory = Static<typeof educationHistory>;
+export type FRESHResumeEducationHistory = Infer<typeof educationHistory>;
 
 const education = object({
   summary: optional(string({
@@ -375,7 +377,7 @@ const education = object({
   description: `The 'employment' section describes the candidate's formal education, including college and university, continuing education, and standalone programs and courses.`,
 });
 
-export type FRESHResumeEducation = Static<typeof education>;
+export type FRESHResumeEducation = Infer<typeof education>;
 
 const social = array(object({
   network: string({
@@ -395,7 +397,7 @@ const social = array(object({
   description: `The 'social' section describes the candidate's participation in internet and social networking services and communities including GitHub, FaceBook, and the like.`,
 });
 
-export type FRESHResumeSocial = Static<typeof social>;
+export type FRESHResumeSocial = Infer<typeof social>;
 
 const fresh = object({
   name: string({
@@ -430,4 +432,4 @@ const fresh = object({
   title: 'FRESH Resume Schema',
 });
 
-export type FRESHResume = Static<typeof fresh>;
+export type FRESHResume = Infer<typeof fresh>;

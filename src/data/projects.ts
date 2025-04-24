@@ -1,3 +1,5 @@
+import { FRESHResumeProject } from '@/schemas/FRESH.js';
+
 export enum ProjectCategory {
   OPEN_SOURCE   = 'Open source',
   PUBLIC_ACCESS = 'Public access',
@@ -9,7 +11,18 @@ export enum ProjectRole {
   DEVELOPER   = 'Developer',
 }
 
-export const projects =  [
+export type ProjectTimestamp = `${number}${number}${number}${number}-${number}${number}`;
+
+interface ValidProject extends FRESHResumeProject {
+  readonly start: ProjectTimestamp;
+  readonly end?: ProjectTimestamp;
+}
+
+const validateProjects = <T extends readonly ValidProject[]>(
+  value: T
+): T => value;
+
+export const projects = validateProjects([
   {
     title:    'Astro',
     category: ProjectCategory.OPEN_SOURCE,
@@ -463,11 +476,8 @@ export const projects =  [
     start: '2015-01',
     end:   '2015-01',
   },
-] as const;
+]);
 
-export type ProjectTimestamp = `${number}${number}${number}${number}-${number}${number}`;
+export type Projects = typeof projects;
 
-export type ProjectData = ArrayType<typeof projects> & {
-  readonly end?:  ProjectTimestamp;
-  readonly start: ProjectTimestamp,
-};
+export type ProjectData = Extract<Projects[number], FRESHResumeProject>;
