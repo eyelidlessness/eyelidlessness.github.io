@@ -4,6 +4,10 @@
   "type": "module",
   "types": "./env.d.ts",
   "homepage": "/",
+  "volta": {
+    "node": "22.15.0",
+    "yarn": "1.22.22"
+  },
   "scripts": {
     "start": "yarn run build:watch & yarn run test:watch",
     "build": "microsite build",
