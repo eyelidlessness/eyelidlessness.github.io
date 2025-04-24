@@ -10,9 +10,16 @@ jobs:
         with:
           fetch-depth: 0 # For consistent git commands in CI test runs!
 
-      - uses: actions/setup-node@v4
+      - uses: volta-cli/action@v4
         with:
-          node-version: 14.21.3
+          node-version: '14.21.3'
+          yarn-version: '1.22.22'
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: install-14.21.3-${{ hashFiles('yarn.lock', '.github/workflows/build.yml') }}
 
       # Per https://stackoverflow.com/a/74732671, hopefully addresses current
       # failure of `yarn install --frozen-lockfile`
