@@ -19,8 +19,8 @@ import {
   ProjectData,
   ProjectTimestamp,
 } from '@/data/projects';
+import type { ResumeData } from '@/data/resume';
 import {
-  resume,
   ResumeProjectRole,
   ResumeSkillLevel,
 } from '@/data/resume';
@@ -245,7 +245,7 @@ const ResumeSkillLevelMarkers = Object.values(ResumeSkillLevel)
 
 interface ResumeSkillsListProps {
   readonly name:   string;
-  readonly skills: typeof resume['skills']['list'];
+  readonly skills: ResumeData['skills']['list'];
 }
 
 const ResumeSkillsetListing = ({
@@ -475,9 +475,9 @@ const BaseResumeEmployment = styled(ResumeSection, {
 
 interface ResumeEmploymentProps {
   readonly employment:
-    typeof resume['employment'] extends infer T
+    ResumeData['employment'] extends infer T
       ? T
-      : typeof resume['employment'];
+      : ResumeData['employment'];
 }
 
 const ResumeEmployment = ({ employment }: ResumeEmploymentProps) => (
@@ -704,7 +704,7 @@ interface ResumeProps {
   readonly className?: string;
   readonly id?:        string;
   readonly meta:       BlogArtProps;
-  readonly resume:     typeof resume;
+  readonly resume:     ResumeData;
   readonly updated:    Date;
 }
 

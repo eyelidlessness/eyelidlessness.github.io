@@ -396,6 +396,8 @@ export const resume = validateResume({
   ],
 });
 
+export type ResumeData = typeof resume;
+
 export {
   ProjectCategory as ResumeProjectCategory,
   ProjectRole     as ResumeProjectRole,
