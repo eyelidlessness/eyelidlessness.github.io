@@ -5,6 +5,7 @@ import {
 } from '@/lib/styles';
 import { FullBleedContainer } from './FullBleed';
 import { SiteHeader }         from './Site';
+import { GitHubLogoDefs } from './GitHubLogo.jsx';
 
 const BaseMain = styled(FullBleedContainer, {
   paddingTop:    0,
@@ -22,6 +23,7 @@ export const Main = ({
   <StylesProvider>
     { redirect == null
       ? (<>
+        <GitHubLogoDefs />
         <SiteHeader />
         <BaseMain as="main" { ...props } />
       </>)

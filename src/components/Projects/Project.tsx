@@ -1,7 +1,4 @@
-import {
-  GitHubLogo,
-  GitHubLogoDefs,
-} from '@/components/GitHubLogo';
+import { GitHubLogo }            from '@/components/GitHubLogo';
 import {
   Timestamp,
   TimestampMode,
@@ -177,7 +174,6 @@ export const Project = ({
   return (
     <BaseProject>
       <ProjectIconLink href={ repo }>
-        <GitHubLogoDefs />
         <GitHubLogo />
       </ProjectIconLink>
 
