@@ -6,15 +6,12 @@ import {
   Timestamp,
   TimestampMode,
 } from '@/components/Timestamp';
-import {
-  ProjectData,
-  ProjectRole,
-  ProjectTimestamp,
-} from '@/data/projects';
-import { mdx }                from '@/lib/content';
-import { styled }             from '@/lib/styles';
-import { ProjectsFlex }       from './ProjectsFlex';
-import { projectsTwoUpQuery } from './ProjectsTwoUp';
+import type { ProjectTimestamp } from '@/data/projects';
+import { ProjectData }           from '@/data/projects';
+import { styled }                from '@/lib/styles';
+import { ProjectsFlex }          from './ProjectsFlex';
+import { projectsTwoUpQuery }    from './ProjectsTwoUp';
+import { ProjectDescription }    from './ProjectDescription.jsx';
 
 const BaseFlex = styled(ProjectsFlex, {
   flexWrap: 'wrap',
@@ -30,6 +27,7 @@ const Header = styled(BaseFlex, {
   alignItems:     'baseline',
   justifyContent: 'space-between',
   margin:         '0 -0.5rem',
+  rowGap:         '0.325rem',
 
   nested: {
     '& > *': {
@@ -72,6 +70,7 @@ const dateStringToDate = (dateString: string) => {
 
 const BaseTimeRange = styled('div', {
   fontSize: '0.88889em',
+  marginLeft: 'auto',
 });
 
 const ProjectTimestamp = styled(Timestamp, {
@@ -158,11 +157,6 @@ const BaseProject = styled('div', {
   padding:             '1rem 0',
 });
 
-const ProjectDescription = styled('div', {
-  fontSize: '0.88889em',
-  margin:   '0.5rem 0',
-});
-
 interface ProjectProps {
   readonly project: ProjectData;
 }
@@ -177,33 +171,33 @@ export const Project = ({
     start,
     summary,
   },
-}: ProjectProps) => (
-  <BaseProject>
-    <ProjectIconLink href={ repo }>
-      <GitHubLogoDefs />
-      <GitHubLogo />
-    </ProjectIconLink>
+}: ProjectProps) => {
 
-    <ProjectBody>
-      <Header>
-        <ProjectHeading>
-          <ProjectHeadingLink href={ repo }>
-            { title }
-          </ProjectHeadingLink>
-        </ProjectHeading>
 
-        <TimeRange range={ [ start, end ] } />
-      </Header>
+  return (
+    <BaseProject>
+      <ProjectIconLink href={ repo }>
+        <GitHubLogoDefs />
+        <GitHubLogo />
+      </ProjectIconLink>
 
-      <ProjectDescription>
-        {(
-          role === ProjectRole.CREATOR
-            ? mdx(description)
-            : null
-        )}
+      <ProjectBody>
+        <Header>
+          <ProjectHeading>
+            <ProjectHeadingLink href={ repo }>
+              { title }
+            </ProjectHeadingLink>
+          </ProjectHeading>
 
-        { mdx(summary) }
-      </ProjectDescription>
-    </ProjectBody>
-  </BaseProject>
-);
+          <TimeRange range={ [ start, end ] } />
+        </Header>
+
+        <ProjectDescription
+          role={ role }
+          description={ description }
+          summary={ summary ?? null }
+        />
+      </ProjectBody>
+    </BaseProject>
+  );;
+}

@@ -1273,7 +1273,7 @@ const HashPlot = ({
         cy: endY,
       } = plotPoint(end, index);
 
-      const topic = topics?.[index % topics?.length ?? 0];
+      const topic = topics?.[index % topics.length];
 
       return (
         <g>
@@ -1516,7 +1516,7 @@ const HashPlot = ({
                     return `${command} ${x},${y}`;
                   }).join(' ');
 
-                  const topic = topics?.[index % topics?.length ?? 0];
+                  const topic = topics?.[index % topics.length];
 
                   return (
                     <SegmentPath
@@ -1556,7 +1556,7 @@ const HashPlot = ({
               })
               .join(' ');
 
-              const topic = topics?.[index % topics?.length ?? 0];
+              const topic = topics?.[index % topics.length];
 
               return (
                 <SegmentPath

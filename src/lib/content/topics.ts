@@ -89,7 +89,7 @@ export const getTopicKey = <T extends TopicLike>(
 ) => (
   isTopicKey(value)
     ? value
-  : topicKeys[value] as TopicKeyType<T>
+  : topicKeys[value as Topic] as TopicKeyType<T>
 );
 
 const hyphenate = (topicKey: string & TopicKey) => (

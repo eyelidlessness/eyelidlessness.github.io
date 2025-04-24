@@ -13,6 +13,7 @@ import module                     from 'module';
 import {
   ElementType,
   Fragment,
+  FunctionComponent,
   h as preactH,
   toChildArray,
   VNode,
@@ -85,10 +86,11 @@ interface MDXProps<
   readonly remarkPlugins?: PluginsList<RM>;
 }
 
-export const MDX = <
-  RH extends readonly AnyPlugin[],
-  RM extends readonly AnyPlugin[]
->(props: MDXProps<RH, RM>) => {
+type MDXComponent = FunctionComponent<
+  MDXProps<readonly AnyPlugin[], readonly AnyPlugin[]>
+>;
+
+export const MDX: MDXComponent = (props): VNode => {
   const {
     children:      baseChildren      = h(() => null, {}),
     components:    baseComponents    = {},

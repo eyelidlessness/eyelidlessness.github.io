@@ -19,8 +19,8 @@ import {
   ProjectData,
   ProjectTimestamp,
 } from '@/data/projects';
+import type { ResumeData } from '@/data/resume';
 import {
-  resume,
   ResumeProjectRole,
   ResumeSkillLevel,
 } from '@/data/resume';
@@ -34,6 +34,7 @@ import {
   theme,
 } from '@/lib/styles';
 import { ResumeSection }      from './ResumeSection';
+import { ProjectDescription } from '../Projects/ProjectDescription.jsx';
 
 const Flex = styled('div', {
   alignItems: 'start',
@@ -245,7 +246,7 @@ const ResumeSkillLevelMarkers = Object.values(ResumeSkillLevel)
 
 interface ResumeSkillsListProps {
   readonly name:   string;
-  readonly skills: typeof resume['skills']['list'];
+  readonly skills: ResumeData['skills']['list'];
 }
 
 const ResumeSkillsetListing = ({
@@ -475,9 +476,9 @@ const BaseResumeEmployment = styled(ResumeSection, {
 
 interface ResumeEmploymentProps {
   readonly employment:
-    typeof resume['employment'] extends infer T
+    ResumeData['employment'] extends infer T
       ? T
-      : typeof resume['employment'];
+      : ResumeData['employment'];
 }
 
 const ResumeEmployment = ({ employment }: ResumeEmploymentProps) => (
@@ -536,11 +537,6 @@ const BaseResumeProject = styled('div', {
   padding:             '1rem 0',
 });
 
-const ResumeProjectDescription = styled('div', {
-  fontSize: '0.88889em',
-  margin:   '0.5rem 0',
-});
-
 interface ResumeProjectProps {
   readonly project: ProjectData;
 }
@@ -572,15 +568,11 @@ const ResumeProject = ({
         <ResumeTimeRange range={ [ start, end ] } />
       </ResumeHeader>
 
-      <ResumeProjectDescription>
-        {(
-          role === ResumeProjectRole.CREATOR
-            ? mdx(description)
-            : null
-        )}
-
-        { mdx(summary) }
-      </ResumeProjectDescription>
+      <ProjectDescription
+        role={ role }
+        description={ description }
+        summary={ summary ?? null }
+      />
     </ResumeProjectBody>
   </BaseResumeProject>
 );
@@ -704,7 +696,7 @@ interface ResumeProps {
   readonly className?: string;
   readonly id?:        string;
   readonly meta:       BlogArtProps;
-  readonly resume:     typeof resume;
+  readonly resume:     ResumeData;
   readonly updated:    Date;
 }
 
