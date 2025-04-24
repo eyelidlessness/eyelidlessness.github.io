@@ -20,6 +20,11 @@ const validHashes = Object.entries({
   upper:   'C0A6A0B1A80898B178FAD939D6E31BA378ED10F6',
 });
 
+// Prerequisites
+it.before((assert) => {
+  assert.snapshot(validHashes);
+});
+
 validHashes.forEach(([ key, validHash ]) => {
   it(`gets a hex point sequence (${key})`, (assert) => {
     const sequence = toHexPointSequence(validHash);

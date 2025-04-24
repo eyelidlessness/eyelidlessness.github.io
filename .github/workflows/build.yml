@@ -6,22 +6,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # For consistent git commands in CI test runs!
 
-      - uses: actions/setup-node@v2-beta
+      - uses: volta-cli/action@v4
         with:
-          node-version: '14'
-          check-latest: true
-      - run: yarn install
+          node-version: '14.21.3'
+          yarn-version: '1.22.22'
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: install-14.21.3-${{ hashFiles('yarn.lock', '.github/workflows/build.yml') }}
+
+      # Per https://stackoverflow.com/a/74732671, hopefully addresses current
+      # failure of `yarn install --frozen-lockfile`
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: '3.10'
+
+      - run: yarn install --frozen-lockfile
       - run: yarn typecheck
       - run: yarn test
       - run: TZ=America/Los_Angeles yarn build
 
-      - uses: JamesIves/github-pages-deploy-action@3.6.2
+      - uses: JamesIves/github-pages-deploy-action@v4.7.3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
-          BRANCH: gh-pages
-          FOLDER: dist
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: dist
