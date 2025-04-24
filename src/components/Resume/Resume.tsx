@@ -7,10 +7,7 @@ import {
   BlogArtProps,
 } from '@/components/Blog';
 import { FullBleedContainer } from '@/components/FullBleed';
-import {
-  GitHubLogo,
-  GitHubLogoDefs,
-} from '@/components/GitHubLogo';
+import { GitHubLogo }         from '@/components/GitHubLogo';
 import {
   Timestamp,
   TimestampMode,
@@ -727,7 +724,6 @@ export const Resume = ({
       itemscope
       itemtype="http://schema.org/Person"
     >
-      <GitHubLogoDefs />
       <BlogArt { ...meta } />
 
       <ResumeHeaderSection>
