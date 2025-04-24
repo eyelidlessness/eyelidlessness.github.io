@@ -148,7 +148,7 @@ export default function hashed() {
         renderer,
         resolvedKeyframe,
         KEYFRAME_TYPE,
-        props,
+        props as object,
       );
 
       const keyframeReference = JSON.stringify(processedKeyframe);

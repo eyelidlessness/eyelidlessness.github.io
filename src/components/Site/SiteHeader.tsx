@@ -110,6 +110,12 @@ const SiteHeaderGitHubLogo = styled(GitHubLogo, {
   width:   `clamp(1.125em, 4vw, ${gitHubLogoMaxWidth})`,
 });
 
+type GitHubLinkType =
+  | 'GITHUB_LINK_LOGO'
+  | 'GITHUB_LINK_TEXT';
+
+const GITHUB_LINK_TYPE: GitHubLinkType = 'GITHUB_LINK_TEXT';
+
 interface SiteLink {
   readonly label:    ComponentChildren;
   readonly location: string;
@@ -128,7 +134,9 @@ export const SiteHeader = () => {
     },
 
     {
-      label:    'GitHub' ?? ( <SiteHeaderGitHubLogo /> ),
+      label:    GITHUB_LINK_TYPE === 'GITHUB_LINK_TEXT'
+        ? 'GitHub'
+        : ( <SiteHeaderGitHubLogo /> ),
       location: 'https://github.com/eyelidlessness',
     }
   ] as const;

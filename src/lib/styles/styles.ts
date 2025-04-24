@@ -108,7 +108,7 @@ export const createStylesProvider = (renderer: IRenderer) => (
 
 export const StylesProvider = createStylesProvider(renderer);
 
-const baseCSS = <T>(value: T) => (
+const baseCSS = <T extends IStyle>(value: T) => (
   renderer.renderRule(identity, value)
 );
 

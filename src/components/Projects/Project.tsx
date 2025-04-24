@@ -6,10 +6,10 @@ import {
   Timestamp,
   TimestampMode,
 } from '@/components/Timestamp';
+import type { ProjectTimestamp } from '@/data/projects';
 import {
   ProjectData,
   ProjectRole,
-  ProjectTimestamp,
 } from '@/data/projects';
 import { mdx }                from '@/lib/content';
 import { styled }             from '@/lib/styles';
