@@ -34,6 +34,7 @@ import {
   theme,
 } from '@/lib/styles';
 import { ResumeSection }      from './ResumeSection';
+import { ProjectDescription } from '../Projects/ProjectDescription.jsx';
 
 const Flex = styled('div', {
   alignItems: 'start',
@@ -536,11 +537,6 @@ const BaseResumeProject = styled('div', {
   padding:             '1rem 0',
 });
 
-const ResumeProjectDescription = styled('div', {
-  fontSize: '0.88889em',
-  margin:   '0.5rem 0',
-});
-
 interface ResumeProjectProps {
   readonly project: ProjectData;
 }
@@ -572,15 +568,11 @@ const ResumeProject = ({
         <ResumeTimeRange range={ [ start, end ] } />
       </ResumeHeader>
 
-      <ResumeProjectDescription>
-        {(
-          role === ResumeProjectRole.CREATOR
-            ? mdx(description)
-            : null
-        )}
-
-        { mdx(summary) }
-      </ResumeProjectDescription>
+      <ProjectDescription
+        role={ role }
+        description={ description }
+        summary={ summary ?? null }
+      />
     </ResumeProjectBody>
   </BaseResumeProject>
 );

@@ -13,16 +13,123 @@ export enum ProjectRole {
 
 export type ProjectTimestamp = `${number}${number}${number}${number}-${number}${number}`;
 
-interface ValidProject extends FRESHResumeProject {
+interface TimestampedProject {
   readonly start: ProjectTimestamp;
   readonly end?: ProjectTimestamp;
 }
 
-const validateProjects = <T extends readonly ValidProject[]>(
-  value: T
-): T => value;
+const NOW_MILLIS = Date.now();
+
+const projectTimestampMillis = (timestamp?: ProjectTimestamp): number => {
+  if (timestamp == null) {
+    return NOW_MILLIS;
+  }
+
+  return new Date(timestamp).getTime();
+}
+
+interface ValidProject extends FRESHResumeProject, TimestampedProject {
+  readonly start: ProjectTimestamp;
+  readonly end?: ProjectTimestamp;
+}
+
+const sortProjects = <T extends TimestampedProject>(projects: readonly T[]): readonly T[] => {
+  return projects.slice().sort((a, b) => {
+    const endA = projectTimestampMillis(a.end);
+    const endB = projectTimestampMillis(b.end);
+
+    if (endA > endB) {
+      return -1;
+    }
+
+    if (endB > endA) {
+      return 1;
+    }
+
+    const startA = projectTimestampMillis(a.start);
+    const startB = projectTimestampMillis(b.start);
+
+    if (startA > startB) {
+      return -1;
+    }
+
+    if (startB > startA) {
+      return 1;
+    }
+
+    return 0;
+  })
+}
+
+const validateProjects = <T extends ValidProject>(
+  value: readonly T[]
+): readonly T[] => sortProjects(value);
 
 export const projects = validateProjects([
+  {
+    title: '@getodk/xforms-engine',
+    category: ProjectCategory.OPEN_SOURCE,
+
+    description: `
+      Client-agnostic, reactive runtime for
+      [ODK XForms](https://getodk.github.io/xforms-spec/)
+    `,
+
+    repo: 'https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/xforms-engine',
+    role: ProjectRole.CREATOR,
+
+    start: '2023-10',
+    end: '2025-04',
+  },
+
+  {
+    title: '@getodk/xpath',
+    category: ProjectCategory.OPEN_SOURCE,
+
+    description: `
+      Extensible XPath 1.0 interpreter, supporting
+      [ODK XForms](https://getodk.github.io/xforms-spec/#xpath-functions)
+      extensions, arbitrary DOM implementations
+    `,
+
+    repo: 'https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/xpath',
+    role: ProjectRole.CREATOR,
+
+    start: '2023-10',
+    end: '2025-04',
+  },
+
+  {
+    title: '@getodk/tree-sitter-xpath',
+    category: ProjectCategory.OPEN_SOURCE,
+
+    description: `
+      [tree-sitter](https://tree-sitter.github.io/tree-sitter/) parser for
+      XPath 1.0 syntax
+    `,
+
+    repo: 'https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/tree-sitter-xpath',
+    role: ProjectRole.CREATOR,
+
+    start: '2023-10',
+    end: '2025-04',
+  },
+
+  {
+    title: '@getodk/web-forms',
+    category: ProjectCategory.OPEN_SOURCE,
+
+    description: `
+      [ODK Web Forms](https://github.com/getodk/web-forms) UI client
+    `,
+
+    repo: 'https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/web-forms',
+    role: ProjectRole.CONTRIBUTOR,
+
+    start: '2024-03',
+    end: '2025-04',
+  },
+
   {
     title:    'Astro',
     category: ProjectCategory.OPEN_SOURCE,
@@ -40,6 +147,7 @@ export const projects = validateProjects([
     role: ProjectRole.CONTRIBUTOR,
 
     start: '2021-07',
+    end: '2021-07',
   },
 
   {
@@ -60,23 +168,24 @@ export const projects = validateProjects([
     role: ProjectRole.DEVELOPER,
 
     start: '2021-04',
+    end: '2023-10',
   },
 
   {
-    title:    'Eyelidlessness',
+    title:    'eyelidlessness.github.io',
     category: ProjectCategory.PUBLIC_ACCESS,
 
     description: `
-      My personal website and tech blog.
+      My personal website, résumé and tech blog.
     `,
 
-    summary: `
-      Built with [Preact][1], [Microsite][2] and [Fela][3].
+    // summary: `
+    //   Built with [Preact][1], [Microsite][2] and [Fela][3].
 
-      [1]: https://preactjs.com/
-      [2]: https://github.com/natemoo-re/microsite
-      [3]: https://fela.js.org/
-    `,
+    //   [1]: https://preactjs.com/
+    //   [2]: https://github.com/natemoo-re/microsite
+    //   [3]: https://fela.js.org/
+    // `,
 
     repo: 'https://github.com/eyelidlessness/eyelidlessness.github.io',
     role: ProjectRole.CREATOR,
@@ -105,6 +214,7 @@ export const projects = validateProjects([
     role: ProjectRole.CONTRIBUTOR,
 
     start: '2021-01',
+    end: '2021-05',
   },
 
   {
