@@ -12,6 +12,12 @@ jobs:
         with:
           node-version: 14.21.3
 
+      # Per https://stackoverflow.com/a/74732671, hopefully addresses current
+      # failure of `yarn install --frozen-lockfile`
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: '3.10'
+
       - run: yarn install --frozen-lockfile
       - run: yarn typecheck
       - run: yarn test
