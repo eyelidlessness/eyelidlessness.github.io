@@ -27,6 +27,7 @@ import {
 import { ResumeProjects } from './ResumeProjects.jsx';
 import { ResumeSection }      from './ResumeSection';
 import { ResumeArt } from './ResumeArt.jsx';
+import { TimeRange } from '../TimeRange.jsx';
 
 const Flex = styled('div', {
   alignItems: 'start',
@@ -282,71 +283,9 @@ const ResumeEmployerSummary = styled('div', {
   margin:   '0.5rem 0',
 });
 
-const dateStringPattern = /^(\d{4})-(\d{2})$/;
-
-const dateStringToDate = (dateString: string) => {
-  const matches = dateString.match(dateStringPattern);
-
-  if (matches == null) {
-    throw new Error(`Invalid format for date: ${dateString}, expected YYYY-MM`);
-  }
-
-  const [ , year, month ] = matches;
-
-  return new Date(`${year}-${month}-01T00:00:00`);
-};
-
-const BaseResumeTimeRange = styled('div', {
-  fontSize: '0.88889em',
-});
-
-const ResumeTimestamp = styled(Timestamp, {
-  fontSize: 'inherit',
-});
-
 const ResumeEmploymentHeading = styled('h2', {
   marginBottom: '0.5rem',
 });
-
-interface ResumeEmploymentTimeRangeProps {
-  readonly range: readonly [ start: ProjectTimestamp, end?: ProjectTimestamp ];
-}
-
-const ResumeTimeRange = ({
-  range: [ start, end ],
-}: ResumeEmploymentTimeRangeProps) => {
-  const startDate = dateStringToDate(start);
-
-  if (start == end || end == null) {
-    return (
-      <BaseResumeTimeRange>
-        <ResumeTimestamp
-          date={ startDate }
-          itemprop="endDate"
-          mode={ TimestampMode.SHORT }
-        />
-      </BaseResumeTimeRange>
-    );
-  }
-
-  const endDate = dateStringToDate(end);
-
-  return (
-    <BaseResumeTimeRange>
-      <ResumeTimestamp
-        date={ startDate }
-        itemprop="startDate"
-        mode={ TimestampMode.SHORT }
-      />
-      { ' – ' }
-      <ResumeTimestamp
-        date={ endDate }
-        itemprop="endDate"
-        mode={ TimestampMode.SHORT }
-      />
-    </BaseResumeTimeRange>
-  );
-};
 
 const ResumeEmploymentPosition = styled('div', {
   fontSize: '0.88889rem',
@@ -426,7 +365,7 @@ const ResumeEmploymentListItem = ({
   >
     <ResumeHeader>
       <h3 itemprop="name">{ employer }</h3>
-      <ResumeTimeRange range={ [ start, end ] } />
+      <TimeRange range={ [ start, end ] } />
     </ResumeHeader>
     <ResumeEmploymentPosition itemprop="roleName">
       { position }

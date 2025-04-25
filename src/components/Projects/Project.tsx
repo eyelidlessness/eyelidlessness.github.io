@@ -1,14 +1,14 @@
 import { GitHubLogo }            from '@/components/GitHubLogo';
-import {
-  Timestamp,
-  TimestampMode,
-} from '@/components/Timestamp';
-import type { ProjectTimestamp } from '@/data/projects';
 import { ProjectData }           from '@/data/projects';
 import { styled }                from '@/lib/styles';
 import { ProjectsFlex }          from './ProjectsFlex';
 import { projectsTwoUpQuery }    from './ProjectsTwoUp';
 import { ProjectDescription }    from './ProjectDescription.jsx';
+import { TimeRange } from '../TimeRange.jsx';
+
+const ProjectTimeRangeContainer = styled('div', {
+  marginLeft: 'auto',
+});
 
 const BaseFlex = styled(ProjectsFlex, {
   flexWrap: 'wrap',
@@ -50,82 +50,6 @@ const ProjectHeadingLink = styled('a', {
     },
   },
 });
-
-const dateStringPattern = /^(\d{4})-(\d{2})$/;
-
-const dateStringToDate = (dateString: string) => {
-  const matches = dateString.match(dateStringPattern);
-
-  if (matches == null) {
-    throw new Error(`Invalid format for date: ${dateString}, expected YYYY-MM`);
-  }
-
-  const [ , year, month ] = matches;
-
-  return new Date(`${year}-${month}-01T00:00:00`);
-};
-
-const BaseTimeRange = styled('div', {
-  fontSize: '0.88889em',
-  marginLeft: 'auto',
-});
-
-const ProjectTimestamp = styled(Timestamp, {
-  fontSize: 'inherit',
-});
-
-interface TimeRangeProps {
-  readonly range: readonly [ start: ProjectTimestamp, end?: ProjectTimestamp ];
-}
-
-const TimeRange = ({
-  range: [ start, end ],
-}: TimeRangeProps) => {
-  const startDate = dateStringToDate(start);
-
-  if (end == null) {
-    return (
-      <BaseTimeRange>
-        { 'Since ' }
-        <ProjectTimestamp
-          date={ startDate }
-          itemprop="startDate"
-          mode={ TimestampMode.SHORT }
-        />
-      </BaseTimeRange>
-    );
-  }
-
-  const endDate = dateStringToDate(end);
-
-  if (start == end) {
-    return (
-      <BaseTimeRange>
-        <ProjectTimestamp
-          date={ startDate }
-          itemprop="endDate"
-          mode={ TimestampMode.SHORT }
-        />
-      </BaseTimeRange>
-    );
-  }
-
-  return (
-    <BaseTimeRange>
-      <ProjectTimestamp
-        date={ startDate }
-        itemprop="startDate"
-        mode={ TimestampMode.SHORT }
-      />
-      { ' – ' }
-      <ProjectTimestamp
-        date={ endDate }
-        itemprop="endDate"
-        mode={ TimestampMode.SHORT }
-      />
-    </BaseTimeRange>
-  );
-};
 
 const ProjectIconLink = styled('a', {
   display:  'block',
@@ -185,7 +109,9 @@ export const Project = ({
             </ProjectHeadingLink>
           </ProjectHeading>
 
-          <TimeRange range={ [ start, end ] } />
+          <ProjectTimeRangeContainer>
+            <TimeRange range={ [ start, end ] } />
+          </ProjectTimeRangeContainer>
         </Header>
 
         <ProjectDescription
