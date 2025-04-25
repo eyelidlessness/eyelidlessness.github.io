@@ -104,7 +104,7 @@ export const criticalStyles = cleanWhitespace(`
     font-family:             Minipax, Georgia, serif;
     font-smooth:             always;
     font-weight:             normal;
-    line-height:             0.9375;
+    line-height:             ${theme.headingLineHeight};
     margin-bottom:           1rem;
     margin-top:              1rem;
     padding-left:            1rem;

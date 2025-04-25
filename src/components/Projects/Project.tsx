@@ -1,40 +1,27 @@
 import { GitHubLogo }            from '@/components/GitHubLogo';
 import { ProjectData }           from '@/data/projects';
-import { styled }                from '@/lib/styles';
-import { ProjectsFlex }          from './ProjectsFlex';
+import { clamp, styled, theme }  from '@/lib/styles';
 import { projectsTwoUpQuery }    from './ProjectsTwoUp';
 import { ProjectDescription }    from './ProjectDescription.jsx';
 import { TimeRange } from '../TimeRange.jsx';
 
-const ProjectTimeRangeContainer = styled('div', {
-  marginLeft: 'auto',
-});
-
-const BaseFlex = styled(ProjectsFlex, {
-  flexWrap: 'wrap',
+const ProjectHeader = styled('div', {
+  display: 'grid',
+  rowGap:  '0.325rem',
 
   nested: {
     '& > *': {
-      minWidth: 'max(calc(50% - 2rem), 30ch)',
+      margin: 0,
     },
   },
 });
 
-const Header = styled(BaseFlex, {
-  alignItems:     'baseline',
-  justifyContent: 'space-between',
-  margin:         '0 -0.5rem',
-  rowGap:         '0.325rem',
-
-  nested: {
-    '& > *': {
-      margin:   '0 0.5rem',
-      minWidth: 'auto',
-    },
-  },
-});
+const projectHeadingFontSize = clamp('1rem', '3.5cqi', '1.25rem');
 
 const ProjectHeading = styled('h3', {
+  fontFamily:  theme.prose.fontFamily,
+  fontWeight:  500,
+  fontSize:    projectHeadingFontSize,
   paddingLeft: 0,
   textIndent:  0,
 });
@@ -52,13 +39,17 @@ const ProjectHeadingLink = styled('a', {
 });
 
 const ProjectIconLink = styled('a', {
-  display:  'block',
-  padding:  '0 0.5rem 0.5rem 0.5rem',
-  zIndex:   1,
+  alignSelf:  'baseline',
+  display:    'block',
+  flexShrink: 0,
+  height:     `calc(${projectHeadingFontSize} * ${theme.headingLineHeight})`,
+  lineHeight: `calc(${projectHeadingFontSize} * ${theme.headingLineHeight * 1.5})`,
+  padding:    '0 0.5rem',
+  zIndex:     1,
 
   nested: {
     '& svg': {
-      width: '1.25em',
+      width: '1em',
     },
 
     [projectsTwoUpQuery]: {
@@ -68,14 +59,14 @@ const ProjectIconLink = styled('a', {
 });
 
 const ProjectBody = styled('div', {
+  flexGrow:   1,
   paddingTop: '0.05556rem',
 });
 
 const BaseProject = styled('div', {
-  alignItems:          'start',
-  display:             'grid',
-  gridTemplateColumns: 'auto 1fr',
-  padding:             '1rem 0',
+  alignItems: 'start',
+  display:    'flex',
+  padding:    '1rem 0',
 });
 
 interface ProjectProps {
@@ -99,17 +90,15 @@ export const Project = ({
     </ProjectIconLink>
 
     <ProjectBody>
-      <Header>
+      <ProjectHeader>
         <ProjectHeading>
           <ProjectHeadingLink href={ repo }>
             { title }
           </ProjectHeadingLink>
         </ProjectHeading>
 
-        <ProjectTimeRangeContainer>
-          <TimeRange range={ [ start, end ] } />
-        </ProjectTimeRangeContainer>
-      </Header>
+        <TimeRange range={ [ start, end ] } />
+      </ProjectHeader>
 
       <ProjectDescription
         role={ role }

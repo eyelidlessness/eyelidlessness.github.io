@@ -514,6 +514,7 @@ export const theme = {
     },
   },
 
+  headingLineHeight: 0.9375,
   headingRanges,
 
   [darkMode]: {

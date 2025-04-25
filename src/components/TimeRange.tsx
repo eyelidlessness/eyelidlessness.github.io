@@ -1,10 +1,38 @@
 import { ProjectTimestamp } from '@/data/projects.js';
-import { styled } from '@/lib/styles/styles.js';
-import { Timestamp, TimestampMode } from './Timestamp.jsx';
+import { styled, theme } from '@/lib/styles';
+import { Timestamp, TimestampMode, TimestampProps } from './Timestamp.jsx';
+
+interface OptionalTimestampProps extends Omit<TimestampProps, 'date'> {
+  readonly date: Date | null;
+}
+
+const OptionalTimestamp = ({ date, ...rest }: OptionalTimestampProps) => (
+  date == null
+    ? null
+    : <Timestamp {...rest} date={date} />
+);
+
+const TimeRangeText = styled('span', {
+  nested: {
+    [theme.darkMode]: {
+      ...theme[theme.darkMode].deemphasize,
+    },
+  },
+  ...theme.deemphasize,
+});
 
 const dateStringPattern = /^(\d{4})-(\d{2})$/;
 
-const dateStringToDate = (dateString: string): Date => {
+interface DateStringToDate {
+  (dateString: string): Date;
+  (dateString?: string): Date | null;
+}
+
+const dateStringToDate: DateStringToDate = (dateString) => {
+  if (dateString == null) {
+    return null!;
+  }
+
   const matches = dateStringPattern.exec(dateString);
 
   if (matches == null) {
@@ -18,6 +46,7 @@ const dateStringToDate = (dateString: string): Date => {
 
 const BaseTimeRange = styled('div', {
   fontSize: '0.88889em',
+  whiteSpace: 'nowrap',
 
   nested: {
     '& time': {
@@ -34,20 +63,6 @@ export const TimeRange = ({
   range: [start, end],
 }: TimeRangeProps) => {
   const startDate = dateStringToDate(start);
-
-  if (end == null) {
-    return (
-      <BaseTimeRange>
-        { 'Since ' }
-        <Timestamp
-          date={ startDate }
-          itemprop="startDate"
-          mode={ TimestampMode.SHORT }
-        />
-      </BaseTimeRange>
-    );
-  }
-
   const endDate = dateStringToDate(end);
 
   if (start == end) {
@@ -69,8 +84,8 @@ export const TimeRange = ({
         itemprop="startDate"
         mode={ TimestampMode.SHORT }
       />
-      { ' – ' }
-      <Timestamp
+      <TimeRangeText>-</TimeRangeText>
+      <OptionalTimestamp
         date={ endDate }
         itemprop="endDate"
         mode={ TimestampMode.SHORT }

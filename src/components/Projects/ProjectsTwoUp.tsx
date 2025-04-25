@@ -8,6 +8,10 @@ export const ProjectsTwoUp = styled(ProjectsFlex, {
   margin:  0,
 
   nested: {
+    '& > *': {
+      containerType: 'inline-size',
+    },
+
     [projectsTwoUpQuery]: {
       display:  'flex',
       flexWrap: 'nowrap',
