@@ -92,34 +92,30 @@ export const Project = ({
     start,
     summary,
   },
-}: ProjectProps) => {
+}: ProjectProps) => (
+  <BaseProject>
+    <ProjectIconLink href={ repo }>
+      <GitHubLogo />
+    </ProjectIconLink>
 
+    <ProjectBody>
+      <Header>
+        <ProjectHeading>
+          <ProjectHeadingLink href={ repo }>
+            { title }
+          </ProjectHeadingLink>
+        </ProjectHeading>
 
-  return (
-    <BaseProject>
-      <ProjectIconLink href={ repo }>
-        <GitHubLogo />
-      </ProjectIconLink>
+        <ProjectTimeRangeContainer>
+          <TimeRange range={ [ start, end ] } />
+        </ProjectTimeRangeContainer>
+      </Header>
 
-      <ProjectBody>
-        <Header>
-          <ProjectHeading>
-            <ProjectHeadingLink href={ repo }>
-              { title }
-            </ProjectHeadingLink>
-          </ProjectHeading>
-
-          <ProjectTimeRangeContainer>
-            <TimeRange range={ [ start, end ] } />
-          </ProjectTimeRangeContainer>
-        </Header>
-
-        <ProjectDescription
-          role={ role }
-          description={ description }
-          summary={ summary ?? null }
-        />
-      </ProjectBody>
-    </BaseProject>
-  );;
-}
+      <ProjectDescription
+        role={ role }
+        description={ description }
+        summary={ summary ?? null }
+      />
+    </ProjectBody>
+  </BaseProject>
+);
