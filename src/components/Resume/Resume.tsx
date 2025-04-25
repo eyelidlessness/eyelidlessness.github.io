@@ -4,18 +4,15 @@ import {
 } from 'preact';
 import { BlogArtProps }       from '@/components/Blog';
 import { FullBleedContainer } from '@/components/FullBleed';
-import { GitHubLogo }         from '@/components/GitHubLogo';
 import {
   Timestamp,
   TimestampMode,
 } from '@/components/Timestamp';
 import {
-  ProjectData,
   ProjectTimestamp,
 } from '@/data/projects';
 import type { ResumeData } from '@/data/resume';
 import {
-  ResumeProjectRole,
   ResumeSkillLevel,
 } from '@/data/resume';
 import {
@@ -27,8 +24,8 @@ import {
   styled,
   theme,
 } from '@/lib/styles';
+import { ResumeProjects } from './ResumeProjects.jsx';
 import { ResumeSection }      from './ResumeSection';
-import { ProjectDescription } from '../Projects/ProjectDescription.jsx';
 import { ResumeArt } from './ResumeArt.jsx';
 
 const Flex = styled('div', {
@@ -486,180 +483,6 @@ const ResumeEmployment = ({ employment }: ResumeEmploymentProps) => (
   </BaseResumeEmployment>
 );
 
-const ResumeProjectHeading = styled('h3', {
-  paddingLeft: 0,
-  textIndent:  0,
-});
-
-const ResumeProjectHeadingLink = styled('a', {
-  color:          'inherit',
-  fontWeight:     'inherit',
-  textDecoration: 'none',
-
-  nested: {
-    '&:active, &:focus, &:hover, &:visited': {
-      color: 'inherit',
-    },
-  },
-});
-
-const projectsTwoUpQuery = '@media (min-width: 41.666rem)';
-
-const ResumeProjectIconLink = styled('a', {
-  display:  'block',
-  padding:  '0 0.5rem 0.5rem 0.5rem',
-  zIndex:   1,
-
-  nested: {
-    '& svg': {
-      width: '1.25em',
-    },
-
-    [projectsTwoUpQuery]: {
-      paddingLeft: 0,
-    },
-  },
-});
-
-const ResumeProjectBody = styled('div', {
-  paddingTop: '0.05556rem',
-});
-
-const BaseResumeProject = styled('div', {
-  alignItems:          'start',
-  display:             'grid',
-  gridTemplateColumns: 'auto 1fr',
-  padding:             '1rem 0',
-});
-
-interface ResumeProjectProps {
-  readonly project: ProjectData;
-}
-
-const ResumeProject = ({
-  project: {
-    description,
-    end,
-    repo,
-    role,
-    title,
-    start,
-    summary,
-  },
-}: ResumeProjectProps) => (
-  <BaseResumeProject>
-    <ResumeProjectIconLink href={ repo }>
-      <GitHubLogo />
-    </ResumeProjectIconLink>
-
-    <ResumeProjectBody>
-      <ResumeHeader>
-        <ResumeProjectHeading>
-          <ResumeProjectHeadingLink href={ repo }>
-            { title }
-          </ResumeProjectHeadingLink>
-        </ResumeProjectHeading>
-
-        <ResumeTimeRange range={ [ start, end ] } />
-      </ResumeHeader>
-
-      <ProjectDescription
-        role={ role }
-        description={ description }
-        summary={ summary ?? null }
-      />
-    </ResumeProjectBody>
-  </BaseResumeProject>
-);
-
-const ResumeProjectsTwoUp = styled(Flex, {
-  display: 'block',
-  margin:  0,
-
-  nested: {
-    [projectsTwoUpQuery]: {
-      display:  'flex',
-      flexWrap: 'nowrap',
-      margin:   '-1rem',
-
-      nested: {
-        '& > *': {
-          flexBasis: 'calc(50% - 2rem)',
-          margin:    '1rem',
-        },
-      },
-    },
-  },
-});
-
-const ResumeProjectSet = styled('div', {
-  marginTop: '0.5rem',
-});
-
-
-interface ResumeProjectSets {
-  readonly creator:     readonly ProjectData[];
-  readonly contributor: readonly ProjectData[];
-}
-
-interface ResumeProjectsProps {
-  readonly projects: readonly ProjectData[];
-}
-
-const ResumeProjects = ({ projects }: ResumeProjectsProps) => {
-  const {
-    creator,
-    contributor,
-  } = projects.reduce<ResumeProjectSets>((acc, project) => {
-    const setKey = project.role === ResumeProjectRole.CREATOR
-      ? 'creator'
-      : 'contributor';
-
-    return {
-      ...acc,
-
-      [setKey]: [
-        ...acc[setKey],
-
-        project,
-      ],
-    };
-  }, {
-    creator:     [],
-    contributor: [],
-  })
-
-  return (
-    <ResumeSection>
-      <ResumeProjectsTwoUp>
-        <div>
-          <ResumeFlexHeading>
-            Projects I Created
-          </ResumeFlexHeading>
-
-          <ResumeProjectSet>
-            { creator.map((project) => (
-              <ResumeProject project={ project } />
-            )) }
-          </ResumeProjectSet>
-        </div>
-
-        <div>
-          <ResumeFlexHeading>
-            Open Source Contributions
-          </ResumeFlexHeading>
-
-          <ResumeProjectSet>
-            { contributor.map((project) => (
-              <ResumeProject project={ project } />
-            )) }
-          </ResumeProjectSet>
-        </div>
-      </ResumeProjectsTwoUp>
-    </ResumeSection>
-  );
-};
-
 const BaseResume = styled(FullBleedContainer, {
   nested: {
     '& p': {
@@ -784,7 +607,9 @@ export const Resume = ({
 
       <ResumeEmployment employment={ employment } />
 
-      <ResumeProjects projects={ projects } />
+      <ResumeSection>
+        <ResumeProjects projects={ projects } />
+      </ResumeSection>
 
       <ResumeSection>
         <h2>References</h2>
