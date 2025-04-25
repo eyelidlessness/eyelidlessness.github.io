@@ -18,6 +18,11 @@ interface AbbrNode extends Node {
   readonly type:      'abbr';
 }
 
+interface TextNode extends Node {
+  readonly type:  'text';
+  readonly value: string;
+}
+
 let visited = new Set<string>();
 
 export const resetAbbrContext = () => {
@@ -44,6 +49,14 @@ export const remarkDistinctAbbr: Plugin = () => {
 
         visited.add(abbr);
       });
+
+      visit<TextNode>(ast, 'text', (node) => {
+        if (node.value.includes('\u200b')) {
+          Object.assign(node, {
+            value: node.value.replace(/\u200b/gu, ''),
+          });
+        }
+      })
     }
   );
 };

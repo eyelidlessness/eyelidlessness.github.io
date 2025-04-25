@@ -27,6 +27,7 @@ const techAbbreviations = {
   JSON:      'JavaScript Object Notation',
   JVM:       'Java Virtual Machine',
   nREPL:     'Clojure network REPL (Read–eval–print loop)',
+  ODK:       'Open Data Kit (https://getodk.org/)',
   REPL:      'Read–eval–print loop',
   REST:      'Representational State Transfer',
   'SHA-1':   'Secure Hash Algorithm 1',

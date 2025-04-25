@@ -216,9 +216,10 @@ export enum ResumeSkillLevel {
 }
 
 export enum ResumeSkillset {
-  LANGUAGES_PLATFORMS          = 'Languages & Platforms',
-  SERVICES_DISTRIBUTED_SYSTEMS = 'Services & Distributed Systems',
-  USER_INTERFACE_EXPERIENCE    = 'User Interface & Experience',
+  LANGUAGES_PLATFORMS          = 'Languages',
+  SERVICES_DISTRIBUTED_SYSTEMS = 'Services',
+  USER_INTERFACE_EXPERIENCE    = 'UI/UX',
+  DOMAIN_SPECIFIC_LANGUAGES    = 'DSL\u200bs',
 }
 
 const resumeSkills = {
@@ -267,15 +268,26 @@ const resumeSkills = {
       level: ResumeSkillLevel.ADVANCED,
     },
     {
-      name:  'SVG',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
       name:  'UI & UX design',
       level: ResumeSkillLevel.ADVANCED,
     },
     {
       name:  'A11y',
+      level: ResumeSkillLevel.INTERMEDIATE,
+    },
+  ],
+
+  [ResumeSkillset.DOMAIN_SPECIFIC_LANGUAGES]: [
+    {
+      name:  'Interpreter runtime',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'Interpreter optimization',
+      level: ResumeSkillLevel.INTERMEDIATE,
+    },
+    {
+      name: 'Domain-specific tooling',
       level: ResumeSkillLevel.INTERMEDIATE,
     },
   ],
@@ -287,6 +299,14 @@ const resumeSkills = {
     },
     {
       name:  'Clojure & ClojureScript',
+      level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name: 'XPath',
+      level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name: 'ODK XForms',
       level: ResumeSkillLevel.EXPERT,
     },
     {

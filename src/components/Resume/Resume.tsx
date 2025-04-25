@@ -143,50 +143,40 @@ const ResumeBrief = styled(FullBleedContainer, {
   },
 });
 
-const threeUpQuery = '@media (min-width: 44.625rem)';
+const resumeSkillsetsColumnarQuery = '@media (min-width: 44.625rem)';
 
-const ThreeUp = styled(Flex, {
-  display: 'block',
-  margin:  0,
+const ResumeFlexHeading = styled('h2', {
+  fontSize:    '1em',
+  marginBottom: 0,
+  paddingLeft:  0,
+  textIndent:   0,
 
   nested: {
-    '& > *': {
-      margin:  '0 0 1rem',
-    },
-
-    [threeUpQuery]: {
-      display:        'flex',
-      flexWrap:       'nowrap',
-      justifyContent: 'space-between',
-      margin:         '0 -0.5rem -0.5rem',
-
-      nested: {
-        '& > *': {
-          margin: '0 0.5rem 0.5rem'
-        },
-      },
+    [resumeSkillsetsColumnarQuery]: {
+      justifySelf: 'end',
     },
   },
 });
 
-const ResumeFlexHeading = styled('h2', {
-  fontSize:    clamp(
-    `${theme.headingRanges.h3.minEm}em`,
-    `${theme.headingRanges.h3.fluidVw}vw`,
-    `1.17778em`
-  ),
-  marginBottom: 0,
-  paddingLeft:  0,
-  textIndent:   0,
-});
+const ResumeSkillsetsContainer = styled('div', {
+  alignItems:          'baseline',
+  display:             'grid',
+  gap:                 '1rem 0',
+  gridTemplateColumns: 'auto',
+  gridTemplateRows:    'auto',
+  fontSize:            '0.88889em',
 
-const ResumeSkillsetsContainer = styled(ThreeUp, {
-  fontSize: '0.88889em',
+  nested: {
+    [resumeSkillsetsColumnarQuery]: {
+      gridTemplateColumns: 'auto 1fr',
+    },
+  },
 });
 
 const ResumeSkillsList = styled('ul', {
   display: 'block',
-  padding: 0,
+  margin:  0,
+  padding: '0 0 0 1rem',
 });
 
 const ResumeSkillsListItem = styled('li', {
@@ -198,16 +188,6 @@ const ResumeSkillsListItem = styled('li', {
   nested: {
     '&:last-child': {
       marginRight: 0,
-    },
-
-    [threeUpQuery]: {
-      display: 'block',
-
-      nested: {
-        '&:last-child': {
-          marginBottom: 0,
-        },
-      },
     },
   },
 });
@@ -230,13 +210,13 @@ const ResumeSkillLevelMarkers = Object.values(ResumeSkillLevel)
 
       nested: {
         ...theme.resume.skillLevel[level].nested,
-
-        [threeUpQuery]: {
-          margin: '0 0.325rem',
-        },
       },
     })
   }), {} as Record<ResumeSkillLevel, ResumeSkillLevelMarker>);
+
+const BaseResumeSkillsetListing = styled('div', {
+  display: 'contents',
+});
 
 interface ResumeSkillsListProps {
   readonly name:   string;
@@ -247,8 +227,8 @@ const ResumeSkillsetListing = ({
   name,
   skills,
 }: ResumeSkillsListProps) => (
-  <div itemscope itemtype="http://schema.org/ItemList">
-    <ResumeFlexHeading itemprop="name">{ name }</ResumeFlexHeading>
+  <BaseResumeSkillsetListing itemscope itemtype="http://schema.org/ItemList">
+    <ResumeFlexHeading itemprop="name">{ mdxInline(name) }</ResumeFlexHeading>
 
     <ResumeSkillsList>
       { skills.map(({
@@ -269,7 +249,7 @@ const ResumeSkillsetListing = ({
         );
       }) }
     </ResumeSkillsList>
-  </div>
+  </BaseResumeSkillsetListing>
 );
 
 const ResumeTopLevelListingItem = styled(FullBleedContainer, {
