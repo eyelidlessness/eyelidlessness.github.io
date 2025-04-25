@@ -2,10 +2,7 @@ import {
   ComponentProps,
   ElementType,
 } from 'preact';
-import {
-  BlogArt,
-  BlogArtProps,
-} from '@/components/Blog';
+import { BlogArtProps }       from '@/components/Blog';
 import { FullBleedContainer } from '@/components/FullBleed';
 import { GitHubLogo }         from '@/components/GitHubLogo';
 import {
@@ -32,6 +29,7 @@ import {
 } from '@/lib/styles';
 import { ResumeSection }      from './ResumeSection';
 import { ProjectDescription } from '../Projects/ProjectDescription.jsx';
+import { ResumeArt } from './ResumeArt.jsx';
 
 const Flex = styled('div', {
   alignItems: 'start',
@@ -724,7 +722,7 @@ export const Resume = ({
       itemscope
       itemtype="http://schema.org/Person"
     >
-      <BlogArt { ...meta } />
+      <ResumeArt { ...meta } renderType="post" />
 
       <ResumeHeaderSection>
         <ResumeHeader>

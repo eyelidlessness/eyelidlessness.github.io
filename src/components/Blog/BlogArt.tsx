@@ -119,7 +119,7 @@ export const BlogArt = (props: BlogArtProps) => {
     >
       <title>
         Generated art for the page or post titled
-        <i>{ title }</i>,
+        {' '}<i>{ title }</i>,
         with the content or commit hash { hash } {
           topics.length > 0
             ? [ ', and the topics: ', topics.map(String).join(', ') ]

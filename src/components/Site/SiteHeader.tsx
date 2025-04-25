@@ -129,8 +129,8 @@ export const SiteHeader = () => {
     },
 
     {
-      label:    'Projects',
-      location: '/projects/',
+      label:    'Hire me',
+      location: '/resume/',
     },
 
     {
