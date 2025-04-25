@@ -55,6 +55,7 @@ const ResumeHeader = styled(BaseFlex, {
   alignItems:     'baseline',
   justifyContent: 'space-between',
   margin:         '0 -0.5rem',
+  paddingTop:     clamp('0.5rem', '3vw', '2rem'),
 
   nested: {
     '& > *': {
