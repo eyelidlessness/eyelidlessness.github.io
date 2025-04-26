@@ -99,13 +99,13 @@ const segmentLinePathStyles = ({
   ...(fill
     ? {
       fill:        'currentcolor',
-      fillOpacity: 0.15,
+      fillOpacity: 0.05,
       mask:        'url(#curvesVerticalFade)',
       strokeWidth: 0,
     }
     : {
       fill:        'none',
-      strokeWidth: 2,
+      strokeWidth: 1,
       stroke:      'currentcolor',
     }),
 
@@ -290,7 +290,7 @@ const HashPlot = ({
       <defs>
         <linearGradient id="curvesVerticalFadeGradient" y2="1" x2="0">
           <stop offset="0" stop-color="white" stop-opacity="1" />
-          <stop offset="0.25" stop-color="white" stop-opacity=".75" />
+          <stop offset="0.15" stop-color="white" stop-opacity=".95" />
           <stop offset="1" stop-color="white" stop-opacity="0" />
         </linearGradient>
 
