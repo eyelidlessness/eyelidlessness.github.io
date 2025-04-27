@@ -1,31 +1,29 @@
-import uo from"unist-util-visit";import{h as t,Fragment as $,toChildArray as go}from"https://cdn.skypack.dev/preact@10.5.10";import{createRenderer as Gn}from"fela";import"fela-tools";import fo from"module";import{isobject as Wn,createComponent as Vn,RendererProvider as qn,Readonly as Kn,Object$1 as Jn,Optional as u,Unknown as Zn,Literal as Qn,String as m,Partial as Ie,Union as bo,Boolean as yo,Array$1 as G,Integer as er,Number$1 as tr,emojiRegex as or,h as So,rehypeAccessibleEmojis as nr,remarkSlug as rr,remarkSmartypants_1 as sr,hsluv_1 as ie,rgba as ir}from"./_vendor/index.js";import{processStyleWithPlugins as ar,KEYFRAME_TYPE as xo,isNestedSelector as cr,normalizeNestedProperty as lr,isMediaQuery as dr,generateCombinedMediaQuery as vo,isSupport as mr,generateDeclarationReference as pr,isUndefinedValue as hr,generateCSSSelector as ur,RULE_TYPE as gr}from"fela-utils";import{cssifyDeclaration as fr,cssifyObject as br}from"css-in-js-utils";import Co from"md5";import wo from"dedent";import yr from"@mdx-js/mdx";import{mdx as at,MDXProvider as Sr}from"@mdx-js/preact";import{transform as xr}from"buble-jsx-only";import vr from"remark-mdx";import Cr from"remark-mdx-to-plain-text";import Le from"path";import{loadTheme as ko,getHighlighter as Po}from"shiki";import{BUNDLED_LANGUAGES as wr}from"shiki-languages";import{renderers as kr}from"shiki-twoslash";import{definePage as Pr}from"microsite/page";import To from"node-object-hash";import"sharp";import $t from"fs";import Tr from"child_process";import Er from"crypto";import{Head as Eo,seo as ct}from"microsite/head";let Lt=new Set;const Ar=()=>{Lt=new Set},Ir=()=>e=>{uo(e,"abbr",o=>{const{abbr:n}=o;Lt.has(n)&&(delete o.abbr,delete o.children,delete o.data,delete o.reference,Object.assign(o,{type:"text",value:n})),Lt.add(n)})},Ao="production",Mr="production",Or=!0;var lt=Object.freeze({__proto__:null,MODE:Ao,NODE_ENV:Mr,SSR:Or});const Rr=e=>e.replace(/[A-Z]/g,o=>`-${o.toLowerCase()}`),_=(e,o)=>[e.join(","),"{",Object.entries(o).reduce((n,[r,s])=>typeof s=="object"&&(r==="nested"||r.includes("&"))?n:`${n}${Rr(r)}:${s};`,""),"}",Object.entries(o).map(([n,r])=>{if(typeof r=="object"){if(n==="nested")return Object.entries(r).map(([s,i])=>{const c=e.map(d=>s.replace(/&/g,d));return _(c,i)}).join("");if(n.includes("&")){const s=e.map(i=>n.replace(/&/g,i));return _(s,r)}}return""},[]).join("")].join(""),Be=(...e)=>`clamp(${e.join(",")})`,ze=e=>e.replace(/\s+/g," ").trim(),dt=e=>e;function Qe(e){return e.replace(/[^_a-zA-Z0-9-]+/g,"-").replace(/^-+|-+$/g,"")}function jr(e,o,n,r,s,i){const c=[];return s&&c.push(Qe(s).slice(0,16)),r&&c.push(Qe(r).slice(0,16)),n&&c.push(Qe(n).slice(0,16)),c.push(Qe(e).slice(0,16)),c.push(Qe(o).slice(0,16)),c.push(i.slice(0,8)),c.join("_")}function $r(e,o,n=[""]){let r="";for(const i in e){const c=e[i];r=`${r}${i}{${br(c)}}`}let s="";for(let i=0;i<n.length;i++){const c=n[i];s=`${s}@${c}keyframes ${o}{${r}}`}return s}function Lr(){return e=>(e.renderKeyframe=(o,n)=>{const r=o(n,e),s=ar(e,r,xo,n),i=JSON.stringify(s);if(!e.cache.hasOwnProperty(i)){const c=Co(i),d=(e.selectorPrefix||"_")+c.slice(0,8),p=$r(s,d,e.keyframePrefixes),h={type:xo,keyframe:p,name:d};e.cache[i]=h,e._emitChange(h)}return e.cache[i].name},e._renderStyleToClassNames=({_className:o,...n},r="",s="",i="")=>{let c=o?` ${o}`:"";for(const d in n){const p=n[d];if(Wn(p))if(cr(d))c+=e._renderStyleToClassNames(p,r+lr(d),s,i);else if(dr(d)){const h=vo(s,d.slice(6).trim());c+=e._renderStyleToClassNames(p,r,h,i)}else if(mr(d)){const h=vo(i,d.slice(9).trim());c+=e._renderStyleToClassNames(p,r,s,h)}else console.warn(`The object key "${d}" is not a valid nested key in Fela.
+import Je from"unist-util-visit";import{h as o,Fragment as z,toChildArray as Rt}from"https://cdn.skypack.dev/preact@10.5.10";import Ho from"@mdx-js/mdx";import{mdx as $e,MDXProvider as _o}from"@mdx-js/preact";import{isobject as Fo,createComponent as Uo,RendererProvider as Yo,Readonly as zo,Object$1 as Go,Optional as g,Unknown as Xo,Literal as Wo,String as d,Partial as le,Union as At,Boolean as Pt,Array$1 as L,Integer as Vo,Number$1 as Ko,emojiRegex as qo,h as Ot,rehypeAccessibleEmojis as Jo,remarkSlug as Qo,remarkSmartypants_1 as Zo,hsluv_1 as K}from"./_vendor/index.js";import{transform as en}from"buble-jsx-only";import It from"dedent";import Mt from"module";import tn from"remark-mdx";import on from"remark-mdx-to-plain-text";import ue from"path";import{loadTheme as jt,getHighlighter as Lt}from"shiki";import{BUNDLED_LANGUAGES as nn}from"shiki-languages";import{renderers as rn}from"shiki-twoslash";import Qe from"fs";import sn from"node-object-hash";import"fela-tools";import"sharp";import an from"child_process";import ln from"crypto";import{Head as Dt,seo as Ne}from"microsite/head";import{createRenderer as cn}from"fela";import{processStyleWithPlugins as dn,KEYFRAME_TYPE as Bt,isNestedSelector as mn,normalizeNestedProperty as pn,isMediaQuery as un,generateCombinedMediaQuery as $t,isSupport as gn,generateDeclarationReference as hn,isUndefinedValue as fn,generateCSSSelector as bn,RULE_TYPE as yn}from"fela-utils";import{cssifyDeclaration as Sn,cssifyObject as vn}from"css-in-js-utils";import Nt from"md5";let Ze=new Set;const En=()=>{Ze=new Set},kn=()=>e=>{Je(e,"abbr",t=>{const{abbr:n}=t;Ze.has(n)&&(delete t.abbr,delete t.children,delete t.data,delete t.reference,Object.assign(t,{type:"text",value:n})),Ze.add(n)}),Je(e,"text",t=>{t.value.includes("\u200B")&&Object.assign(t,{value:t.value.replace(/\u200b/gu,"")})})},Ht="production",Tn="production",wn=!0;var et=Object.freeze({__proto__:null,MODE:Ht,NODE_ENV:Tn,SSR:wn});const Cn=e=>e.replace(/[A-Z]/g,t=>`-${t.toLowerCase()}`),x=(e,t)=>[e.join(","),"{",Object.entries(t).reduce((n,[r,i])=>typeof i=="object"&&(r==="nested"||r.includes("&"))?n:`${n}${Cn(r)}:${i};`,""),"}",Object.entries(t).map(([n,r])=>{if(typeof r=="object"){if(n==="nested")return Object.entries(r).map(([i,s])=>{const l=e.map(m=>i.replace(/&/g,m));return x(l,s)}).join("");if(n.includes("&")){const i=e.map(s=>n.replace(/&/g,s));return x(i,r)}}return""},[]).join("")].join(""),ne=(...e)=>`clamp(${e.join(",")})`,ve=e=>e.replace(/\s+/g," ").trim(),He=e=>e;function Oe(e){return e.replace(/[^_a-zA-Z0-9-]+/g,"-").replace(/^-+|-+$/g,"")}function xn(e,t,n,r,i,s){const l=[];return i&&l.push(Oe(i).slice(0,16)),r&&l.push(Oe(r).slice(0,16)),n&&l.push(Oe(n).slice(0,16)),l.push(Oe(e).slice(0,16)),l.push(Oe(t).slice(0,16)),l.push(s.slice(0,8)),l.join("_")}function Rn(e,t,n=[""]){let r="";for(const s in e){const l=e[s];r=`${r}${s}{${vn(l)}}`}let i="";for(let s=0;s<n.length;s++){const l=n[s];i=`${i}@${l}keyframes ${t}{${r}}`}return i}function An(){return e=>(e.renderKeyframe=(t,n)=>{const r=t(n,e),i=dn(e,r,Bt,n),s=JSON.stringify(i);if(!e.cache.hasOwnProperty(s)){const l=Nt(s),m=(e.selectorPrefix||"_")+l.slice(0,8),p=Rn(i,m,e.keyframePrefixes),u={type:Bt,keyframe:p,name:m};e.cache[s]=u,e._emitChange(u)}return e.cache[s].name},e._renderStyleToClassNames=({_className:t,...n},r="",i="",s="")=>{let l=t?` ${t}`:"";for(const m in n){const p=n[m];if(Fo(p))if(mn(m))l+=e._renderStyleToClassNames(p,r+pn(m),i,s);else if(un(m)){const u=$t(i,m.slice(6).trim());l+=e._renderStyleToClassNames(p,r,u,s)}else if(gn(m)){const u=$t(s,m.slice(9).trim());l+=e._renderStyleToClassNames(p,r,i,u)}else console.warn(`The object key "${m}" is not a valid nested key in Fela.
 Maybe you forgot to add a plugin to resolve it?
-Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information.`);else{const h=pr(d,p,r,s,i);if(!e.cache.hasOwnProperty(h)){if(hr(p)){e.cache[h]={className:""};continue}const g=fr(d,p),f=Co(h),w=e.devMode?jr(d,p,r,s,i,f):(e.selectorPrefix||"_")+f.slice(0,8),S=ur(w,r),b={type:gr,className:w,selector:S,declaration:g,pseudo:r,media:s,support:i};e.cache[h]=b,e._emitChange(b)}const y=e.cache[h].className;y&&(c+=` ${y}`)}}return c},e)}import.meta.env=lt;const mt=fo.createRequire(import.meta.url),{default:Br}=mt("fela-identifier"),{default:Nr}=mt("fela-plugin-embedded"),{default:Hr}=mt("fela-plugin-multiple-selectors"),{default:Dr}=mt("fela-plugin-typescript"),Yr=Ao==="development",_r=()=>{const e=Br(),o=Gn({devMode:Yr,enhancers:[Lr(),e],plugins:[Nr(),Hr(),Dr()]});return{identifier:e,renderer:o}},{identifier:me,renderer:Ne}=_r(),Xr=e=>Array.isArray(e)?e:[e],zr=e=>({children:o})=>t(qn,{renderer:e},...Xr(o)),Fe=zr(Ne),Fr=e=>Ne.renderRule(dt,e),pt=Object.assign(Fr,{global:Ne.renderStatic.bind(Ne)}),l=(e,o)=>{const n=typeof o=="function"?o:()=>o;return Vn(n,e,Object.keys)},W=(e,o)=>Kn(Jn(e,o)),se=()=>u(Zn()),Io="FRESH@0.1.0",Ur=W({format:Qn(Io,{description:"The canonical resume format and version. Should be 'FRESH@0.1.0'."}),version:u(m({description:"The semantic version number for this resume."}))},{description:"The 'meta' section contains metadata information for the resume, including the resume version, schema, and any other fields required by tools."}),Gr=Ie(W({label:m({description:"A label for this resume, such as 'Full-Stack Developer'."}),class:m({description:"Profession type or 'character class'."}),image:m({description:"URL or path to your picture in JPEG, PNG, GIF, or BMP format."}),brief:m({description:"A short description or summary of yourself as a candidate."}),quote:m({description:"Candidate quote or byline."})},{description:"The 'info' section contains basic summary information for the candidate, including an optional label or job title, candidate photo, summary, and quote."})),Wr=Ie(W({willing:bo([yo(),m()],{description:"Willingness to relocate."}),destinations:G(m({description:"City or area of relocation."}),{description:"Preferred destinations for relocation"})})),Vr=Ie(W({travel:er({description:"Percentage of time willing to travel (0 to 100)."}),authorization:m({description:"Work authorization: citizen, work visa, etc."}),commitment:G(m({description:"One of: contract, permanent, part-time, seasonal, full-time."}),{description:"Types of work commitment desired: contract, perm, seasonal, etc."}),remote:yo({description:"Open to remote employment opportunities."}),relocation:Wr},{description:"The disposition section describes the candidate's overall attitude towards new employment opportunities including: travel, relocation, schedule, desired type of work, and the like."})),qr=G(Ie(W({label:m({description:"A label for this contact information."}),category:m({description:"Type of contact information: email, phone, url, postal, or IM."}),value:m({description:"Phone number, email address, website, etc."})}))),Kr=Ie(W({email:m({description:"Primary contact email.",format:"email"}),phone:m({description:"Primary phone number."}),website:m({description:"Website, blog, or home page.",format:"uri"}),other:qr},{description:"The 'contact' section contains the candidate's contact information, including phone numbers, emails, websites, IMs, and custom contact types."})),Jr=Ie(W({address:m({description:"Your full postal address."}),code:m({description:"Postal or other official routing code."}),city:m({description:"Your home city."}),country:m({description:"Two-digit country code (US, AU, UK, IN, etc.)."}),region:m({description:"Your state, region, or province."})},{description:"The 'location' section, when present, contains the candidate's location and address info."})),Zr=G(W({employer:m({description:"Employer name."}),position:u(m({description:"Your position or formal job title."})),url:u(m({description:"Employer website.",format:"uri"})),start:u(m({description:"Date you began work, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),end:u(m({description:"Date you finished work, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),summary:u(m({description:"A summary of your achievements and responsibilities under this employer."})),highlights:u(G(m({description:"For ex, 'Led 5-person development team, increasing profits by 50% year-over-year'."}),{description:"Noteworthy achievements and/or highlights."})),location:u(m({description:"Freeform location of the job or position, e.g., 'San Francisco, CA' or 'Tokyo'."})),keywords:u(G(m({description:"For example, C++, HTML, HIPAA, etc."}),{description:"Keywords associated with this position."}))})),Qr=Ie(W({summary:m({description:"Summary of overall employment."}),history:Zr},{description:"The 'employment' section describes the candidate's formal employment history."})),es=G(W({category:m({description:"Media category: image, thumbnail, screenshot, MP3, download, etc."}),name:u(m({type:"string",description:"Friendly media name."})),url:u(m({type:"string",description:"Media link, path, or location."}))}),{description:"Media associated with this project."}),ts=G(W({title:m({description:"Project name or code-name."}),category:u(m({description:"Project type: open-source, private, side project, etc."})),description:u(m({description:"Project description or summary."})),summary:u(m({description:"A summary of your achievements and responsibilities on the project."})),role:u(m({description:"Your role on the project: Contributor, Creator, etc."})),url:u(m({description:"Project URL.",format:"uri"})),media:u(es),repo:u(m({description:"Repo URL.",format:"uri"})),start:u(m({description:"Date your involvement with project began, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),end:u(m({description:"Date your involvement with project ended, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),highlights:u(G(m({description:"For ex, 'Led 5-person development team, increasing profits by 50% year-over-year'."}),{description:"Noteworthy project-related achievements and/or highlights."})),location:u(m({description:"Freeform location of the job or position, e.g., 'San Francisco, CA' or 'Tokyo'."})),keywords:u(G(m({description:"For example, C++, HTML, HIPAA, etc."}),{description:"Keywords associated with this project."}))}),{description:"The 'projects' section describes the candidate's project history -- not the jobs the candidate has worked but the specific projects and enterprises the candidate has created or been involved in, whether paid or unpaid."}),os=Ie(W({sets:G(W({name:m({description:"Name of the skillset: 'Programming' or 'Project Management' etc."}),level:u(m({description:"Level of mastery of the skill."})),skills:G(m({description:"Title or ID of a skill from the skills list."}))})),list:G(W({name:m({description:"The name or title of the skill."}),level:u(m({description:"A freeform description of your level of mastery with the skill."})),summary:u(m({description:"A short summary of your experience with this skill."})),years:u(bo([m(),tr()],{description:"Number of years you've used the skill."}))}))},{description:"A description of the candidate's formal skills and capabilities."})),ns=G(W({title:u(m({description:"A freeform title for this education stint. Typically, this should be the short name of your degree, certification, or training."})),institution:m({description:"College or school name."}),area:u(m({description:"e.g. Arts"})),studyType:u(m({description:"e.g. Bachelor"})),start:u(m({description:"Date this schooling began, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),end:u(m({description:"Date this schooling ended, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),grade:u(m({description:"Grade or GPA."})),curriculum:u(G(m({description:"The course name and number or other identifying info."}),{description:"Notable courses, subjects, and educational experiences."})),url:u(m({description:"Website or URL of the institution or school.",format:"uri"})),summary:u(m({description:"A short summary of this education experience."})),keywords:u(G(m({description:"For example, C++, HTML, HIPAA, etc."}),{description:"Keywords associated with this education stint."})),highlights:u(G(m({description:"For ex, 'Graduated *summa cum laude*'."}),{description:"Noteworthy achievements and/or highlights."})),location:u(m({description:"Freeform location of the education, e.g., 'San Francisco, CA' or 'Tokyo'."}))})),rs=W({summary:u(m({description:"Summary of overall education."})),level:m({description:"Highest level of education obtained (none, diploma, some-college, degree)."}),degree:u(m({description:"Your degree, if any (BSCS, BA, etc.)."})),history:u(ns)},{description:"The 'employment' section describes the candidate's formal education, including college and university, continuing education, and standalone programs and courses."}),ss=G(W({network:m({description:"The name of the social network, such as Facebook or GitHub."}),user:m({description:"Your username or handle on the social network."}),url:m({description:"URL of your profile page on this network.",format:"uri"}),label:u(m({description:"A friendly label."}))}),{description:"The 'social' section describes the candidate's participation in internet and social networking services and communities including GitHub, FaceBook, and the like."}),Dl=W({name:m({description:"The candidate's name as it should appear on the resume."}),meta:Ur,info:u(Gr),disposition:u(Vr),contact:u(Kr),location:u(Jr),employment:u(Qr),projects:u(ts),skills:u(os),education:u(rs),social:u(ss),services:se(),recognition:se(),writing:se(),reading:se(),speaking:se(),governance:se(),languages:se(),samples:se(),references:se(),testimonials:se(),interests:se(),extracurricular:se(),affiliation:se()},{title:"FRESH Resume Schema"});var A;(function(e){e.OPEN_SOURCE="Open source",e.PUBLIC_ACCESS="Public access"})(A||(A={}));var P;(function(e){e.CONTRIBUTOR="Contributor",e.CREATOR="Creator",e.DEVELOPER="Developer"})(P||(P={}));const is=Date.now(),ht=e=>e==null?is:new Date(e).getTime(),as=e=>e.slice().sort((o,n)=>{const r=ht(o.end),s=ht(n.end);if(r>s)return-1;if(s>r)return 1;const i=ht(o.start),c=ht(n.start);return i>c?-1:c>i?1:0}),cs=e=>as(e),Mo=cs([{title:"@getodk/xforms-engine",category:A.OPEN_SOURCE,description:`
+Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information.`);else{const u=hn(m,p,r,i,s);if(!e.cache.hasOwnProperty(u)){if(fn(p)){e.cache[u]={className:""};continue}const h=Sn(m,p),y=Nt(u),v=e.devMode?xn(m,p,r,i,s,y):(e.selectorPrefix||"_")+y.slice(0,8),f=bn(v,r),k={type:yn,className:v,selector:f,declaration:h,pseudo:r,media:i,support:s};e.cache[u]=k,e._emitChange(k)}const b=e.cache[u].className;b&&(l+=` ${b}`)}}return l},e)}import.meta.env=et;const _e=Mt.createRequire(import.meta.url),{default:Pn}=_e("fela-identifier"),{default:On}=_e("fela-plugin-embedded"),{default:In}=_e("fela-plugin-multiple-selectors"),{default:Mn}=_e("fela-plugin-typescript"),jn=Ht==="development",Ln=()=>{const e=Pn(),t=cn({devMode:jn,enhancers:[An(),e],plugins:[On(),In(),Mn()]});return{identifier:e,renderer:t}},{identifier:Fe,renderer:ce}=Ln(),Dn=e=>Array.isArray(e)?e:[e],Bn=e=>({children:t})=>o(Yo,{renderer:e},...Dn(t)),ge=Bn(ce),$n=e=>ce.renderRule(He,e),Ue=Object.assign($n,{global:ce.renderStatic.bind(ce)}),c=(e,t)=>{const n=typeof t=="function"?t:()=>t;return Uo(n,e,Object.keys)},D=(e,t)=>zo(Go(e,t)),W=()=>g(Xo()),_t="FRESH@0.1.0",Nn=D({format:Wo(_t,{description:"The canonical resume format and version. Should be 'FRESH@0.1.0'."}),version:g(d({description:"The semantic version number for this resume."}))},{description:"The 'meta' section contains metadata information for the resume, including the resume version, schema, and any other fields required by tools."}),Hn=le(D({label:d({description:"A label for this resume, such as 'Full-Stack Developer'."}),class:d({description:"Profession type or 'character class'."}),image:d({description:"URL or path to your picture in JPEG, PNG, GIF, or BMP format."}),brief:d({description:"A short description or summary of yourself as a candidate."}),quote:d({description:"Candidate quote or byline."})},{description:"The 'info' section contains basic summary information for the candidate, including an optional label or job title, candidate photo, summary, and quote."})),_n=le(D({willing:At([Pt(),d()],{description:"Willingness to relocate."}),destinations:L(d({description:"City or area of relocation."}),{description:"Preferred destinations for relocation"})})),Fn=le(D({travel:Vo({description:"Percentage of time willing to travel (0 to 100)."}),authorization:d({description:"Work authorization: citizen, work visa, etc."}),commitment:L(d({description:"One of: contract, permanent, part-time, seasonal, full-time."}),{description:"Types of work commitment desired: contract, perm, seasonal, etc."}),remote:Pt({description:"Open to remote employment opportunities."}),relocation:_n},{description:"The disposition section describes the candidate's overall attitude towards new employment opportunities including: travel, relocation, schedule, desired type of work, and the like."})),Un=L(le(D({label:d({description:"A label for this contact information."}),category:d({description:"Type of contact information: email, phone, url, postal, or IM."}),value:d({description:"Phone number, email address, website, etc."})}))),Yn=le(D({email:d({description:"Primary contact email.",format:"email"}),phone:d({description:"Primary phone number."}),website:d({description:"Website, blog, or home page.",format:"uri"}),other:Un},{description:"The 'contact' section contains the candidate's contact information, including phone numbers, emails, websites, IMs, and custom contact types."})),zn=le(D({address:d({description:"Your full postal address."}),code:d({description:"Postal or other official routing code."}),city:d({description:"Your home city."}),country:d({description:"Two-digit country code (US, AU, UK, IN, etc.)."}),region:d({description:"Your state, region, or province."})},{description:"The 'location' section, when present, contains the candidate's location and address info."})),Gn=L(D({employer:d({description:"Employer name."}),position:g(d({description:"Your position or formal job title."})),url:g(d({description:"Employer website.",format:"uri"})),start:g(d({description:"Date you began work, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),end:g(d({description:"Date you finished work, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),summary:g(d({description:"A summary of your achievements and responsibilities under this employer."})),highlights:g(L(d({description:"For ex, 'Led 5-person development team, increasing profits by 50% year-over-year'."}),{description:"Noteworthy achievements and/or highlights."})),location:g(d({description:"Freeform location of the job or position, e.g., 'San Francisco, CA' or 'Tokyo'."})),keywords:g(L(d({description:"For example, C++, HTML, HIPAA, etc."}),{description:"Keywords associated with this position."}))})),Xn=le(D({summary:d({description:"Summary of overall employment."}),history:Gn},{description:"The 'employment' section describes the candidate's formal employment history."})),Wn=L(D({category:d({description:"Media category: image, thumbnail, screenshot, MP3, download, etc."}),name:g(d({type:"string",description:"Friendly media name."})),url:g(d({type:"string",description:"Media link, path, or location."}))}),{description:"Media associated with this project."}),Vn=L(D({title:d({description:"Project name or code-name."}),category:g(d({description:"Project type: open-source, private, side project, etc."})),description:g(d({description:"Project description or summary."})),summary:g(d({description:"A summary of your achievements and responsibilities on the project."})),role:g(d({description:"Your role on the project: Contributor, Creator, etc."})),url:g(d({description:"Project URL.",format:"uri"})),media:g(Wn),repo:g(d({description:"Repo URL.",format:"uri"})),start:g(d({description:"Date your involvement with project began, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),end:g(d({description:"Date your involvement with project ended, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),highlights:g(L(d({description:"For ex, 'Led 5-person development team, increasing profits by 50% year-over-year'."}),{description:"Noteworthy project-related achievements and/or highlights."})),location:g(d({description:"Freeform location of the job or position, e.g., 'San Francisco, CA' or 'Tokyo'."})),keywords:g(L(d({description:"For example, C++, HTML, HIPAA, etc."}),{description:"Keywords associated with this project."}))}),{description:"The 'projects' section describes the candidate's project history -- not the jobs the candidate has worked but the specific projects and enterprises the candidate has created or been involved in, whether paid or unpaid."}),Kn=le(D({sets:L(D({name:d({description:"Name of the skillset: 'Programming' or 'Project Management' etc."}),level:g(d({description:"Level of mastery of the skill."})),skills:L(d({description:"Title or ID of a skill from the skills list."}))})),list:L(D({name:d({description:"The name or title of the skill."}),level:g(d({description:"A freeform description of your level of mastery with the skill."})),summary:g(d({description:"A short summary of your experience with this skill."})),years:g(At([d(),Ko()],{description:"Number of years you've used the skill."}))}))},{description:"A description of the candidate's formal skills and capabilities."})),qn=L(D({title:g(d({description:"A freeform title for this education stint. Typically, this should be the short name of your degree, certification, or training."})),institution:d({description:"College or school name."}),area:g(d({description:"e.g. Arts"})),studyType:g(d({description:"e.g. Bachelor"})),start:g(d({description:"Date this schooling began, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),end:g(d({description:"Date this schooling ended, in YYYY, YYYY-MM, or YYYY-MM-DD format.",format:"date"})),grade:g(d({description:"Grade or GPA."})),curriculum:g(L(d({description:"The course name and number or other identifying info."}),{description:"Notable courses, subjects, and educational experiences."})),url:g(d({description:"Website or URL of the institution or school.",format:"uri"})),summary:g(d({description:"A short summary of this education experience."})),keywords:g(L(d({description:"For example, C++, HTML, HIPAA, etc."}),{description:"Keywords associated with this education stint."})),highlights:g(L(d({description:"For ex, 'Graduated *summa cum laude*'."}),{description:"Noteworthy achievements and/or highlights."})),location:g(d({description:"Freeform location of the education, e.g., 'San Francisco, CA' or 'Tokyo'."}))})),Jn=D({summary:g(d({description:"Summary of overall education."})),level:d({description:"Highest level of education obtained (none, diploma, some-college, degree)."}),degree:g(d({description:"Your degree, if any (BSCS, BA, etc.)."})),history:g(qn)},{description:"The 'employment' section describes the candidate's formal education, including college and university, continuing education, and standalone programs and courses."}),Qn=L(D({network:d({description:"The name of the social network, such as Facebook or GitHub."}),user:d({description:"Your username or handle on the social network."}),url:d({description:"URL of your profile page on this network.",format:"uri"}),label:g(d({description:"A friendly label."}))}),{description:"The 'social' section describes the candidate's participation in internet and social networking services and communities including GitHub, FaceBook, and the like."}),yl=D({name:d({description:"The candidate's name as it should appear on the resume."}),meta:Nn,info:g(Hn),disposition:g(Fn),contact:g(Yn),location:g(zn),employment:g(Xn),projects:g(Vn),skills:g(Kn),education:g(Jn),social:g(Qn),services:W(),recognition:W(),writing:W(),reading:W(),speaking:W(),governance:W(),languages:W(),samples:W(),references:W(),testimonials:W(),interests:W(),extracurricular:W(),affiliation:W()},{title:"FRESH Resume Schema"});var T;(function(e){e.OPEN_SOURCE="Open source",e.PUBLIC_ACCESS="Public access"})(T||(T={}));var E;(function(e){e.CONTRIBUTOR="Contributor",e.CREATOR="Creator",e.DEVELOPER="Developer"})(E||(E={}));const Zn=Date.now(),Ye=e=>e==null?Zn:new Date(e).getTime(),er=e=>e.slice().sort((t,n)=>{const r=Ye(t.end),i=Ye(n.end);if(r>i)return-1;if(i>r)return 1;const s=Ye(t.start),l=Ye(n.start);return s>l?-1:l>s?1:0}),tr=e=>er(e),or=tr([{title:"@getodk/xforms-engine",category:T.OPEN_SOURCE,description:`
       Client-agnostic, reactive runtime for
       [ODK XForms](https://getodk.github.io/xforms-spec/)
-    `,repo:"https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/xforms-engine",role:P.CREATOR,start:"2023-10",end:"2025-04"},{title:"@getodk/xpath",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/xforms-engine",role:E.CREATOR,start:"2023-10",end:"2025-04"},{title:"@getodk/xpath",category:T.OPEN_SOURCE,description:`
       Extensible XPath 1.0 interpreter, supporting
       [ODK XForms](https://getodk.github.io/xforms-spec/#xpath-functions)
       extensions, arbitrary DOM implementations
-    `,repo:"https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/xpath",role:P.CREATOR,start:"2023-10",end:"2025-04"},{title:"@getodk/tree-sitter-xpath",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/xpath",role:E.CREATOR,start:"2023-10",end:"2025-04"},{title:"@getodk/tree-sitter-xpath",category:T.OPEN_SOURCE,description:`
       [tree-sitter](https://tree-sitter.github.io/tree-sitter/) parser for
       XPath 1.0 syntax
-    `,repo:"https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/tree-sitter-xpath",role:P.CREATOR,start:"2023-10",end:"2025-04"},{title:"@getodk/web-forms",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/tree-sitter-xpath",role:E.CREATOR,start:"2023-10",end:"2025-04"},{title:"@getodk/web-forms",category:T.OPEN_SOURCE,description:`
       [ODK Web Forms](https://github.com/getodk/web-forms) UI client
-    `,repo:"https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/web-forms",role:P.CONTRIBUTOR,start:"2024-03",end:"2025-04"},{title:"Astro",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/getodk/web-forms/tree/ab3be86e457250f4bbb58ff9857695a9f9d1c789/packages/web-forms",role:E.CONTRIBUTOR,start:"2024-03",end:"2025-04"},{title:"Astro",category:T.OPEN_SOURCE,description:`
       "Build faster websites with less client-side Javascript"
     `,summary:`
       Collaborate with core contributors to add support for rendering
       [SolidJS](https://www.solidjs.com/) components.
-    `,repo:"https://github.com/snowpackjs/astro",role:P.CONTRIBUTOR,start:"2021-07",end:"2021-07"},{title:"Enketo",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/snowpackjs/astro",role:E.CONTRIBUTOR,start:"2021-07",end:"2021-07"},{title:"Enketo",category:T.OPEN_SOURCE,description:`
       "Web forms evolved. Deploy and conduct surveys that work without a
       connection, on any device."
     `,summary:`
       Ongoing maintenance, developer experience improvements & helping
       determine the future direction of Enketo projects.
-    `,repo:"https://github.com/enketo",role:P.DEVELOPER,start:"2021-04",end:"2023-10"},{title:"eyelidlessness.github.io",category:A.PUBLIC_ACCESS,description:`
-      My personal website, r\xE9sum\xE9 and tech blog.
-    `,repo:"https://github.com/eyelidlessness/eyelidlessness.github.io",role:P.CREATOR,start:"2020-10"},{title:"Microsite",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/enketo",role:E.DEVELOPER,start:"2021-04",end:"2023-10"},{title:"Microsite",category:T.OPEN_SOURCE,description:`
       "A fast, opinionated static site generator powered by Snowpack.
       Build simple static sites with fool-proof performance by leveraging
       automatic partial hydration."
@@ -34,29 +32,29 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
       on the project. Microsite powers my site, thanks [@natemoo-re][1]!
 
       [1]: https://github.com/natemoo-re
-    `,repo:"https://github.com/natemoo-re/microsite",role:P.CONTRIBUTOR,start:"2021-01",end:"2021-05"},{title:"HNDarkMode",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/natemoo-re/microsite",role:E.CONTRIBUTOR,start:"2021-01",end:"2021-05"},{title:"HNDarkMode",category:T.OPEN_SOURCE,description:`
       Dark mode web extension for Hacker News.
     `,summary:`
       Quick weekend project, made by request when I saw that it had been
       left up to the Hacker News community.
-    `,repo:"https://github.com/eyelidlessness/HNDarkMode",role:P.CREATOR,start:"2021-01",end:"2021-01"},{title:"typescript-eslint",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/eyelidlessness/HNDarkMode",role:E.CREATOR,start:"2021-01",end:"2021-01"},{title:"typescript-eslint",category:T.OPEN_SOURCE,description:`
       "An ESLint plugin which provides lint rules for TypeScript codebases."
-    `,summary:"\n      Introduced the `ignoreInferredTypes` option for the\n      `prefer-readonly-parameter-types` rule to improve DX when the rule\n      is used with third-party libraries.\n    ",repo:"https://github.com/typescript-eslint/typescript-eslint",role:P.CONTRIBUTOR,start:"2020-10",end:"2020-10"},{title:"mdx",category:A.OPEN_SOURCE,description:`
+    `,summary:"\n      Introduced the `ignoreInferredTypes` option for the\n      `prefer-readonly-parameter-types` rule to improve DX when the rule\n      is used with third-party libraries.\n    ",repo:"https://github.com/typescript-eslint/typescript-eslint",role:E.CONTRIBUTOR,start:"2020-10",end:"2020-10"},{title:"mdx",category:T.OPEN_SOURCE,description:`
       "Markdown for the component era"
     `,summary:`
       Improved TypeScript support.
-    `,repo:"https://github.com/mdx-js/mdx",role:P.CONTRIBUTOR,start:"2020-02",end:"2020-02"},{title:"FAST",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/mdx-js/mdx",role:E.CONTRIBUTOR,start:"2020-02",end:"2020-02"},{title:"FAST",category:T.OPEN_SOURCE,description:`
       "FAST is a collection of technologies built on Web Components and
       modern Web Standards, designed to help you efficiently tackle some
       of the most common challenges in website and application design
       and development."
     `,summary:`
       Improved documentation.
-    `,repo:"https://github.com/microsoft/fast",role:P.CONTRIBUTOR,start:"2018-08",end:"2018-08"},{title:"Razzle",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/microsoft/fast",role:E.CONTRIBUTOR,start:"2018-08",end:"2018-08"},{title:"Razzle",category:T.OPEN_SOURCE,description:`
       "Build modern React applications. From zero to production."
     `,summary:`
       Corrected documentation in TypeScript example.
-    `,repo:"https://github.com/jaredpalmer/razzle",role:P.CONTRIBUTOR,start:"2017-08",end:"2017-08"},{title:"CLJSJS",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/jaredpalmer/razzle",role:E.CONTRIBUTOR,start:"2017-08",end:"2017-08"},{title:"CLJSJS",category:T.OPEN_SOURCE,description:`
       "CLJSJS is an effort to package Javascript libraries to be able to
       use them from within ClojureScript."
     `,summary:`
@@ -65,24 +63,24 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
 
       [1]: https://github.com/MikeMcl/big.js/
       [2]: https://github.com/jkbrzt/rrule
-    `,repo:"https://github.com/cljsjs/packages",role:P.CONTRIBUTOR,start:"2016-06",end:"2017-05"},{title:"Espalier",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/cljsjs/packages",role:E.CONTRIBUTOR,start:"2016-06",end:"2017-05"},{title:"Espalier",category:T.OPEN_SOURCE,description:`
       Placeholder style rules for [Garden][1].
 
       [1]: https://github.com/noprompt/garden
     `,summary:`
       Created and open sourced at Reup to optimize redundant CSS rules
       as a simple DSL with a great DX.
-    `,repo:"https://github.com/reup-distribution/espalier",role:P.CREATOR,start:"2015-12",end:"2017-02"},{title:"pre-commit-mypy",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/reup-distribution/espalier",role:E.CREATOR,start:"2015-12",end:"2017-02"},{title:"pre-commit-mypy",category:T.OPEN_SOURCE,description:`
       "Mirror of mypy package for pre-commit"
     `,summary:`
       Expanded version support.
-    `,repo:"https://github.com/d1ff/pre-commit-mypy",role:P.CONTRIBUTOR,start:"2016-10",end:"2016-10"},{title:"cljs-rest",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/d1ff/pre-commit-mypy",role:E.CONTRIBUTOR,start:"2016-10",end:"2016-10"},{title:"cljs-rest",category:T.OPEN_SOURCE,description:`
       A ClojureScript REST client, suitable for AJAX interaction with
       RESTful APIs.
     `,summary:`
       Created and open sourced at Reup to simplify integration between
       ClojureScript websites & web apps and backend REST APIs.
-    `,repo:"https://github.com/reup-distribution/cljs-rest",role:P.CREATOR,start:"2016-03",end:"2016-07"},{title:"cljs-rrule",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/reup-distribution/cljs-rest",role:E.CREATOR,start:"2016-03",end:"2016-07"},{title:"cljs-rrule",category:T.OPEN_SOURCE,description:`
       A ClojureScript wrapper for [rrule.js][1], with common Clojure
       semantics for \`RRule\` and \`RRuleSet\`, conforming to [RFC 2445][2]
       ([with some specific exceptions][3]).
@@ -93,7 +91,7 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
     `,summary:`
       Created and open sourced at Reup for generating standardized rules
       for recurring dates & times.
-    `,repo:"https://github.com/reup-distribution/cljs-rrule",role:P.CREATOR,start:"2016-06",end:"2016-07"},{title:"speclj",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/reup-distribution/cljs-rrule",role:E.CREATOR,start:"2016-06",end:"2016-07"},{title:"speclj",category:T.OPEN_SOURCE,description:`
       "It's a TDD/BDD framework for [Clojure][1] and [Clojurescript][2],
       based on [RSpec][3]."
 
@@ -107,17 +105,17 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
       throwable type.
 
       [1]: https://github.com/clojure/clojurescript/wiki/Using-cljc
-    `,repo:"https://github.com/slagyr/speclj",role:P.CONTRIBUTOR,start:"2016-04",end:"2016-04"},{title:"alter-cljs",category:A.OPEN_SOURCE,description:"\n      A ClojureScript implementation of `alter-var-root`.\n    ",summary:`
+    `,repo:"https://github.com/slagyr/speclj",role:E.CONTRIBUTOR,start:"2016-04",end:"2016-04"},{title:"alter-cljs",category:T.OPEN_SOURCE,description:"\n      A ClojureScript implementation of `alter-var-root`.\n    ",summary:`
       Created to provide the same behavior as [Clojure][1] on the JVM.
 
       [1]: https://clojuredocs.org/clojure.core/alter-var-root
-    `,repo:"https://github.com/eyelidlessness/alter-cljs",role:P.CREATOR,start:"2016-01",end:"2016-01"},{title:"Figwheel",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/eyelidlessness/alter-cljs",role:E.CREATOR,start:"2016-01",end:"2016-01"},{title:"Figwheel",category:T.OPEN_SOURCE,description:`
       "Figwheel builds your ClojureScript code and hot loads it into the
       browser as you are coding!"
     `,summary:`
       Added support for the \`:notify-command\` configuration allowing
       projects to run arbitrary commands once a rebuild is complete.
-    `,repo:"https://github.com/bhauman/lein-figwheel",role:P.CONTRIBUTOR,start:"2015-12",end:"2015-12"},{title:"Accountant",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/bhauman/lein-figwheel",role:E.CONTRIBUTOR,start:"2015-12",end:"2015-12"},{title:"Accountant",category:T.OPEN_SOURCE,description:`
       "Accountant is a ClojureScript library to make navigation in
       single-page applications simple."
     `,summary:`
@@ -125,25 +123,54 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
       set when the link was clicked, and where a previous location
       state's query parameters were not removed when navigating to
       another link without those query parameters.
-    `,repo:"https://github.com/venantius/accountant",role:P.CONTRIBUTOR,start:"2015-12",end:"2016-12"},{title:"GitHub Issues Dump",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/venantius/accountant",role:E.CONTRIBUTOR,start:"2015-12",end:"2016-12"},{title:"GitHub Issues Dump",category:T.OPEN_SOURCE,description:`
       Utility for exporting all of an organization's GitHub issues and
       comments.
     `,summary:`
       Created and open sourced at ClipCard to easily produce a full
       archive of an organization's GitHub issues activity.
-    `,repo:"https://github.com/ClipCard/github_issues_dump",role:P.CREATOR,start:"2015-08",end:"2015-08"},{title:"Bundle Tracker",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/ClipCard/github_issues_dump",role:E.CREATOR,start:"2015-08",end:"2015-08"},{title:"Bundle Tracker",category:T.OPEN_SOURCE,description:`
       Utility for cataloging and identifying macOS "bundle" directory
       types which are commonly treated as files.
     `,summary:`
       Created and open sourced at ClipCard for use in several API
       integrations where macOS bundle directories were expected to be
       represented as files.
-    `,repo:"https://github.com/ClipCard/bundle_tracker",role:P.CREATOR,start:"2015-01",end:"2015-05"},{title:"quick-clojure",category:A.OPEN_SOURCE,description:`
+    `,repo:"https://github.com/ClipCard/bundle_tracker",role:E.CREATOR,start:"2015-01",end:"2015-05"},{title:"quick-clojure",category:T.OPEN_SOURCE,description:`
       "Run clojure scripts and lein commands quickly using a persistent
       nREPL session."
     `,summary:`
       Fixed a bug where the REPL's port was reported incorrectly.
-    `,repo:"https://github.com/benwbooth/quick-clojure",role:P.CONTRIBUTOR,start:"2015-01",end:"2015-01"}]),ls=e=>e,ds=[{employer:"Treez",position:"Senior Software Engineer",start:"2018-12",end:"2020-09",summary:`
+    `,repo:"https://github.com/benwbooth/quick-clojure",role:E.CONTRIBUTOR,start:"2015-01",end:"2015-01"}]),nr=e=>e,rr=e=>e,ir=rr([{employer:"ODK",position:"Senior Software Engineer",start:"2021-03",end:"2025-04",summary:`
+      ODK builds data collection software, used globally across a wide variety
+      of high-social impact campaigns, in public health and beyond.
+    `,highlights:[`
+        Conceived and created ODK Web Forms\u2014ODK's greenfield web-based data
+        collection software\u2014which now complements Collect, ODK's long-standing
+        flagship data collection product for Android devices.
+      `,`
+        Spearheaded initial prototyping, design & architecture of Web Forms,
+        supporting evaluation of long-term viability for the project by ODK
+        leadership.
+      `,`
+        Primarily responsible for design & implementation of Web Forms XPath
+        functionality. Achieved full W3C XPath 1.0 standards compliance;
+        extension of XPath language semantics to support additional data types;
+        development of a broad library of custom functions supporting the
+        underlying ODK XForms specification; adapted interpreter to provide XPath
+        evaluation semantics in arbitrary runtime contexts, with a small &
+        flexible adapter API.
+      `,`
+        Primarily responsible for design & implementation of the Web Forms XForms
+        Engine. Implemented the engine's core data model and computational
+        graph, according to ODK XForms spec; developed the engine's fundamental
+        abstractions for computation as an internal reactive graph; conceived and
+        matured the engine's external interfaces, providing simple, cohesive & client-agnostic access to the engine's underlying ODK XForms semantics.`,`
+        Directed design & architecture of Web forms to support long-term vision
+        for the project\u2014anticipating unification of ODK's data collection
+        software across all supported platforms, and expanding functionality well
+        beyond the project's current, core data capture feature set.
+      `]},{employer:"Treez",position:"Senior Software Engineer",start:"2018-12",end:"2020-09",summary:`
       Treez provides a full seed-to-sale catalogue of tools for
       inventory & process management, regulatory reporting, B2B
       sales, and point of sale for the legal cannabis market.
@@ -249,29 +276,29 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
         consumer adoption.
       `,`
         Designed and developed ClipCard for Mac.
-      `]}],ms=ds;var M;(function(e){e.BASIC="Basic",e.INTERMEDIATE="Intermediate",e.ADVANCED="Advanced",e.EXPERT="Expert"})(M||(M={}));var et;(function(e){e.LANGUAGES_PLATFORMS="Languages & Platforms",e.SERVICES_DISTRIBUTED_SYSTEMS="Services & Distributed Systems",e.USER_INTERFACE_EXPERIENCE="User Interface & Experience"})(et||(et={}));const Bt={[et.SERVICES_DISTRIBUTED_SYSTEMS]:[{name:"REST & HATEOAS",level:M.EXPERT},{name:"OpenAPI & JSON Schema",level:M.EXPERT},{name:"Django REST framework",level:M.ADVANCED},{name:"Fault tolerance",level:M.ADVANCED},{name:"Microservice architecture",level:M.ADVANCED},{name:"Apache Storm",level:M.INTERMEDIATE},{name:"Redis",level:M.BASIC}],[et.USER_INTERFACE_EXPERIENCE]:[{name:"React & JSX",level:M.EXPERT},{name:"DOM & Web APIs",level:M.EXPERT},{name:"Web performance",level:M.ADVANCED},{name:"SVG",level:M.ADVANCED},{name:"UI & UX design",level:M.ADVANCED},{name:"A11y",level:M.INTERMEDIATE}],[et.LANGUAGES_PLATFORMS]:[{name:"TypeScript (Node.js & web)",level:M.EXPERT},{name:"Clojure & ClojureScript",level:M.EXPERT},{name:"HTML & CSS",level:M.EXPERT},{name:"SQL (PostgreSQL)",level:M.ADVANCED},{name:"Python",level:M.INTERMEDIATE},{name:"Swift",level:M.BASIC},{name:"Java",level:M.BASIC}]},ps={list:Object.values(Bt).flatMap(dt),merged:Bt,sets:Object.entries(Bt).map(([e,o])=>({name:e,skills:o.map(({name:n})=>n)}))},Yl=ls({name:"Trevor Schmidt",meta:{format:Io,version:"0.0.1"},contact:{email:"gnosis@gmail.com",website:"https://eyelidlessness.github.io/"},disposition:{authorization:"citizen",commitment:["full-time","permanent"],remote:!0,relocation:{willing:"Unlikely"},travel:5},education:{history:[{end:"2000",institution:"Potomac Falls High School",location:"Sterling, VA",start:"1996",studyType:"High school"}],level:"High School"},employment:{history:ms},info:{class:"Software Engineer",brief:wo(`
+      `]}]),sr=ir;var S;(function(e){e.BASIC="Basic",e.INTERMEDIATE="Intermediate",e.ADVANCED="Advanced",e.EXPERT="Expert"})(S||(S={}));var Ee;(function(e){e.LANGUAGES_PLATFORMS="Languages",e.SERVICES_DISTRIBUTED_SYSTEMS="Services",e.USER_INTERFACE_EXPERIENCE="UI/UX",e.DOMAIN_SPECIFIC_LANGUAGES="DSL\u200Bs"})(Ee||(Ee={}));const tt={[Ee.SERVICES_DISTRIBUTED_SYSTEMS]:[{name:"REST & HATEOAS",level:S.EXPERT},{name:"OpenAPI & JSON Schema",level:S.EXPERT},{name:"Django REST framework",level:S.ADVANCED},{name:"Fault tolerance",level:S.ADVANCED},{name:"Microservice architecture",level:S.ADVANCED},{name:"Apache Storm",level:S.INTERMEDIATE},{name:"Redis",level:S.BASIC}],[Ee.USER_INTERFACE_EXPERIENCE]:[{name:"React & JSX",level:S.EXPERT},{name:"DOM & Web APIs",level:S.EXPERT},{name:"Web performance",level:S.ADVANCED},{name:"UI & UX design",level:S.ADVANCED},{name:"A11y",level:S.INTERMEDIATE}],[Ee.DOMAIN_SPECIFIC_LANGUAGES]:[{name:"Interpreter runtime",level:S.ADVANCED},{name:"Interpreter optimization",level:S.INTERMEDIATE},{name:"Domain-specific tooling",level:S.INTERMEDIATE}],[Ee.LANGUAGES_PLATFORMS]:[{name:"TypeScript (Node.js & web)",level:S.EXPERT},{name:"Clojure & ClojureScript",level:S.EXPERT},{name:"XPath",level:S.EXPERT},{name:"ODK XForms",level:S.EXPERT},{name:"HTML & CSS",level:S.EXPERT},{name:"SQL (PostgreSQL)",level:S.ADVANCED},{name:"Python",level:S.INTERMEDIATE},{name:"Swift",level:S.BASIC},{name:"Java",level:S.BASIC}]},ar={list:Object.values(tt).flatMap(He),merged:tt,sets:Object.entries(tt).map(([e,t])=>({name:e,skills:t.map(({name:n})=>n)}))},lr=nr({name:"Trevor Schmidt",meta:{format:_t,version:"0.0.1"},contact:{email:"gnosis@gmail.com",website:"https://eyelidlessness.github.io/"},disposition:{authorization:"citizen",commitment:["full-time","permanent"],remote:!0,relocation:{willing:"Unlikely"},travel:5},education:{history:[{end:"2000",institution:"Potomac Falls High School",location:"Sterling, VA",start:"1996",studyType:"High school"}],level:"High School"},employment:{history:sr},info:{class:"Software Engineer",brief:It(`
       Senior full-stack software engineer with 15+ years experience
       building and maintaining high-quality services and distributed
       systems; powerful tooling and libraries that accelerate
       development; and high-performance, highly usable and attractive
       websites & web applications.
-    `).trim().replace(/\n\s+/g," "),label:"Senior Full-Stack Software Engineer"},location:{city:"Seattle",region:"WA",country:"US"},projects:Mo,skills:ps,social:[{network:"GitHub",url:"https://github.com/eyelidlessness",user:"eyelidlessness"}]}),ut=Symbol("DEFAULT_TOPIC"),N={[ut]:ut,ABLEISM:"Ableism",ART:"Art",LEMON:"My puppy",MENTAL_ILLNESS:"Mental illness",NEURODIVERGENCE:"Neurodivergence",PHILOSOPHY:"Philosophy",POLITICS:"Politics",RACISM:"Racism",SEXISM:"Sexism",SUBSTANCE_ABUSE:"Substance use & abuse",TECHNOLOGY:"Technology",TRANSPHOBIA:"Transphobia"},hs=e=>typeof e=="string"||typeof e=="symbol",Oo=e=>hs(e)&&e in N,Nt=e=>Oo(e)?N[e]:e,Ro=Object.entries(N).reduce((e,o)=>{const[n,r]=o;return typeof n=="string"?{...e,[r]:n}:e},{}),us=e=>Oo(e)?e:Ro[e],gs=e=>e.toLowerCase().replace(/\W+|_+/g,"-"),fs=Object.fromEntries(Object.entries(Ro).map(([e,o])=>typeof o=="string"?[e,gs(o)]:null).filter(e=>e!=null)),bs=e=>{const o=Nt(e);if(typeof o=="string")return fs[o]},gt=2,Ht={minEm:1.0625,fluidVw:1.0625*gt,maxEm:1.25},O="@media (prefers-color-scheme: dark)",ys=["h1","h2","h3","h4","h5","h6"],Ss=["dd","dl","dt","li","ol","ul"],xs=[...ys,...Ss,"p"],Ue=Ht.minEm/Ht.maxEm,Ce={h1:1.953,h2:1.563,h3:1.25},vs={h1:{minEm:Ce.h1*Ue,fluidVw:Ce.h1*Ue*gt,maxEm:Ce.h1},h2:{minEm:Ce.h2*Ue,fluidVw:Ce.h2*Ue*gt,maxEm:Ce.h2},h3:{minEm:Ce.h3*Ue,fluidVw:Ce.h3*Ue*gt,maxEm:Ce.h3}},jo=75,ft=1.25,Cs=["0.7fr",`${ft}rem`,[`${jo}ch`,`calc(100% - ${ft*2}rem)`],`${ft}rem`,"1.2fr"],Dt=1,ws=["0.7fr",`${Dt}rem`,[`${jo*1.1875}ch`,`calc(100% - ${Dt*2}rem)`],`${Dt}rem`,"1.2fr"],ks=["ui-monospace","Menlo","Monaco","Cascadia Mono","Segoe UI Mono","Roboto Mono","Oxygen Mono","Ubuntu Monospace","Source Code Pro","Fira Mono","Droid Sans Mono","Courier New","monospace"],Yt=ks.join(", "),Ps=["system-ui","-apple-system","BlinkMacSystemFont","Segoe UI","Roboto","Helvetica Neue","Arial","Noto Sans","sans-serif","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"],Ts=Ps.map(e=>e.includes(" ")?`"${e}"`:e).join(", "),te={DEFAULT_TOPIC:{dark:"#aaa",light:"#555"},ABLEISM:"#edc258",ARTS_CRAFTS:"#293fe4",LEMON:"#82c2e4",MENTAL_ILLNESS:"#d33d0a",NEURODIVERGENCE:"#f7834a",PHILOSOPHY:"#9a9aa6",POLITICS:"#ffe413",RACISM:"#7a5221",SEXISM:"#ec9ac0",SUBSTANCE_ABUSE:"#edbb0e",TECHNOLOGY:"hsla(336deg, 100%, 42%, 0.9)",TRANSPHOBIA:"#10be8a"},Es="hover-inherit-topic-color",As={[N[ut]]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.DEFAULT_TOPIC.light},[O]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.DEFAULT_TOPIC.dark}}}}},[N.ABLEISM]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.ABLEISM}}},[N.ART]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.ARTS_CRAFTS}}},[N.LEMON]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.LEMON}}},[N.MENTAL_ILLNESS]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.MENTAL_ILLNESS}}},[N.NEURODIVERGENCE]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.NEURODIVERGENCE}}},[N.PHILOSOPHY]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.PHILOSOPHY}}},[N.POLITICS]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.POLITICS}}},[N.RACISM]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.RACISM}}},[N.SEXISM]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.SEXISM}}},[N.SUBSTANCE_ABUSE]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.SUBSTANCE_ABUSE}}},[N.TECHNOLOGY]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.TECHNOLOGY}}},[N.TRANSPHOBIA]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:te.TRANSPHOBIA}}}},$o=me(),a={HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME:Es,baseFontSizeRange:Ht,darkMode:O,abbreviation:{backgroundImage:`linear-gradient(${["to top","hsl(64deg, 100%, 50%, 0.25)","hsl(64deg, 100%, 50%, 0.25) 0.5em","transparent 0.5em"].join(", ")})`},artOverlay:{backgroundColor:"hsla(192deg, 85%, 99%, 0.7)",nested:{"@supports (backdrop-filter: blur(40px))":{backgroundColor:"hsla(192deg, 85%, 99%, 0.5)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)"},[O]:{backgroundColor:"hsla(192deg, 10%, 10%, 0.7)","@supports (backdrop-filter: blur(40px))":{backgroundColor:"hsla(192deg, 10%, 10%, 0.5)"}}}},aside:{backgroundColor:"hsl(192deg, 35%, 96.5%)"},asideBlock:{symbol:{color:"hsl(208deg, 35%, 81%)",nested:{[O]:{color:"hsl(208deg, 35%, 35%)"}}}},blog:{listing:{descriptionIdentifier:$o,description:{color:"hsl(212deg, 10%, 15%)",fontSize:"0.9375em",nested:{[O]:{color:"hsl(212deg, 10%, 75%)"}}},item:{"&:nth-child(odd)":{backgroundColor:"hsl(192deg, 15%, 97%)",nested:{"& h2":{backgroundColor:"hsla(192deg, 15%, 97%, 0.75)"},[`& .${$o}`]:{color:"hsl(212deg, 10%, 20%)",nested:{[O]:{color:"hsl(212deg, 10%, 90%)"}}},[O]:{backgroundColor:"hsl(192deg, 45%, 3%)",nested:{"& h2":{backgroundColor:"hsla(192deg, 45%, 3%, 0.75)"}}}}}},linkTitle:{backgroundColor:"hsla(192deg, 85%, 99%, 0.75)",color:"#000",nested:{":hover":{color:"#000"},[O]:{backgroundColor:"hsla(192deg, 10%, 10%, 0.75)",color:"#fff",":hover":{color:"#fff"}}}}}},description:{backgroundColor:"hsl(53deg, 81%, 96%)",color:"hsl(212deg, 10%, 35%)",nested:{"& > h1":{color:"hsl(53deg, 13%, 26%)"},"& p":{lineHeight:1.3333},[O]:{backgroundColor:"hsl(130deg,21%,14%)",color:"#f1f3f2",nested:{"& > h1":{color:"hsl(130deg, 6%, 90%)"}}}}},document:{backgroundColor:"hsl(192deg, 85%, 99%)"},code:{backgroundColor:"hsl(200deg, 80%, 95%)",color:"hsla(210deg, 12%, 0%, 95%)",fontFamily:Yt},codeBlock:{symbol:{color:"hsl(228deg, 5%, 81%)",fontFamily:Yt,nested:{[O]:{color:"hsl(228deg, 6%, 21%)"}}}},deemphasize:{color:"hsl(212deg, 50%, 25%)",fontSize:"0.9375em"},emphasize:{color:"#000"},firstLastMarginZeroElements:xs,gitHubLogo:{fill:"#171515",nested:{[O]:{fill:"#fff"}}},headingRanges:vs,[O]:{aside:{backgroundColor:"hsl(192deg, 55%, 11%)",nested:{"& a":{color:"hsla(205deg, 100%, 90%, 90%)",textDecorationColor:"hsla(205deg, 100%, 78%, 120%)"}}},code:{backgroundColor:"hsl(200deg, 60%, 15%)",color:"hsla(210deg, 12%, 100%, 95%)"},document:{backgroundColor:"hsl(192deg, 10%, 10%)"},deemphasize:{color:"hsl(202deg, 20%, 95%)"},emphasize:{color:"#fff"},links:{"&:hover":{color:"hsl(195deg, 90%, 68%)"},"&, &:active, &:visited, & code":{color:"hsl(205deg, 100%, 78%)",textDecorationColor:"hsla(205deg, 100%, 78%, 50%)"}},pre:{color:"hsla(210deg, 12%, 100%, 90%)",backgroundColor:"#000",borderColor:"#000"},prose:{color:"hsl(190deg, 80%, 95%)"},separator:{color:"hsla(0deg, 0%, 100%, 0.2)"},siteHeader:{pageLinks:{color:"#fff","&:active, &:focus, &:hover":{color:"#f9f9f9"},":visited":{color:"#fff"}}},siteLogo:{color:"hsl(336deg, 100%, 85%)"}},links:{"&:hover":{color:"hsl(205deg, 78%, 41%)",textDecorationColor:"initial"},"&, & code":{color:"hsl(205deg, 86%, 31%)",textDecorationColor:"hsla(205deg, 86%, 31%, 50%)"}},mainGridColumns:Cs,mainGridSidePaddingRem:ft,monospaceFont:Yt,pre:{color:"hsl(210deg, 12%, 16%)",backgroundColor:"#fff",borderColor:"#dbdbdb",borderStyle:"solid",borderWidth:"0.5px 0"},projects:{current:{backgroundColor:"hsl(244deg 100% 98%)",nested:{[O]:{backgroundColor:"hsl(244deg 30% 13%)"}}}},prose:{color:"hsla(210deg, 12%, 5%, 95%)",fontFamily:Ts},resume:{brief:{backgroundColor:"hsl(336deg, 100%, 97%)",nested:{[O]:{backgroundColor:"hsl(336deg, 100%, 7%)"}}},contactList:{link:{nested:{"&, &:active, &:hover, &:visited":{color:"hsla(210deg, 12%, 5%, 95%)"},[O]:{nested:{"&, &:active, &:hover, &:visited":{color:"hsl(210deg, 10%, 90%)"}}}}}},employment:{container:{backgroundColor:"hsl(47deg, 58%, 98%)",nested:{[O]:{backgroundColor:"hsl(41deg, 100%, 8%)"}}},separator:{borderBottom:"1px solid hsl(17deg, 78%, 90%)",nested:{[O]:{borderColor:"hsl(17deg, 70%, 17%)"}}}},skillLevel:{[M.BASIC]:{backgroundColor:"hsl(207deg, 25%, 83%)",nested:{[O]:{backgroundColor:"hsl(207deg, 15%, 43%)"}}},[M.INTERMEDIATE]:{backgroundColor:"hsl(188deg, 53%, 74%)",nested:{[O]:{backgroundColor:"hsl(188deg, 53%, 34%)"}}},[M.ADVANCED]:{backgroundColor:"hsl(188deg, 70%, 59%)",nested:{[O]:{backgroundColor:"hsl(188deg, 80%, 39%)"}}},[M.EXPERT]:{backgroundColor:"hsl(152deg, 100%, 39%)",nested:{[O]:{backgroundColor:"hsl(152deg, 100%, 29%)"}}}}},separator:{color:"hsla(0deg, 0%, 0%, 0.2)"},scrollable:{cover:e=>({backgroundImage:`linear-gradient(to right, ${["transparent",`${e} 1rem`,e].join(", ")})`}),shadow:{backgroundImage:`linear-gradient(${["to left","rgba(0,0,0,0.3)","rgba(0,0,0,0.125) 1px","transparent 5px"].join(", ")})`}},siteHeader:{columns:ws,pageLinks:{color:"#000","&:active, &:focus, &:hover":{color:"#0a0a0a"},":visited":{color:"#000"}}},siteLogo:{color:"hsl(336deg, 100%, 42%)"},toggleSwitch:{button:{backgroundColor:"#fff",nested:{[O]:{backgroundColor:"#f9f9f9"}}},container:{off:{color:"#ddd",nested:{[O]:{color:"#666"}}},on:{color:"hsl(152deg, 100%, 39%)"}}},topicColors:As,topicTagIdentifier:me(),topicTagInner:{backgroundImage:ze(`linear-gradient(
+    `).trim().replace(/\n\s+/g," "),label:"Senior Full-Stack Software Engineer"},location:{city:"Seattle",region:"WA",country:"US"},projects:or,skills:ar,social:[{network:"GitHub",url:"https://github.com/eyelidlessness",user:"eyelidlessness"}]}),ze=Symbol("DEFAULT_TOPIC"),M={[ze]:ze,ABLEISM:"Ableism",ART:"Art",LEMON:"My puppy",MENTAL_ILLNESS:"Mental illness",NEURODIVERGENCE:"Neurodivergence",PHILOSOPHY:"Philosophy",POLITICS:"Politics",RACISM:"Racism",SEXISM:"Sexism",SUBSTANCE_ABUSE:"Substance use & abuse",TECHNOLOGY:"Technology",TRANSPHOBIA:"Transphobia"},cr=e=>typeof e=="string"||typeof e=="symbol",Ft=e=>cr(e)&&e in M,ot=e=>Ft(e)?M[e]:e,Ut=Object.entries(M).reduce((e,t)=>{const[n,r]=t;return typeof n=="string"?{...e,[r]:n}:e},{}),dr=e=>Ft(e)?e:Ut[e],mr=e=>e.toLowerCase().replace(/\W+|_+/g,"-"),pr=Object.fromEntries(Object.entries(Ut).map(([e,t])=>typeof t=="string"?[e,mr(t)]:null).filter(e=>e!=null)),ur=e=>{const t=ot(e);if(typeof t=="string")return pr[t]},Ge=2,nt={minEm:1.0625,fluidVw:1.0625*Ge,maxEm:1.25},w="@media (prefers-color-scheme: dark)",gr=["h1","h2","h3","h4","h5","h6"],hr=["dd","dl","dt","li","ol","ul"],fr=[...gr,...hr,"p"],ke=nt.minEm/nt.maxEm,re={h1:1.953,h2:1.563,h3:1.25},br={h1:{minEm:re.h1*ke,fluidVw:re.h1*ke*Ge,maxEm:re.h1},h2:{minEm:re.h2*ke,fluidVw:re.h2*ke*Ge,maxEm:re.h2},h3:{minEm:re.h3*ke,fluidVw:re.h3*ke*Ge,maxEm:re.h3}},Yt=75,Xe=1.25,yr=["0.7fr",`${Xe}rem`,[`${Yt}ch`,`calc(100% - ${Xe*2}rem)`],`${Xe}rem`,"1.2fr"],rt=1,Sr=["0.7fr",`${rt}rem`,[`${Yt*1.1875}ch`,`calc(100% - ${rt*2}rem)`],`${rt}rem`,"1.2fr"],vr=["ui-monospace","Menlo","Monaco","Cascadia Mono","Segoe UI Mono","Roboto Mono","Oxygen Mono","Ubuntu Monospace","Source Code Pro","Fira Mono","Droid Sans Mono","Courier New","monospace"],it=vr.join(", "),Er=["system-ui","-apple-system","BlinkMacSystemFont","Segoe UI","Roboto","Helvetica Neue","Arial","Noto Sans","sans-serif","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"],kr=Er.map(e=>e.includes(" ")?`"${e}"`:e).join(", "),G={DEFAULT_TOPIC:{dark:"#aaa",light:"#555"},ABLEISM:"#edc258",ARTS_CRAFTS:"#293fe4",LEMON:"#82c2e4",MENTAL_ILLNESS:"#d33d0a",NEURODIVERGENCE:"#f7834a",PHILOSOPHY:"#9a9aa6",POLITICS:"#ffe413",RACISM:"#7a5221",SEXISM:"#ec9ac0",SUBSTANCE_ABUSE:"#edbb0e",TECHNOLOGY:"hsla(336deg, 100%, 42%, 0.9)",TRANSPHOBIA:"#10be8a"},Tr="hover-inherit-topic-color",wr={[M[ze]]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.DEFAULT_TOPIC.light},[w]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.DEFAULT_TOPIC.dark}}}}},[M.ABLEISM]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.ABLEISM}}},[M.ART]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.ARTS_CRAFTS}}},[M.LEMON]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.LEMON}}},[M.MENTAL_ILLNESS]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.MENTAL_ILLNESS}}},[M.NEURODIVERGENCE]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.NEURODIVERGENCE}}},[M.PHILOSOPHY]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.PHILOSOPHY}}},[M.POLITICS]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.POLITICS}}},[M.RACISM]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.RACISM}}},[M.SEXISM]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.SEXISM}}},[M.SUBSTANCE_ABUSE]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.SUBSTANCE_ABUSE}}},[M.TECHNOLOGY]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.TECHNOLOGY}}},[M.TRANSPHOBIA]:{nested:{"&, &.hover-inherit-topic-color:hover":{color:G.TRANSPHOBIA}}}},zt=Fe(),a={HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME:Tr,baseFontSizeRange:nt,darkMode:w,abbreviation:{"--abbreviation-highlight":"hsl(64deg 100% 50% / 0.25)",backgroundImage:`linear-gradient(${["to top","var(--abbreviation-highlight)","var(--abbreviation-highlight) 0.5em","transparent 0.5em"].join(", ")})`},artOverlay:{backgroundColor:"hsla(192deg, 85%, 99%, 0.7)",nested:{"@supports (backdrop-filter: blur(40px))":{backgroundColor:"hsla(192deg, 85%, 99%, 0.5)",backdropFilter:"blur(40px)",WebkitBackdropFilter:"blur(40px)"},[w]:{backgroundColor:"hsla(192deg, 10%, 10%, 0.7)","@supports (backdrop-filter: blur(40px))":{backgroundColor:"hsla(192deg, 10%, 10%, 0.5)"}}}},aside:{backgroundColor:"hsl(192deg, 35%, 96.5%)"},asideBlock:{symbol:{color:"hsl(208deg, 35%, 81%)",nested:{[w]:{color:"hsl(208deg, 35%, 35%)"}}}},blog:{listing:{descriptionIdentifier:zt,description:{color:"hsl(212deg, 10%, 15%)",fontSize:"0.9375em",nested:{[w]:{color:"hsl(212deg, 10%, 75%)"}}},item:{"&:nth-child(odd)":{backgroundColor:"hsl(192deg, 15%, 97%)",nested:{"& h2":{backgroundColor:"hsla(192deg, 15%, 97%, 0.75)"},[`& .${zt}`]:{color:"hsl(212deg, 10%, 20%)",nested:{[w]:{color:"hsl(212deg, 10%, 90%)"}}},[w]:{backgroundColor:"hsl(192deg, 45%, 3%)",nested:{"& h2":{backgroundColor:"hsla(192deg, 45%, 3%, 0.75)"}}}}}},linkTitle:{backgroundColor:"hsla(192deg, 85%, 99%, 0.75)",color:"#000",nested:{":hover":{color:"#000"},[w]:{backgroundColor:"hsla(192deg, 10%, 10%, 0.75)",color:"#fff",":hover":{color:"#fff"}}}}}},description:{backgroundColor:"hsl(53deg, 81%, 96%)",color:"hsl(212deg, 10%, 35%)",nested:{"& > h1":{color:"hsl(53deg, 13%, 26%)"},"& p":{lineHeight:1.3333},[w]:{backgroundColor:"hsl(130deg,21%,14%)",color:"#f1f3f2",nested:{"& > h1":{color:"hsl(130deg, 6%, 90%)"}}}}},document:{backgroundColor:"hsl(192deg, 85%, 99%)"},code:{backgroundColor:"hsl(200deg, 80%, 95%)",color:"hsla(210deg, 12%, 0%, 95%)",fontFamily:it},codeBlock:{symbol:{color:"hsl(228deg, 5%, 81%)",fontFamily:it,nested:{[w]:{color:"hsl(228deg, 6%, 21%)"}}}},deemphasize:{color:"hsl(212deg, 50%, 25%)",fontSize:"0.9375em"},emphasize:{color:"#000"},firstLastMarginZeroElements:fr,gitHubLogo:{fill:"#171515",nested:{[w]:{fill:"#fff"}}},headingLineHeight:.9375,headingRanges:br,[w]:{abbreviation:{"--abbreviation-highlight":"hsl(336deg 85% 25%)"},aside:{backgroundColor:"hsl(192deg, 55%, 11%)",nested:{"& a":{color:"hsla(205deg, 100%, 90%, 90%)",textDecorationColor:"hsla(205deg, 100%, 78%, 120%)"}}},code:{backgroundColor:"hsl(200deg, 60%, 15%)",color:"hsla(210deg, 12%, 100%, 95%)"},document:{backgroundColor:"hsl(192deg 60% 4%)"},deemphasize:{color:"hsl(202deg, 20%, 95%)"},emphasize:{color:"#fff"},links:{"&:hover":{color:"hsl(195deg, 90%, 68%)"},"&, &:active, &:visited, & code":{color:"hsl(205deg, 100%, 78%)",textDecorationColor:"hsla(205deg, 100%, 78%, 50%)"}},pre:{color:"hsla(210deg, 12%, 100%, 90%)",backgroundColor:"#000",borderColor:"#000"},prose:{color:"hsl(190deg 20% 97%)"},separator:{color:"hsla(0deg, 0%, 100%, 0.2)"},siteHeader:{pageLinks:{color:"#fff","&:active, &:focus, &:hover":{color:"#f9f9f9"},":visited":{color:"#fff"}}},siteLogo:{color:"hsl(336deg, 100%, 85%)"}},links:{"&:hover":{color:"hsl(205deg, 78%, 41%)",textDecorationColor:"initial"},"&, & code":{color:"hsl(205deg, 86%, 31%)",textDecorationColor:"hsla(205deg, 86%, 31%, 50%)"}},mainGridColumns:yr,mainGridSidePaddingRem:Xe,monospaceFont:it,pre:{color:"hsl(210deg, 12%, 16%)",backgroundColor:"#fff",borderColor:"#dbdbdb",borderStyle:"solid",borderWidth:"0.5px 0"},projects:{current:{backgroundColor:"hsl(244deg 100% 98%)",nested:{[w]:{backgroundColor:"hsl(244deg 30% 13%)"}}}},prose:{color:"hsl(210deg 12% 5% / 95%)",fontFamily:kr},resume:{brief:{backgroundColor:"hsl(336deg, 100%, 97%)",nested:{[w]:{backgroundColor:"hsl(336deg, 100%, 7%)"}}},contactList:{link:{nested:{"&, &:active, &:hover, &:visited":{color:"hsla(210deg, 12%, 5%, 95%)"},[w]:{nested:{"&, &:active, &:hover, &:visited":{color:"hsl(210deg, 10%, 90%)"}}}}}},employment:{container:{backgroundColor:"hsl(47deg, 58%, 98%)",nested:{[w]:{backgroundColor:"hsl(41deg, 100%, 8%)"}}},separator:{borderBottom:"1px solid hsl(17deg, 28%, 96%)",nested:{[w]:{borderColor:"hsl(17deg, 70%, 17%)"}}}},skillLevel:{[S.BASIC]:{backgroundColor:"hsl(207deg, 25%, 83%)",nested:{[w]:{backgroundColor:"hsl(207deg, 15%, 43%)"}}},[S.INTERMEDIATE]:{backgroundColor:"hsl(188deg, 53%, 74%)",nested:{[w]:{backgroundColor:"hsl(188deg, 53%, 34%)"}}},[S.ADVANCED]:{backgroundColor:"hsl(188deg, 70%, 59%)",nested:{[w]:{backgroundColor:"hsl(188deg, 80%, 39%)"}}},[S.EXPERT]:{backgroundColor:"hsl(152deg, 100%, 39%)",nested:{[w]:{backgroundColor:"hsl(152deg, 100%, 29%)"}}}}},separator:{color:"hsla(0deg, 0%, 0%, 0.2)"},scrollable:{cover:e=>({backgroundImage:`linear-gradient(to right, ${["transparent",`${e} 1rem`,e].join(", ")})`}),shadow:{backgroundImage:`linear-gradient(${["to left","rgba(0,0,0,0.3)","rgba(0,0,0,0.125) 1px","transparent 5px"].join(", ")})`}},siteHeader:{columns:Sr,pageLinks:{color:"#000","&:active, &:focus, &:hover":{color:"#0a0a0a"},":visited":{color:"#000"}}},siteLogo:{color:"hsl(336deg, 100%, 42%)"},toggleSwitch:{button:{backgroundColor:"#fff",nested:{[w]:{backgroundColor:"#f9f9f9"}}},container:{off:{color:"#ddd",nested:{[w]:{color:"#666"}}},on:{color:"hsl(152deg, 100%, 39%)"}}},topicColors:wr,topicTagIdentifier:Fe(),topicTagInner:{backgroundImage:ve(`linear-gradient(
       to top,
       rgba(255, 255, 255, 0.9),
       rgba(255, 255, 255, 0.95) 2px
-    )`),color:"#000",nested:{[O]:{backgroundImage:ze(`linear-gradient(
+    )`),color:"#000",nested:{[w]:{backgroundImage:ve(`linear-gradient(
           to top,
           rgba(0, 0, 0, 0.65),
           rgba(0, 0, 0, 0.7) 2px
-        )`),color:"#fff"}}},topicTagLink:e=>({nested:{"&:active, &:focus, &:hover":{boxShadow:["-1px   0 0.125em     currentcolor"," 0     0 0       2px currentcolor"].join(", "),outline:"none"},[[`&:active .${e}`,`&:focus .${e}`,`&:hover .${e}`].join(",")]:{backgroundImage:ze(`linear-gradient(
+        )`),color:"#fff"}}},topicTagLink:e=>({nested:{"&:active, &:focus, &:hover":{boxShadow:["-1px   0 0.125em     currentcolor"," 0     0 0       2px currentcolor"].join(", "),outline:"none"},[[`&:active .${e}`,`&:focus .${e}`,`&:hover .${e}`].join(",")]:{backgroundImage:ve(`linear-gradient(
           to top,
           rgba(255, 255, 255, 0.8),
           rgba(255, 255, 255, 0.925) 2px
-        )`)},[`& .${e}, &:hover .${e}`]:{color:"#000"},[O]:{nested:{[[`&:active .${e}`,`&:focus .${e}`,`&:hover .${e}`].join(",")]:{backgroundImage:ze(`linear-gradient(
+        )`)},[`& .${e}, &:hover .${e}`]:{color:"#000"},[w]:{nested:{[[`&:active .${e}`,`&:focus .${e}`,`&:hover .${e}`].join(",")]:{backgroundImage:ve(`linear-gradient(
               to top,
               rgba(0, 0, 0, 0.7),
               rgba(0, 0, 0, 0.75) 2px
-            )`)},[`& .${e}, &:hover .${e}`]:{color:"#fff"}}}}}),topicTagOuter:{boxShadow:["-0.5px 0 0.25em        rgba(255, 255, 255, 0)","-1px   0 0.125em       currentcolor"," 0     0 0       0.5px rgba(255, 255, 255, 0)"," 0     0 0       0.5px currentcolor"].join(", ")},visualization:{plot:{axis:{color:"hsl(194deg, 8%, 67%)",nested:{[O]:{color:"hsl(194deg, 8%, 50%)"}}}}}},_t=["b","em","h1","h2","h3","i","strong"],bt=["h1","h2","h3","h4","h5","h6"],Is=[...bt,"address","article","aside","blockquote","details","dialog","figcaption","figure","footer","header","hgroup","main","menu","nav","p","section"],Ms=Array.from(new Set([...bt,...Is,"div","fieldset","form","hgroup","hr","pre"])),Os=ze(`
+            )`)},[`& .${e}, &:hover .${e}`]:{color:"#fff"}}}}}),topicTagOuter:{boxShadow:["-0.5px 0 0.25em        rgba(255, 255, 255, 0)","-1px   0 0.125em       currentcolor"," 0     0 0       0.5px rgba(255, 255, 255, 0)"," 0     0 0       0.5px currentcolor"].join(", ")},visualization:{plot:{axis:{color:"hsl(194deg, 8%, 67%)",nested:{[w]:{color:"hsl(194deg, 8%, 50%)"}}}}}},st=["b","em","h1","h2","h3","i","strong"],We=["h1","h2","h3","h4","h5","h6"],Cr=[...We,"address","article","aside","blockquote","details","dialog","figcaption","figure","footer","header","hgroup","main","menu","nav","p","section"],xr=Array.from(new Set([...We,...Cr,"div","fieldset","form","hgroup","hr","pre"])),Rr=ve(`
   @font-face {
     font-display: fallback;
     font-family:  Minipax;
@@ -280,9 +307,7 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
 
     src:
       local('__Minipax'),
-      url('/fonts/Minipax/regular.woff2') format('woff2'),
-      url('/fonts/Minipax/regular.woff')  format('woff'),
-      url('/fonts/Minipax/regular.ttf')   format('truetype');
+      url('/fonts/Minipax/regular.woff2') format('woff2');
   }
 
   html, body {
@@ -294,24 +319,24 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
 
   html {
     box-sizing:       border-box;
-    font-size:        ${Be(`${a.baseFontSizeRange.minEm}em`,`${a.baseFontSizeRange.fluidVw}vw`,`${a.baseFontSizeRange.maxEm}em`)};
+    font-size:        ${ne(`${a.baseFontSizeRange.minEm}em`,`${a.baseFontSizeRange.fluidVw}vw`,`${a.baseFontSizeRange.maxEm}em`)};
     text-size-adjust:         100%;
     -webkit-text-size-adjust: 100%;
   }
 
-  ${_(["html","body"],{...a.document})}
+  ${x(["html","body"],{...a.document})}
 
-  ${_(["body"],{...a.prose})}
+  ${x(["body"],{...a.prose})}
 
   *, *:before, *:after {
     box-sizing: inherit;
   }
 
-  ${bt.join(",")} {
+  ${We.join(",")} {
     font-family:             Minipax, Georgia, serif;
     font-smooth:             always;
     font-weight:             normal;
-    line-height:             0.9375;
+    line-height:             ${a.headingLineHeight};
     margin-bottom:           1rem;
     margin-top:              1rem;
     padding-left:            1rem;
@@ -319,14 +344,14 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
     -webkit-font-smoothing:  antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-`),Rs=()=>{pt.global(ze(`
+`),Ar=()=>{Ue.global(ve(`
       @media (prefers-reduced-motion) {
         * {
           transition: none !important;
         }
       }
 
-      ${Ms.join(",")} {
+      ${xr.join(",")} {
         display: block;
       }
 
@@ -334,24 +359,24 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
         font-weight: normal;
       }
 
-      ${bt.map(e=>`${e} small`).join(",")} {
+      ${We.map(e=>`${e} small`).join(",")} {
         color:          currentColor;
         font-size:      0.875em;
         vertical-align: 0.05em;
       }
 
-      ${_(_t,a.emphasize)}
+      ${x(st,a.emphasize)}
 
       h1 {
-        font-size: ${Be(`${a.headingRanges.h1.minEm}em`,`${a.headingRanges.h1.fluidVw}vw`,`${a.headingRanges.h1.maxEm}em`)};
+        font-size: ${ne(`${a.headingRanges.h1.minEm}em`,`${a.headingRanges.h1.fluidVw}vw`,`${a.headingRanges.h1.maxEm}em`)};
       }
 
       h2 {
-        font-size: ${Be(`${a.headingRanges.h2.minEm}em`,`${a.headingRanges.h2.fluidVw}vw`,`${a.headingRanges.h2.maxEm}em`)};
+        font-size: ${ne(`${a.headingRanges.h2.minEm}em`,`${a.headingRanges.h2.fluidVw}vw`,`${a.headingRanges.h2.maxEm}em`)};
       }
 
       h3 {
-        font-size: ${Be(`${a.headingRanges.h3.minEm}em`,`${a.headingRanges.h3.fluidVw}vw`,`${a.headingRanges.h3.maxEm}em`)};
+        font-size: ${ne(`${a.headingRanges.h3.minEm}em`,`${a.headingRanges.h3.fluidVw}vw`,`${a.headingRanges.h3.maxEm}em`)};
       }
 
       dl {
@@ -386,15 +411,15 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
         margin: 1.5em 0;
       }
 
-      ${_(["hr:after"],{...a.separator,content:'"\u273B \u273B \u273B"',display:"block",letterSpacing:"0.5em",textAlign:"center"})}
+      ${x(["hr:after"],{...a.separator,content:'"\u273B \u273B \u273B"',display:"block",letterSpacing:"0.5em",textAlign:"center"})}
 
       li {
         margin: 0.5em 0;
       }
 
-      ${_(["pre"],a.pre)}
+      ${x(["pre"],a.pre)}
 
-      ${_(["code"],{...a.code,borderRadius:"0.1875rem",display:"inline-flex",fontSize:"0.875em",hyphens:"auto",lineHeight:"1.5em",overflowWrap:"break-word",padding:"0.1111rem 0.3333rem 0",wordWrap:"break-word"})}
+      ${x(["code"],{...a.code,borderRadius:"0.1875rem",display:"inline-flex",fontSize:"0.875em",hyphens:"auto",lineHeight:"1.5em",overflowWrap:"break-word",padding:"0.1111rem 0.3333rem 0",wordWrap:"break-word"})}
 
       pre code {
         background-color: transparent;
@@ -412,15 +437,15 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
         margin-bottom: 0;
       }
 
-      ${_(["a"],{...a.links,fontWeight:"bolder"})}
+      ${x(["a"],{...a.links,fontWeight:"bolder"})}
 
-      ${_(["abbr"],{...a.abbreviation,textDecoration:"none"})}
+      ${x(["abbr"],{...a.abbreviation,textDecoration:"none"})}
 
-      ${_(["aside","small"],a.deemphasize)}
+      ${x(["aside","small"],a.deemphasize)}
 
-      ${_(["aside"],{...a.aside,fontSize:"0.8889em",margin:"1rem 0",padding:"0.8889rem",nested:{"& a":{fontWeight:600}}})}
+      ${x(["aside"],{...a.aside,fontSize:"0.8889em",margin:"1rem 0",padding:"0.8889rem",nested:{"& a":{fontWeight:600}}})}
 
-      ${_t.map(e=>`aside ${e}`).join(", ")} {
+      ${st.map(e=>`aside ${e}`).join(", ")} {
         color: inherit;
       }
 
@@ -450,24 +475,25 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
       }
 
       ${a.darkMode} {
-        ${_(["html","body"],{...a[a.darkMode].document})}
+        ${x(["html","body"],{...a[a.darkMode].document})}
 
-        ${_(["body"],{...a[a.darkMode].prose})}
+        ${x(["body"],{...a[a.darkMode].prose})}
 
         body, dl, p, ol, ul {
           font-weight:    300;
           letter-spacing: 0.2px;
         }
 
-        ${_(_t,a[a.darkMode].emphasize)}
-        ${_(["pre"],a[a.darkMode].pre)}
-        ${_(["code"],a[a.darkMode].code)}
-        ${_(["a"],a[a.darkMode].links)}
-        ${_(["aside","small"],a[a.darkMode].deemphasize)}
-        ${_(["aside"],a[a.darkMode].aside)}
-        ${_(["hr:after"],a[a.darkMode].separator)}
+        ${x(st,a[a.darkMode].emphasize)}
+        ${x(["abbr"],a[a.darkMode].abbreviation)}
+        ${x(["pre"],a[a.darkMode].pre)}
+        ${x(["code"],a[a.darkMode].code)}
+        ${x(["a"],a[a.darkMode].links)}
+        ${x(["aside","small"],a[a.darkMode].deemphasize)}
+        ${x(["aside"],a[a.darkMode].aside)}
+        ${x(["hr:after"],a[a.darkMode].separator)}
       }
-    `))},js=`
+    `))},Pr=`
   ${a.mainGridColumns[0]}
   ${a.mainGridColumns[1]}
   min(
@@ -476,682 +502,24 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
   )
   ${a.mainGridColumns[3]}
   ${a.mainGridColumns[4]}
-`.replace(/\s+/g," "),Lo={gridColumn:"1 / -1"},Bo=pt(Lo),V=l("div",{nested:{[`& > .${Bo}`]:{gridColumn:"1 / -1"},"& > *":{gridColumn:"3 / 3"},"& > aside":{marginTop:0},"& > details":{marginTop:0},"& > h1":{marginTop:0},"& > h2":{marginTop:0},"& > h3":{marginTop:0},"& > hr":{marginTop:0},"& > ol":{marginTop:0},"& > p":{marginTop:0},"& > ul":{marginTop:0}},display:"grid",gridTemplateColumns:js,...Lo}),$s=({children:e,shadow:o,...n})=>t(V,{...n},e),No=([e,o,n])=>`rgba(${[e,o,n,0].join(",")})`,Ho=["12rem 100%","auto"],Do=Ho.join(", "),Ls=Ho.map(e=>e.replace("100%","100.1%")).join(", "),Bs=Ne.renderKeyframe(()=>({"0%":{backgroundSize:Do},"100%":{backgroundSize:Ls}}),{}),Yo="5px",_o=(e,o)=>e!=null&&o!=null?{backgroundImage:[`linear-gradient(${["to left",`rgba(${o.join(",")})`,`rgba(${o.join(",")}) calc(11rem + ${Yo})`,`${No(o)} 12rem`].join(", ")})`,`linear-gradient(${["to left",`rgba(${e.join(",")})`,`rgba(${e.join(",")}) 0.5px`,`${No(e)} ${Yo}`].join(", ")})`].join(", ")}:null,Ns=e=>{if(e!=null){const{darkMask:o,darkScroll:n,lightMask:r,lightScroll:s}=e;return{dark:_o(n,o),light:_o(s,r)}}return{dark:null,light:null}},Xo=l($s,({shadow:e})=>{const{dark:o,light:n}=Ns(e),r=o==null?null:{[a.darkMode]:o};return{...n,backgroundAttachment:"local, scroll",backgroundPosition:"calc(100% + 11rem) 0, 0 0",backgroundRepeat:"no-repeat",backgroundSize:Do,paddingRight:a.mainGridSidePaddingRem,overflowX:"auto",nested:{...r,"& > *":{gridColumn:"3 / -1"},"@media not all and (min-resolution: .001dpcm)":{nested:{"@supports (-webkit-appearance: none)":{animationName:Bs,animationDuration:"1000s",animationIterationCount:"infinite"}}},"@media (hover: hover)":{animationPlayState:"paused",nested:{"&:active, &:focus, &:hover":{animationPlayState:"running"}}}}}}),Hs=l(V,{margin:"1rem 0 2rem",maxWidth:"100%",padding:0,width:"auto"}),zo=l("div",{paddingLeft:"1rem"}),Ds=l("div",{flexGrow:0,fontSize:"9em",gridColumn:"2",height:0,lineHeight:"3.5rem",overflow:"visible",textAlign:"center",transform:"rotate(-6.5deg)",userSelect:"none",width:"3.75rem"}),Ys=l("div",{flexGrow:1,padding:"1rem 0.75rem"}),Xt="div",_s={ContentContainer:Xt,InnerContainer:zo,OuterContainer:Xt,SymbolContainer:Xt},Fo=e=>{const{children:o,ContentContainer:n,InnerContainer:r,OuterContainer:s,outerContainerProps:i,symbol:c,SymbolContainer:d}={..._s,...e};return t(Hs,{as:s,...i},t(Ds,{as:d,role:"presentation"},c),t(zo,{as:r},t(Ys,{as:n},o)))},Xs=l("pre",{fontSize:"1rem"}),zs=l(Xo,{maxHeight:"min(42.25rem, 80vh)",paddingLeft:"clamp(1.25em, 3.5vw, 3em)",nested:{[a.darkMode]:{}}}),Fs=e=>t(zs,{shadow:{darkMask:[0,0,0,1],darkScroll:[0,164,255,.75],lightMask:[255,255,255,1],lightScroll:[124,128,131,.75]},...e}),Us=l(V,{...a.pre,nested:{[a.darkMode]:{...a[a.darkMode].pre},"& code":{backgroundColor:"transparent",hyphens:"none",overflowWrap:"normal",whiteSpace:"pre",wordWrap:"normal"},"& pre":{backgroundColor:"transparent",border:0,maxWidth:"100%",margin:0,padding:"1rem 0",whiteSpace:"pre"}}}),Gs=l("div",{...a.codeBlock.symbol,fontSize:"clamp(3em, 7vw, 4em)",marginLeft:"-0.3em",marginTop:"-0.325em"}),Ws=({children:e})=>t(Fo,{ContentContainer:Xs,InnerContainer:Fs,OuterContainer:Us,symbol:"{",SymbolContainer:Gs},e),Vs=e=>e.map((o,n)=>n),yt=(e,o)=>Vs(e).sort((n,r)=>{const s=o(e[n],e[r]);return s===0?n===r?0:n>r?1:-1:s}).map(n=>e[n]),qs=e=>typeof e=="object"&&e!=null,Ks=l("span",{display:"inline-block",fontSize:"1.5em",fontStyle:"normal",lineHeight:.5,padding:"0 0.125em",verticalAlign:"-0.125em"}),Js=(e,o)=>qs(e)&&e.role==="img"&&typeof e["aria-label"]=="string"&&typeof o=="string"&&or().test(o),Zs=({["aria-label"]:e,children:o,role:n})=>t(Ks,{"aria-label":e,role:n},o),Qs={CA:"California",MI:"Michigan",US:"United States",VA:"Virginia",WA:"Washington"},ei={".cljc":"Clojure & ClojureScript cross-platform modules",A11y:"Accessibility",ADHD:"Attention deficit hyperactivity disorder",AJAX:"Asynchronous JavaScript and XML",API:"Application Programming Interface",APIs:"Application Programming Interfaces",B2B:"Business to Business",CI:"Continuous Integration",CSS:"Cascading Style Sheets",copypasta:"copy and paste",DOM:"Document Object Model",DSL:"Domain Specific Language",DX:"Developer Experience",ETL:"Extract, Transform, Load",HATEOAS:"Hypertext As The Engine Of Application State",HTML:"Hypertext Markup Language",JSON:"JavaScript Object Notation",JVM:"Java Virtual Machine",nREPL:"Clojure network REPL (Read\u2013eval\u2013print loop)",REPL:"Read\u2013eval\u2013print loop",REST:"Representational State Transfer","SHA-1":"Secure Hash Algorithm 1",SQL:"Structured Query Language",SVG:"Scalable Vector Graphics",trig:"trigonometry",UI:"User Interface",UX:"User Experience",WSLCB:"Washington State Liquor and Cannabis Board"},ti={...Qs,...ei},Uo=Le.resolve(process.cwd(),"./syntax-themes"),[oi,ni]=await Promise.all([ko(Le.resolve(Uo,"./yi-dark.json")),ko(Le.resolve(Uo,"./yi-light.json"))]),ri={background:"backgroundColor",fontStyle:"fontStyle",foreground:"color"},si={bold:{fontWeight:"bold"},italic:{fontStyle:"italic"},strikethrough:{textDecoration:"strikethrough"},underline:{textDecoration:"underline"}},ii=e=>e.trim().split(/\b\W*\b/).reduce((o,n)=>({...o,...si[n]}),{}),ai=e=>Object.entries(e).reduce((o,[n,r])=>{const s=ri[n];if(r==null||typeof s!="string")return o;const i=s==="fontStyle"?ii(r):{[s]:r};return{...o,...i}},{}),[ci,li]=await Promise.all([Po({theme:oi}),Po({theme:ni})]),di=new Set(wr.map(e=>e.id)),mi=new Set(["ts","tsx","typescript"]),Go=e=>e.explanation?.reduce((o,n)=>({...o,...n.scopes.reduce((r,{themeMatches:s})=>({...r,...s.reduce((i,{settings:c})=>({...i,...ai(c)}),r)}),o)}),{color:e.color}),pi=(e,o,n={})=>{const r=Go(e),s=Go(o),i=s==null?null:{nested:{[a.darkMode]:s}},{content:c}=e;if(r==null&&i==null)return t("span",n,c);const d={...r,...i},p=l("span",d);return t(p,n,c)},hi=pt({paddingRight:"1rem"}),ui={className:hi},gi=(e,o)=>So(t(Fe,{},t("pre",{},t("code",{},...e.reduce((n,r,s)=>{const i=r.map((d,p)=>{const h=o[s][p],y=p===r.length-1?ui:{};return pi(d,h,y)}),c=s===0?"":`
-`;return[...n,c,...i]},[]))))),fi=e=>{const{lang:o,value:n,meta:r}=e,s=Boolean(process?.env?.TWOSLASH_DISABLE)||!0,i=String(o)==="json5"?"json":o;let c;const d=n.replace(/^\n+|\n+$/g,"");if(!di.has(i))c=kr.plainTextRenderer(d,{});else{const p=li.codeToThemedTokens(d,i),h=ci.codeToThemedTokens(d,i);c=gi(p,h)}mi.has(i)&&!r?.includes("ignore"),e.children=[],e.type="html",e.value=c},bi=()=>o=>{uo(o,"code",fi)};import.meta.env=lt;const tt=fo.createRequire(import.meta.url),yi=tt("rehype-parse"),Si=tt("rehype-remark"),xi=tt("remark"),vi=tt("remark-abbr"),Ci=tt("remark-stringify"),wi=({className:e,children:o,...n})=>e==="language-id"?null:e==="code-container"?at($,n,...go(o)):t("div",{className:e,...n},...go(o)),ki=({children:e,...o})=>Js(o,e)?t(Zs,o,e):t("span",o,e),zt={components:{div:wi,pre:Ws,span:ki},rehypePlugins:[nr],remarkPlugins:[bi,vi,Ir,rr,sr]},Pi=e=>{const{children:o=at(()=>null,{}),components:n={},rehypePlugins:r=[],remarkPlugins:s=[]}=e,i={...zt.components,...n},c={mdx:at,MDXProvider:Sr,components:i,props:{}},d=typeof o=="string"?wo(o).trim():o,p=[...zt.rehypePlugins,...r],h=[...zt.remarkPlugins,...s],y=yr.sync(d,{rehypePlugins:p,remarkPlugins:h,skipExport:!0}).trim(),{code:g}=xr(y,{objectAssign:"Object.assign"}),f=Object.keys(c),w=Object.values(c),S=`return h(
+`.replace(/\s+/g," "),Gt={gridColumn:"1 / -1"},Xt=Ue(Gt),B=c("div",{nested:{[`& > .${Xt}`]:{gridColumn:"1 / -1"},"& > *":{gridColumn:"3 / 3"},"& > aside":{marginTop:0},"& > details":{marginTop:0},"& > h1":{marginTop:0},"& > h2":{marginTop:0},"& > h3":{marginTop:0},"& > hr":{marginTop:0},"& > ol":{marginTop:0},"& > p":{marginTop:0},"& > ul":{marginTop:0}},display:"grid",gridTemplateColumns:Pr,...Gt}),Or=({children:e,shadow:t,...n})=>o(B,{...n},e),Wt=([e,t,n])=>`rgba(${[e,t,n,0].join(",")})`,Vt=["12rem 100%","auto"],Kt=Vt.join(", "),Ir=Vt.map(e=>e.replace("100%","100.1%")).join(", "),Mr=ce.renderKeyframe(()=>({"0%":{backgroundSize:Kt},"100%":{backgroundSize:Ir}}),{}),qt="5px",Jt=(e,t)=>e!=null&&t!=null?{backgroundImage:[`linear-gradient(${["to left",`rgba(${t.join(",")})`,`rgba(${t.join(",")}) calc(11rem + ${qt})`,`${Wt(t)} 12rem`].join(", ")})`,`linear-gradient(${["to left",`rgba(${e.join(",")})`,`rgba(${e.join(",")}) 0.5px`,`${Wt(e)} ${qt}`].join(", ")})`].join(", ")}:null,jr=e=>{if(e!=null){const{darkMask:t,darkScroll:n,lightMask:r,lightScroll:i}=e;return{dark:Jt(n,t),light:Jt(i,r)}}return{dark:null,light:null}},Qt=c(Or,({shadow:e})=>{const{dark:t,light:n}=jr(e),r=t==null?null:{[a.darkMode]:t};return{...n,backgroundAttachment:"local, scroll",backgroundPosition:"calc(100% + 11rem) 0, 0 0",backgroundRepeat:"no-repeat",backgroundSize:Kt,paddingRight:a.mainGridSidePaddingRem,overflowX:"auto",nested:{...r,"& > *":{gridColumn:"3 / -1"},"@media not all and (min-resolution: .001dpcm)":{nested:{"@supports (-webkit-appearance: none)":{animationName:Mr,animationDuration:"1000s",animationIterationCount:"infinite"}}},"@media (hover: hover)":{animationPlayState:"paused",nested:{"&:active, &:focus, &:hover":{animationPlayState:"running"}}}}}}),Lr=c(B,{margin:"1rem 0 2rem",maxWidth:"100%",padding:0,width:"auto"}),Zt=c("div",{paddingLeft:"1rem"}),Dr=c("div",{flexGrow:0,fontSize:"9em",gridColumn:"2",height:0,lineHeight:"3.5rem",overflow:"visible",textAlign:"center",transform:"rotate(-6.5deg)",userSelect:"none",width:"3.75rem"}),Br=c("div",{flexGrow:1,padding:"1rem 0.75rem"}),at="div",$r={ContentContainer:at,InnerContainer:Zt,OuterContainer:at,SymbolContainer:at},eo=e=>{const{children:t,ContentContainer:n,InnerContainer:r,OuterContainer:i,outerContainerProps:s,symbol:l,SymbolContainer:m}={...$r,...e};return o(Lr,{as:i,...s},o(Dr,{as:m,role:"presentation"},l),o(Zt,{as:r},o(Br,{as:n},t)))},Nr=c("pre",{fontSize:"1rem"}),Hr=c(Qt,{maxHeight:"min(42.25rem, 80vh)",paddingLeft:"clamp(1.25em, 3.5vw, 3em)",nested:{[a.darkMode]:{}}}),_r=e=>o(Hr,{shadow:{darkMask:[0,0,0,1],darkScroll:[0,164,255,.75],lightMask:[255,255,255,1],lightScroll:[124,128,131,.75]},...e}),Fr=c(B,{...a.pre,nested:{[a.darkMode]:{...a[a.darkMode].pre},"& code":{backgroundColor:"transparent",hyphens:"none",overflowWrap:"normal",whiteSpace:"pre",wordWrap:"normal"},"& pre":{backgroundColor:"transparent",border:0,maxWidth:"100%",margin:0,padding:"1rem 0",whiteSpace:"pre"}}}),Ur=c("div",{...a.codeBlock.symbol,fontSize:"clamp(3em, 7vw, 4em)",marginLeft:"-0.3em",marginTop:"-0.325em"}),Yr=({children:e})=>o(eo,{ContentContainer:Nr,InnerContainer:_r,OuterContainer:Fr,symbol:"{",SymbolContainer:Ur},e),zr=e=>e.map((t,n)=>n),lt=(e,t)=>zr(e).sort((n,r)=>{const i=t(e[n],e[r]);return i===0?n===r?0:n>r?1:-1:i}).map(n=>e[n]),Gr=e=>typeof e=="object"&&e!=null,Xr=c("span",{display:"inline-block",fontSize:"1.5em",fontStyle:"normal",lineHeight:.5,padding:"0 0.125em",verticalAlign:"-0.125em"}),Wr=(e,t)=>Gr(e)&&e.role==="img"&&typeof e["aria-label"]=="string"&&typeof t=="string"&&qo().test(t),Vr=({["aria-label"]:e,children:t,role:n})=>o(Xr,{"aria-label":e,role:n},t),Kr={CA:"California",MI:"Michigan",US:"United States",VA:"Virginia",WA:"Washington"},qr={".cljc":"Clojure & ClojureScript cross-platform modules",A11y:"Accessibility",ADHD:"Attention deficit hyperactivity disorder",AJAX:"Asynchronous JavaScript and XML",API:"Application Programming Interface",APIs:"Application Programming Interfaces",B2B:"Business to Business",CI:"Continuous Integration",CSS:"Cascading Style Sheets",copypasta:"copy and paste",DOM:"Document Object Model",DSL:"Domain Specific Language",DX:"Developer Experience",ETL:"Extract, Transform, Load",HATEOAS:"Hypertext As The Engine Of Application State",HTML:"Hypertext Markup Language",JSON:"JavaScript Object Notation",JVM:"Java Virtual Machine",nREPL:"Clojure network REPL (Read\u2013eval\u2013print loop)",ODK:"Open Data Kit (https://getodk.org/)",REPL:"Read\u2013eval\u2013print loop",REST:"Representational State Transfer","SHA-1":"Secure Hash Algorithm 1",SQL:"Structured Query Language",SVG:"Scalable Vector Graphics",trig:"trigonometry",UI:"User Interface",UX:"User Experience",WSLCB:"Washington State Liquor and Cannabis Board"},Jr={...Kr,...qr},to=ue.resolve(process.cwd(),"./syntax-themes"),[Qr,Zr]=await Promise.all([jt(ue.resolve(to,"./yi-dark.json")),jt(ue.resolve(to,"./yi-light.json"))]),ei={background:"backgroundColor",fontStyle:"fontStyle",foreground:"color"},ti={bold:{fontWeight:"bold"},italic:{fontStyle:"italic"},strikethrough:{textDecoration:"strikethrough"},underline:{textDecoration:"underline"}},oi=e=>e.trim().split(/\b\W*\b/).reduce((t,n)=>({...t,...ti[n]}),{}),ni=e=>Object.entries(e).reduce((t,[n,r])=>{const i=ei[n];if(r==null||typeof i!="string")return t;const s=i==="fontStyle"?oi(r):{[i]:r};return{...t,...s}},{}),[ri,ii]=await Promise.all([Lt({theme:Qr}),Lt({theme:Zr})]),si=new Set(nn.map(e=>e.id)),ai=new Set(["ts","tsx","typescript"]),oo=e=>e.explanation?.reduce((t,n)=>({...t,...n.scopes.reduce((r,{themeMatches:i})=>({...r,...i.reduce((s,{settings:l})=>({...s,...ni(l)}),r)}),t)}),{color:e.color}),li=(e,t,n={})=>{const r=oo(e),i=oo(t),s=i==null?null:{nested:{[a.darkMode]:i}},{content:l}=e;if(r==null&&s==null)return o("span",n,l);const m={...r,...s},p=c("span",m);return o(p,n,l)},ci=Ue({paddingRight:"1rem"}),di={className:ci},mi=(e,t)=>Ot(o(ge,{},o("pre",{},o("code",{},...e.reduce((n,r,i)=>{const s=r.map((m,p)=>{const u=t[i][p],b=p===r.length-1?di:{};return li(m,u,b)}),l=i===0?"":`
+`;return[...n,l,...s]},[]))))),pi=e=>{const{lang:t,value:n,meta:r}=e,i=Boolean(process?.env?.TWOSLASH_DISABLE)||!0,s=String(t)==="json5"?"json":t;let l;const m=n.replace(/^\n+|\n+$/g,"");if(!si.has(s))l=rn.plainTextRenderer(m,{});else{const p=ii.codeToThemedTokens(m,s),u=ri.codeToThemedTokens(m,s);l=mi(p,u)}ai.has(s)&&!r?.includes("ignore"),e.children=[],e.type="html",e.value=l},ui=()=>t=>{Je(t,"code",pi)};import.meta.env=et;const Ie=Mt.createRequire(import.meta.url),gi=Ie("rehype-parse"),hi=Ie("rehype-remark"),fi=Ie("remark"),bi=Ie("remark-abbr"),yi=Ie("remark-stringify"),Si=({className:e,children:t,...n})=>e==="language-id"?null:e==="code-container"?$e(z,n,...Rt(t)):o("div",{className:e,...n},...Rt(t)),vi=({children:e,...t})=>Wr(t,e)?o(Vr,t,e):o("span",t,e),ct={components:{div:Si,pre:Yr,span:vi},rehypePlugins:[Jo],remarkPlugins:[ui,bi,kn,Qo,Zo]},no=e=>{const{children:t=$e(()=>null,{}),components:n={},rehypePlugins:r=[],remarkPlugins:i=[]}=e,s={...ct.components,...n},l={mdx:$e,MDXProvider:_o,components:s,props:{}},m=typeof t=="string"?It(t).trim():t,p=[...ct.rehypePlugins,...r],u=[...ct.remarkPlugins,...i],b=Ho.sync(m,{rehypePlugins:p,remarkPlugins:u,skipExport:!0}).trim(),{code:h}=en(b,{objectAssign:"Object.assign"}),y=Object.keys(l),v=Object.values(l),f=`return h(
     MDXProvider,
     {components},
     h(MDXContent, props)
-  )`;return new Function("h",...f,`${g}
+  )`;return new Function("h",...y,`${h}
 
-${S}`)(at,...w)},Ti=Object.entries(ti).map(([e,o])=>`*[${e}]: ${o}`).join(`
-`),Ei=e=>[e,Ti].join(`
+${f}`)($e,...v)},Ei=Object.entries(Jr).map(([e,t])=>`*[${e}]: ${t}`).join(`
+`),ki=e=>[e,Ei].join(`
 
-`),Wo=([e,...o],{includeAbbreviations:n=!0})=>{const r=typeof e=="string"?[e,...o].join(""):String.raw(e,...o);return n?Ei(r):r},St=(...e)=>{const o=Wo(e,{includeAbbreviations:!0});return t(Fe,{},t(Pi,{},o))},Ai=(...e)=>{const o=Wo(e,{includeAbbreviations:!1});return xi().use(yi).use(Si).use(Ci).use(vr).use(Cr).processSync(o).contents.toString().trim()},we=(e,o)=>Number(e.toFixed(o)),ke=parseInt("ff",16),Vo=parseInt("00",16),qo=.05,Ko=.15,Jo=.05;class ot extends Error{constructor(o){super(`Invalid hash: ${o}`)}}const Ii=/^[0-9a-f]{40}$/i,Mi=e=>Ii.test(e),Oi=new Set(["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"]),Ri=e=>e.length===10,ji=/([0-9a-f]{2})([0-9a-f]{2})/ig,Ft=e=>{if(!Mi(e))throw new ot(e);const n=Array.from(e.matchAll(ji)??[]).map(([r,s,i])=>({x:s,y:i}));if(!Ri(n))throw new ot(e);return n},$i=Symbol("IS_POINT"),Li=e=>Object.assign(e,{[$i]:!0}),Zo=e=>{const o=parseInt(e,16);if(o>ke||o<Vo)throw new Error(`Not a valid coordinate: ${e}`);return Li(o)},Bi=({x:e,y:o})=>({x:Zo(e),y:Zo(o)}),Ni=e=>e.length===10,Ut=(e,o)=>{try{const n=o.map(Bi);if(!Ni(n))throw new ot(e);return n}catch{throw new ot(e)}},Hi=Symbol("SCALED_COORDINATE"),Qo=e=>e.reduce(({max:o,min:n},{y:r})=>({max:Math.max(Number(o),Number(r)),min:Math.min(Number(n),Number(r))}),{max:-Infinity,min:Infinity}),ae=(e,o)=>Object.assign(we(e,2),{[Hi]:o}),Ge=({x:e,xScale:o,y:n,yScale:r})=>({x:ae(e,o),y:ae(n,r)}),xt=({x:e,y:o},{xScale:n,xShift:r,yScale:s,yShift:i})=>Ge({x:(e+r)*n,xScale:n,y:(o+i)*s,yScale:s}),Gt=({points:e,xMax:o,xScale:n,yScale:r})=>[Ge({x:0,xScale:n,y:0,yScale:r}),...e,Ge({x:o,xScale:n,y:0,yScale:r})].reduce((s,i,c,d)=>{if(c===0||c===d.length-1)return s;const p=ae(0,r),h=[{x:d[c-1].x,y:p},i,{x:d[c+1].x,y:p}];return[...s,h]},[]),Wt=({segments:e,xMax:o,xScale:n,yScale:r})=>e.map(s=>{const[{x:i,y:c},{x:d,y:p},{x:h,y}]=s,g=h-i,f=p/g,S=6/f;if(S<1){const k=S*.2*i,T=i-k,z=h+k,H=T<0?Math.abs(T):z>o?o-z:0,I=T+H,F=z+H,v=S*.3,q=d+H,Z=v*p,oe=p-Z;return[Ge({x:I,xScale:n,y:c,yScale:r}),Ge({x:q,xScale:n,y:oe,yScale:r}),Ge({x:F,xScale:n,y,yScale:r})]}return s}),Di=({x:e,y:o},{x:n,y:r})=>{const s=n-e,i=r-o;return{angle:Math.atan2(i,s),length:Math.sqrt(s**2+i**2)}},en=({current:e,previous:o,next:n,reverse:r,smoothing:s,xScale:i,yScale:c})=>{const d=r?Math.PI:0,p=Di(o,n),h=p.angle+d,y=p.length*s,{x:g,y:f}=e,w=g+Math.cos(h)*y,S=f+Math.sin(h)*y;return{x:ae(w,i),y:ae(S,c)}},tn=({index:e,point:o,points:n,smoothing:r,xScale:s,yScale:i})=>{const c=n[e-1];if(c==null)throw new Error("Cannot build cubic bezier points, no point before the provided index.");const d=n[e-2]??c,p=en({current:c,previous:d,next:o,reverse:!1,smoothing:r,xScale:s,yScale:i}),h=c,y=n[e+1]??o,g=en({current:o,previous:h,next:y,reverse:!0,smoothing:r,xScale:s,yScale:i});return[p,g,o]},on=({segment:e,smoothing:o,xScale:n,yScale:r})=>e.reduce((s,i,c)=>{if(c===0)return s;const p=tn({index:c,point:i,points:e,smoothing:o,xScale:n,yScale:r}).map(h=>`${h.x},${h.y}`).join(" ");return[...s,`C ${p}`]},[]),Yi=({baseYCoordinate:e,isBaselineBelowMidpoint:o,segments:n,xScale:r,yMax:s,yScale:i,yTilt:c=!1})=>n.reduce((d,p,h,y)=>{const{length:g}=y,[f,w,S]=p,{x:b,y:k}=f,{x:T,y:z}=w,{x:H,y:I}=S,F=H-b,v=F===0?0:Math.max(z/F*Jo,Ko),q=c?.1:0,Z=1-q,oe=1+q,U=h%2==0?Z:oe,Se=o?k+e:s-k+e,le={x:b,y:ae(Se*U,i)},xe=h%2==0?Z:oe,Oe=o?I+e:s-I+e,pe={x:ae(H,r),y:ae(Oe*xe,i)},he=T-b,ue=H-T,ge=ue>he?0:0-(T-b)*qo,X=(g-h)*(i/100*s),L={x:ae(T+ge,r),y:ae(z-X,i)},Re=on({segment:[le,L,pe],smoothing:v,xScale:r,yScale:i}),je=ue>he?(H-T)*qo:0,Te={x:ae(T+je,r),y:ae(s-X,i)},ne=on({segment:[pe,Te,le],smoothing:v,xScale:r,yScale:i});return[...d,[`M ${le.x},${le.y}`,...Re,...ne,"Z"].join(" ")]},[]),_i=({hash:e,xPadding:o=0,xScale:n=1,yOffset:r=.5,yPadding:s=0,yScale:i=1})=>{const c=Ft(e),d=Ut(e,c),p=yt(d,({x:I},{x:F})=>Number(I)===Number(F)?0:Number(I)>Number(F)?1:-1),h=o/2,y=s/2,g=p.map(I=>xt(I,{xScale:n,xShift:h,yScale:i,yShift:y})),f=(ke+o)*n,{max:w}=Qo(g),S=(w+s)*i,b=Gt({points:g,xMax:f,xScale:n,yScale:i}),k=Wt({segments:b,xMax:f,xScale:n,yScale:i}),T=r>.5,z=T?S*r:-1*S*r;return{segmentPaths:Yi({baseYCoordinate:z,segments:k,xScale:n,yMax:S,isBaselineBelowMidpoint:T,yScale:i}),xMax:f,yMax:S}};var Vt;(function(e){e.PNG="png"})(Vt||(Vt={}));const qt=process.cwd(),nt=e=>e.startsWith("/")?Le.resolve(qt,e.replace(/^.*?\/src\//,"./src/").replace(/\.js$/,".tsx")):Le.extname(e)==""?Le.resolve(qt,"./src/pages/",`${e}.tsx`):e;var We;(function(e){e.ALL="",e.CURRENT="--diff-filter=M",e.FIRST="--diff-filter=A",e.FIRST_MERGE="--full-history --reverse --merges"})(We||(We={}));var He;(function(e){e.HASH="%H",e.ISO_DATE="%aI"})(He||(He={}));const Xi="origin",zi="main",rt=e=>{const{branch:o=zi,decode:n,filter:r=We.FIRST,format:s,path:i=qt,remote:c=Xi}=e,{error:d,stdout:p}=Tr.spawnSync("git",["log",...r.split(" "),`--branches=${o}`,`--format=${s}`,`--remotes=${c}`,"--",i]);if(d)throw d;const h=p.toString().trim();return(h===""?[]:h.split(`
-`)).map(n)},Kt=e=>{const o=new Date(e);if(!isNaN(o.getTime()))return o},Fi=e=>{const o=nt(e),[n=null]=rt({decode:Kt,filter:We.CURRENT,format:He.ISO_DATE,path:o});return n},Ui=e=>{const o=nt(e),[n=null]=rt({decode:Kt,format:He.ISO_DATE,path:o});return n},Gi=e=>{const o=nt(e),[n=null]=rt({decode:Kt,filter:We.FIRST_MERGE,format:He.ISO_DATE,path:o});return n},Jt=e=>{const o=$t.readFileSync(e).toString();let n=Er.createHash("sha1");return n.update(o),n.digest("hex")},Wi=e=>{const o=nt(e),[n]=rt({decode:dt,format:He.HASH,path:o});return n??Jt(o)},Vi=e=>{const o=nt(e),[n]=rt({decode:dt,filter:We.FIRST_MERGE,format:He.HASH,path:o});return n??Jt(o)},qi={height:630,width:1200},Ki=process.env.EYELIDLESSNESS_HOST??"https://eyelidlessness.github.io",Ji=To({alg:"sha1",coerce:!0,sort:!0,trim:!0}),Zi=(e,o,n=Vt.PNG,r=qi)=>{const s=e.replace(/^file:(\/\/)?(\/.*?)\/src\/.*$/,"$2/images"),i=Ji.hash(o),c=Le.resolve(s,`${i}.${n}`),d=c.replace(/^.*?\/images\//,"/images/");return{image:{absolutePath:c,imageType:n,publicPath:d,...r}}};var De;(function(e){e.IMMUTABLE="immutable",e.IMMUTABLE_MERGE="immutable-merge",e.MUTABLE="mutable"})(De||(De={}));const nn=(e,o,n,r,s=[N.TECHNOLOGY])=>{const i=r===De.MUTABLE,c=r===De.IMMUTABLE_MERGE,d=o.replace(/^file:(\/\/)?/,""),p=i?Jt(d):c?Vi(e):Wi(e),h={created:(c?Gi(e):Ui(e))??$t.statSync(d).ctime,updated:Fi(e)??$t.statSync(d).mtime},g=Zi(o,i?{importURL:o,stat:h,topics:s}:{hash:p,importURL:o});return{hash:p,host:Ki,path:e,social:g,stat:h,title:n,topics:s}},rn=()=>t($,null,t("linearGradient",{id:"horizontalMidFadeGradient",y2:"0",x2:"1"},t("stop",{offset:"0","stop-color":"white","stop-opacity":"0.25"}),t("stop",{offset:"0.0125","stop-color":"white","stop-opacity":"0.25"}),t("stop",{offset:"0.075","stop-color":"white","stop-opacity":".5"}),t("stop",{offset:"0.5","stop-color":"white","stop-opacity":"1"}),t("stop",{offset:"0.925","stop-color":"white","stop-opacity":".5"}),t("stop",{offset:"0.9875","stop-color":"white","stop-opacity":"0.25"}),t("stop",{offset:"1","stop-color":"white","stop-opacity":"0.25"})),t("mask",{id:"horizontalMidFade",maskContentUnits:"objectBoundingBox"},t("rect",{fill:"url(#softVerticalFadeGradient)",height:"1",width:"1"})),t("linearGradient",{id:"softVerticalFadeGradient",y2:"1",x2:"0"},t("stop",{offset:"0","stop-color":"white","stop-opacity":"1"}),t("stop",{offset:"0.25","stop-color":"white","stop-opacity":".75"}),t("stop",{offset:"1","stop-color":"white","stop-opacity":"0.35"})),t("mask",{id:"softVerticalFade",maskContentUnits:"objectBoundingBox"},t("rect",{fill:"url(#softVerticalFadeGradient)",height:"1",width:"1"}))),Qi=()=>t("svg",{"aria-hidden":"true",height:"0",width:"0",xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 1 1"},t("defs",null,t(rn,null))),ea=1.6180334,ta=4,sn=we(ea*5,6),an=.75,Ve=.15,oa=1.5,st=Be("6rem",`${100/sn}vw`,"10rem"),na=l(V,{height:st,position:"relative",width:"100%"}),ra=l("svg",{display:"block",height:"inherit",position:"absolute",width:"100%"}),sa=l("path",{fill:"currentcolor",fillRule:"nonzero",opacity:.85});var it;(function(e){e.INLINE="inline",e.NONE="none"})(it||(it={}));const Zt={xPadding:ta,xScale:sn,yOffset:an,yPadding:Ve,yScale:oa},vt=e=>{const{className:o,defsUsage:n=it.INLINE,hash:r,height:s,rawSVG:i=!1,styleRenderer:c=Ne,title:d,topics:p=[],width:h}=e,y=p.length<2?[...p,N[ut]]:p,g=I=>`${I}-${r}`,{segmentPaths:f,xMax:w,yMax:S}=_i({...Zt,hash:r}),b=S*an,k=S*Ve/10.24,T=k*.75,H=t(ra,{className:Bo,height:s,preserveAspectRatio:"none",viewBox:[0,0,w,S].join(" "),width:h},t("title",null,"Generated art for the page or post titled",t("i",null,d),", with the content or commit hash ",r," ",y.length>0?[", and the topics: ",y.map(String).join(", ")]:null),t("defs",null,n===it.INLINE?t(rn,null):null,t("filter",{id:g("blur")},t("feOffset",{in:"SourceGraphic",dx:"0",dy:T,result:"glowOffsetOut"}),t("feGaussianBlur",{in:"glowOffsetOut",stdDeviation:k,result:"glowBlurOut"}),t("feBlend",{in:"SourceGraphic",in2:"glowBlurOut",mode:"color-dodge"})),t("clipPath",{id:g("blurOverlayClip")},t("rect",{x:"0",width:w,y:b,height:S})),t("filter",{id:g("blurOverlay")},t("feOffset",{result:"glowOffsetOut",in:"SourceGraphic",dx:"0",dy:T}),t("feGaussianBlur",{result:"glowBlurOut",in:"glowOffsetOut",stdDeviation:k})),t("filter",{id:g("blurUnderlay")},t("feOffset",{result:"glowOffsetOut",in:"SourceGraphic",dx:"0",dy:T}),t("feGaussianBlur",{in:"glowOffsetOut",result:"glowBlurOut",stdDeviation:k}),t("feTurbulence",{type:"turbulence",baseFrequency:"10",numOctaves:"2",result:"turbulence"}),t("feDisplacementMap",{in:"glowBlurOut",in2:"turbulence",result:"dither",scale:"25",xChannelSelector:"R",yChannelSelector:"G"}),t("feColorMatrix",{in:"dither",result:"saturated",type:"saturate",values:"5"}),t("feGaussianBlur",{in:"saturated",result:"saturatedBlurOut",stdDeviation:k})),t("g",{id:g("blobs")},f.map((I,F)=>{const v=F%y.length,q=y[v],Z=c.renderRule(()=>({...a.topicColors[q]}),Object.keys);return t(sa,{key:I,className:Z,d:I,mask:"url(#softVerticalFade)"})}))),t("g",{transform:[`translate(0, ${S*Ve})`,`scale(1, ${1-Ve*2})`].join(" "),filter:`url(#${g("blur")})`},t("use",{href:`#${g("blobs")}`,mask:"url(#horizontalMidFade)"})),t("g",{"clip-path":`url(#${g("blurOverlayClip")})`,filter:`url(#${g("blurOverlay")})`,transform:[`translate(0, ${S*Ve})`,`scale(1, ${1-Ve*2})`].join(" ")},t("use",{href:`#${g("blobs")}`,mask:"url(#softVerticalFade)"})));return i?H:t(na,{className:o},H)},ia=[,"January","February","March","April","May","June","July","August","September","October","November","December"],aa=l("time",{nested:{[a.darkMode]:{...a[a.darkMode].deemphasize}},...a.deemphasize});var Pe;(function(e){e.DEFAULT="DEFAULT",e.META="META",e.SHORT="SHORT"})(Pe||(Pe={}));const Qt=({date:e,mode:o=Pe.DEFAULT,...n})=>{const r=e.getMonth()+1,s=e.getFullYear(),i=o===Pe.SHORT?`${r}/${s}`:o===Pe.META?"":[e.getDate(),ia[r],s].join(" ");return t(aa,{...n,datetime:e.toISOString()},i)},ca=l("a",{...a.topicTagLink(a.topicTagIdentifier.className)}),la=l("span",a.topicTagIdentifier()),da=l(la,{...a.topicTagInner,display:"inline-block",lineHeight:1,padding:"0.325rem 0.625rem 0.325rem 0.5rem"}),ma=({className:e,link:o=!0,topic:n})=>{const r=bs(n),s=Nt(n);if(r==null||typeof s!="string")throw new Error(`Unexpected topic: ${String(s)}`);const i=o?ca:"span",c=o?{href:`/blog/topics/${r}/`}:{};return t(i,{className:[e,a.HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME].join(" "),...c},t(da,null,s))},cn=l(ma,e=>({...a.topicTagOuter,...a.topicColors[Nt(e.topic)],backgroundColor:"currentcolor",borderRadius:"0.25rem",display:"inline-block",fontSize:"max(15px, 0.7778em)",fontWeight:500,lineHeight:1,overflow:"hidden",textDecoration:"none"})),pa=l("ul",{nested:{"&, & > li":{listStyle:"none"}},display:"flex",flexWrap:"wrap",margin:0,padding:0}),ha=l("li",{nested:{"&, &:first-child":{margin:"0.5em 1em 0 0"},"&:last-child":{marginBottom:0,marginRight:0}},display:"inline-block",flexShrink:0}),ln=({className:e,link:o=!0,topics:n})=>t(pa,{className:e},n.map(r=>typeof r=="string"?t(ha,{key:us(r)},t(cn,{link:o,topic:r})):null)),ua=e=>e.reduce((o,n)=>{const r=n.stat.created.getFullYear(),s=o[r]??[];return{...o,[r]:[...s,n]}},{}),ga=l(V,{paddingLeft:0,nested:{"&, & > li":{listStyle:"none"}}}),fa=l(V,{...a.blog.listing.item,minHeight:st,padding:"1rem 0 1.5rem",position:"relative",nested:{"&:last-child":{marginBottom:0}}}),ba=l(V,{paddingTop:`calc(${st} - max(2.5rem, 4.16667vw))`,textDecoration:"none"}),ya=l(V,{fontWeight:"normal",gridColumn:"2 / -2",position:"relative"}),Sa=l("div",{gridColumn:"1 / -1",left:0,position:"absolute",top:"1rem",width:"100%"}),xa=pt({backdropFilter:"blur(0.25rem) saturate(5)",justifySelf:"start",marginLeft:"-0.5rem",marginRight:"-0.5rem",WebkitBackdropFilter:"blur(0.25rem) saturate(5)"}),va=l("h2",{...a.blog.listing.linkTitle,marginBottom:0,marginTop:0,padding:"0.2778rem 0.5rem 0.5556rem 1.4444rem"}),Ca=l(Qt,{padding:"0 0.5rem 0.125rem 0"}),wa=l(ln,{gridColumn:"3 / 3"}),ka=l("div",{...a.blog.listing.description,marginTop:"0.5rem",marginBottom:"0.5rem"}),Pa=l("a",{fontSize:"0.875em"});var Ct;(function(e){e.DATE="date"})(Ct||(Ct={}));var wt;(function(e){e.ASC="asc",e.DESC="desc"})(wt||(wt={}));const Ta=({order:e=wt.DESC,posts:o,sort:n=Ct.DATE})=>{const r=o.slice().sort((i,c)=>e===wt.DESC&&n===Ct.DATE?i.stat.created>c.stat.created?-1:1:0),s=ua(r);return t($,null,Object.entries(s).map(([i,c])=>t($,{key:i},t(ga,null,c.map(d=>{const{CustomArt:p=vt,description:h,hash:y,path:g,stat:{created:f},title:w,topics:S}=d;return t(fa,{key:g},t(ba,{as:"a",href:g},t(Sa,null,t(p,{defsUsage:it.NONE,hash:y,padded:!0,renderType:"listing",title:w,topics:S})),t(ya,null,t(va,{className:xa},w),t(Ca,{date:f}))),t(wa,{link:!1,topics:S}),t(ka,{className:a.blog.listing.descriptionIdentifier},h),t("p",null,t(Pa,{href:g},"Read more\u2026")))})))))},Ea=()=>t($,null,t("link",{rel:"apple-touch-icon",sizes:"180x180",href:"/favicons/apple-touch-icon.png"}),t("link",{rel:"icon",type:"image/png",sizes:"32x32",href:"/favicons/favicon-32x32.png"}),t("link",{rel:"icon",type:"image/png",sizes:"192x192",href:"/favicons/android-chrome-192x192.png"}),t("link",{rel:"icon",type:"image/png",sizes:"16x16",href:"/favicons/favicon-16x16.png"}),t("link",{rel:"manifest",href:"/favicons/site.webmanifest"}),t("link",{rel:"mask-icon",href:"/favicons/safari-pinned-tab.svg",color:"#ff0000"}),t("link",{rel:"shortcut icon",href:"/favicons/favicon.ico"}),t("meta",{name:"apple-mobile-web-app-title",content:"Eyelidlessness"}),t("meta",{name:"application-name",content:"Eyelidlessness"}),t("meta",{name:"msapplication-TileColor",content:"#555555"}),t("meta",{name:"msapplication-config",content:"/favicons/browserconfig.xml"}));Rs();const dn=({children:e,meta:{description:o,host:n,redirect:r,social:{image:s},title:i},...c})=>r?t(Eo,{...c},t(ct.title,null,"Redirecting to ",r),t("meta",{"http-equiv":"refresh",content:`0; URL=${r}`}),t("link",{rel:"canonical",href:r})):t(Eo,{...c},t(ct.title,null,i," | Eyelidlessness"),o!=null?t(ct.description,null,o):t($,null),t("meta",{name:"theme-color",content:a.siteLogo.color}),t("style",{dangerouslySetInnerHTML:{__html:Os}}),t("meta",{name:"twitter:card",content:"summary_large_image"}),t("meta",{name:"twitter:site",content:"@eyelidlessenss"}),t(ct.image,{alt:i,height:s.height,src:`${n}${s.publicPath}`,width:s.width}),t($,null,e),t(Ea,null)),Aa=({as:e="div",devilsBreakpoint:o,gap:n,...r})=>{const s=l(e,{alignItems:"center",display:"flex",flexWrap:"wrap",nested:{"&:before":{content:'""',flexBasis:`max(${[n?.horizontal??"0px",`calc((${o} - 100%) * 666)`].join(", ")})`,flexGrow:666,marginTop:n?.vertical??"0px"},"& > *":{flexGrow:1,marginLeft:"auto",marginRight:"auto",textAlign:"center"},"& > *:first-child":{order:-1}}});return t(s,{...r})},Ye=512,mn=[0,0,Ye,Ye].join(" "),Ia=Ye/2,Ma=["M335","499c14","0","12","17","12","17H165s-2-17","12-17c13","0","16-6","16-12l-1-50c-71","16-86-28-86-28-12-30-28-37-28-37-24-16","1-16","1-16","26","2","40","26","40","26","22","39","59","28","74","22","2-17","9-28","16-35-57-6-116-28-116-126","0-28","10-51","26-69-3-6-11-32","3-67","0","0","21-7","70","26","42-12","86-12","128","0","49-33","70-26","70-26","14","35","6","61","3","67","16","18","26","41","26","69","0","98-60","120-117","126","10","8","18","24","18","48l-1","70c0","6","3","12","16","12z"].join(" "),Oa=()=>t("svg",{xmlns:"http://www.w3.org/2000/svg","aria-hidden":"true","aria-label":"GitHub",height:"0",viewBox:mn,width:"0"},t("defs",null,t("mask",{id:"octocat-knockout"},t("rect",{fill:"#fff",height:Ye,mask:"url(#octocat)",rx:Ia,width:Ye}),t("path",{d:Ma,fill:"#000"})))),Ra=l("rect",{...a.gitHubLogo}),pn=({className:e})=>t("svg",{xmlns:"http://www.w3.org/2000/svg","aria-label":"GitHub",className:e,role:"img",viewBox:mn},t("title",null,"GitHub"),t(Ra,{height:Ye,mask:"url(#octocat-knockout)",width:Ye})),kt={height:60,width:338},ja=l("svg",{display:"inline-block",maxWidth:"100%",width:`${kt.width}px`}),$a=l("use",{nested:{[a.darkMode]:{...a[a.darkMode].siteLogo}},...a.siteLogo,fill:"currentcolor"}),La=`0 0 ${kt.width} ${kt.height}`,Ba=()=>t(ja,{viewBox:La},t($a,{xlinkHref:"/images/SiteLogo.svg#site-logo"}),t("title",null,"Eyelidlessness")),{columns:qe}=a.siteHeader,Na=`
-  ${qe[0]}
-  ${qe[1]}
+`),dt=([e,...t],{includeAbbreviations:n=!0})=>{const r=typeof e=="string"?[e,...t].join(""):String.raw(e,...t);return n?ki(r):r},Te=(...e)=>{const t=dt(e,{includeAbbreviations:!0});return o(ge,{},o(no,{},t))},ro=(...e)=>{const t=dt(e,{includeAbbreviations:!0});return o(ge,{},o(no,{components:{p:z}},t))},Ti=(...e)=>{const t=dt(e,{includeAbbreviations:!1});return fi().use(gi).use(hi).use(yi).use(tn).use(on).processSync(t).contents.toString().trim()},ie=(e,t)=>Number(e.toFixed(t)),he=parseInt("ff",16),io=parseInt("00",16),so=.05,mt=.15,pt=.05;class Me extends Error{constructor(t){super(`Invalid hash: ${t}`)}}const wi=/^[0-9a-f]{40}$/i,Ci=e=>wi.test(e),xi=new Set(["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"]),Ri=e=>e.length===10,Ai=/([0-9a-f]{2})([0-9a-f]{2})/ig,ut=e=>{if(!Ci(e))throw new Me(e);const n=Array.from(e.matchAll(Ai)??[]).map(([r,i,s])=>({x:i,y:s}));if(!Ri(n))throw new Me(e);return n},Pi=Symbol("IS_POINT"),Oi=e=>Object.assign(e,{[Pi]:!0}),ao=e=>{const t=parseInt(e,16);if(t>he||t<io)throw new Error(`Not a valid coordinate: ${e}`);return Oi(t)},Ii=({x:e,y:t})=>({x:ao(e),y:ao(t)}),Mi=e=>e.length===10,gt=(e,t)=>{try{const n=t.map(Ii);if(!Mi(n))throw new Me(e);return n}catch{throw new Me(e)}},ji=Symbol("SCALED_COORDINATE"),lo=e=>e.reduce(({max:t,min:n},{y:r})=>({max:Math.max(Number(t),Number(r)),min:Math.min(Number(n),Number(r))}),{max:-Infinity,min:Infinity}),q=(e,t)=>Object.assign(ie(e,2),{[ji]:t}),we=({x:e,xScale:t,y:n,yScale:r})=>({x:q(e,t),y:q(n,r)}),ht=({x:e,y:t},{xScale:n,xShift:r,yScale:i,yShift:s})=>we({x:(e+r)*n,xScale:n,y:(t+s)*i,yScale:i}),ft=({points:e,xMax:t,xScale:n,yScale:r})=>[we({x:0,xScale:n,y:0,yScale:r}),...e,we({x:t,xScale:n,y:0,yScale:r})].reduce((i,s,l,m)=>{if(l===0||l===m.length-1)return i;const p=q(0,r),u=[{x:m[l-1].x,y:p},s,{x:m[l+1].x,y:p}];return[...i,u]},[]),bt=({segments:e,xMax:t,xScale:n,yScale:r})=>e.map(i=>{const[{x:s,y:l},{x:m,y:p},{x:u,y:b}]=i,h=u-s,y=p/h,f=6/y;if(f<1){const A=f*.2*s,C=s-A,$=u+A,O=C<0?Math.abs(C):$>t?t-$:0,P=C+O,V=$+O,R=f*.3,_=m+O,I=R*p,X=p-I;return[we({x:P,xScale:n,y:l,yScale:r}),we({x:_,xScale:n,y:X,yScale:r}),we({x:V,xScale:n,y:b,yScale:r})]}return i}),Li=({x:e,y:t},{x:n,y:r})=>{const i=n-e,s=r-t;return{angle:Math.atan2(s,i),length:Math.sqrt(i**2+s**2)}},co=({current:e,previous:t,next:n,reverse:r,smoothing:i,xScale:s,yScale:l})=>{const m=r?Math.PI:0,p=Li(t,n),u=p.angle+m,b=p.length*i,{x:h,y}=e,v=h+Math.cos(u)*b,f=y+Math.sin(u)*b;return{x:q(v,s),y:q(f,l)}},yt=({index:e,point:t,points:n,smoothing:r,xScale:i,yScale:s})=>{const l=n[e-1];if(l==null)throw new Error("Cannot build cubic bezier points, no point before the provided index.");const m=n[e-2]??l,p=co({current:l,previous:m,next:t,reverse:!1,smoothing:r,xScale:i,yScale:s}),u=l,b=n[e+1]??t,h=co({current:t,previous:u,next:b,reverse:!0,smoothing:r,xScale:i,yScale:s});return[p,h,t]},mo=({segment:e,smoothing:t,xScale:n,yScale:r})=>e.reduce((i,s,l)=>{if(l===0)return i;const p=yt({index:l,point:s,points:e,smoothing:t,xScale:n,yScale:r}).map(u=>`${u.x},${u.y}`).join(" ");return[...i,`C ${p}`]},[]),Di=({baseYCoordinate:e,isBaselineBelowMidpoint:t,segments:n,xScale:r,yMax:i,yScale:s,yTilt:l=!1})=>n.reduce((m,p,u,b)=>{const{length:h}=b,[y,v,f]=p,{x:k,y:A}=y,{x:C,y:$}=v,{x:O,y:P}=f,V=O-k,R=V===0?0:Math.max($/V*pt,mt),_=l?.1:0,I=1-_,X=1+_,Q=u%2==0?I:X,ee=t?A+e:i-A+e,F={x:k,y:q(ee*Q,s)},Z=u%2==0?I:X,te=t?P+e:i-P+e,U={x:q(O,r),y:q(te*Z,s)},H=C-k,N=O-C,Y=N>H?0:0-(C-k)*so,J=(h-u)*(s/100*i),de={x:q(C+Y,r),y:q($-J,s)},me=mo({segment:[F,de,U],smoothing:R,xScale:r,yScale:s}),pe=N>H?(O-C)*so:0,Se={x:q(C+pe,r),y:q(i-J,s)},oe=mo({segment:[U,Se,F],smoothing:R,xScale:r,yScale:s});return[...m,[`M ${F.x},${F.y}`,...me,...oe,"Z"].join(" ")]},[]),Bi=({hash:e,xPadding:t=0,xScale:n=1,yOffset:r=.5,yPadding:i=0,yScale:s=1})=>{const l=ut(e),m=gt(e,l),p=lt(m,({x:P},{x:V})=>Number(P)===Number(V)?0:Number(P)>Number(V)?1:-1),u=t/2,b=i/2,h=p.map(P=>ht(P,{xScale:n,xShift:u,yScale:s,yShift:b})),y=(he+t)*n,{max:v}=lo(h),f=(v+i)*s,k=ft({points:h,xMax:y,xScale:n,yScale:s}),A=bt({segments:k,xMax:y,xScale:n,yScale:s}),C=r>.5,$=C?f*r:-1*f*r;return{segmentPaths:Di({baseYCoordinate:$,segments:A,xScale:n,yMax:f,isBaselineBelowMidpoint:C,yScale:s}),xMax:y,yMax:f}};var St;(function(e){e.PNG="png"})(St||(St={}));const vt=process.cwd(),je=e=>e.startsWith("/")?ue.resolve(vt,e.replace(/^.*?\/src\//,"./src/").replace(/\.js$/,".tsx")):ue.extname(e)==""?ue.resolve(vt,"./src/pages/",`${e}.tsx`):e;var Ce;(function(e){e.ALL="",e.CURRENT="--diff-filter=M",e.FIRST="--diff-filter=A",e.FIRST_MERGE="--full-history --reverse --merges"})(Ce||(Ce={}));var fe;(function(e){e.HASH="%H",e.ISO_DATE="%aI"})(fe||(fe={}));const $i="origin",Ni="main",Le=e=>{const{branch:t=Ni,decode:n,filter:r=Ce.FIRST,format:i,path:s=vt,remote:l=$i}=e,{error:m,stdout:p}=an.spawnSync("git",["log",...r.split(" "),`--branches=${t}`,`--format=${i}`,`--remotes=${l}`,"--",s]);if(m)throw m;const u=p.toString().trim();return(u===""?[]:u.split(`
+`)).map(n)},Et=e=>{const t=new Date(e);if(!isNaN(t.getTime()))return t},Hi=e=>{const t=je(e),[n=null]=Le({decode:Et,filter:Ce.CURRENT,format:fe.ISO_DATE,path:t});return n},_i=e=>{const t=je(e),[n=null]=Le({decode:Et,format:fe.ISO_DATE,path:t});return n},Fi=e=>{const t=je(e),[n=null]=Le({decode:Et,filter:Ce.FIRST_MERGE,format:fe.ISO_DATE,path:t});return n},kt=e=>{const t=Qe.readFileSync(e).toString();let n=ln.createHash("sha1");return n.update(t),n.digest("hex")},Ui=e=>{const t=je(e),[n]=Le({decode:He,format:fe.HASH,path:t});return n??kt(t)},Yi=e=>{const t=je(e),[n]=Le({decode:He,filter:Ce.FIRST_MERGE,format:fe.HASH,path:t});return n??kt(t)},zi={height:630,width:1200},Gi=process.env.EYELIDLESSNESS_HOST??"https://eyelidlessness.github.io",Xi=sn({alg:"sha1",coerce:!0,sort:!0,trim:!0}),Wi=(e,t,n=St.PNG,r=zi)=>{const i=e.replace(/^file:(\/\/)?(\/.*?)\/src\/.*$/,"$2/images"),s=Xi.hash(t),l=ue.resolve(i,`${s}.${n}`),m=l.replace(/^.*?\/images\//,"/images/");return{image:{absolutePath:l,imageType:n,publicPath:m,...r}}};var be;(function(e){e.IMMUTABLE="immutable",e.IMMUTABLE_MERGE="immutable-merge",e.MUTABLE="mutable"})(be||(be={}));const po=(e,t,n,r,i=[M.TECHNOLOGY])=>{const s=r===be.MUTABLE,l=r===be.IMMUTABLE_MERGE,m=t.replace(/^file:(\/\/)?/,""),p=s?kt(m):l?Yi(e):Ui(e),u={created:(l?Fi(e):_i(e))??Qe.statSync(m).ctime,updated:Hi(e)??Qe.statSync(m).mtime},h=Wi(t,s?{importURL:t,stat:u,topics:i}:{hash:p,importURL:t});return{hash:p,host:Gi,path:e,social:h,stat:u,title:n,topics:i}},uo=()=>o(z,null,o("linearGradient",{id:"horizontalMidFadeGradient",y2:"0",x2:"1"},o("stop",{offset:"0","stop-color":"white","stop-opacity":"0.25"}),o("stop",{offset:"0.0125","stop-color":"white","stop-opacity":"0.25"}),o("stop",{offset:"0.075","stop-color":"white","stop-opacity":".5"}),o("stop",{offset:"0.5","stop-color":"white","stop-opacity":"1"}),o("stop",{offset:"0.925","stop-color":"white","stop-opacity":".5"}),o("stop",{offset:"0.9875","stop-color":"white","stop-opacity":"0.25"}),o("stop",{offset:"1","stop-color":"white","stop-opacity":"0.25"})),o("mask",{id:"horizontalMidFade",maskContentUnits:"objectBoundingBox"},o("rect",{fill:"url(#softVerticalFadeGradient)",height:"1",width:"1"})),o("linearGradient",{id:"softVerticalFadeGradient",y2:"1",x2:"0"},o("stop",{offset:"0","stop-color":"white","stop-opacity":"1"}),o("stop",{offset:"0.25","stop-color":"white","stop-opacity":".75"}),o("stop",{offset:"1","stop-color":"white","stop-opacity":"0.35"})),o("mask",{id:"softVerticalFade",maskContentUnits:"objectBoundingBox"},o("rect",{fill:"url(#softVerticalFadeGradient)",height:"1",width:"1"}))),Vi=()=>o("svg",{"aria-hidden":"true",height:"0",width:"0",xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 1 1"},o("defs",null,o(uo,null))),Ki=1.6180334,qi=4,go=ie(Ki*5,6),ho=.75,xe=.15,Ji=1.5,Re=ne("6rem",`${100/go}vw`,"10rem"),Qi=c(B,{height:Re,position:"relative",width:"100%"}),Zi=c("svg",{display:"block",height:"inherit",position:"absolute",width:"100%"}),es=c("path",{fill:"currentcolor",fillRule:"nonzero",opacity:.85});var De;(function(e){e.INLINE="inline",e.NONE="none"})(De||(De={}));const Tt={xPadding:qi,xScale:go,yOffset:ho,yPadding:xe,yScale:Ji},wt=e=>{const{className:t,defsUsage:n=De.INLINE,hash:r,height:i,rawSVG:s=!1,styleRenderer:l=ce,title:m,topics:p=[],width:u}=e,b=p.length<2?[...p,M[ze]]:p,h=P=>`${P}-${r}`,{segmentPaths:y,xMax:v,yMax:f}=Bi({...Tt,hash:r}),k=f*ho,A=f*xe/10.24,C=A*.75,O=o(Zi,{className:Xt,height:i,preserveAspectRatio:"none",viewBox:[0,0,v,f].join(" "),width:u},o("title",null,"Generated art for the page or post titled"," ",o("i",null,m),", with the content or commit hash ",r," ",b.length>0?[", and the topics: ",b.map(String).join(", ")]:null),o("defs",null,n===De.INLINE?o(uo,null):null,o("filter",{id:h("blur")},o("feOffset",{in:"SourceGraphic",dx:"0",dy:C,result:"glowOffsetOut"}),o("feGaussianBlur",{in:"glowOffsetOut",stdDeviation:A,result:"glowBlurOut"}),o("feBlend",{in:"SourceGraphic",in2:"glowBlurOut",mode:"color-dodge"})),o("clipPath",{id:h("blurOverlayClip")},o("rect",{x:"0",width:v,y:k,height:f})),o("filter",{id:h("blurOverlay")},o("feOffset",{result:"glowOffsetOut",in:"SourceGraphic",dx:"0",dy:C}),o("feGaussianBlur",{result:"glowBlurOut",in:"glowOffsetOut",stdDeviation:A})),o("filter",{id:h("blurUnderlay")},o("feOffset",{result:"glowOffsetOut",in:"SourceGraphic",dx:"0",dy:C}),o("feGaussianBlur",{in:"glowOffsetOut",result:"glowBlurOut",stdDeviation:A}),o("feTurbulence",{type:"turbulence",baseFrequency:"10",numOctaves:"2",result:"turbulence"}),o("feDisplacementMap",{in:"glowBlurOut",in2:"turbulence",result:"dither",scale:"25",xChannelSelector:"R",yChannelSelector:"G"}),o("feColorMatrix",{in:"dither",result:"saturated",type:"saturate",values:"5"}),o("feGaussianBlur",{in:"saturated",result:"saturatedBlurOut",stdDeviation:A})),o("g",{id:h("blobs")},y.map((P,V)=>{const R=V%b.length,_=b[R],I=l.renderRule(()=>({...a.topicColors[_]}),Object.keys);return o(es,{key:P,className:I,d:P,mask:"url(#softVerticalFade)"})}))),o("g",{transform:[`translate(0, ${f*xe})`,`scale(1, ${1-xe*2})`].join(" "),filter:`url(#${h("blur")})`},o("use",{href:`#${h("blobs")}`,mask:"url(#horizontalMidFade)"})),o("g",{"clip-path":`url(#${h("blurOverlayClip")})`,filter:`url(#${h("blurOverlay")})`,transform:[`translate(0, ${f*xe})`,`scale(1, ${1-xe*2})`].join(" ")},o("use",{href:`#${h("blobs")}`,mask:"url(#softVerticalFade)"})));return s?O:o(Qi,{className:t},O)},ts=[,"January","February","March","April","May","June","July","August","September","October","November","December"],os=c("time",{nested:{[a.darkMode]:{...a[a.darkMode].deemphasize}},...a.deemphasize});var se;(function(e){e.DEFAULT="DEFAULT",e.META="META",e.SHORT="SHORT"})(se||(se={}));const Ae=({date:e,mode:t=se.DEFAULT,...n})=>{const r=e.getMonth()+1,i=e.getFullYear(),s=t===se.SHORT?`${r}/${i}`:t===se.META?"":[e.getDate(),ts[r],i].join(" ");return o(os,{...n,datetime:e.toISOString()},s)},ns=c("a",{...a.topicTagLink(a.topicTagIdentifier.className)}),rs=c("span",a.topicTagIdentifier()),is=c(rs,{...a.topicTagInner,display:"inline-block",lineHeight:1,padding:"0.325rem 0.625rem 0.325rem 0.5rem"}),ss=({className:e,link:t=!0,topic:n})=>{const r=ur(n),i=ot(n);if(r==null||typeof i!="string")throw new Error(`Unexpected topic: ${String(i)}`);const s=t?ns:"span",l=t?{href:`/blog/topics/${r}/`}:{};return o(s,{className:[e,a.HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME].join(" "),...l},o(is,null,i))},fo=c(ss,e=>({...a.topicTagOuter,...a.topicColors[ot(e.topic)],backgroundColor:"currentcolor",borderRadius:"0.25rem",display:"inline-block",fontSize:"max(15px, 0.7778em)",fontWeight:500,lineHeight:1,overflow:"hidden",textDecoration:"none"})),as=c("ul",{nested:{"&, & > li":{listStyle:"none"}},display:"flex",flexWrap:"wrap",margin:0,padding:0}),ls=c("li",{nested:{"&, &:first-child":{margin:"0.5em 1em 0 0"},"&:last-child":{marginBottom:0,marginRight:0}},display:"inline-block",flexShrink:0}),bo=({className:e,link:t=!0,topics:n})=>o(as,{className:e},n.map(r=>typeof r=="string"?o(ls,{key:dr(r)},o(fo,{link:t,topic:r})):null)),cs=e=>e.reduce((t,n)=>{const r=n.stat.created.getFullYear(),i=t[r]??[];return{...t,[r]:[...i,n]}},{}),ds=c(B,{paddingLeft:0,nested:{"&, & > li":{listStyle:"none"}}}),ms=c(B,{...a.blog.listing.item,minHeight:Re,padding:"1rem 0 1.5rem",position:"relative",nested:{"&:last-child":{marginBottom:0}}}),ps=c(B,{paddingTop:`calc(${Re} - max(2.5rem, 4.16667vw))`,textDecoration:"none"}),us=c(B,{fontWeight:"normal",gridColumn:"2 / -2",position:"relative"}),gs=c("div",{gridColumn:"1 / -1",left:0,position:"absolute",top:"1rem",width:"100%"}),hs=Ue({backdropFilter:"blur(0.25rem) saturate(5)",justifySelf:"start",marginLeft:"-0.5rem",marginRight:"-0.5rem",WebkitBackdropFilter:"blur(0.25rem) saturate(5)"}),fs=c("h2",{...a.blog.listing.linkTitle,marginBottom:0,marginTop:0,padding:"0.2778rem 0.5rem 0.5556rem 1.4444rem"}),bs=c(Ae,{padding:"0 0.5rem 0.125rem 0"}),ys=c(bo,{gridColumn:"3 / 3"}),Ss=c("div",{...a.blog.listing.description,marginTop:"0.5rem",marginBottom:"0.5rem"}),vs=c("a",{fontSize:"0.875em"});var Ve;(function(e){e.DATE="date"})(Ve||(Ve={}));var Ke;(function(e){e.ASC="asc",e.DESC="desc"})(Ke||(Ke={}));const Es=({order:e=Ke.DESC,posts:t,sort:n=Ve.DATE})=>{const r=t.slice().sort((s,l)=>e===Ke.DESC&&n===Ve.DATE?s.stat.created>l.stat.created?-1:1:0),i=cs(r);return o(z,null,Object.entries(i).map(([s,l])=>o(z,{key:s},o(ds,null,l.map(m=>{const{CustomArt:p=wt,description:u,hash:b,path:h,stat:{created:y},title:v,topics:f}=m;return o(ms,{key:h},o(ps,{as:"a",href:h},o(gs,null,o(p,{defsUsage:De.NONE,hash:b,padded:!0,renderType:"listing",title:v,topics:f})),o(us,null,o(fs,{className:hs},v),o(bs,{date:y}))),o(ys,{link:!1,topics:f}),o(Ss,{className:a.blog.listing.descriptionIdentifier},u),o("p",null,o(vs,{href:h},"Read more\u2026")))})))))},ks=()=>o(z,null,o("link",{rel:"apple-touch-icon",sizes:"180x180",href:"/favicons/apple-touch-icon.png"}),o("link",{rel:"icon",type:"image/png",sizes:"32x32",href:"/favicons/favicon-32x32.png"}),o("link",{rel:"icon",type:"image/png",sizes:"192x192",href:"/favicons/android-chrome-192x192.png"}),o("link",{rel:"icon",type:"image/png",sizes:"16x16",href:"/favicons/favicon-16x16.png"}),o("link",{rel:"manifest",href:"/favicons/site.webmanifest"}),o("link",{rel:"mask-icon",href:"/favicons/safari-pinned-tab.svg",color:"#ff0000"}),o("link",{rel:"shortcut icon",href:"/favicons/favicon.ico"}),o("meta",{name:"apple-mobile-web-app-title",content:"Eyelidlessness"}),o("meta",{name:"application-name",content:"Eyelidlessness"}),o("meta",{name:"msapplication-TileColor",content:"#555555"}),o("meta",{name:"msapplication-config",content:"/favicons/browserconfig.xml"}));Ar();const yo=({children:e,meta:{description:t,host:n,redirect:r,social:{image:i},title:s},...l})=>r?o(Dt,{...l},o(Ne.title,null,"Redirecting to ",r),o("meta",{"http-equiv":"refresh",content:`0; URL=${r}`}),o("link",{rel:"canonical",href:r})):o(Dt,{...l},o(Ne.title,null,s," | Eyelidlessness"),t!=null?o(Ne.description,null,t):o(z,null),o("meta",{name:"theme-color",content:a.siteLogo.color}),o("style",{dangerouslySetInnerHTML:{__html:Rr}}),o("meta",{name:"twitter:card",content:"summary_large_image"}),o("meta",{name:"twitter:site",content:"@eyelidlessenss"}),o(Ne.image,{alt:s,height:i.height,src:`${n}${i.publicPath}`,width:i.width}),o(z,null,e),o(ks,null)),Ts=({as:e="div",devilsBreakpoint:t,gap:n,...r})=>{const i=c(e,{alignItems:"center",display:"flex",flexWrap:"wrap",nested:{"&:before":{content:'""',flexBasis:`max(${[n?.horizontal??"0px",`calc((${t} - 100%) * 666)`].join(", ")})`,flexGrow:666,marginTop:n?.vertical??"0px"},"& > *":{flexGrow:1,marginLeft:"auto",marginRight:"auto",textAlign:"center"},"& > *:first-child":{order:-1}}});return o(i,{...r})},ye=512,So=[0,0,ye,ye].join(" "),ws=ye/2,Cs=["M335","499c14","0","12","17","12","17H165s-2-17","12-17c13","0","16-6","16-12l-1-50c-71","16-86-28-86-28-12-30-28-37-28-37-24-16","1-16","1-16","26","2","40","26","40","26","22","39","59","28","74","22","2-17","9-28","16-35-57-6-116-28-116-126","0-28","10-51","26-69-3-6-11-32","3-67","0","0","21-7","70","26","42-12","86-12","128","0","49-33","70-26","70-26","14","35","6","61","3","67","16","18","26","41","26","69","0","98-60","120-117","126","10","8","18","24","18","48l-1","70c0","6","3","12","16","12z"].join(" "),xs=()=>o("svg",{xmlns:"http://www.w3.org/2000/svg","aria-hidden":"true","aria-label":"GitHub",height:"0",viewBox:So,width:"0"},o("defs",null,o("mask",{id:"octocat-knockout"},o("rect",{fill:"#fff",height:ye,mask:"url(#octocat)",rx:ws,width:ye}),o("path",{d:Cs,fill:"#000"})))),Rs=c("rect",{...a.gitHubLogo}),vo=({className:e})=>o("svg",{xmlns:"http://www.w3.org/2000/svg","aria-label":"GitHub",className:e,role:"img",viewBox:So},o("title",null,"GitHub"),o(Rs,{height:ye,mask:"url(#octocat-knockout)",width:ye})),qe={height:60,width:338},As=c("svg",{display:"inline-block",maxWidth:"100%",width:`${qe.width}px`}),Ps=c("use",{nested:{[a.darkMode]:{...a[a.darkMode].siteLogo}},...a.siteLogo,fill:"currentcolor"}),Os=`0 0 ${qe.width} ${qe.height}`,Is=()=>o(As,{viewBox:Os},o(Ps,{xlinkHref:"/images/SiteLogo.svg#site-logo"}),o("title",null,"Eyelidlessness")),{columns:Pe}=a.siteHeader,Ms=`
+  ${Pe[0]}
+  ${Pe[1]}
   min(
-    ${qe[2][0]},
-    ${qe[2][1]}
+    ${Pe[2][0]},
+    ${Pe[2][1]}
   )
-  ${qe[3]}
-  ${qe[4]}
-`.replace(/\s+/g," "),Ha=l("header",{...a.artOverlay,display:"grid",gridColumn:"1 / -1",gridTemplateColumns:Na,padding:"clamp(0.5rem, 5vmin, 3rem) 0",position:"relative",zIndex:1}),Da=l("div",{gridColumn:3}),Ya=l("div",{margin:"0 auto"}),_a=l("a",{textDecoration:"none"}),Xa=l("ul",{alignItems:"center",display:"flex",flexShrink:0,justifyContent:"center",listStyle:"none",marginBottom:0,marginTop:0,padding:0}),hn=1,za=l("li",{nested:{"&:first-child":{marginLeft:0},"&:last-child":{marginRight:0}},display:"block",flexShrink:0,listStyle:"none",margin:`0 ${hn/2}rem`,padding:0}),Fa=l("a",{...a.siteHeader.pageLinks,display:"block",fontSize:"clamp(1em, 3vw, 1.125em)",fontWeight:300,lineHeight:1,padding:"0.25rem",textDecoration:"none",whiteSpace:"nowrap",nested:{[a.darkMode]:{...a[a.darkMode].siteHeader.pageLinks},":active":{fontWeight:300},":local-link":{textDecoration:"underline"}}}),un="1.5em",_l=l(pn,{display:"block",width:`clamp(1.125em, 4vw, ${un})`}),Ua=()=>{const e=[{label:"Blog",location:"/"},{label:"Projects",location:"/projects/"},{label:"GitHub",location:"https://github.com/eyelidlessness"}],o=e.reduce((s,i)=>typeof i.label=="string"?s+i.label.length:s,0),n={horizontal:"2rem"},r=`${[`${kt.width}px`,n.horizontal,`${o+1}ch`,un,`${e.length*hn}rem`].join(" + ")}`;return t(Ha,null,t(Da,null,t(Aa,{as:"nav",devilsBreakpoint:r,gap:n},t(Ya,null,t(_a,{href:"/"},t(Ba,null))),t(Xa,null,e.map(({location:s,label:i})=>t(za,null,t(Fa,{href:s},i)))))))},Ga=l(V,{paddingTop:0,paddingBottom:"4em"}),gn=({redirect:e,...o})=>t(Fe,null,e==null?t($,null,t(Oa,null),t(Ua,null),t(Ga,{as:"main",...o})):t($,null)),Wa=l(V,{...a.description,nested:{...a.description.nested,"&:last-child":{marginBottom:0},"& h1":{fontFamily:"unset",fontSize:"1.2em",lineHeight:1,marginBottom:"0.75rem",scrollMarginTop:"1rem"},"& p":{marginBottom:"0.625rem"},"& p:last-child":{marginBottom:0}},marginBottom:"2rem",paddingBottom:"1rem",paddingTop:"1rem"}),Va=l("h1",{fontSize:"1em",lineHeight:1,marginBottom:"0.75rem"}),qa=l("div",{fontSize:"0.889em"}),Ka=({as:e="section",title:o,...n})=>t(Wa,{as:e,itemprop:"description"},o?t(Va,null,o):null,t(qa,{...n})),Ja=l(V,{...a.artOverlay}),Za=l("h1",{marginBottom:"0.25rem"}),Qa=l(V,{marginBottom:"1rem"}),fn=e=>{const{children:o,CustomArt:n,description:r,descriptionRaw:s,hash:i,redirect:c,stat:{created:d},title:p,topics:h}=e;return t($,null,t(dn,{meta:{...e,description:s}}),t(gn,{as:"article",redirect:c},t(Qa,null,n==null?t(vt,{hash:i,title:p,topics:h}):t(n,{hash:i,renderType:"post",StylesProvider:Fe,title:p,topics:h}),t(Ja,null,t(Za,null,p),t(Qt,{date:d,itemprop:"datePublished"}),t(ln,{link:!1,topics:h}))),t(Ka,null,r),o))},bn={IMMUTABLE:De.IMMUTABLE,IMMUTABLE_MERGE:De.IMMUTABLE_MERGE},yn=async e=>{const{description:o,importURL:n,path:r,redirect:s,title:i,topics:c,type:d=bn.IMMUTABLE_MERGE}=e,{CustomArt:p,hash:h,host:y,social:g,stat:f}=nn(r,n,i,d,c),w=Ai`${So(t($,null,o))}`;return{CustomArt:p,description:o,descriptionRaw:w,hash:h,host:y,path:r,redirect:s,social:g,stat:f,title:i,topics:c}},Sn=l("div",{alignItems:"start",display:"flex",margin:"-0.5rem",nested:{"& > *":{margin:"0.5rem"}}}),xn="@media (min-width: 41.666rem)",ec=l(Sn,{display:"block",margin:0,nested:{[xn]:{display:"flex",flexWrap:"nowrap",margin:"-1rem",nested:{"& > *":{flexBasis:"calc(50% - 2rem)",margin:"1rem"}}}}}),tc=l("div",{fontSize:"0.88889em",margin:"0.5rem 0"}),oc=e=>{const o=Array();return e.role===P.CREATOR&&o.push(e.description),e.summary!=null&&o.push(e.summary),o.length===0&&o.push(e.description),t(tc,null,o.map(n=>St(n)))},nc=l(Sn,{flexWrap:"wrap",nested:{"& > *":{minWidth:"max(calc(50% - 2rem), 30ch)"}}}),rc=l(nc,{alignItems:"baseline",justifyContent:"space-between",margin:"0 -0.5rem",rowGap:"0.325rem",nested:{"& > *":{margin:"0 0.5rem",minWidth:"auto"}}}),sc=l("h3",{paddingLeft:0,textIndent:0}),ic=l("a",{color:"inherit",fontWeight:"inherit",textDecoration:"none",nested:{"&:active, &:focus, &:hover, &:visited":{color:"inherit"}}}),ac=/^(\d{4})-(\d{2})$/,vn=e=>{const o=e.match(ac);if(o==null)throw new Error(`Invalid format for date: ${e}, expected YYYY-MM`);const[,n,r]=o;return new Date(`${n}-${r}-01T00:00:00`)},eo=l("div",{fontSize:"0.88889em",marginLeft:"auto"}),Pt=l(Qt,{fontSize:"inherit"}),cc=({range:[e,o]})=>{const n=vn(e);if(o==null)return t(eo,null,"Since ",t(Pt,{date:n,itemprop:"startDate",mode:Pe.SHORT}));const r=vn(o);return e==o?t(eo,null,t(Pt,{date:n,itemprop:"endDate",mode:Pe.SHORT})):t(eo,null,t(Pt,{date:n,itemprop:"startDate",mode:Pe.SHORT})," \u2013 ",t(Pt,{date:r,itemprop:"endDate",mode:Pe.SHORT}))},lc=l("a",{display:"block",padding:"0 0.5rem 0.5rem 0.5rem",zIndex:1,nested:{"& svg":{width:"1.25em"},[xn]:{paddingLeft:0}}}),dc=l("div",{paddingTop:"0.05556rem"}),mc=l("div",{alignItems:"start",display:"grid",gridTemplateColumns:"auto 1fr",padding:"1rem 0"}),to=({project:{description:e,end:o,repo:n,role:r,title:s,start:i,summary:c}})=>t(mc,null,t(lc,{href:n},t(pn,null)),t(dc,null,t(rc,null,t(sc,null,t(ic,{href:n},s)),t(cc,{range:[i,o]})),t(oc,{role:r,description:e,summary:c??null}))),pc=l("div",{fontSize:"0.8889em",paddingLeft:"0.25rem"}),hc=l("aside",{...a.aside,fontSize:"1rem",nested:{[a.darkMode]:{...a[a.darkMode].aside}}}),uc=l("div",{...a.asideBlock.symbol,fontSize:Be("2.2em","7vw","3em"),marginLeft:"-1.25rem",marginTop:"-1.25rem",transform:"rotate(-20deg)",nested:{...a.asideBlock.symbol.nested,[a.darkMode]:{...a.asideBlock.symbol.nested[a.darkMode],fontWeight:"bolder"}}}),Cn=({children:e})=>t(Fo,{ContentContainer:pc,OuterContainer:hc,symbol:"#",SymbolContainer:uc},e),gc=l("span",{clip:"rect(0 0 0 0)",clipPath:"inset(50%)",height:"1px",overflow:"hidden",position:"absolute",whiteSpace:"nowrap",width:"1px"});import.meta.env=lt;const Tt=(...e)=>["https://github.com/eyelidlessness/eyelidlessness.github.io",...e].join("/"),wn={blame:Tt("blame/9216eb05cd375fccc7e9b06a98bb9c1b110a97d0/src/pages/blog/2021/02","what-the-art-p2-constraints/index.tsx#L111-L112"),artBoilerplate:Tt("blob/main/src/lib/art/math.ts"),bezierCurves:"https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Cubic_B%C3%A9zier_curves",gitBoilerplate:Tt("blob/main/src/lib/git/log.ts"),goldenRatio:"https://en.wikipedia.org/wiki/Golden_ratio",microsite:"https://github.com/natemoo-re/microsite",originMain:Tt("tree/main"),p1:"/blog/2021/02/what-the-art-p1-why/",p2:"/blog/2021/02/what-the-art-p2-constraints/",resume:"/resume/",sha1:"https://en.wikipedia.org/wiki/SHA-1"},fc=Object.entries(wn).map(([e,o])=>`[${e}]: ${o}`).join(`
-`),ce=(...e)=>St(String.raw(...e),`
-
-`,fc),kn=l("h3",{fontFamily:"inherit",fontSize:"0.889em",fontWeight:700,margin:0}),Pn=16,bc=40,Tn=a.baseFontSizeRange.minEm,yc=a.baseFontSizeRange.maxEm,Ke=Pn*yc,En=Ke/Tn,An=e=>e*Ke/2,In=An(bc),Sc=l(V,{margin:"0.5rem 0 2rem"}),xc=l("svg",{display:"block",fontSize:`${Pn*Tn}px`,maxWidth:"28rem",width:"100%"}),Mn=({className:e,children:o,height:n,width:r})=>t(xc,{className:e,viewBox:`0 0 ${r} ${n}`},o),vc=({children:e,className:o,height:n=Ke,width:r=In})=>t(Sc,{className:o},t(Mn,{height:n,width:r},e)),C="0123456789".split("").map(e=>{const n=Number(e)*36;return{dark:{emphasize:ie.hsluvToHex([n,100,35]),hover:ie.hsluvToHex([n,100,3]),plot:ie.hsluvToHex([n,100,74]),selected:ie.hsluvToHex([n,100,64]),x:ie.hsluvToHex([n,100,84]),y:ie.hsluvToHex([n,100,74])},light:{emphasize:ie.hsluvToHex([n,100,80]),hover:ie.hsluvToHex([n,100,97]),plot:ie.hsluvToHex([n,100,64]),selected:ie.hsluvToHex([n,100,64]),x:ie.hsluvToHex([n,100,54]),y:ie.hsluvToHex([n,100,44])}}}),On=l("text",{fill:"currentcolor",fontFamily:a.monospaceFont}),Cc=({className:e,hash:o})=>t($,null,t(kn,null,"Result:"),t(vc,{className:e},t(On,{textLength:In,x:"0",y:En},o))),wc=l(Cc,{color:C[9].light.x,marginTop:"0.5rem",nested:{[a.darkMode]:{color:C[9].dark.y}}}),kc=me(),Je=({className:e="",...o},...n)=>({...o,className:[e,kc,...n].join(" ")}),Rn=me(),Pc=({children:e,className:o="",coordinate:n,index:r,padLength:s,sortedIndex:i,toggleClass:c,...d})=>t(On,{...Je(d,o,Rn)},typeof e=="string"?e.padStart(s," "):e),Me=l(Pc,({coordinate:e,index:o,sortedIndex:n})=>({"--sorted-color":C[n].light[e],color:C[o].light[e],whiteSpace:"pre",nested:{[a.darkMode]:{"--sorted-color":C[n].dark[e],color:C[o].dark[e]}}})),oo=me(),Tc=({children:e,index:o,sortedIndex:n,toggleClass:r,...s})=>t("rect",{...Je(s,oo)},e),Ec=l(Tc,({index:e,sortedIndex:o})=>({"--selected-color":C[e].light.selected,"--selected-sorted-color":C[o].light.selected,"--sorted-color":C[o].light.hover,color:C[e].light.hover,fill:"currentcolor",opacity:0,transition:"opacity 0.1s ease-in-out",zIndex:-1,nested:{[a.darkMode]:{"--selected-color":C[e].dark.selected,"--selected-sorted-color":C[o].dark.selected,"--sorted-color":C[o].dark.hover,color:C[e].dark.hover}}})),no=me(),Ac=({children:e,index:o,isControlPoint:n,isSegment:r,pointSize:s,sortedIndex:i,sortedX:c,sortedY:d,sortedTranslateXPercent:p,sortedTranslateyPercent:h,xShift:y,yShift:g,...f})=>t("circle",{...Je(f,no)},e),jn="stroke-width 0.1s ease-in-out, color 0.1s ease-in-out",Ic=l(Ac,({index:e,isControlPoint:o,isSegment:n,sortedIndex:r,sortedTranslateXPercent:s,sortedTranslateyPercent:i})=>o?{"--emphasized-color":"#666","--emphasized-stroke-width":0,color:"transparent",fill:"currentcolor",stroke:"currentcolor",strokeWidth:0,nested:{[a.darkMode]:{"--emphasized-color":"#ccc",color:"transparent"}}}:n?{"--emphasized-color":C[e].light.plot,color:"#dadada",fill:"currentcolor",stroke:C[e].light.plot,strokeWidth:0,transition:jn,nested:{[a.darkMode]:{"--emphasized-color":C[e].dark.plot,color:"#666"}}}:{"--emphasized-color":C[e].light.plot,"--emphasized-sorted-color":C[r].light.plot,"--unsorted-transform":`translate(${[`${s}%`,`${i}%`].join(",")})`,"--sorted-color":C[r].light.plot,"--sorted-stroke":C[r].light.emphasize,color:C[e].light.plot,fill:"currentcolor",paintOrder:"stroke fill",stroke:C[e].light.emphasize,strokeWidth:0,transition:Object.entries({fill:"0.1s",stroke:"0.1s","stroke-width":"0.1s",transform:"0.2s"}).map(([c,d])=>`${c} ${d} ease-in-out`).join(", "),nested:{[a.darkMode]:{"--emphasized-color":C[e].dark.plot,"--emphasized-sorted-color":C[r].dark.plot,"--sorted-color":C[r].dark.plot,"--sorted-stroke":C[r].dark.emphasize,color:C[e].dark.plot,stroke:C[e].dark.emphasize}}}),Mc=(e,o)=>o==null?{color:C[e].light.plot,nested:{[a.darkMode]:{color:C[e].dark.plot}}}:a.topicColors[o],$n=({fill:e,index:o,topic:n})=>({...Mc(o,n),...e?{fill:"currentcolor",fillOpacity:.15,mask:"url(#curvesVerticalFade)",strokeWidth:0}:{fill:"none",strokeWidth:2,stroke:"currentcolor"},transition:jn,vectorEffect:"non-scaling-stroke"}),Oc=({fill:e,index:o,topic:n,...r})=>t("line",{...r}),Ln=l(Oc,$n),Rc=({fill:e,index:o,topic:n,...r})=>t("path",{...r}),Bn=l(Rc,$n),Nn=({exampleId:e,index:o,suffix:n,type:r})=>r==="radio"?`example-${e}-${o}-${n}-choice`:`example-${e}-${n}-choice`,Hn=e=>{const{checked:o,className:n,exampleId:r,suffix:s,type:i,value:c}=e,d=Boolean(o)?{checked:o}:{},p=Nn(e);return t(gc,{...d,as:"input",className:n,id:p,name:`example-${r}-${s}`,type:i,value:c})},jc=({pointSize:e,...o})=>t(Hn,{...o}),$c=l(jc,({exampleId:e,index:o,pointSize:n,suffix:r})=>({nested:{[`&:checked ~ * #example-${e}-${o}-${r}`]:{strokeWidth:n*2.5},[`&:checked ~ * .example-${e}-${o}-${r}`]:{color:"var(--emphasized-color)",strokeWidth:"var(--emphasized-stroke-width, 3)"},[`&:checked ~ * .example-${e}-${o}-line`]:{},[`&:checked ~ * [for="example-${e}-${o}-${r}-choice"] .${oo}`]:{opacity:1,color:"var(--selected-color)"},[`&:checked ~ * [for="example-${e}-${o}-${r}-choice"] text`]:{color:"#fff",nested:{[a.darkMode]:{color:ir(255,255,255,.9)}}}}})),Lc=l("g",{nested:{"&:hover rect":{opacity:.5}}}),Bc=({hash:e})=>{const o=Number.parseInt(e,16);if(isNaN(o))throw new ot(e);const n=o.toExponential(2),[r,s]=n.split(/e[-+]/);return t($,null,r,s==null?null:t("sup",null,s))},Nc=l(V,{...a.pre,marginBottom:"1.5rem",nested:{[a.darkMode]:{...a[a.darkMode].pre}}}),Hc=({children:e,...o})=>t(Xo,{...o,shadow:{darkMask:[0,0,0,1],darkScroll:[230,179,213,.75],lightMask:[255,255,255,1],lightScroll:[124,128,131,.75]}},e),Dc=l("div",{alignItems:"stretch",display:"flex",nested:{"&:after":{content:'""',backgroundImage:`linear-gradient(${["to left","rgba(255,255,255,1)","rgba(255,255,255,1) 3rem","rgba(255,255,255,0) 4rem"].join(", ")})`,backgroundSize:"4rem 100%",boxShadow:"2rem 0 0 #fff",display:"block",flexShrink:0,marginLeft:"auto",order:10,width:"2rem"},[a.darkMode]:{nested:{"&:after":{backgroundImage:`linear-gradient(${["to left","rgba(0,0,0,1)","rgba(0,0,0,1) 3rem","rgba(0,0,0,0) 4rem"].join(", ")})`,boxShadow:"2rem 0 0 #000"}}}}}),Dn=me(),Yc=({children:e,sortedIndex:o,...n})=>t("label",{...Je(n,Dn)},e),_c=l(Yc,({sortedIndex:e})=>({"--sorted-index":e,display:"inline-block",flexShrink:0,paddingBottom:"0.5rem",paddingRight:"1rem",paddingTop:"0.5rem",transition:"order 0.05s ease-in-out"})),Xc=l("span",{...a.toggleSwitch.container.off,alignItems:"center",backgroundColor:"currentcolor",border:"4px solid currentcolor",borderRadius:"16px",boxSizing:"content-box",display:"inline-flex",height:"24px",padding:0,width:"48px",verticalAlign:"middle"}),Yn=me(),zc=({children:e,...o})=>t(Xc,{...o,className:Yn},e),Fc=l("span",{...a.toggleSwitch.button,borderRadius:"12px",display:"inline-block",height:"24px",width:"24px",verticalAlign:"middle"}),Uc=l("label",{alignItems:"center",display:"inline-flex",justifySelf:"start"}),Gc=l("span",{fontSize:"0.8889rem",marginRight:"0.5rem"}),Wc=me(),Vc=({children:e,exampleId:o,...n})=>{const s=Nn({exampleId:o,suffix:"sort",type:"checkbox"}),i=Je({...n,for:s},Wc);return t(Uc,{...i},t(Gc,null,"Enable sorting"),t(zc,null,t(Fc,null)))},qc=({sortIndexes:e,toggleClass:o,...n})=>t(Hn,{...Je(n,o),type:"checkbox"}),Kc=l(qc,{nested:{[`&:checked ~ * .${Rn}`]:{color:"var(--sorted-color)",stroke:"var(--sorted-stroke)"},[`&:checked ~ * .${oo}`]:{"--selected-color":"var(--selected-sorted-color)",color:"var(--sorted-color)"},[`&:checked ~ * .${Dn}`]:{order:"var(--sorted-index)"},[`& ~ * .${no}`]:{transform:"var(--unsorted-transform)"},[`&:checked ~ * .${no}`]:{"--emphasized-color":"var(--emphasized-sorted-color)",color:"var(--sorted-color)",stroke:"var(--sorted-stroke)",transform:"translate(0, 0)"},[`&:checked ~ * .${Yn}`]:{...a.toggleSwitch.container.on,justifyContent:"flex-end"}}}),Jc=l("div",{alignItems:"center",display:"flex",justifyContent:"space-between",marginBottom:"0.5rem"}),_n=e=>typeof e=="number"?`${e}px`:e,Zc=l(Mn,({height:e,width:o})=>({height:_n(e),overflow:"visible",width:_n(o)})),Qc=l(V,{position:"relative"}),Xn=l("svg",{overflow:"visible",padding:"1rem"}),Et=13,ro=l("text",{...a.visualization.plot.axis,fontFamily:a.monospaceFont,fontSize:`${Et}px`,fill:"currentcolor"}),so=20,io={xMax:ke,xScale:1,xShift:0,yMax:ke,yScale:1,yShift:0},el=To({alg:"sha1",coerce:!0,sort:!0,trim:!0}),tl=16,ol=128,zn=Array.from(Oi),ao=zn.map(e=>parseInt(e??el.hash(e),16)),co=Math.min(...ao),nl=Math.max(...ao)-co,rl=zn.reduce((e,o,n)=>{const r=ao[n],s=we((r-co)/nl*(ol-tl)+co,2);return{...e,[o]:s}},{}),lo=({className:e,exampleId:o,hexPoints:n,points:r,pointSize:s=6,renderAxis:i=!0,renderCurves:c,renderSegments:d=!1,scaleOptions:p,segments:h,sortIndexes:y,sortToggleClass:g,topics:f,...w})=>{const{xScale:S,xShift:b,xRange:k=S*(ke+b*2),yMax:T,yShift:z,yScale:H,yRange:I=H*(T+z*2)}={...io,...p},F=so*2,v=w.height??I+F,q=w.width??k+F,Z=0,oe="100%",U=0-Et,Se="100%",le=ke.toString(16),xe=Vo.toString(16),Oe=xe.padStart(2,xe),pe=n.map(({x:j,y:E},K)=>{if(typeof s=="number")return s;const Q=(K%2==0?j:E)[0];return typeof s=="number"?s:rl[Q]}),he=typeof s=="number"?null:pe.map(j=>j*.666+4),ue=he?.map((j,E)=>`hash-plot-blur-${o}-${E}`),ge=he==null?null:t("defs",null,he.map((j,E)=>t("filter",{id:ue?.[E]},t("feGaussianBlur",{in:"SourceGraphic",stdDeviation:j})))),X=i?t($,null,t(ro,{x:U,y:oe,transform:`translate(0, ${Et})`},Oe),t(ro,{x:U,y:Z},le),t(ro,{x:Se,y:oe,transform:`translate(0, ${Et})`},le)):null,L=({x:j,y:E},K)=>{const Y=y[K],{x:Q,y:fe}=r[Y],de=we((j+b)/k*100,4),B=100-we((E-z)/I*100,4),J=we((Q+b)/k*100,4),R=100-we((fe-z)/I*100,4),ee=0-we(de-J,4),be=0-we(B-R,4),ye=pe[K],re=ue?.[K],ve=re==null?{}:{filter:`url(#${re})`};return{cx:de,cy:B,filterId:re,filterProps:ve,pointSize:ye,sortedCx:J,sortedCy:R,sortedTranslateXPercent:ee,sortedTranslateyPercent:be}},x=({index:j,isControlPoint:E=!1,point:K,pointSize:Y})=>{const{cx:Q,cy:fe,filterProps:de,pointSize:B,sortedCx:J,sortedCy:R,sortedTranslateXPercent:ee,sortedTranslateyPercent:be}=L(K,j),ye=Boolean(d||c),re=y[j],ve=ye?{className:`example-${o}-${j}-point`}:{className:[`example-${o}-${j}-point`,`example-${o}-${re}-sorted-point`].join(" "),id:`example-${o}-${j}-point`};return t(Ic,{...de,...ve,cx:`${Q}%`,cy:`${fe}%`,index:j,isControlPoint:E,isSegment:ye,pointSize:Y??B,r:Y??B,sortedIndex:re,sortedX:J-K.x,sortedY:R-R,sortedTranslateXPercent:ee,sortedTranslateyPercent:be,toggleClass:g,xShift:so,yShift:so})},Re=d?null:r.map((j,E)=>t(x,{index:E,point:j})),je=d?h?.map(([j,E,K],Y)=>{const{cx:Q,cy:fe}=L(j,Y),{cx:de,cy:B}=L(E,Y),{cx:J,cy:R}=L(K,Y),ee=f?.[Y%f.length];return t("g",null,t(x,{index:Y,point:j}),t(x,{index:Y,point:E}),t(x,{index:Y,point:K}),t(Ln,{className:`example-${o}-${Y}-line`,index:Y,topic:ee,x1:`${Q}%`,x2:`${de}%`,y1:`${fe}%`,y2:`${B}%`}),t(Ln,{className:`example-${o}-${Y}-line`,index:Y,topic:ee,x1:`${de}%`,x2:`${J}%`,y1:`${B}%`,y2:`${R}%`}))}):null,Te=()=>{if(h==null||c==null)return{curvePoints:null,renderedCurves:null};const E=(c==="all"||c==="only"?h:[h[0]]).map(B=>{const[J,R,ee]=B,{x:be}=J,{y:ye}=R,{x:re}=ee,ve=re-be,po=ve===0?0:Math.max(ye/ve*Jo,Ko);return{cubicPoints:B?.reduce((Ee,Ae,$e)=>{if($e===0)return Ee;const Xe=tn({index:$e,point:Ae,points:B,smoothing:po,xScale:S,yScale:H});return[...Ee,Xe]},[]),segment:B}}),K={overflow:"visible"},Y=l(c==="only"?Xn:"svg",K),Q=c==="only"?{className:e}:void 0,fe=c==="only"?v:"100%",de=c==="only"?q:"100%";return{curvePoints:t($,null,E.map(({cubicPoints:B,segment:J},R)=>{const[ee,be,ye]=J;return t("g",null,t(x,{index:R,point:ee,pointSize:4}),t(x,{index:R,point:be,pointSize:4}),t(x,{index:R,point:ye,pointSize:4}),B.map(([re,ve])=>t($,null,t(x,{index:R,isControlPoint:!0,point:re,pointSize:3}),t(x,{index:R,isControlPoint:!0,point:ve,pointSize:3}))))})),renderedCurves:t(Y,{...Q,height:fe,width:de,preserveAspectRatio:"none",viewBox:`0 0 ${q} ${v}`},t("defs",null,t("linearGradient",{id:"curvesVerticalFadeGradient",y2:"1",x2:"0"},t("stop",{offset:"0","stop-color":"white","stop-opacity":"1"}),t("stop",{offset:"0.25","stop-color":"white","stop-opacity":".75"}),t("stop",{offset:"1","stop-color":"white","stop-opacity":"0"})),t("mask",{id:"curvesVerticalFade",maskContentUnits:"objectBoundingBox"},t("rect",{fill:"url(#curvesVerticalFadeGradient)",height:"1",width:"1"}))),E.map(({cubicPoints:B,segment:J},R)=>{const[ee,be,ye]=J,re=B.map(([_e,Ee],Ae)=>[Ae===0?ee:be,_e,Ee,Ae===0?be:ye]);return t($,null,t(()=>t($,null,re.map(_e=>{const Ee=_e.map(($e,Xe)=>{const{cx:Ot,cy:Ze}=L($e,R),Rt=Ot/100*q,jt=Ze/100*v;return`${Xe===0?"M ":Xe===1?"C ":""} ${Rt},${jt}`}).join(" "),Ae=f?.[R%f.length];return t(Bn,{d:Ee,index:R,topic:Ae})})),null),t(()=>{const _e=re.map((Ae,$e)=>Ae.map((Ot,Ze)=>{if($e>0&&Ze===0)return"";const{cx:Rt,cy:jt}=L(Ot,R),ho=Rt/100*q,Un=jt/100*v;return`${Ze===0?"M ":Ze===1?"C ":""} ${ho},${Un}`}).join(" ")).join(" "),Ee=f?.[R%f.length];return t(Bn,{d:_e,fill:!0,index:R,topic:Ee})},null))}))}},{curvePoints:D,renderedCurves:ne}=Te();return c==="only"?ne:t(Xn,{className:e,height:v,width:q},ge,X,Re,je,D,ne)},sl=l(V,{marginBottom:"1rem"}),il=l(lo,{gridColumn:"1 / -1"}),al=l(lo,{width:"32rem"}),At=({exampleId:e,hexPoints:o,plotPointSize:n=6,points:r,renderAxis:s,renderCurves:i,renderScaled:c=!0,renderSegments:d,scaleOptions:p=io,toggleSorting:h})=>{const y=c?V:$,g=c?il:al,f=Boolean(i||d),S=f?Ke*3:!f&&c?Ke*5:Ke*4,b=En,k=b*2.5,T=b*3.5,z=b*4.5,H={...io,...p},I=r.map(X=>xt(X,H)),F=yt(I,(X,L)=>Number(X.x)===Number(L.x)?0:Number(X.x)>Number(L.x)?1:-1),v=I.map((X,L)=>h?F.indexOf(X)??-1:L),q=h?o:F.map(X=>o[I.indexOf(X)]),Z=h?r:F,oe=h?I:F,U=me(),{xScale:Se,xShift:le,yScale:xe}=H,Oe=le*2,pe=(ke+Oe)*Se,he=Gt({points:oe,xMax:pe,xScale:Se,yScale:xe}),ue=Wt({segments:he,xMax:pe,xScale:Se,yScale:xe}),ge={...H};return t(y,null,t(Qc,null,Z.map((X,L)=>t($c,{checked:L===0,exampleId:e,pointSize:n,index:L,suffix:"point",type:"radio"})),h?t(Kc,{exampleId:e,sortIndexes:v,suffix:"sort",toggleClass:U}):null,t(Jc,null,t(kn,null,"Result:"),h?t(Vc,{exampleId:e}):null),t(sl,null,t(g,{exampleId:e,hexPoints:q,points:Z,pointSize:n,renderAxis:s,renderCurves:i,renderSegments:d,scaleOptions:ge,segments:ue,sortIndexes:v,sortToggleClass:U})),t(Nc,null,t(Hc,null,t(Dc,null,q.map(({x:X,y:L},x)=>{const{x:Re,y:je}=Z[x],{x:Te,y:D}=oe[x],ne=[X,L,Re,je,...c?[Te,D]:[]],j=String(ke).length,E=f?j:Math.max(j,...ne.map(ee=>String(ee).length)),K=o.length,Y=An(K),Q=1/K*Y,fe=E*Q,de=fe*2+Q,B=fe+Q,J=Q/2,R=de+J*2;return t(_c,{className:`point-${x}`,for:`example-${e}-${x}-point-choice`,sortedIndex:v[x]},t(Zc,{height:S,width:R},t(Lc,null,t(Ec,{index:x,height:S,rx:3,ry:3,width:R,x:0-J,y:0,sortedIndex:v[x],toggleClass:U}),t(Me,{coordinate:"x",index:x,y:b,padLength:E,sortedIndex:v[x],toggleClass:U},"x"),t(Me,{coordinate:"y",index:x,x:B,y:b,padLength:E,sortedIndex:v[x],toggleClass:U},"y"),t(Me,{coordinate:"x",index:x,y:k,padLength:E,sortedIndex:v[x],toggleClass:U},X),t(Me,{coordinate:"y",index:x,x:B,y:k,padLength:E,sortedIndex:v[x],toggleClass:U},L),f?null:t($,null,t(Me,{coordinate:"x",index:x,y:T,padLength:E,sortedIndex:v[x],toggleClass:U},String(parseInt(X,16))),t(Me,{coordinate:"y",index:x,x:B,y:T,padLength:E,sortedIndex:v[x],toggleClass:U},String(parseInt(L,16)))),c&&!f?t($,null,t(Me,{coordinate:"x",index:x,y:z,padLength:E,sortedIndex:v[x],toggleClass:U},String(Te)),t(Me,{coordinate:"y",index:x,padLength:E,x:B,y:z,sortedIndex:v[x],toggleClass:U},String(D))):null)))}))))))},It=({index:e})=>t($,null,t("code",null,"P",t("sub",null,e)),":\xA0",t("code",null,"{","\xA0x",t("sub",null,e),",\xA0y",t("sub",null,e),"\xA0","}")),Mt=({className:e,hash:o,height:n,identifier:r=me,renderType:s,StylesProvider:i=Fe,styleRenderer:c=Ne,topics:d,width:p})=>{const h=Ft(o),y=Ut(o,h),{xPadding:g,xScale:f,yPadding:w,yScale:S}=Zt,b=s==="meta",k=b?0:g,T=b?0:w,z=k/2,H=T/2,I={xScale:f,xShift:z,yScale:S,yShift:H},v=yt(y,(D,ne)=>D.x===ne.x?0:D.x>ne.x?1:-1).map(D=>xt(D,I)),q=v.map((D,ne)=>ne),Z=v.map(D=>h[v.indexOf(D)]),oe=(ke+k)*f,U=r(),Se=Gt({points:v,xMax:oe,xScale:f,yScale:S}),le=Wt({segments:Se,xMax:oe,xScale:f,yScale:S}),xe=b?{path:{strokeWidth:"4px !important",transform:"scale(.95)",transformOrigin:"50% 50%"}}:null,Oe=b?"0 !important":"0 0 1rem !important",pe=st,he="100%",ue=D=>typeof D=="number"?`${D}px`:D,ge=(D,ne)=>typeof D=="number"?D*ne:D,X=b?ge(n??pe,.95):st,L=b?ge(p??he,.95):"100%",x=b&&n!=null?ge(n,.95):n,Re=b&&p!=null?ge(p,.95):p,je=c.renderRule(()=>({gridColumn:"1 / -1",height:ue(X),padding:Oe,width:ue(L),nested:{...xe}}),Object.keys),Te=b?e:`${e} ${je}`;return t(i,null,t(lo,{className:Te,exampleId:-1,height:x,hexPoints:Z,points:v,renderAxis:!1,renderCurves:"only",scaleOptions:I,segments:le,sortIndexes:q,sortToggleClass:U,topics:d,width:Re}))},cl=e=>{const{hash:o,title:n,topics:r}=e,s=Ft(o),i=Ut(o,s),c=yt(i,({x:k},{x:T})=>Number(k)===Number(T)?0:Number(k)>Number(T)?1:-1),{xPadding:d,xScale:p,yPadding:h,yScale:y}=Zt,g=d/2,f=h/2,w={xShift:g,xScale:p,yShift:f,yScale:y},S=c.map(k=>xt(k,w)),{}=Qo(S),b=k=>"${"+k+"}";return t(fn,{...e,CustomArt:Mt},ce`
-        Previous:
-
-        - [What the art, part 1: Why?][p1]
-        - [What the art, part 2: Constraints][p2]
-
-        Well, I certainly was [overly optimistic][blame] about how quickly I'd
-        be able to finish this post! I took a little detour to build out
-        [my résumé][resume] because I'm currently on the job hunt (want to hire
-        me?). I wanted to finish this series, but knowing the site was live and
-        ready to serve up my résumé proved to be a big enough ADHD mental block
-        that I couldn't focus on the blog until it was done.
-
-        But we're back to fill in some of the juicy implementation details! In
-        the previous posts, I discussed the motivation behind the art, and the
-        constraints that informed the artistic direction. This is how it was
-        built.
-      `,t(Cn,null,ce`
-          There's a fair bit of boilerplate & plumbing that the art
-          functionality depends on. To keep the post focused I'll leave out
-          some of the boring stuff. But if you want to see the nitty gritty,
-          you can check out the full source for Git usage in
-          [\`lib/git/log.ts\`][gitBoilerplate], and for art generation in
-          [\`lib/art/math.ts\`][artBoilerplate].
-        `),t("h2",null,"Getting the Git"),ce`
-        As I mentioned in Constraints, one of the goals was immutability:
-        art that would render the same even if a given post is edited. This
-        is achieved by retrieving a Git hash of the initial commit of the post.
-        To allow incremental commits (save early, save often!), I restrict
-        this hash lookup to the [\`origin/main\`][originMain] branch.
-
-        For every post, I look up the initial commit hash of the post's entry
-        module, falling back to a format-compatible SHA-1 hash of the current
-        content of the file on disk in cases where the post isn't yet
-        committed:
-
-        ~~~typescript
-        export const getInitialFileHash = (basePath: string) => {
-          const path = resolveModulePath(basePath);
-          const [ hash ] = getFormattedGitLogData({
-            decode: identity,
-            format: GitFormat.HASH,
-            path,
-          });
-
-          return hash ?? getSHA1Hash(path);
-        };
-
-        const hash = getInitialFileHash(path);
-        ~~~
-      `,t(wc,{hash:o}),t("h2",null,"Using (abusing) the hash data"),t("p",null,"The hash ",t("a",{href:wn.sha1},"represents a 160-bit number"),", this post's hash being approximately ",t(Bc,{hash:o}),". My idea was to treat it as the basis for a data structure: a set of ten numeric pairs, two hex characters per number, 8 bits each, which are then converted to ",t("code",null,"{ x, y }")," coordinates."),ce`
-        ~~~typescript
-        export const COORDINATE_MAX  = parseInt('ff', 16);
-        export const COORDINATE_MIN  = parseInt('00', 16);
-
-        // ...
-
-        const hexPointPattern = /([0-9a-f]{2})([0-9a-f]{2})/ig;
-
-        export const toHexPointSequence = (hash: string): HexPointSequence => {
-          if (!isValidHash(hash)) {
-            throw new InvalidHashError(hash);
-          }
-
-          const matches = Array.from(hash.matchAll(hexPointPattern) ?? []);
-          const points  = matches.map(([ _, x, y ]) => ({
-            x,
-            y,
-          } as HexPoint));
-
-          if (!isHexPointSequence(points)) {
-            throw new InvalidHashError(hash);
-          }
-
-          return points;
-        };
-
-        // ...
-
-        const toCoordinate = (value: HexCoordinate): Coordinate => {
-          const result = parseInt(value, 16);
-
-          if (result > COORDINATE_MAX || result < COORDINATE_MIN) {
-            throw new Error(\`Not a valid coordinate: ${b("value")}\`);
-          }
-
-          return coordinate(result);
-        };
-
-        export const toPointSequence = (
-          hash:      string,
-          hexPoints: HexPointSequence
-        ): PointSequence => {
-          try {
-            const result = hexPoints.map(toPoint);
-
-            if (!isPointSequence(result)) {
-              throw new InvalidHashError(hash);
-            }
-
-            return result;
-          }
-          catch {
-            throw new InvalidHashError(hash);
-          }
-        };
-
-        const hexPoints  = toHexPointSequence(hash);
-        const basePoints = toPointSequence(hash, hexPoints);
-        ~~~
-
-        While I can't predict the initial commit hash on \`main/origin\`
-        for this post, it's improbable (but possible!) that the plot points in
-        the example result below follow the same horizontal order as their
-        labels—that would require a hash where every other 8-bit
-        substring assigned to an \`x\` coordinate has a greater value than the
-        previous \`x\`. But the final art style is a series of horizontal curves
-        along a baseline, so the next thing I do is sort the point sequence
-        along the \`x\` axis.
-
-        ~~~typescript
-        const sortedPoints = sortBy(basePoints, ({ x: a }, { x: b }) => (
-          Number(a) === Number(b)
-            ? 0
-          : Number(a) > Number(b)
-            ? 1
-            : -1
-        ));
-        ~~~
-
-        Sorting is off by default in the example, to allow readers to toggle
-        the before/after state.
-      `,t(At,{exampleId:1,hexPoints:s,points:i,renderScaled:!1,toggleSorting:!0}),t("h2",null,"Aspect ratio & padding adjustments"),ce`
-        Of course, the final art rendering isn't square, it's much wider than
-        it is tall. With some adjustments for very small & very large
-        viewports, its aspect ratio is roughly five times the
-        [golden ratio][goldenRatio] (there's no significance to this other than
-        that it was the first ratio I tried), plus a small amount of padding—on
-        the \`x\` axis to begin and end the blobs on the art's baseline, and on
-        the \`y\` axis to leave some room for overshoot once the curves are
-        computed.
-
-        ~~~typescript
-        export const scalePoint = <
-          X extends number,
-          Y extends number
-        >({ x, y }: Point, {
-          xScale,
-          xShift,
-          yScale,
-          yShift,
-        }: ScalePointOptions<X, Y>): ScaledPoint<X, Y> => (
-          scaledPoint({
-            x: (x + xShift) * xScale,
-            xScale,
-            y: (y + yShift) * yScale,
-            yScale,
-          })
-        );
-
-        const scaledPoints = sortedPoints.map((point) => (
-          scalePoint(point, scaleOptions)
-        ));
-        ~~~
-      `,t(At,{exampleId:2,hexPoints:s,points:i,renderAxis:!1,scaleOptions:w}),t("h2",null,"Connecting the dots"),ce`
-        In the final art rendering, each point is joined into overlapping
-        curves, each segment curving from approximately the previous point's
-        \`x\` (or \`0\`) at the \`y\` the baseline to the following point's
-        \`x\` (or \`xMax\`), also at the baseline.
-
-        ~~~typescript
-        export const getNaiveSegments = <
-          X extends number,
-          Y extends number
-        >({
-          points,
-          xMax,
-          xScale,
-          yScale,
-        }: GetSegmentsOptions<X, Y>): SegmentList<X, Y> => (
-          [
-            scaledPoint({
-              x: 0,
-              xScale,
-              y: 0,
-              yScale,
-            }),
-            ...points,
-            scaledPoint({
-              x: xMax,
-              xScale,
-              y: 0,
-                yScale,
-            }),
-          ].reduce<SegmentList<X, Y>>((
-            acc,
-            mid,
-            index,
-            points
-          ) => {
-            if (index === 0 || index === points.length - 1) {
-              return acc;
-            }
-
-            const baseline = scaledCoordinate(0, yScale);
-
-            const segment = [
-              {
-                x: points[index - 1].x,
-                y: baseline,
-              },
-              mid,
-              {
-                x: points[index + 1].x,
-                y: baseline,
-              },
-            ] as const;
-
-            return [
-              ...acc,
-              segment,
-            ];
-          }, [])
-        );
-
-        const naiveSegments = getNaiveSegments({
-          points: scaledPoints,
-          xMax,
-        });
-        ~~~
-
-        Why are they _naïve_ segments? As I mentioned in Constraints, I
-        discovered during development that sometimes certain hashes would
-        create shapes which were inappropriate for the kind of content I wanted
-        on my site. So after constructing these naïve segments, I walk through
-        them again in hopes of detecting that scenario.
-
-        I should add a caveat: this was entirely a process trial and error, and
-        produced some moderately ugly "magic" code. I try not to write code like
-        this, but if you're making art sometimes you've gotta break a few eggs!
-
-        ~~~typescript
-        /**
-         * Generating art will be risk-free fun, I thought...
-         */
-        export const getNonPhallicSegments = <X extends number, Y extends number>({
-          segments,
-          xMax,
-          xScale,
-          yScale,
-        }: GetNonPhallicSegmentsOptions<X, Y>): SegmentList<X, Y> => (
-          segments.map<Segment<X, Y>>((segment) => {
-            const [
-              { x: startX, y: startY },
-              { x: midX,   y: midY },
-              { x: endX,   y: endY },
-            ] = segment;
-
-            const width           = endX - startX;
-            const ratio           = midY / width;
-            const maxRatio        = 6;
-            const ratioAdjustment = maxRatio / ratio;
-
-            if (ratioAdjustment < 1) {
-              const ratioAdjustmentX    = ratioAdjustment * 0.2;
-              const adjustmentX         = ratioAdjustmentX * startX;
-              const ratioAdjustedStartX = startX - adjustmentX;
-              const ratioAdjustedEndX   = endX   + adjustmentX;
-
-              const overshootX = (
-                ratioAdjustedStartX < 0
-                  ? Math.abs(ratioAdjustedStartX)
-                : ratioAdjustedEndX > xMax
-                  ? xMax - ratioAdjustedEndX
-                  : 0
-              );
-
-              const adjustedStartX = ratioAdjustedStartX + overshootX;
-              const adjustedEndX   = ratioAdjustedEndX   + overshootX;
-
-              const ratioAdjustmentY = ratioAdjustment * 0.3;
-
-              const adjustedMidX = midX + overshootX;
-              const adjustmentY  = ratioAdjustmentY * midY;
-              const adjustedMidY = midY - adjustmentY;
-
-              return [
-                scaledPoint({
-                  x: adjustedStartX,
-                  xScale,
-                  y: startY,
-                  yScale,
-                }),
-                scaledPoint({
-                  x: adjustedMidX,
-                  xScale,
-                  y: adjustedMidY,
-                  yScale,
-                }),
-                scaledPoint({
-                  x: adjustedEndX,
-                  xScale,
-                  y: endY,
-                  yScale,
-                }),
-              ];
-            }
-
-            return segment;
-          })
-        );
-
-        const segments = getNonPhallicSegments({
-          segments: naiveSegments,
-          xMax,
-          xScale,
-          yScale,
-        });
-        ~~~
-      `,t(At,{exampleId:3,hexPoints:s,points:i,renderAxis:!1,renderSegments:!0,scaleOptions:w}),t("h2",null,"My trig crash course"),ce`
-        We're coming near the end! But before I get to the final step, I needed
-        to be able to generate [cubic Bézier curves][bezierCurves] for each
-        segment.
-      `,t(Cn,null,ce`
-          I had to ~~learn~~ copy & paste some math to generate the curves. I
-          did take the time to learn what the math is actually doing while
-          writing this post, but I've never taken a trigonometry course, so I'm
-          probably not the best person to explain it in great detail, but I'll
-          give it a shot.
-        `),ce`
-        A single cubic Bézier curve is defined by:
-      `,t("ul",null,t("li",null,"A starting point ",t(It,{index:0})),t("li",null,"A starting control point ",t(It,{index:1})),t("li",null,"An ending control point ",t(It,{index:2})),t("li",null,"An ending point ",t(It,{index:3}))),ce`
-        The control points determine how far the curve extends, and how fast
-        it arrives at the ending point. Here's how I calculate those curves.
-        This is a fair bit of code, but the important bits are the
-        \`curveLine\` function—which calculates an angled line to the control
-        point, and the \`curveControlPoint\` function which calculates the
-        control point's position from that line.
-
-        ~~~typescript
-        const curveLine = <X extends number, Y extends number>(
-          { x: x0, y: y0 }: ScaledPoint<X, Y>,
-          { x: x1, y: y1 }: ScaledPoint<X, Y>
-        ) => {
-          const xLength = x1 - x0;
-          const yLength = y1 - y0;
-
-          return {
-            angle:  Math.atan2(yLength, xLength),
-            length: Math.sqrt((xLength ** 2) + (yLength ** 2)),
-          };
-        };
-
-        const curveControlPoint = <X extends number, Y extends number>({
-          current,
-          previous,
-          next,
-          reverse,
-          smoothing,
-          xScale,
-          yScale,
-        }: CurveControlPointOptions<X, Y>): ScaledPoint<X, Y> => {
-          const reverseCompensation = reverse
-            ? Math.PI
-            : 0;
-          const opposedLine = curveLine(previous, next);
-
-          const angle  = opposedLine.angle  + reverseCompensation;
-          const length = opposedLine.length * smoothing;
-
-          const { x: xCurrent, y: yCurrent } = current;
-
-          const x = xCurrent + (Math.cos(angle) * length);
-          const y = yCurrent + (Math.sin(angle) * length);
-
-          return {
-            x: scaledCoordinate(x, xScale),
-            y: scaledCoordinate(y, yScale),
-          };
-        };
-
-        export const cubicBezierPoints = <X extends number, Y extends number>({
-          index,
-          point,
-          points,
-          smoothing,
-          xScale,
-          yScale,
-        }: CubicBezierPointsOptions<X, Y>): CubicBezierPoints<X, Y> => {
-          const startCurrent = points[index - 1];
-
-          if (startCurrent == null) {
-            throw new Error(
-              'Cannot build cubic bezier points, no point before the provided index.'
-            );
-          }
-
-          const startPrevious = points[index - 2] ?? startCurrent;
-          const startControl = curveControlPoint({
-            current:  startCurrent,
-            previous: startPrevious,
-            next:     point,
-            reverse:  false,
-            smoothing,
-            xScale,
-            yScale,
-          });
-
-          const previous = startCurrent;
-          const next = points[index + 1] ?? point;
-          const endControl = curveControlPoint({
-            current:  point,
-            previous: previous,
-            next,
-            reverse:  true,
-            smoothing,
-            xScale,
-            yScale,
-          });
-
-          return [ startControl, endControl, point ];
-        };
-
-        const cubicPoints = segments.map((segment) => (
-          segment.reduce((acc, point, index) => {
-            if (index === 0) {
-              return acc;
-            }
-
-            const segmentPoints = cubicBezierPoints({
-              index,
-              point,
-              points: segment,
-              smoothing,
-              xScale,
-              yScale,
-            });
-
-            return [
-              ...acc,
-              segmentPoints,
-            ]
-          }, []);
-        ));
-        ~~~
-      `,t(At,{exampleId:4,hexPoints:s,points:i,renderAxis:!1,renderCurves:"all",scaleOptions:w}),t("h2",null,"Now, the magic happens"),ce`
-        Now that I can get those smooth curves, I put on the final touches.
-        Again, this is a fair bit of code, but essentially what's happening
-        is that for each segment, I calculate a _slightly adjusted_ curve
-        above the \`y\` axis baseline, then a _slightly differently adjusted_
-        curve approximately mirroring it below the same baseline.
-
-        These adjustments were chosen to fit a general theme in the site
-        design, where most everything is laid out slightly to the left
-        (assuming you're on a screen large enough for that to kick in), and
-        to add just a little more visual variety than the curves alone.
-
-        ~~~typescript
-        const getCubicPoints = <X extends number, Y extends number>({
-          segment,
-          smoothing,
-          xScale,
-          yScale,
-        }: GetCubicPointsOptions<X, Y>) => (
-          segment.reduce<readonly string[]>((
-            acc:    readonly string[],
-            point:  ScaledPoint<X, Y>,
-            index:  number
-          ) => {
-            if (index === 0) {
-              return acc;
-            }
-
-            const segmentPoints = cubicBezierPoints({
-              index,
-              point,
-              points: segment,
-              smoothing,
-              xScale,
-              yScale,
-            });
-
-            const result = segmentPoints.map((point) => (
-              \`${b("point.x")},${b("point.y")}\`
-            )).join(' ');
-
-            return [
-              ...acc,
-              \`C ${b("result")}\`,
-            ];
-          }, [])
-        );
-
-        export const getSegmentPaths = <X extends number, Y extends number>({
-          baseYCoordinate,
-          isBaselineBelowMidpoint,
-          segments,
-          xScale,
-          yMax,
-          yScale,
-          yTilt = false,
-        }: GetSegmentPathsOptions<X, Y>) => (
-          segments.reduce((
-            acc,
-            segment,
-            index,
-            segments
-          ) => {
-            const { length } = segments;
-            const [
-              baseStartPoint,
-              baseMidPoint,
-              baseEndPoint,
-            ] = segment;
-
-            const { x: startX, y: baseStartY } = baseStartPoint;
-            const { x: midX,   y: midY }       = baseMidPoint;
-            const { x: endX,   y: baseEndY }   = baseEndPoint;
-
-            const width = endX - startX;
-
-            const smoothing = width === 0
-              ? 0
-              : Math.max(midY / width * SMOOTHING_RATIO, MIN_SMOOTHING);
-
-            const Y_TILT = yTilt
-              ? 0.1
-              : 0;
-
-            const Y_TILT_NEG = 1 - Y_TILT;
-            const Y_TILT_POS = 1 + Y_TILT;
-
-            const startYTilt = index % 2 === 0
-              ? Y_TILT_NEG
-              : Y_TILT_POS;
-
-            const startY = isBaselineBelowMidpoint
-              ? baseStartY + baseYCoordinate
-              : yMax - baseStartY + baseYCoordinate;
-
-            const startPoint: ScaledPoint<X, Y> = {
-              x: startX,
-              y: scaledCoordinate(startY * startYTilt, yScale),
-            };
-
-            const endYTilt = index % 2 === 0
-              ? Y_TILT_NEG
-              : Y_TILT_POS;
-
-            const endY = isBaselineBelowMidpoint
-              ? baseEndY + baseYCoordinate
-              : yMax - baseEndY + baseYCoordinate;
-
-            const endPoint: ScaledPoint<X, Y> = {
-              x: scaledCoordinate(endX, xScale),
-              y: scaledCoordinate(endY * endYTilt, yScale),
-            };
-
-            const startMidXDistance = midX - startX;
-            const midEndXDistance = endX - midX;
-
-            const forwardMidPointXAdjustment = midEndXDistance > startMidXDistance
-              ? 0
-              : 0 - ((midX - startX) * MID_POINT_TILT);
-
-            const midPointYAdjustment = (length - index) * (yScale / 100 * yMax);
-
-            const forwardMidPoint: ScaledPoint<X, Y> = {
-              x: scaledCoordinate(midX + forwardMidPointXAdjustment, xScale),
-              y: scaledCoordinate(midY - midPointYAdjustment, yScale),
-            };
-
-            const forwardSegment: Segment<X, Y> = [
-              startPoint,
-              forwardMidPoint,
-              endPoint,
-            ];
-
-            const forwardPoints = getCubicPoints({
-              segment: forwardSegment,
-              smoothing,
-              xScale,
-              yScale,
-            });
-
-            const reverseMidPointXAdjustment = midEndXDistance > startMidXDistance
-              ? (endX - midX) * MID_POINT_TILT
-              : 0;
-
-            const reverseMidPoint: ScaledPoint<X, Y> = {
-              x: scaledCoordinate(midX + reverseMidPointXAdjustment, xScale),
-              y: scaledCoordinate(yMax - midPointYAdjustment, yScale),
-            };
-
-            const reverseSegment: Segment<X, Y> = [
-              endPoint,
-              reverseMidPoint,
-              startPoint,
-            ];
-
-            const reversePoints = getCubicPoints({
-              segment: reverseSegment,
-              smoothing,
-              xScale,
-              yScale,
-            });
-
-            return [
-              ...acc,
-              [
-                \`M ${b("startPoint.x")},${b("startPoint.y")}\`,
-                ...forwardPoints,
-                ...reversePoints,
-                'Z',
-              ].join(' '),
-            ];
-          }, [] as readonly string[])
-        );
-
-        const segmentPaths = getSegmentPaths({
-          baseYCoordinate,
-          segments,
-          xScale,
-          yMax,
-          isBaselineBelowMidpoint,
-          yScale,
-        });
-        ~~~
-      `,t(vt,{hash:o,title:n,topics:r}),t("h2",null,"My mistakes"),ce`
-        One thing that was challenging building both the original art
-        project, as well as the examples for this post, is that I'm working
-        with numerical data, which I expect to go _up_ as it increases, but
-        SVG renders higher numbers on the \`y\` axis _down_. I've gotten
-        so frequently so turned around by this that, well, the final art
-        rendering shows I never quite got it right! But I like how it looks,
-        and I don't want to mess with that for now.
-
-        Sometimes technically incorrect is the best kind of correct!
-
-        * * *
-
-        ### And another thing...
-
-        I discovered two more mistakes after the post went live! First, I
-        noticed the post's timestamp was incorrect. Since the timestamp is
-        also defined by the time of the first commit to \`origin/main\`,
-        this means that the command I'd used to retrieve the initial hash
-        was also wrong.
-
-        Then I realized the URL is wrong, because I began writing the post
-        in February. Both have been corrected.
-      `)};var ll=Pr(cl,{async getStaticProps(e){return{props:{...await yn({...e,description:St`
-        The final part in a series introducing my new site's art project.
-        I walk through some of the more interesting parts of how the art
-        is generated.
-      `,importURL:import.meta.url,title:"What the art, part 3: Implementation",topics:[N.ART,N.TECHNOLOGY,N.NEURODIVERGENCE]}),CustomArt:Mt}}}});const dl=l(V,{...a.projects.current,margin:"0.5rem 0 3rem",padding:"1rem 0"}),Fn=l("h2",{fontSize:Be(`${a.headingRanges.h3.minEm}em`,`${a.headingRanges.h3.fluidVw}vw`,"1.17778em"),marginBottom:0,paddingLeft:0,textIndent:0}),mo=l("div",{marginTop:"0.5rem"}),ml=({projects:e,meta:o,...n})=>{const{contributor:r,creator:s,current:i}=e.reduce((c,d)=>{const p=d.end==null?"current":d.role===P.CREATOR?"creator":"contributor";return{...c,[p]:[...c[p],d]}},{contributor:[],creator:[],current:[]});return t($,null,t(Mt,{...o,renderType:"post"}),t("h1",null,"Projects"),t(dl,null,t("h2",null,"Current"),t(mo,null,i.map(c=>t(to,{project:c})))),t(ec,{...n},t("div",null,t(Fn,null,"Projects I Created"),t(mo,null,s.map(c=>t(to,{project:c})))),t("div",null,t(Fn,null,"Open Source Contributions"),t(mo,null,r.map(c=>t(to,{project:c}))))))};export{vt as BlogArt,Qi as BlogArtDefs,Ta as BlogListing,bn as BlogMetadataType,fn as BlogPost,Mt as CustomArt,dn as Head,gn as Main,De as PageMetadataType,ml as Projects,Fe as StylesProvider,N as Topic,cn as TopicTag,lt as __SNOWPACK_ENV__,yn as getBlogPostStaticProps,nn as getPageMetadata,ll as index,St as mdx,Mo as projects,Ar as resetAbbrContext,l as styled};
+  ${Pe[3]}
+  ${Pe[4]}
+`.replace(/\s+/g," "),js=c("header",{...a.artOverlay,display:"grid",gridColumn:"1 / -1",gridTemplateColumns:Ms,padding:"clamp(0.5rem, 5vmin, 3rem) 0",position:"relative",zIndex:1}),Ls=c("div",{gridColumn:3}),Ds=c("div",{margin:"0 auto"}),Bs=c("a",{textDecoration:"none"}),$s=c("ul",{alignItems:"center",display:"flex",flexShrink:0,justifyContent:"center",listStyle:"none",marginBottom:0,marginTop:0,padding:0}),Eo=1,Ns=c("li",{nested:{"&:first-child":{marginLeft:0},"&:last-child":{marginRight:0}},display:"block",flexShrink:0,listStyle:"none",margin:`0 ${Eo/2}rem`,padding:0}),Hs=c("a",{...a.siteHeader.pageLinks,display:"block",fontSize:"clamp(1em, 3vw, 1.125em)",fontWeight:300,lineHeight:1,padding:"0.25rem",textDecoration:"none",whiteSpace:"nowrap",nested:{[a.darkMode]:{...a[a.darkMode].siteHeader.pageLinks},":active":{fontWeight:300},":local-link":{textDecoration:"underline"}}}),ko="1.5em",Sl=c(vo,{display:"block",width:`clamp(1.125em, 4vw, ${ko})`}),_s=()=>{const e=[{label:"Blog",location:"/"},{label:"Hire me",location:"/resume/"},{label:"GitHub",location:"https://github.com/eyelidlessness"}],t=e.reduce((i,s)=>typeof s.label=="string"?i+s.label.length:i,0),n={horizontal:"2rem"},r=`${[`${qe.width}px`,n.horizontal,`${t+2}ch`,ko,`${e.length*Eo}rem`].join(" + ")}`;return o(js,null,o(Ls,null,o(Ts,{as:"nav",devilsBreakpoint:r,gap:n},o(Ds,null,o(Bs,{href:"/"},o(Is,null))),o($s,null,e.map(({location:i,label:s})=>o(Ns,null,o(Hs,{href:i},s)))))))},Fs=c(B,{paddingTop:0,paddingBottom:"4em"}),To=({redirect:e,...t})=>o(ge,null,e==null?o(z,null,o(xs,null),o(_s,null),o(Fs,{as:"main",...t})):o(z,null)),Us=c(B,{...a.description,nested:{...a.description.nested,"&:last-child":{marginBottom:0},"& h1":{fontFamily:"unset",fontSize:"1.2em",lineHeight:1,marginBottom:"0.75rem",scrollMarginTop:"1rem"},"& p":{marginBottom:"0.625rem"},"& p:last-child":{marginBottom:0}},marginBottom:"2rem",paddingBottom:"1rem",paddingTop:"1rem"}),Ys=c("h1",{fontSize:"1em",lineHeight:1,marginBottom:"0.75rem"}),zs=c("div",{fontSize:"0.889em"}),Gs=({as:e="section",title:t,...n})=>o(Us,{as:e,itemprop:"description"},t?o(Ys,null,t):null,o(zs,{...n})),Xs=c(B,{paddingTop:"1rem"}),Ws=c("h1",{marginBottom:"0.25rem"}),Vs=c(B,{paddingBlock:"1rem"}),Ks=e=>{const{children:t,CustomArt:n,description:r,descriptionRaw:i,hash:s,redirect:l,stat:{created:m},title:p,topics:u}=e;return o(z,null,o(yo,{meta:{...e,description:i}}),o(To,{as:"article",redirect:l},o(Vs,null,n==null?o(wt,{hash:s,title:p,topics:u}):o(n,{hash:s,renderType:"post",StylesProvider:ge,title:p,topics:u}),o(Xs,null,o(Ws,null,p),o(Ae,{date:m,itemprop:"datePublished"}),o(bo,{link:!1,topics:u}))),o(Gs,null,r),t))},wo={IMMUTABLE:be.IMMUTABLE,IMMUTABLE_MERGE:be.IMMUTABLE_MERGE},qs=async e=>{const{description:t,importURL:n,path:r,redirect:i,title:s,topics:l,type:m=wo.IMMUTABLE_MERGE}=e,{CustomArt:p,hash:u,host:b,social:h,stat:y}=po(r,n,s,m,l),v=Ti`${Ot(o(z,null,t))}`;return{CustomArt:p,description:t,descriptionRaw:v,hash:u,host:b,path:r,redirect:i,social:h,stat:y,title:s,topics:l}},Js=c("div",{alignItems:"start",display:"flex",margin:"-0.5rem",nested:{"& > *":{margin:"0.5rem"}}}),Co="@media (min-width: 41.666rem)",Qs=c(Js,{display:"block",margin:0,nested:{"& > *":{containerType:"inline-size"},[Co]:{display:"flex",flexWrap:"nowrap",margin:"-1rem",nested:{"& > *":{flexBasis:"calc(50% - 2rem)",margin:"1rem"}}}}}),Zs=c("div",{fontSize:"0.88889em",margin:"0.5rem 0"}),ea=e=>{const t=Array();return e.role===E.CREATOR&&t.push(e.description),e.summary!=null&&t.push(e.summary),t.length===0&&t.push(e.description),o(Zs,null,t.map(n=>Te(n)))},ta=({date:e,...t})=>e==null?null:o(Ae,{...t,date:e}),oa=c("span",{nested:{[a.darkMode]:{...a[a.darkMode].deemphasize}},...a.deemphasize}),na=/^(\d{4})-(\d{2})$/,xo=e=>{if(e==null)return null;const t=na.exec(e);if(t==null)throw new Error(`Invalid format for date: ${e}, expected YYYY-MM`);const[,n,r]=t;return new Date(`${n}-${r}-01T00:00:00`)},Ro=c("div",{fontSize:"0.88889em",whiteSpace:"nowrap",nested:{"& time":{fontSize:"inherit"}}}),Ao=({range:[e,t]})=>{const n=xo(e),r=xo(t);return e==t?o(Ro,null,o(Ae,{date:n,itemprop:"endDate",mode:se.SHORT})):o(Ro,null,o(Ae,{date:n,itemprop:"startDate",mode:se.SHORT}),o(oa,null,"-"),o(ta,{date:r,itemprop:"endDate",mode:se.SHORT}))},ra=c("div",{display:"grid",rowGap:"0.325rem",nested:{"& > *":{margin:0}}}),Ct=ne("1rem","3.5cqi","1.25rem"),ia=c("h3",{fontFamily:a.prose.fontFamily,fontWeight:500,fontSize:Ct,paddingLeft:0,textIndent:0}),sa=c("a",{color:"inherit",fontWeight:"inherit",textDecoration:"none",nested:{"&:active, &:focus, &:hover, &:visited":{color:"inherit"}}}),aa=c("a",{alignSelf:"baseline",display:"block",flexShrink:0,height:`calc(${Ct} * ${a.headingLineHeight})`,lineHeight:`calc(${Ct} * ${a.headingLineHeight*1.5})`,padding:"0 0.5rem",zIndex:1,nested:{"& svg":{width:"1em"},[Co]:{paddingLeft:0}}}),la=c("div",{flexGrow:1,paddingTop:"0.05556rem"}),ca=c("div",{alignItems:"start",display:"flex",padding:"1rem 0"}),Po=({project:{description:e,end:t,repo:n,role:r,title:i,start:s,summary:l}})=>o(ca,null,o(aa,{href:n},o(vo,null)),o(la,null,o(ra,null,o(ia,null,o(sa,{href:n},i)),o(Ao,{range:[s,t]})),o(ea,{role:r,description:e,summary:l??null}))),Oo=c("h2",{fontSize:ne(`${a.headingRanges.h3.minEm}em`,`${a.headingRanges.h3.fluidVw}vw`,"1.17778em"),marginBottom:0,paddingLeft:0,textIndent:0}),Io=c("div",{marginTop:"0.5rem"}),da=e=>{const{creator:t,contributor:n}=e.projects.reduce((r,i)=>{const s=i.role===E.CREATOR?"creator":"contributor";return{...r,[s]:[...r[s],i]}},{creator:[],contributor:[]});return o(Qs,null,o("div",null,o(Oo,null,"Projects I Created"),o(Io,null,t.map(r=>o(Po,{project:r})))),o("div",null,o(Oo,null,"Open Source Contributions"),o(Io,null,n.map(r=>o(Po,{project:r})))))},ma=c(B,{padding:"1rem 0 0",nested:{"&:first-child, &:nth-of-type(1)":{paddingTop:0}}}),Be=e=>o(ma,{as:"section",...e}),Mo="0123456789".split("").map(e=>{const n=Number(e)*36;return{dark:{emphasize:K.hsluvToHex([n,100,35]),hover:K.hsluvToHex([n,100,3]),plot:K.hsluvToHex([n,100,74]),selected:K.hsluvToHex([n,100,64]),x:K.hsluvToHex([n,100,84]),y:K.hsluvToHex([n,100,74])},light:{emphasize:K.hsluvToHex([n,100,80]),hover:K.hsluvToHex([n,100,97]),plot:K.hsluvToHex([n,100,64]),selected:K.hsluvToHex([n,100,64]),x:K.hsluvToHex([n,100,54]),y:K.hsluvToHex([n,100,44])}}}),pa="stroke-width 0.1s ease-in-out, color 0.1s ease-in-out",ua=(e,t)=>t==null?{color:Mo[e].light.plot,nested:{[a.darkMode]:{color:Mo[e].dark.plot}}}:a.topicColors[t],ga=({fill:e,index:t,topic:n})=>({...ua(t,n),...e?{fill:"currentcolor",fillOpacity:.05,mask:"url(#curvesVerticalFade)",strokeWidth:0}:{fill:"none",strokeWidth:1,stroke:"currentcolor"},transition:pa,vectorEffect:"non-scaling-stroke"}),ha=({fill:e,index:t,topic:n,...r})=>o("path",{...r}),jo=c(ha,ga),fa=c("svg",{overflow:"visible",padding:"1rem"}),ba=20,ya={xMax:he,xScale:1,xShift:0,yMax:he,yScale:1,yShift:0},Sa=({className:e,hexPoints:t,points:n,pointSize:r=6,scaleOptions:i,segments:s,sortIndexes:l,sortToggleClass:m,topics:p,...u})=>{const{xScale:b,xShift:h,xRange:y=b*(he+h*2),yMax:v,yShift:f,yScale:k,yRange:A=k*(v+f*2)}={...ya,...i},C=ba*2,$=u.height??A+C,O=u.width??y+C,P=({x:R,y:_},I)=>{const X=l[I],{x:Q,y:ee}=n[X],F=ie((R+h)/y*100,4),Z=100-ie((_-f)/A*100,4),te=ie((Q+h)/y*100,4),U=100-ie((ee-f)/A*100,4),H=0-ie(F-te,4),N=0-ie(Z-U,4);return{cx:F,cy:Z,sortedCx:te,sortedCy:U,sortedTranslateXPercent:H,sortedTranslateyPercent:N}},V=s.map(R=>{const[_,I,X]=R,{x:Q}=_,{y:ee}=I,{x:F}=X,Z=F-Q,te=Z===0?0:Math.max(ee/Z*pt,mt);return{cubicPoints:R?.reduce((H,N,Y)=>{if(Y===0)return H;const J=yt({index:Y,point:N,points:R,smoothing:te,xScale:b,yScale:k});return[...H,J]},[]),segment:R}});return o(fa,{className:e,height:$,width:O,preserveAspectRatio:"none",viewBox:`0 0 ${O} ${$}`},o("defs",null,o("linearGradient",{id:"curvesVerticalFadeGradient",y2:"1",x2:"0"},o("stop",{offset:"0","stop-color":"white","stop-opacity":"1"}),o("stop",{offset:"0.15","stop-color":"white","stop-opacity":".95"}),o("stop",{offset:"1","stop-color":"white","stop-opacity":"0"})),o("mask",{id:"curvesVerticalFade",maskContentUnits:"objectBoundingBox"},o("rect",{fill:"url(#curvesVerticalFadeGradient)",height:"1",width:"1"}))),V.map(({cubicPoints:R,segment:_},I)=>{const[X,Q,ee]=_,F=R.map(([U,H],N)=>[N===0?X:Q,U,H,N===0?Q:ee]);return o(z,null,o(()=>o(z,null,F.map(U=>{const H=U.map((Y,J)=>{const{cx:de,cy:ae}=P(Y,I),me=de/100*O,pe=ae/100*$;return`${J===0?"M ":J===1?"C ":""} ${me},${pe}`}).join(" "),N=p?.[I%p.length];return o(jo,{d:H,index:I,topic:N})})),null),o(()=>{const U=F.map((N,Y)=>N.map((de,ae)=>{if(Y>0&&ae===0)return"";const{cx:me,cy:pe}=P(de,I),Se=me/100*O,j=pe/100*$;return`${ae===0?"M ":ae===1?"C ":""} ${Se},${j}`}).join(" ")).join(" "),H=p?.[I%p.length];return o(jo,{d:U,fill:!0,index:I,topic:H})},null))}))},Lo=({className:e="",hash:t,height:n,identifier:r=Fe,renderType:i,StylesProvider:s=ge,styleRenderer:l=ce,topics:m,width:p})=>{const u=ut(t),b=gt(t,u),{xPadding:h,xScale:y,yPadding:v,yScale:f}=Tt,k=i==="meta",A=k?0:h,C=k?0:v,$=A/2,O=C/2,P={xScale:y,xShift:$,yScale:f,yShift:O},R=lt(b,({x:j},{x:oe})=>j===oe?0:j>oe?1:-1).map(j=>ht(j,P)),_=R.map((j,oe)=>oe),I=R.map(j=>u[R.indexOf(j)]),X=(he+A)*y,Q=r(),ee=ft({points:R,xMax:X,xScale:y,yScale:f}),F=bt({segments:ee,xMax:X,xScale:y,yScale:f}),Z=k?{path:{strokeWidth:"4px !important",transform:"scale(.95)",transformOrigin:"50% 50%"}}:null,te=k?"0 !important":"0 0 1rem !important",U=Re,H="100%",N=j=>typeof j=="number"?`${j}px`:j,Y=(j,oe)=>typeof j=="number"?j*oe:j,J=k?Y(n??U,.95):Re,de=k?Y(p??H,.95):"100%",ae=k&&n!=null?Y(n,.95):n,me=k&&p!=null?Y(p,.95):p,pe=l.renderRule(()=>({gridColumn:"1 / -1",height:N(J),padding:te,width:N(de),nested:{...Z}}),Object.keys),Se=k?e:`${e} ${pe}`;return o(s,null,o(Sa,{className:Se,height:ae,hexPoints:I,points:R,scaleOptions:P,segments:F,sortIndexes:_,sortToggleClass:Q,topics:m,width:me}))},Do=c("div",{alignItems:"start",display:"flex",margin:"-0.5rem",nested:{"& > *":{margin:"0.5rem"}}}),Bo=c(Do,{flexWrap:"wrap",nested:{"& > *":{minWidth:"max(calc(50% - 2rem), 30ch)"}}}),va=c(Bo,{alignItems:"baseline",justifyContent:"space-between",margin:"0 -0.5rem",paddingTop:ne("0.5rem","3vw","2rem"),nested:{"& > *":{margin:"0 0.5rem",minWidth:"auto"}}}),Ea=c(Be,{padding:0}),ka=c(Do,{flexWrap:"wrap",margin:"0.1111rem 0 0"}),Ta=c("a",{...a.resume.contactList.link,fontSize:"0.88889em",fontWeight:500,minWidth:"auto",textDecoration:"none"}),wa=c("span",{nested:{"@media print":{nested:{"& > *":{display:"none"},"&:after":{content:"attr(data-print-label)"}}}}}),xt=({children:e,printLabel:t,...n})=>o(Ta,{...n},o(wa,{"data-print-label":t},o("span",null,e))),Ca=c(B,{...a.resume.brief,margin:"1rem 0 0",padding:"1rem 0",nested:{...a.resume.brief.nested,"& p, & ul, & li":{margin:"0.5em 0"},"& :first-child":{marginTop:0},"& :last-child":{marginBottom:0},"& > *":{fontSize:"0.88889em",minWidth:"auto"}}}),$o="@media (min-width: 44.625rem)",xa=c("h2",{fontSize:"1em",marginBottom:0,paddingLeft:0,textIndent:0,nested:{[$o]:{justifySelf:"end"}}}),Ra=c("div",{alignItems:"baseline",display:"grid",gap:"1rem 0",gridTemplateColumns:"auto",gridTemplateRows:"auto",fontSize:"0.88889em",nested:{[$o]:{gridTemplateColumns:"auto 1fr"}}}),Aa=c("ul",{display:"block",margin:0,padding:"0 0 0 1rem"}),Pa=c("li",{display:"inline-block",listStyle:"none",margin:"0 1.5rem 0.125rem 0",padding:0,nested:{"&:last-child":{marginRight:0}}}),Oa=Object.values(S).reduce((e,t)=>({...e,[t]:c("span",{...a.resume.skillLevel[t],borderRadius:"4px",display:"inline-block",height:"8px",margin:"0 0.325rem 0 0",width:"8px",verticalAlign:"middle",nested:{...a.resume.skillLevel[t].nested}})}),{}),Ia=c("div",{display:"contents"}),Ma=({name:e,skills:t})=>o(Ia,{itemscope:!0,itemtype:"http://schema.org/ItemList"},o(xa,{itemprop:"name"},ro(e)),o(Aa,null,t.map(({level:n,name:r})=>{const i=Oa[n];return o(Pa,{key:r,itemprop:"itemListElement"},o(i,{role:"img",title:`Skill level: ${n}`}),ro`${r}`)}))),ja=c(B,{padding:"1rem 0"}),La=c("div",{fontSize:"0.94444em",margin:"0.5rem 0"}),Da=c("h2",{marginBottom:"1rem"}),Ba=c("div",{fontSize:"0.88889rem"}),$a=c("ul",{fontSize:"0.88889em",paddingInlineStart:0}),Na=c("li",{display:"grid",gridTemplateColumns:"1.25rem 1fr",listStyle:"none",nested:{"&:before":{content:'"\u203A"',fontWeight:"bolder",lineHeight:1.2222,textAlign:"center"}}}),Ha=c(ja,{marginBottom:"0.5rem",paddingBottom:"1.5rem",position:"relative",nested:{"&:after":{...a.resume.employment.separator,bottom:0,content:'""',display:"block",gridColumn:"1 / -1",left:0,position:"absolute",width:"100%"},"&:last-child":{marginBottom:0},"&:last-child:after":{display:"none"}}}),_a=c(Bo,{alignItems:"baseline",justifyContent:"space-between",gap:"0.5rem",nested:{"& > *":{minWidth:"auto"}}}),Fa=({employer:e,end:t,highlights:n,position:r,start:i,summary:s,...l})=>o(Ha,{as:"section",itemscope:!0,itemtype:"https://schema.org/EmployeeRole",...l},o(_a,null,o("h3",{itemprop:"name"},e),o(Ao,{range:[i,t]})),o(Ba,{itemprop:"roleName"},r),s==null?null:o(La,{itemprop:"description"},Te(s)),n==null?null:o($a,{itemtype:"http://schema.org/ItemList"},n.map(m=>o(Na,{key:m,itemprop:"itemListElement"},Te(m))))),Ua=c(Be,{...a.resume.employment.container,marginTop:"1rem"}),Ya=({employment:e})=>o(Ua,null,o(Da,null,"Recent Experience"),e.history.map(t=>o(Fa,{...t}))),za=c(B,{nested:{"& p":{lineHeight:1.325,margin:"0 0 0.75em"},"& p:last-child":{margin:0}}}),Ga=c(Ae,{clip:"rect(0 0 0 0)",clipPath:"inset(50%)",height:"1px",overflow:"hidden",position:"absolute",whiteSpace:"nowrap",width:"1px"}),No=e=>e.replace(/^https?:\/\/|\/$/g,""),Xa=({className:e,id:t,meta:n,resume:r,updated:i})=>{const{contact:{email:s,website:l},employment:m,info:p,name:u,projects:b,skills:h,social:y}=r;return o(za,{className:e,id:t,itemscope:!0,itemtype:"http://schema.org/Person"},o(Lo,{...n,renderType:"post"}),o(Ea,null,o(va,null,o("h1",{itemprop:"name"},u),o(Ga,{date:i,itemprop:"datePublished",mode:se.META}),o(ka,null,o(xt,{href:`mailto:${s}`,itemprop:"email",printLabel:s},"Email"),o(xt,{href:l,itemprop:"url",printLabel:No(l),rel:"me"},"Website"),y.map(({network:v,url:f})=>o(xt,{href:f,itemprop:"url",printLabel:No(f),rel:"me"},v)))),o(Ca,{itemprop:"description"},Te(p.brief))),o(Be,{"aria-label":"Skillsets"},o(Ra,null,Object.entries(h.merged).map(([v,f])=>o(Ma,{key:v,name:v,skills:f})))),o(Ya,{employment:m}),o(Be,null,o(da,{projects:b})),o(Be,null,o("h2",null,"References"),Te("Available upon request.")))},vl=c("ul",{display:"flex",fontSize:"0.88889em",listStyle:"none",margin:0,padding:0}),El=c("li",{margin:"0 0.5rem 0 0",padding:0,nested:{"&:last-child":{marginRight:0}}}),kl=c("a",{...a.resume.contactList.link,textDecoration:"none"});export{Re as BLOG_ART_HEIGHT,wt as BlogArt,Vi as BlogArtDefs,Es as BlogListing,wo as BlogMetadataType,Ks as BlogPost,he as COORDINATE_MAX,io as COORDINATE_MIN,B as FullBleedContainer,Qt as FullBleedScrollableOverflow,eo as FullBleedSymbolBlock,yo as Head,Me as InvalidHashError,mt as MIN_SMOOTHING,To as Main,be as PageMetadataType,Xa as Resume,Lo as ResumeArt,pt as SMOOTHING_RATIO,ge as StylesProvider,M as Topic,fo as TopicTag,et as __SNOWPACK_ENV__,Tt as blogArtDefaultParameters,ne as clamp,yt as cubicBezierPoints,qs as getBlogPostStaticProps,ft as getNaiveSegments,bt as getNonPhallicSegments,po as getPageMetadata,xi as hexChars,Fe as identifier,Te as mdx,ce as renderer,En as resetAbbrContext,lr as resume,ht as scalePoint,lt as sortBy,c as styled,a as theme,ie as toFixed,ut as toHexPointSequence,gt as toPointSequence,lo as yBounds};
