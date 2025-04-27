@@ -49,7 +49,7 @@ export default definePage(ResumePage, {
       path,
       import.meta.url,
       title,
-      PageMetadataType.IMMUTABLE,
+      PageMetadataType.MUTABLE,
       topics
     );
 
