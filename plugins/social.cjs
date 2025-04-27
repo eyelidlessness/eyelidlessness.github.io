@@ -91,7 +91,7 @@ const pluginSocial = () => ({
         );
 
         /** @type {import('../src/lib/content/meta').PageMetadata<any> | null} */
-        const props = typeof staticProps === 'object'
+        const props = typeof staticProps === 'object' && staticProps != null
           ? staticProps.props
           : null;
 
@@ -150,13 +150,17 @@ const pluginSocial = () => ({
             width,
           });
 
+          if (artRaster == null) {
+            throw new Error('Failed to generate raster image for art');
+          }
+
           const baseDistPath = path.resolve(process.cwd(), './dist');
           const distPath = path.resolve(baseDistPath, `.${publicPath}`);
 
           mkdirSync(dirname(distPath), {
             recursive: true,
           });
-          writeFileSync(distPath, artRaster);
+          writeFileSync(distPath, new Uint8Array(artRaster), { encoding: null});
         }
         catch (error) {
           console.trace('unexpected error', pagePath, error, 'el', rasterElement);
