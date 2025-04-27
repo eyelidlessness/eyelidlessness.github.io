@@ -36,7 +36,7 @@ export enum TimestampMode {
   SHORT   = 'SHORT',
 }
 
-type TimestampProps =
+export type TimestampProps =
   & ComponentProps<typeof Time>
   & {
     readonly date:  Date;

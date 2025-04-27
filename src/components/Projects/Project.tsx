@@ -1,40 +1,27 @@
 import { GitHubLogo }            from '@/components/GitHubLogo';
-import {
-  Timestamp,
-  TimestampMode,
-} from '@/components/Timestamp';
-import type { ProjectTimestamp } from '@/data/projects';
 import { ProjectData }           from '@/data/projects';
-import { styled }                from '@/lib/styles';
-import { ProjectsFlex }          from './ProjectsFlex';
+import { clamp, styled, theme }  from '@/lib/styles';
 import { projectsTwoUpQuery }    from './ProjectsTwoUp';
 import { ProjectDescription }    from './ProjectDescription.jsx';
+import { TimeRange } from '../TimeRange.jsx';
 
-const BaseFlex = styled(ProjectsFlex, {
-  flexWrap: 'wrap',
+const ProjectHeader = styled('div', {
+  display: 'grid',
+  rowGap:  '0.325rem',
 
   nested: {
     '& > *': {
-      minWidth: 'max(calc(50% - 2rem), 30ch)',
+      margin: 0,
     },
   },
 });
 
-const Header = styled(BaseFlex, {
-  alignItems:     'baseline',
-  justifyContent: 'space-between',
-  margin:         '0 -0.5rem',
-  rowGap:         '0.325rem',
-
-  nested: {
-    '& > *': {
-      margin:   '0 0.5rem',
-      minWidth: 'auto',
-    },
-  },
-});
+const projectHeadingFontSize = clamp('1rem', '3.5cqi', '1.25rem');
 
 const ProjectHeading = styled('h3', {
+  fontFamily:  theme.prose.fontFamily,
+  fontWeight:  500,
+  fontSize:    projectHeadingFontSize,
   paddingLeft: 0,
   textIndent:  0,
 });
@@ -51,90 +38,18 @@ const ProjectHeadingLink = styled('a', {
   },
 });
 
-const dateStringPattern = /^(\d{4})-(\d{2})$/;
-
-const dateStringToDate = (dateString: string) => {
-  const matches = dateString.match(dateStringPattern);
-
-  if (matches == null) {
-    throw new Error(`Invalid format for date: ${dateString}, expected YYYY-MM`);
-  }
-
-  const [ , year, month ] = matches;
-
-  return new Date(`${year}-${month}-01T00:00:00`);
-};
-
-const BaseTimeRange = styled('div', {
-  fontSize: '0.88889em',
-  marginLeft: 'auto',
-});
-
-const ProjectTimestamp = styled(Timestamp, {
-  fontSize: 'inherit',
-});
-
-interface TimeRangeProps {
-  readonly range: readonly [ start: ProjectTimestamp, end?: ProjectTimestamp ];
-}
-
-const TimeRange = ({
-  range: [ start, end ],
-}: TimeRangeProps) => {
-  const startDate = dateStringToDate(start);
-
-  if (end == null) {
-    return (
-      <BaseTimeRange>
-        { 'Since ' }
-        <ProjectTimestamp
-          date={ startDate }
-          itemprop="startDate"
-          mode={ TimestampMode.SHORT }
-        />
-      </BaseTimeRange>
-    );
-  }
-
-  const endDate = dateStringToDate(end);
-
-  if (start == end) {
-    return (
-      <BaseTimeRange>
-        <ProjectTimestamp
-          date={ startDate }
-          itemprop="endDate"
-          mode={ TimestampMode.SHORT }
-        />
-      </BaseTimeRange>
-    );
-  }
-
-  return (
-    <BaseTimeRange>
-      <ProjectTimestamp
-        date={ startDate }
-        itemprop="startDate"
-        mode={ TimestampMode.SHORT }
-      />
-      { ' – ' }
-      <ProjectTimestamp
-        date={ endDate }
-        itemprop="endDate"
-        mode={ TimestampMode.SHORT }
-      />
-    </BaseTimeRange>
-  );
-};
-
 const ProjectIconLink = styled('a', {
-  display:  'block',
-  padding:  '0 0.5rem 0.5rem 0.5rem',
-  zIndex:   1,
+  alignSelf:  'baseline',
+  display:    'block',
+  flexShrink: 0,
+  height:     `calc(${projectHeadingFontSize} * ${theme.headingLineHeight})`,
+  lineHeight: `calc(${projectHeadingFontSize} * ${theme.headingLineHeight * 1.5})`,
+  padding:    '0 0.5rem',
+  zIndex:     1,
 
   nested: {
     '& svg': {
-      width: '1.25em',
+      width: '1em',
     },
 
     [projectsTwoUpQuery]: {
@@ -144,14 +59,14 @@ const ProjectIconLink = styled('a', {
 });
 
 const ProjectBody = styled('div', {
+  flexGrow:   1,
   paddingTop: '0.05556rem',
 });
 
 const BaseProject = styled('div', {
-  alignItems:          'start',
-  display:             'grid',
-  gridTemplateColumns: 'auto 1fr',
-  padding:             '1rem 0',
+  alignItems: 'start',
+  display:    'flex',
+  padding:    '1rem 0',
 });
 
 interface ProjectProps {
@@ -168,32 +83,28 @@ export const Project = ({
     start,
     summary,
   },
-}: ProjectProps) => {
+}: ProjectProps) => (
+  <BaseProject>
+    <ProjectIconLink href={ repo }>
+      <GitHubLogo />
+    </ProjectIconLink>
 
+    <ProjectBody>
+      <ProjectHeader>
+        <ProjectHeading>
+          <ProjectHeadingLink href={ repo }>
+            { title }
+          </ProjectHeadingLink>
+        </ProjectHeading>
 
-  return (
-    <BaseProject>
-      <ProjectIconLink href={ repo }>
-        <GitHubLogo />
-      </ProjectIconLink>
+        <TimeRange range={ [ start, end ] } />
+      </ProjectHeader>
 
-      <ProjectBody>
-        <Header>
-          <ProjectHeading>
-            <ProjectHeadingLink href={ repo }>
-              { title }
-            </ProjectHeadingLink>
-          </ProjectHeading>
-
-          <TimeRange range={ [ start, end ] } />
-        </Header>
-
-        <ProjectDescription
-          role={ role }
-          description={ description }
-          summary={ summary ?? null }
-        />
-      </ProjectBody>
-    </BaseProject>
-  );;
-}
+      <ProjectDescription
+        role={ role }
+        description={ description }
+        summary={ summary ?? null }
+      />
+    </ProjectBody>
+  </BaseProject>
+);

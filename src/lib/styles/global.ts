@@ -65,9 +65,7 @@ export const criticalStyles = cleanWhitespace(`
 
     src:
       local('__Minipax'),
-      url('/fonts/Minipax/regular.woff2') format('woff2'),
-      url('/fonts/Minipax/regular.woff')  format('woff'),
-      url('/fonts/Minipax/regular.ttf')   format('truetype');
+      url('/fonts/Minipax/regular.woff2') format('woff2');
   }
 
   html, body {
@@ -104,7 +102,7 @@ export const criticalStyles = cleanWhitespace(`
     font-family:             Minipax, Georgia, serif;
     font-smooth:             always;
     font-weight:             normal;
-    line-height:             0.9375;
+    line-height:             ${theme.headingLineHeight};
     margin-bottom:           1rem;
     margin-top:              1rem;
     padding-left:            1rem;
@@ -310,6 +308,7 @@ export const setGlobalStyles = () => {
         }
 
         ${jsToCSS(emphasisElements, theme[theme.darkMode].emphasize)}
+        ${jsToCSS([ 'abbr' ], theme[theme.darkMode].abbreviation)}
         ${jsToCSS([ 'pre' ], theme[theme.darkMode].pre)}
         ${jsToCSS([ 'code' ], theme[theme.darkMode].code)}
         ${jsToCSS([ 'a' ], theme[theme.darkMode].links)}

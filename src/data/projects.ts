@@ -171,27 +171,27 @@ export const projects = validateProjects([
     end: '2023-10',
   },
 
-  {
-    title:    'eyelidlessness.github.io',
-    category: ProjectCategory.PUBLIC_ACCESS,
+  // {
+  //   title:    'eyelidlessness.github.io',
+  //   category: ProjectCategory.PUBLIC_ACCESS,
 
-    description: `
-      My personal website, résumé and tech blog.
-    `,
+  //   description: `
+  //     My personal website, résumé and tech blog.
+  //   `,
 
-    // summary: `
-    //   Built with [Preact][1], [Microsite][2] and [Fela][3].
+  //   // summary: `
+  //   //   Built with [Preact][1], [Microsite][2] and [Fela][3].
 
-    //   [1]: https://preactjs.com/
-    //   [2]: https://github.com/natemoo-re/microsite
-    //   [3]: https://fela.js.org/
-    // `,
+  //   //   [1]: https://preactjs.com/
+  //   //   [2]: https://github.com/natemoo-re/microsite
+  //   //   [3]: https://fela.js.org/
+  //   // `,
 
-    repo: 'https://github.com/eyelidlessness/eyelidlessness.github.io',
-    role: ProjectRole.CREATOR,
+  //   repo: 'https://github.com/eyelidlessness/eyelidlessness.github.io',
+  //   role: ProjectRole.CREATOR,
 
-    start: '2020-10',
-  },
+  //   start: '2020-10',
+  // },
 
   {
     title:    'Microsite',

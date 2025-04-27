@@ -304,10 +304,12 @@ export const theme = {
   darkMode,
 
   abbreviation: {
+    '--abbreviation-highlight': 'hsl(64deg 100% 50% / 0.25)',
+
     backgroundImage: `linear-gradient(${[
       'to top',
-      'hsl(64deg, 100%, 50%, 0.25)',
-      'hsl(64deg, 100%, 50%, 0.25) 0.5em',
+      'var(--abbreviation-highlight)',
+      'var(--abbreviation-highlight) 0.5em',
       'transparent 0.5em',
     ].join(', ')})`,
   },
@@ -514,9 +516,14 @@ export const theme = {
     },
   },
 
+  headingLineHeight: 0.9375,
   headingRanges,
 
   [darkMode]: {
+    abbreviation: {
+      '--abbreviation-highlight': 'hsl(336deg 85% 25%)',
+    },
+
     aside: {
       backgroundColor: 'hsl(192deg, 55%, 11%)',
 
@@ -534,7 +541,7 @@ export const theme = {
     },
 
     document: {
-      backgroundColor: 'hsl(192deg, 10%, 10%)',
+      backgroundColor: 'hsl(192deg 60% 4%)',
     },
 
     deemphasize: {
@@ -563,7 +570,7 @@ export const theme = {
     },
 
     prose: {
-      color: 'hsl(190deg, 80%, 95%)',
+      color: 'hsl(190deg 20% 97%)',
     },
 
     separator: {
@@ -667,7 +674,7 @@ export const theme = {
   },
 
   prose: {
-    color:      'hsla(210deg, 12%, 5%, 95%)',
+    color:      'hsl(210deg 12% 5% / 95%)',
     fontFamily: proseFontFamily,
   },
 
@@ -731,7 +738,7 @@ export const theme = {
       },
 
       separator: {
-        borderBottom: '1px solid hsl(17deg, 78%, 90%)',
+        borderBottom: '1px solid hsl(17deg, 28%, 96%)',
 
         nested: {
           [darkMode]: {

@@ -129,8 +129,8 @@ export const SiteHeader = () => {
     },
 
     {
-      label:    'Projects',
-      location: '/projects/',
+      label:    'Hire me',
+      location: '/resume/',
     },
 
     {
@@ -152,7 +152,7 @@ export const SiteHeader = () => {
   const devilsBreakpoint = `${[
     `${siteLogoDimensionsPx.width}px`,
     gap.horizontal,
-    `${characterCount + 1}ch`,
+    `${characterCount + 2}ch`,
     gitHubLogoMaxWidth,
     `${siteLinks.length * listItemMarginRem}rem`,
   ].join(' + ')}`;

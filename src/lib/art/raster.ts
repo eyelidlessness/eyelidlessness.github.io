@@ -29,7 +29,7 @@ interface GenerateRasterFromSVGOptions {
 
 export const generateRasterFromSVG = async (
   options: GenerateRasterFromSVGOptions
-) => {
+): Promise<Buffer | null> => {
   const {
     debug,
     height,
@@ -92,5 +92,7 @@ export const generateRasterFromSVG = async (
       'rendered svg',
       rendered
     );
+
+    return null;
   }
 };

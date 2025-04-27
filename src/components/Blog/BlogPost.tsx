@@ -19,13 +19,12 @@ import {
 import {
   styled,
   StylesProvider,
-  theme,
 } from '@/lib/styles';
 import { BlogArt }             from './BlogArt';
 import { BlogPostDescription } from './BlogPostDescription';
 
 const BlogPostHeadingContent = styled(FullBleedContainer, {
-  ...theme.artOverlay,
+  paddingTop: '1rem',
 });
 
 const BlogPostTitle = styled('h1', {
@@ -33,7 +32,7 @@ const BlogPostTitle = styled('h1', {
 });
 
 const BlogPostHeading = styled(FullBleedContainer, {
-  marginBottom: '1rem',
+  paddingBlock: '1rem',
 });
 
 export interface BlogPostDescription {

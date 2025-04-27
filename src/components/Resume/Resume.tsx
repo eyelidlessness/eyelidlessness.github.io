@@ -2,23 +2,17 @@ import {
   ComponentProps,
   ElementType,
 } from 'preact';
-import {
-  BlogArt,
-  BlogArtProps,
-} from '@/components/Blog';
+import { BlogArtProps }       from '@/components/Blog';
 import { FullBleedContainer } from '@/components/FullBleed';
-import { GitHubLogo }         from '@/components/GitHubLogo';
 import {
   Timestamp,
   TimestampMode,
 } from '@/components/Timestamp';
 import {
-  ProjectData,
   ProjectTimestamp,
 } from '@/data/projects';
 import type { ResumeData } from '@/data/resume';
 import {
-  ResumeProjectRole,
   ResumeSkillLevel,
 } from '@/data/resume';
 import {
@@ -30,8 +24,10 @@ import {
   styled,
   theme,
 } from '@/lib/styles';
+import { ResumeProjects } from './ResumeProjects.jsx';
 import { ResumeSection }      from './ResumeSection';
-import { ProjectDescription } from '../Projects/ProjectDescription.jsx';
+import { ResumeArt } from './ResumeArt.jsx';
+import { TimeRange } from '../TimeRange.jsx';
 
 const Flex = styled('div', {
   alignItems: 'start',
@@ -59,6 +55,7 @@ const ResumeHeader = styled(BaseFlex, {
   alignItems:     'baseline',
   justifyContent: 'space-between',
   margin:         '0 -0.5rem',
+  paddingTop:     clamp('0.5rem', '3vw', '2rem'),
 
   nested: {
     '& > *': {
@@ -146,50 +143,40 @@ const ResumeBrief = styled(FullBleedContainer, {
   },
 });
 
-const threeUpQuery = '@media (min-width: 44.625rem)';
+const resumeSkillsetsColumnarQuery = '@media (min-width: 44.625rem)';
 
-const ThreeUp = styled(Flex, {
-  display: 'block',
-  margin:  0,
+const ResumeFlexHeading = styled('h2', {
+  fontSize:    '1em',
+  marginBottom: 0,
+  paddingLeft:  0,
+  textIndent:   0,
 
   nested: {
-    '& > *': {
-      margin:  '0 0 1rem',
-    },
-
-    [threeUpQuery]: {
-      display:        'flex',
-      flexWrap:       'nowrap',
-      justifyContent: 'space-between',
-      margin:         '0 -0.5rem -0.5rem',
-
-      nested: {
-        '& > *': {
-          margin: '0 0.5rem 0.5rem'
-        },
-      },
+    [resumeSkillsetsColumnarQuery]: {
+      justifySelf: 'end',
     },
   },
 });
 
-const ResumeFlexHeading = styled('h2', {
-  fontSize:    clamp(
-    `${theme.headingRanges.h3.minEm}em`,
-    `${theme.headingRanges.h3.fluidVw}vw`,
-    `1.17778em`
-  ),
-  marginBottom: 0,
-  paddingLeft:  0,
-  textIndent:   0,
-});
+const ResumeSkillsetsContainer = styled('div', {
+  alignItems:          'baseline',
+  display:             'grid',
+  gap:                 '1rem 0',
+  gridTemplateColumns: 'auto',
+  gridTemplateRows:    'auto',
+  fontSize:            '0.88889em',
 
-const ResumeSkillsetsContainer = styled(ThreeUp, {
-  fontSize: '0.88889em',
+  nested: {
+    [resumeSkillsetsColumnarQuery]: {
+      gridTemplateColumns: 'auto 1fr',
+    },
+  },
 });
 
 const ResumeSkillsList = styled('ul', {
   display: 'block',
-  padding: 0,
+  margin:  0,
+  padding: '0 0 0 1rem',
 });
 
 const ResumeSkillsListItem = styled('li', {
@@ -201,16 +188,6 @@ const ResumeSkillsListItem = styled('li', {
   nested: {
     '&:last-child': {
       marginRight: 0,
-    },
-
-    [threeUpQuery]: {
-      display: 'block',
-
-      nested: {
-        '&:last-child': {
-          marginBottom: 0,
-        },
-      },
     },
   },
 });
@@ -233,13 +210,13 @@ const ResumeSkillLevelMarkers = Object.values(ResumeSkillLevel)
 
       nested: {
         ...theme.resume.skillLevel[level].nested,
-
-        [threeUpQuery]: {
-          margin: '0 0.325rem',
-        },
       },
     })
   }), {} as Record<ResumeSkillLevel, ResumeSkillLevelMarker>);
+
+const BaseResumeSkillsetListing = styled('div', {
+  display: 'contents',
+});
 
 interface ResumeSkillsListProps {
   readonly name:   string;
@@ -250,8 +227,8 @@ const ResumeSkillsetListing = ({
   name,
   skills,
 }: ResumeSkillsListProps) => (
-  <div itemscope itemtype="http://schema.org/ItemList">
-    <ResumeFlexHeading itemprop="name">{ name }</ResumeFlexHeading>
+  <BaseResumeSkillsetListing itemscope itemtype="http://schema.org/ItemList">
+    <ResumeFlexHeading itemprop="name">{ mdxInline(name) }</ResumeFlexHeading>
 
     <ResumeSkillsList>
       { skills.map(({
@@ -272,7 +249,7 @@ const ResumeSkillsetListing = ({
         );
       }) }
     </ResumeSkillsList>
-  </div>
+  </BaseResumeSkillsetListing>
 );
 
 const ResumeTopLevelListingItem = styled(FullBleedContainer, {
@@ -287,71 +264,9 @@ const ResumeEmployerSummary = styled('div', {
   margin:   '0.5rem 0',
 });
 
-const dateStringPattern = /^(\d{4})-(\d{2})$/;
-
-const dateStringToDate = (dateString: string) => {
-  const matches = dateString.match(dateStringPattern);
-
-  if (matches == null) {
-    throw new Error(`Invalid format for date: ${dateString}, expected YYYY-MM`);
-  }
-
-  const [ , year, month ] = matches;
-
-  return new Date(`${year}-${month}-01T00:00:00`);
-};
-
-const BaseResumeTimeRange = styled('div', {
-  fontSize: '0.88889em',
-});
-
-const ResumeTimestamp = styled(Timestamp, {
-  fontSize: 'inherit',
-});
-
 const ResumeEmploymentHeading = styled('h2', {
-  marginBottom: '0.5rem',
+  marginBottom: '1rem',
 });
-
-interface ResumeEmploymentTimeRangeProps {
-  readonly range: readonly [ start: ProjectTimestamp, end?: ProjectTimestamp ];
-}
-
-const ResumeTimeRange = ({
-  range: [ start, end ],
-}: ResumeEmploymentTimeRangeProps) => {
-  const startDate = dateStringToDate(start);
-
-  if (start == end || end == null) {
-    return (
-      <BaseResumeTimeRange>
-        <ResumeTimestamp
-          date={ startDate }
-          itemprop="endDate"
-          mode={ TimestampMode.SHORT }
-        />
-      </BaseResumeTimeRange>
-    );
-  }
-
-  const endDate = dateStringToDate(end);
-
-  return (
-    <BaseResumeTimeRange>
-      <ResumeTimestamp
-        date={ startDate }
-        itemprop="startDate"
-        mode={ TimestampMode.SHORT }
-      />
-      { ' – ' }
-      <ResumeTimestamp
-        date={ endDate }
-        itemprop="endDate"
-        mode={ TimestampMode.SHORT }
-      />
-    </BaseResumeTimeRange>
-  );
-};
 
 const ResumeEmploymentPosition = styled('div', {
   fontSize: '0.88889rem',
@@ -389,7 +304,7 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
       bottom:     0,
       content:    '""',
       display:    'block',
-      gridColumn: '3 / 3',
+      gridColumn: '1 / -1',
       left:       0,
       position:   'absolute',
       width:      '100%',
@@ -405,15 +320,26 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
   },
 });
 
-type ResumeEmploymentListItemProps =
-  & {
-    readonly employer:    string;
-    readonly end:         ProjectTimestamp;
-    readonly highlights?: readonly string[];
-    readonly position:    string;
-    readonly start:       ProjectTimestamp;
-    readonly summary?:    string;
-  };
+const ResumeEmploymentListItemHeader = styled(BaseFlex, {
+  alignItems:     'baseline',
+  justifyContent: 'space-between',
+  gap:            '0.5rem',
+
+  nested: {
+    '& > *': {
+      minWidth: 'auto',
+    },
+  },
+});
+
+interface ResumeEmploymentListItemProps  {
+  readonly employer:    string;
+  readonly position:    string;
+  readonly start:       ProjectTimestamp;
+  readonly end:         ProjectTimestamp;
+  readonly summary?:    string;
+  readonly highlights?: readonly string[];
+}
 
 const ResumeEmploymentListItem = ({
   employer,
@@ -429,10 +355,11 @@ const ResumeEmploymentListItem = ({
     itemscope itemtype="https://schema.org/EmployeeRole"
     { ...props }
   >
-    <ResumeHeader>
+    <ResumeEmploymentListItemHeader>
       <h3 itemprop="name">{ employer }</h3>
-      <ResumeTimeRange range={ [ start, end ] } />
-    </ResumeHeader>
+      <TimeRange range={ [ start, end ] } />
+    </ResumeEmploymentListItemHeader>
+
     <ResumeEmploymentPosition itemprop="roleName">
       { position }
     </ResumeEmploymentPosition>
@@ -487,180 +414,6 @@ const ResumeEmployment = ({ employment }: ResumeEmploymentProps) => (
     )) }
   </BaseResumeEmployment>
 );
-
-const ResumeProjectHeading = styled('h3', {
-  paddingLeft: 0,
-  textIndent:  0,
-});
-
-const ResumeProjectHeadingLink = styled('a', {
-  color:          'inherit',
-  fontWeight:     'inherit',
-  textDecoration: 'none',
-
-  nested: {
-    '&:active, &:focus, &:hover, &:visited': {
-      color: 'inherit',
-    },
-  },
-});
-
-const projectsTwoUpQuery = '@media (min-width: 41.666rem)';
-
-const ResumeProjectIconLink = styled('a', {
-  display:  'block',
-  padding:  '0 0.5rem 0.5rem 0.5rem',
-  zIndex:   1,
-
-  nested: {
-    '& svg': {
-      width: '1.25em',
-    },
-
-    [projectsTwoUpQuery]: {
-      paddingLeft: 0,
-    },
-  },
-});
-
-const ResumeProjectBody = styled('div', {
-  paddingTop: '0.05556rem',
-});
-
-const BaseResumeProject = styled('div', {
-  alignItems:          'start',
-  display:             'grid',
-  gridTemplateColumns: 'auto 1fr',
-  padding:             '1rem 0',
-});
-
-interface ResumeProjectProps {
-  readonly project: ProjectData;
-}
-
-const ResumeProject = ({
-  project: {
-    description,
-    end,
-    repo,
-    role,
-    title,
-    start,
-    summary,
-  },
-}: ResumeProjectProps) => (
-  <BaseResumeProject>
-    <ResumeProjectIconLink href={ repo }>
-      <GitHubLogo />
-    </ResumeProjectIconLink>
-
-    <ResumeProjectBody>
-      <ResumeHeader>
-        <ResumeProjectHeading>
-          <ResumeProjectHeadingLink href={ repo }>
-            { title }
-          </ResumeProjectHeadingLink>
-        </ResumeProjectHeading>
-
-        <ResumeTimeRange range={ [ start, end ] } />
-      </ResumeHeader>
-
-      <ProjectDescription
-        role={ role }
-        description={ description }
-        summary={ summary ?? null }
-      />
-    </ResumeProjectBody>
-  </BaseResumeProject>
-);
-
-const ResumeProjectsTwoUp = styled(Flex, {
-  display: 'block',
-  margin:  0,
-
-  nested: {
-    [projectsTwoUpQuery]: {
-      display:  'flex',
-      flexWrap: 'nowrap',
-      margin:   '-1rem',
-
-      nested: {
-        '& > *': {
-          flexBasis: 'calc(50% - 2rem)',
-          margin:    '1rem',
-        },
-      },
-    },
-  },
-});
-
-const ResumeProjectSet = styled('div', {
-  marginTop: '0.5rem',
-});
-
-
-interface ResumeProjectSets {
-  readonly creator:     readonly ProjectData[];
-  readonly contributor: readonly ProjectData[];
-}
-
-interface ResumeProjectsProps {
-  readonly projects: readonly ProjectData[];
-}
-
-const ResumeProjects = ({ projects }: ResumeProjectsProps) => {
-  const {
-    creator,
-    contributor,
-  } = projects.reduce<ResumeProjectSets>((acc, project) => {
-    const setKey = project.role === ResumeProjectRole.CREATOR
-      ? 'creator'
-      : 'contributor';
-
-    return {
-      ...acc,
-
-      [setKey]: [
-        ...acc[setKey],
-
-        project,
-      ],
-    };
-  }, {
-    creator:     [],
-    contributor: [],
-  })
-
-  return (
-    <ResumeSection>
-      <ResumeProjectsTwoUp>
-        <div>
-          <ResumeFlexHeading>
-            Projects I Created
-          </ResumeFlexHeading>
-
-          <ResumeProjectSet>
-            { creator.map((project) => (
-              <ResumeProject project={ project } />
-            )) }
-          </ResumeProjectSet>
-        </div>
-
-        <div>
-          <ResumeFlexHeading>
-            Open Source Contributions
-          </ResumeFlexHeading>
-
-          <ResumeProjectSet>
-            { contributor.map((project) => (
-              <ResumeProject project={ project } />
-            )) }
-          </ResumeProjectSet>
-        </div>
-      </ResumeProjectsTwoUp>
-    </ResumeSection>
-  );
-};
 
 const BaseResume = styled(FullBleedContainer, {
   nested: {
@@ -724,7 +477,7 @@ export const Resume = ({
       itemscope
       itemtype="http://schema.org/Person"
     >
-      <BlogArt { ...meta } />
+      <ResumeArt { ...meta } renderType="post" />
 
       <ResumeHeaderSection>
         <ResumeHeader>
@@ -786,7 +539,9 @@ export const Resume = ({
 
       <ResumeEmployment employment={ employment } />
 
-      <ResumeProjects projects={ projects } />
+      <ResumeSection>
+        <ResumeProjects projects={ projects } />
+      </ResumeSection>
 
       <ResumeSection>
         <h2>References</h2>

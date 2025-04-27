@@ -65,7 +65,7 @@ const pluginFela = () => ({
           : { props: {} }
       );
 
-      const props = typeof staticProps === 'object'
+      const props = typeof staticProps === 'object' && staticProps != null
         ? staticProps.props
         : {};
 

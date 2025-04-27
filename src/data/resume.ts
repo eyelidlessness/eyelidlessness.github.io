@@ -1,11 +1,13 @@
 import dedent       from 'dedent';
 import {
+  ProjectTimestamp,
   ProjectTimestamp as ResumeTimestamp,
 } from '@/data/projects';
 import { identity } from '@/lib/helpers';
 import {
   FRESH_SCHEMA_FORMAT,
   FRESHResume,
+  FRESHResumeEmploymentHistoryItem,
 } from '@/schemas/FRESH';
 import { projects } from './projects';
 
@@ -15,7 +17,79 @@ const validateResume = <T extends Immutable<FRESHResume>>(
   value: ValidResume<T>
 ): T => value;
 
-const employmentHistory = [
+export interface EmploymentHistoryItem extends FRESHResumeEmploymentHistoryItem {
+  readonly employer:    string;
+  readonly end:         ProjectTimestamp;
+  readonly highlights?: readonly string[];
+  readonly position:    string;
+  readonly start:       ProjectTimestamp;
+  readonly summary?:    string;
+}
+
+export type EmploymentHistory = readonly EmploymentHistoryItem[];
+
+type ValidEmploymentHistory<
+  T extends Immutable<EmploymentHistory>
+> = Merge<T>;
+
+const validateEmploymentHistory = <
+  T extends Immutable<EmploymentHistory>
+>(
+  value: ValidEmploymentHistory<T>
+): T => value;
+
+const employmentHistory = validateEmploymentHistory([
+  {
+    employer: 'ODK',
+    // TODO: this **WAS** the title I applied for right? I know they only
+    // specified "software engineer" in later listings.
+    position: 'Senior Software Engineer',
+    start:    '2021-03',
+    end:      '2025-04',
+
+    summary: `
+      ODK builds data collection software, used globally across a wide variety
+      of high-social impact campaigns, in public health and beyond.
+    `,
+
+    highlights: [
+      `
+        Conceived and created ODK Web Forms—ODK's greenfield web-based data
+        collection software—which now complements Collect, ODK's long-standing
+        flagship data collection product for Android devices.
+      `,
+
+      `
+        Spearheaded initial prototyping, design & architecture of Web Forms,
+        supporting evaluation of long-term viability for the project by ODK
+        leadership.
+      `,
+
+      `
+        Primarily responsible for design & implementation of Web Forms XPath
+        functionality. Achieved full W3C XPath 1.0 standards compliance;
+        extension of XPath language semantics to support additional data types;
+        development of a broad library of custom functions supporting the
+        underlying ODK XForms specification; adapted interpreter to provide XPath
+        evaluation semantics in arbitrary runtime contexts, with a small &
+        flexible adapter API.
+      `,
+
+      `
+        Primarily responsible for design & implementation of the Web Forms XForms
+        Engine. Implemented the engine's core data model and computational
+        graph, according to ODK XForms spec; developed the engine's fundamental
+        abstractions for computation as an internal reactive graph; conceived and
+        matured the engine's external interfaces, providing simple, cohesive & client-agnostic access to the engine's underlying ODK XForms semantics.`,
+
+      `
+        Directed design & architecture of Web forms to support long-term vision
+        for the project—anticipating unification of ODK's data collection
+        software across all supported platforms, and expanding functionality well
+        beyond the project's current, core data capture feature set.
+      `,
+    ],
+  },
   {
     employer: 'Treez',
     position: 'Senior Software Engineer',
@@ -197,7 +271,7 @@ const employmentHistory = [
       `,
     ],
   },
-] as const;
+] as const);
 
 type ResumeHistory =
   & typeof employmentHistory
@@ -216,9 +290,10 @@ export enum ResumeSkillLevel {
 }
 
 export enum ResumeSkillset {
-  LANGUAGES_PLATFORMS          = 'Languages & Platforms',
-  SERVICES_DISTRIBUTED_SYSTEMS = 'Services & Distributed Systems',
-  USER_INTERFACE_EXPERIENCE    = 'User Interface & Experience',
+  LANGUAGES_PLATFORMS          = 'Languages',
+  SERVICES_DISTRIBUTED_SYSTEMS = 'Services',
+  USER_INTERFACE_EXPERIENCE    = 'UI/UX',
+  DOMAIN_SPECIFIC_LANGUAGES    = 'DSL\u200bs',
 }
 
 const resumeSkills = {
@@ -267,15 +342,26 @@ const resumeSkills = {
       level: ResumeSkillLevel.ADVANCED,
     },
     {
-      name:  'SVG',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
       name:  'UI & UX design',
       level: ResumeSkillLevel.ADVANCED,
     },
     {
       name:  'A11y',
+      level: ResumeSkillLevel.INTERMEDIATE,
+    },
+  ],
+
+  [ResumeSkillset.DOMAIN_SPECIFIC_LANGUAGES]: [
+    {
+      name:  'Interpreter runtime',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'Interpreter optimization',
+      level: ResumeSkillLevel.INTERMEDIATE,
+    },
+    {
+      name: 'Domain-specific tooling',
       level: ResumeSkillLevel.INTERMEDIATE,
     },
   ],
@@ -287,6 +373,14 @@ const resumeSkills = {
     },
     {
       name:  'Clojure & ClojureScript',
+      level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name: 'XPath',
+      level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name: 'ODK XForms',
       level: ResumeSkillLevel.EXPERT,
     },
     {
