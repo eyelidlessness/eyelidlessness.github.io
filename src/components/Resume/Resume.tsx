@@ -265,7 +265,7 @@ const ResumeEmployerSummary = styled('div', {
 });
 
 const ResumeEmploymentHeading = styled('h2', {
-  marginBottom: '0.5rem',
+  marginBottom: '1rem',
 });
 
 const ResumeEmploymentPosition = styled('div', {
@@ -304,7 +304,7 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
       bottom:     0,
       content:    '""',
       display:    'block',
-      gridColumn: '3 / 3',
+      gridColumn: '1 / -1',
       left:       0,
       position:   'absolute',
       width:      '100%',
@@ -320,15 +320,26 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
   },
 });
 
-type ResumeEmploymentListItemProps =
-  & {
-    readonly employer:    string;
-    readonly end:         ProjectTimestamp;
-    readonly highlights?: readonly string[];
-    readonly position:    string;
-    readonly start:       ProjectTimestamp;
-    readonly summary?:    string;
-  };
+const ResumeEmploymentListItemHeader = styled(BaseFlex, {
+  alignItems:     'baseline',
+  justifyContent: 'space-between',
+  gap:            '0.5rem',
+
+  nested: {
+    '& > *': {
+      minWidth: 'auto',
+    },
+  },
+});
+
+interface ResumeEmploymentListItemProps  {
+  readonly employer:    string;
+  readonly end:         ProjectTimestamp;
+  readonly highlights?: readonly string[];
+  readonly position:    string;
+  readonly start:       ProjectTimestamp;
+  readonly summary?:    string;
+}
 
 const ResumeEmploymentListItem = ({
   employer,
@@ -344,10 +355,11 @@ const ResumeEmploymentListItem = ({
     itemscope itemtype="https://schema.org/EmployeeRole"
     { ...props }
   >
-    <ResumeHeader>
+    <ResumeEmploymentListItemHeader>
       <h3 itemprop="name">{ employer }</h3>
       <TimeRange range={ [ start, end ] } />
-    </ResumeHeader>
+    </ResumeEmploymentListItemHeader>
+
     <ResumeEmploymentPosition itemprop="roleName">
       { position }
     </ResumeEmploymentPosition>
