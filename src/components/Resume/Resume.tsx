@@ -334,11 +334,11 @@ const ResumeEmploymentListItemHeader = styled(BaseFlex, {
 
 interface ResumeEmploymentListItemProps  {
   readonly employer:    string;
-  readonly end:         ProjectTimestamp;
-  readonly highlights?: readonly string[];
   readonly position:    string;
   readonly start:       ProjectTimestamp;
+  readonly end:         ProjectTimestamp;
   readonly summary?:    string;
+  readonly highlights?: readonly string[];
 }
 
 const ResumeEmploymentListItem = ({

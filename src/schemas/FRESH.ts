@@ -187,6 +187,8 @@ const employmentHistory = array(object({
 
 export type FRESHResumeEmploymentHistory = Infer<typeof employmentHistory>;
 
+export type FRESHResumeEmploymentHistoryItem = FRESHResumeEmploymentHistory[number];
+
 const employment = partial(object({
   summary: string({
     description: 'Summary of overall employment.',
