@@ -16,6 +16,8 @@ const baseFontSizeRange = {
 
 const darkMode = '@media (prefers-color-scheme: dark)' as const;
 
+const print = '@media print';
+
 const headingElements = [
   'h1',
   'h2',
@@ -302,6 +304,7 @@ export const theme = {
 
   baseFontSizeRange,
   darkMode,
+  print,
 
   abbreviation: {
     '--abbreviation-highlight': 'hsl(64deg 100% 50% / 0.25)',
@@ -707,6 +710,9 @@ export const theme = {
         [darkMode]: {
           backgroundColor: 'hsl(336deg, 100%, 7%)',
         },
+        [print]: {
+          backgroundColor: '#fafafa',
+        },
       },
     },
 
@@ -736,6 +742,10 @@ export const theme = {
           [darkMode]: {
             backgroundColor: 'hsl(41deg, 100%, 8%)',
           },
+
+          [print]: {
+            backgroundColor: 'oklch(0.98 0 0)',
+          },
         },
       },
 
@@ -749,6 +759,10 @@ export const theme = {
         nested: {
           [darkMode]: {
             backgroundColor: 'oklch(0.26 0.06 71.28)',
+          },
+
+          [print]: {
+            backgroundColor: 'oklch(0.99 0 0)',
           },
         },
       },

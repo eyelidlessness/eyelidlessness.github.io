@@ -29,6 +29,14 @@ import { ResumeSection }      from './ResumeSection';
 import { ResumeArt } from './ResumeArt.jsx';
 import { TimeRange } from '../TimeRange.jsx';
 
+const ResumeArtContainer = styled(FullBleedContainer, {
+  nested: {
+    [theme.print]: {
+      paddingInline: '0.125rem',
+    },
+  },
+});
+
 const Flex = styled('div', {
   alignItems: 'start',
   display:    'flex',
@@ -78,14 +86,19 @@ const BaseResumeHeaderLink = styled('a', {
   ...theme.resume.contactList.link,
 
   fontSize:       '0.88889em',
-  fontWeight:     500,
   minWidth:       'auto',
   textDecoration: 'none',
+
+  nested: {
+    '&, &:hover': {
+      fontWeight: 500,
+    },
+  },
 });
 
 const ResumeHeaderLinkInner = styled('span', {
   nested: {
-    '@media print': {
+    [theme.print]: {
       nested: {
         '& > *': {
           display: 'none',
@@ -473,7 +486,9 @@ export const Resume = ({
       itemscope
       itemtype="http://schema.org/Person"
     >
-      <ResumeArt { ...meta } renderType="post" />
+      <ResumeArtContainer>
+        <ResumeArt { ...meta } renderType="post" />
+      </ResumeArtContainer>
 
       <ResumeHeaderSection>
         <ResumeHeader>

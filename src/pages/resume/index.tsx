@@ -16,6 +16,7 @@ import { styled }     from '@/lib/styles/styles.js';
 
 const ResumePageResume = styled(Resume, {
   marginTop: 0,
+  paddingTop: 0,
 });
 
 interface ResumePageProps extends PageMetadata<any> {
@@ -26,7 +27,7 @@ const ResumePage = (props: ResumePageProps) => (
   <>
     <Head meta={ props } />
 
-    <Main>
+    <Main meta={ props }>
       <ResumePageResume
         id="resume"
         meta={ props }
@@ -59,6 +60,7 @@ export default definePage(ResumePage, {
 
         CustomArt: ResumeArt,
         description,
+        pageId: 'resume',
         title,
         topics,
       },

@@ -9,6 +9,7 @@ import {
   SiteLogo,
   siteLogoDimensionsPx,
 } from './SiteLogo';
+import { PageMetadata } from '@/lib/content/meta.js';
 
 const { columns } = theme.siteHeader;
 
@@ -30,6 +31,16 @@ const BaseSiteHeader = styled('header', {
   padding:    'clamp(0.5rem, 4vmin, 2rem) 0',
   position:   'relative',
   zIndex:     1,
+
+  nested: {
+    [theme.print]: {
+      nested: {
+        '&[data-page-id="resume"]': {
+          display: 'none',
+        },
+      },
+    },
+  },
 });
 
 const SiteHeaderNavOuter = styled('div', {
@@ -119,7 +130,16 @@ interface SiteLink {
   readonly location: string;
 }
 
-export const SiteHeader = () => {
+interface SiteHeaderProps {
+  readonly meta: PageMetadata<any>;
+}
+
+export const SiteHeader = (props: SiteHeaderProps) => {
+  const metaProps = (
+    props.meta.pageId == null
+      ? {}
+      : { 'data-page-id': props.meta.pageId }
+  );
   const siteLinks: readonly SiteLink[] = [
     {
       label:    'Blog',
@@ -156,7 +176,7 @@ export const SiteHeader = () => {
   ].join(' + ')}`;
 
   return (
-    <BaseSiteHeader>
+    <BaseSiteHeader { ...metaProps }>
       <SiteHeaderNavOuter>
         <DevilsAlbatross
           as="nav"

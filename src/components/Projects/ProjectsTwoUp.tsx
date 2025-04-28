@@ -1,9 +1,8 @@
-import { styled }       from '@/lib/styles';
-import { ProjectsFlex } from './ProjectsFlex';
+import { styled } from '@/lib/styles';
 
-export const projectsTwoUpQuery = '@media (min-width: 41.666rem)';
+export const projectsTwoUpQuery = '@media screen and (min-width: 41.666rem)';
 
-export const ProjectsTwoUp = styled(ProjectsFlex, {
+export const ProjectsTwoUp = styled('div', {
   display: 'block',
   margin:  0,
 

@@ -21,7 +21,7 @@ const IndexPage = (props: IndexPageProps) => (
   <>
     <Head meta={ props } />
 
-    <Main>
+    <Main meta={ props }>
       <BlogArtDefs />
 
       <BlogListing posts={ props.posts } />

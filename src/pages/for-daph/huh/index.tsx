@@ -21,7 +21,7 @@ const HuhPage = (props: PageMetadata<any>) => {
     <>
       <Head meta={ props } />
 
-      <Main>
+      <Main meta={ props }>
         <BlogArtDefs />
         <BlogArt
           hash={ hash }

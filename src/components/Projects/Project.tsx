@@ -24,6 +24,12 @@ const ProjectHeading = styled('h3', {
   fontSize:    projectHeadingFontSize,
   paddingLeft: 0,
   textIndent:  0,
+
+  nested: {
+    [theme.print]: {
+      fontSize: '1rem',
+    },
+  },
 });
 
 const ProjectHeadingLink = styled('a', {
@@ -55,6 +61,10 @@ const ProjectIconLink = styled('a', {
     [projectsTwoUpQuery]: {
       paddingLeft: 0,
     },
+
+    [theme.print]: {
+      display: 'none',
+    },
   },
 });
 
@@ -67,6 +77,12 @@ const BaseProject = styled('div', {
   alignItems: 'start',
   display:    'flex',
   padding:    '1rem 0',
+
+  nested: {
+    [theme.print]: {
+      padding: '1rem 0 0',
+    },
+  },
 });
 
 interface ProjectProps {

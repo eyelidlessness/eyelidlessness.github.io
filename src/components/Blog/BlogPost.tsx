@@ -57,7 +57,6 @@ export const BlogPost = <Path extends string>(props: BlogPostProps<Path>) => {
     description,
     descriptionRaw,
     hash,
-    redirect,
     stat: { created },
     title,
     topics,
@@ -70,7 +69,7 @@ export const BlogPost = <Path extends string>(props: BlogPostProps<Path>) => {
         description: descriptionRaw,
       } } />
 
-      <Main as="article" redirect={ redirect }>
+      <Main as="article" meta={ props }>
         <BlogPostHeading>
           {( CustomArt == null
               ? (<BlogArt hash={ hash } title={ title } topics={ topics } />)
