@@ -1,4 +1,3 @@
-import hsluv from 'hsluv';
 import { Fragment } from 'preact';
 import {
   blogArtDefaultParameters,
@@ -32,33 +31,8 @@ import {
   styled,
   StylesProvider as DefaultStylesProvider,
   theme,
+  IStyle,
 } from '@/lib/styles';
-
-const hsluvColors = '0123456789'.split('').map((value) => {
-  const offset = Number(value);
-
-  const hue = offset * 36;
-
-  return {
-    dark: {
-      emphasize: hsluv.hsluvToHex([ hue, 100, 35 ]),
-      hover:     hsluv.hsluvToHex([ hue, 100, 3 ]),
-      plot:      hsluv.hsluvToHex([ hue, 100, 74 ]),
-      selected:  hsluv.hsluvToHex([ hue, 100, 64 ]),
-      x:         hsluv.hsluvToHex([ hue, 100, 84 ]),
-      y:         hsluv.hsluvToHex([ hue, 100, 74 ]),
-    },
-
-    light: {
-      emphasize: hsluv.hsluvToHex([ hue, 100, 80 ]),
-      hover:     hsluv.hsluvToHex([ hue, 100, 97 ]),
-      plot:      hsluv.hsluvToHex([ hue, 100, 64 ]),
-      selected:  hsluv.hsluvToHex([ hue, 100, 64 ]),
-      x:         hsluv.hsluvToHex([ hue, 100, 54 ]),
-      y:         hsluv.hsluvToHex([ hue, 100, 44 ]),
-    },
-  };
-});
 
 type Indexed<P> =
   & Omit<P, 'as'>
@@ -72,46 +46,43 @@ type SegmentLinePathProps<P> =
   & Indexed<Omit<P, 'fill'>>
   & {
     readonly fill?:  boolean;
-    readonly topic?: Topic;
+    readonly topic: Topic;
   };
-
-const topicColorStyles = (index: number, topic?: Topic) => (
-  topic == null
-    ? {
-      color: hsluvColors[index].light.plot,
-
-      nested: {
-        [theme.darkMode]: {
-          color: hsluvColors[index].dark.plot,
-        },
-      },
-    }
-    : theme.topicColors[topic]
-);
 
 const segmentLinePathStyles = ({
   fill,
-  index,
   topic,
-}: SegmentLinePathProps<{}>) => ({
-  ...topicColorStyles(index, topic),
+}: SegmentLinePathProps<{}>): IStyle => {
+  const colors = theme.topicColors[topic];
 
-  ...(fill
-    ? {
-      fill:        'currentcolor',
-      fillOpacity: 0.05,
-      mask:        'url(#curvesVerticalFade)',
-      strokeWidth: 0,
-    }
-    : {
-      fill:        'none',
-      strokeWidth: 1,
-      stroke:      'currentcolor',
-    }),
+  return {
+    ...colors,
 
-  transition:   segmentTransition,
-  vectorEffect: 'non-scaling-stroke',
-} as const);
+    ...(fill
+      ? {
+          fill:        'currentcolor',
+          fillOpacity: 0.05,
+          mask:        'url(#curvesVerticalFade)',
+          strokeWidth: 0,
+
+          nested: {
+            ...colors.nested,
+
+            [theme.darkMode]: {
+              fillOpacity: 0.15,
+            },
+          },
+        }
+      : {
+          fill:        'none',
+          strokeWidth: 1,
+          stroke:      'currentcolor',
+        }),
+
+    transition:   segmentTransition,
+    vectorEffect: 'non-scaling-stroke',
+  } as const;
+};
 
 type BaseSegmentPathProps = SegmentLinePathProps<JSX.IntrinsicElements['path']>;
 
@@ -168,7 +139,7 @@ interface HashPlotProps {
   readonly segments:        SegmentList<any, any>;
   readonly sortIndexes:     readonly number[];
   readonly sortToggleClass: string;
-  readonly topics?:         readonly Topic[];
+  readonly topics:          readonly Topic[];
   readonly width?:          number;
 }
 
@@ -228,7 +199,6 @@ const HashPlot = ({
       sortedTranslateyPercent,
     };
   };
-
 
   const segmentData = segments.map((segment) => {
     const [
@@ -352,7 +322,7 @@ const HashPlot = ({
                 return `${command} ${x},${y}`;
               }).join(' ');
 
-              const topic = topics?.[index % topics.length];
+              const topic = topics[index % topics.length]!;
 
               return (
                 <SegmentPath
@@ -423,7 +393,7 @@ export const ResumeArt = ({
   renderType,
   StylesProvider             = DefaultStylesProvider,
   styleRenderer              = renderer,
-  topics,
+  topics                     = [],
   width,
 }: CustomArtProps) => {
   const hexPoints  = toHexPointSequence(hash);
