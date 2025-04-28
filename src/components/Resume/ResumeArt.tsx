@@ -493,12 +493,12 @@ export const ResumeArt = ({
 
   const pathStyles = isMeta
     ? {
-      path: {
-        strokeWidth:     '4px !important',
-        transform:       'scale(.95)',
-        transformOrigin: '50% 50%',
-      },
-    }
+        '& path': {
+          strokeWidth:     '4px !important',
+          transform:       'scale(.95)',
+          transformOrigin: '50% 50%',
+        },
+      }
     : null;
 
   const padding = isMeta
