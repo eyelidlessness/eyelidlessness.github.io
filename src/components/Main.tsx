@@ -17,7 +17,8 @@ const BaseMain = styled(FullBleedContainer, {
     [theme.print]: {
       nested: {
         '&[data-page-id="resume"]': {
-          paddingTop: '1rem',
+          paddingTop:    '1rem',
+          paddingBottom: '1rem',
         },
       },
     },

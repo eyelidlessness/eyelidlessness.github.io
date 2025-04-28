@@ -56,10 +56,12 @@ const BaseTimeRange = styled('div', {
 });
 
 interface TimeRangeProps {
+  readonly className?: string;
   readonly range: readonly [start: ProjectTimestamp, end?: ProjectTimestamp];
 }
 
 export const TimeRange = ({
+  className = '',
   range: [start, end],
 }: TimeRangeProps) => {
   const startDate = dateStringToDate(start);
@@ -67,7 +69,7 @@ export const TimeRange = ({
 
   if (start == end) {
     return (
-      <BaseTimeRange>
+      <BaseTimeRange className={className}>
         <Timestamp
           date={ startDate }
           itemprop="endDate"

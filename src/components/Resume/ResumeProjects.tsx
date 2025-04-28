@@ -21,6 +21,16 @@ const ProjectSet = styled('div', {
   marginTop: '0.5rem',
 });
 
+const ResumeProjectsPrintOnly = styled('div', {
+  display: 'none',
+
+  nested: {
+    [theme.print]: {
+      display: 'block',
+    },
+  },
+});
+
 interface ResumeProjectSets {
   readonly creator:     readonly ProjectData[];
   readonly contributor: readonly ProjectData[];
@@ -52,32 +62,42 @@ export const ResumeProjects = (props: ResumeProjectsProps) => {
     creator:     [],
     contributor: [],
   });
+  const totalProjects = creator.length + contributor.length;
 
   return (
-    <ProjectsTwoUp>
-      <div>
-        <FlexHeading>
-          Projects I Created
-        </FlexHeading>
+    <>
+      <ProjectsTwoUp>
+        <div>
+          <FlexHeading>
+            Projects I Created
+          </FlexHeading>
 
-        <ProjectSet>
-          { creator.map((project) => (
-            <Project project={ project } />
-          )) }
-        </ProjectSet>
-      </div>
+          <ProjectSet>
+            { creator.map((project) => (
+              <Project project={ project } />
+            )) }
+          </ProjectSet>
+        </div>
 
-      <div>
-        <FlexHeading>
-          Open Source Contributions
-        </FlexHeading>
+        <div>
+          <FlexHeading>
+            Open Source Contributions
+          </FlexHeading>
 
-        <ProjectSet>
-          { contributor.map((project) => (
-            <Project project={ project } />
-          )) }
-        </ProjectSet>
-      </div>
-    </ProjectsTwoUp>
+          <ProjectSet>
+            { contributor.map((project) => (
+              <Project project={ project } />
+            )) }
+          </ProjectSet>
+        </div>
+      </ProjectsTwoUp>
+      <ResumeProjectsPrintOnly>
+        <h2>Projects</h2>
+        {totalProjects} projects listed at {' '}
+        <a href="https://eyelidlessness.github.io/resume/#projects">
+          eyelidlessness.github.io/projects
+        </a>
+      </ResumeProjectsPrintOnly>
+    </>
   );
 };

@@ -29,7 +29,7 @@ export default definePage(ProjectPage, {
         ...meta,
 
         description,
-        redirect: '/resume/',
+        redirect: '/resume/#projects',
         title,
       },
     };
