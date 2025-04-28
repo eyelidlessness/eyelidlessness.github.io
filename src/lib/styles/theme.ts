@@ -496,8 +496,9 @@ export const theme = {
   },
 
   deemphasize: {
-    color:    'hsl(212deg, 50%, 25%)',
-    fontSize: '0.9375em',
+    color:      'hsl(212deg, 50%, 25%)',
+    fontSize:   '0.9375em',
+    fontWeight: 300,
   },
 
   emphasize: {
@@ -545,7 +546,8 @@ export const theme = {
     },
 
     deemphasize: {
-      color: 'hsl(202deg, 20%, 95%)',
+      color:      'hsl(202deg, 20%, 95%)',
+      fontWeight: 200,
     },
 
     emphasize: {
@@ -592,7 +594,7 @@ export const theme = {
     },
 
     siteLogo: {
-      color: 'hsl(336deg, 100%, 85%)',
+      color: 'oklch(0.71 0.16 355.75)',
     },
   },
 
@@ -728,7 +730,7 @@ export const theme = {
 
     employment: {
       container: {
-        backgroundColor: 'hsl(47deg, 58%, 98%)',
+        backgroundColor: '#fffff1',
 
         nested: {
           [darkMode]: {
@@ -737,12 +739,16 @@ export const theme = {
         },
       },
 
-      separator: {
-        borderBottom: '1px solid hsl(17deg, 28%, 96%)',
+      itemOdd: {
+        backgroundColor: 'inherit',
+      },
+
+      itemEven: {
+        backgroundColor: 'oklch(0.99 0.03 100.56)',
 
         nested: {
           [darkMode]: {
-            borderColor: 'hsl(17deg, 70%, 17%)',
+            backgroundColor: 'oklch(0.26 0.06 71.28)',
           },
         },
       },
