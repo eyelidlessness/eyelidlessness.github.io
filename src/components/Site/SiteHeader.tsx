@@ -24,12 +24,10 @@ const gridTemplateColumns = `
 `.replace(/\s+/g, ' ');
 
 const BaseSiteHeader = styled('header', {
-  ...theme.artOverlay,
-
   display:    'grid',
   gridColumn: '1 / -1',
   gridTemplateColumns,
-  padding:    'clamp(0.5rem, 5vmin, 3rem) 0',
+  padding:    'clamp(0.5rem, 4vmin, 2rem) 0',
   position:   'relative',
   zIndex:     1,
 });

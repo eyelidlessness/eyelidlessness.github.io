@@ -265,11 +265,12 @@ const ResumeEmployerSummary = styled('div', {
 });
 
 const ResumeEmploymentHeading = styled('h2', {
-  marginBottom: '1rem',
+  marginBottom: '0.5rem',
 });
 
 const ResumeEmploymentPosition = styled('div', {
-  fontSize: '0.88889rem',
+  fontSize:   '0.88889rem',
+  fontWeight: theme.deemphasize.fontWeight,
 });
 
 const ResumeEmploymentHighlightsList = styled('ul', {
@@ -293,29 +294,30 @@ const ResumeEmploymentHighlightsListItem = styled('li', {
 });
 
 const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
-  marginBottom:  '0.5rem',
-  paddingBottom: '1.5rem',
-  position:      'relative',
+  padding:  '1.5rem 0',
+  position: 'relative',
 
   nested: {
-    '&:after': {
-      ...theme.resume.employment.separator,
-
-      bottom:     0,
-      content:    '""',
-      display:    'block',
-      gridColumn: '1 / -1',
-      left:       0,
-      position:   'absolute',
-      width:      '100%',
-    },
-
-    '&:last-child': {
-      marginBottom: 0,
-    },
-
     '&:last-child:after': {
       display: 'none',
+    },
+
+    '&:nth-of-type(odd)': {
+      ...theme.resume.employment.itemOdd,
+    },
+
+    '&:nth-of-type(even)': {
+      ...theme.resume.employment.itemEven,
+    },
+
+    '& strong': {
+      fontWeight: 500,
+
+      nested: {
+        [theme.darkMode]: {
+          fontWeight: 400,
+        },
+      },
     },
   },
 });
@@ -429,13 +431,7 @@ const BaseResume = styled(FullBleedContainer, {
 });
 
 const ReaderModeTimestamp = styled(Timestamp, {
-  clip:       'rect(0 0 0 0)',
-  clipPath:   'inset(50%)',
-  height:     '1px',
-  overflow:   'hidden',
-  position:   'absolute',
-  whiteSpace: 'nowrap',
-  width:      '1px',
+  ...theme.visiblyHidden,
 });
 
 const shortURL = (url: string) => (

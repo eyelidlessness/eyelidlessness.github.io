@@ -48,19 +48,26 @@ const employmentHistory = validateEmploymentHistory([
     end:      '2025-04',
 
     summary: `
-      ODK builds data collection software, used globally across a wide variety
-      of high-social impact campaigns, in public health and beyond.
+      ODK builds a comprehensive suite of open source data collection tools, used
+      globally across a wide variety of campaigns with high social impact in
+      public health & beyond.
     `,
 
     highlights: [
       `
-        Conceived and created ODK Web Forms—ODK's greenfield web-based data
-        collection software—which now complements Collect, ODK's long-standing
-        flagship data collection product for Android devices.
+        Initially hired to maintain Enketo—ODK's inherited/legacy web-based data
+        collection tool.
       `,
 
       `
-        Spearheaded initial prototyping, design & architecture of Web Forms,
+        Conceived, created & led development of ODK Web Forms—ODK's
+        greenfield replacement for Enketo & complement to their flagship Collect
+        product for Andriod devices—successfully shipping to real users as of
+        early 2025.
+      `,
+
+      `
+        Prototyped initial design, architecture & implementation of Web Forms,
         supporting evaluation of long-term viability for the project by ODK
         leadership.
       `,

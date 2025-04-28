@@ -160,8 +160,7 @@ export const projects = validateProjects([
     `,
 
     summary: `
-      Ongoing maintenance, developer experience improvements & helping
-      determine the future direction of Enketo projects.
+      Long-term maintenance.
     `,
 
     repo: 'https://github.com/enketo',

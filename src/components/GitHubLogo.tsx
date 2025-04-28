@@ -2,6 +2,7 @@ import {
   styled,
   theme,
 } from '@/lib/styles';
+import { SVGDefs } from './SVGDefs.jsx';
 
 const baseSize        = 512;
 const viewBox         = [ 0, 0, baseSize, baseSize ].join(' ');
@@ -84,7 +85,7 @@ const octocatPath = [
 ].join(' ');
 
 export const GitHubLogoDefs = () => (
-  <svg
+  <SVGDefs
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
     aria-label="GitHub"
@@ -104,7 +105,7 @@ export const GitHubLogoDefs = () => (
         <path d={ octocatPath } fill="#000" />
       </mask>
     </defs>
-  </svg>
+  </SVGDefs>
 );
 
 const BaseGitHubLogo = styled('rect', {
