@@ -711,7 +711,8 @@ export const theme = {
           backgroundColor: 'hsl(336deg, 100%, 7%)',
         },
         [print]: {
-          backgroundColor: '#fafafa',
+          backgroundColor: 'transparent',
+          padding:         0,
         },
       },
     },
@@ -744,13 +745,14 @@ export const theme = {
           },
 
           [print]: {
-            backgroundColor: 'oklch(0.98 0 0)',
+            backgroundColor: 'transparent',
+            padding:         0,
           },
         },
       },
 
       itemOdd: {
-        backgroundColor: 'inherit',
+        backgroundColor: 'transparent',
       },
 
       itemEven: {
@@ -762,7 +764,7 @@ export const theme = {
           },
 
           [print]: {
-            backgroundColor: 'oklch(0.99 0 0)',
+            backgroundColor: 'transparent',
           },
         },
       },

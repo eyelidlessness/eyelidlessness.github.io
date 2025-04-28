@@ -174,7 +174,7 @@ const ResumeFlexHeading = styled('h2', {
 const ResumeSkillsetsContainer = styled('div', {
   alignItems:          'baseline',
   display:             'grid',
-  gap:                 '1rem 0',
+  gap:                 '0.5rem 0',
   gridTemplateColumns: 'auto',
   gridTemplateRows:    'auto',
   fontSize:            '0.88889em',
@@ -195,7 +195,7 @@ const ResumeSkillsList = styled('ul', {
 const ResumeSkillsListItem = styled('li', {
   display:   'inline-block',
   listStyle: 'none',
-  margin:    '0 1.5rem 0.125rem 0',
+  margin:    '0 1.5rem 0 0',
   padding:   0,
 
   nested: {
@@ -311,12 +311,7 @@ const ResumeEmployerSummary = styled('div', {
 });
 
 const ResumeEmploymentHeading = styled('h2', {
-  marginBottom: '0.5rem',
-});
-
-const ResumeEmploymentPosition = styled('div', {
-  fontSize:   '0.88889rem',
-  fontWeight: theme.deemphasize.fontWeight,
+  marginBottom: 0,
 });
 
 const ResumeEmploymentHighlightsList = styled('ul', {
@@ -365,17 +360,55 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
         },
       },
     },
+
+    [theme.print]: {
+      paddingBottom: 0,
+    },
   },
 });
 
-const ResumeEmploymentListItemHeader = styled(BaseFlex, {
-  alignItems:     'baseline',
+const ResumeEmploymentListItemHeader = styled('div', {
+  alignItems: 'baseline',
+  display:    'grid',
+  columnGap:  '0.5rem',
+  gridTemplate: `
+    "employer time-range"
+    "position position"
+  `,
   justifyContent: 'space-between',
-  gap:            '0.5rem',
 
   nested: {
-    '& > *': {
-      minWidth: 'auto',
+    [theme.print]: {
+      gridTemplate: `
+        "employer position time-range"
+      `,
+      gridAutoColumns: '1fr auto auto',
+    },
+  },
+});
+
+const ResumeEmploymentListItemEmployerHeading = styled('h3', {
+  gridArea:     'employer',
+  marginBottom: 0,
+  whiteSpace:   'nowrap',
+});
+
+const ResumeEmploymentListItemTimeRange = styled(TimeRange, {
+  gridArea: 'time-range',
+});
+
+const ResumeEmploymentPosition = styled('div', {
+  fontSize:   '0.88889rem',
+  fontWeight: theme.deemphasize.fontWeight,
+  gridArea:   'position',
+
+  nested: {
+    [theme.print]: {
+      nested: {
+        '&:after': {
+          content: '","',
+        },
+      },
     },
   },
 });
@@ -404,13 +437,14 @@ const ResumeEmploymentListItem = ({
     { ...props }
   >
     <ResumeEmploymentListItemHeader>
-      <h3 itemprop="name">{ employer }</h3>
-      <TimeRange range={ [ start, end ] } />
+      <ResumeEmploymentListItemEmployerHeading itemprop="name">
+        { employer }
+      </ResumeEmploymentListItemEmployerHeading>
+      <ResumeEmploymentPosition itemprop="roleName">
+        { position }
+      </ResumeEmploymentPosition>
+      <ResumeEmploymentListItemTimeRange range={ [ start, end ] } />
     </ResumeEmploymentListItemHeader>
-
-    <ResumeEmploymentPosition itemprop="roleName">
-      { position }
-    </ResumeEmploymentPosition>
 
     {(
       summary == null
@@ -583,14 +617,14 @@ export const Resume = ({
 
       <ResumeEmployment employment={ employment } />
 
-      <ResumeSection>
+      <ResumeSection id="projects">
         <ResumeProjects projects={ projects } />
       </ResumeSection>
 
       <ResumeSection>
         <h2>References</h2>
 
-        { mdx('Available upon request.') }
+        { mdx('Available upon request') }
       </ResumeSection>
     </BaseResume>
   );

@@ -1,6 +1,6 @@
 import { GitHubLogo }            from '@/components/GitHubLogo';
 import { ProjectData }           from '@/data/projects';
-import { clamp, styled, theme }  from '@/lib/styles';
+import { styled, theme }  from '@/lib/styles';
 import { projectsTwoUpQuery }    from './ProjectsTwoUp';
 import { ProjectDescription }    from './ProjectDescription.jsx';
 import { TimeRange } from '../TimeRange.jsx';
@@ -16,7 +16,7 @@ const ProjectHeader = styled('div', {
   },
 });
 
-const projectHeadingFontSize = clamp('1rem', '3.5cqi', '1.25rem');
+const projectHeadingFontSize = '1.0625rem';
 
 const ProjectHeading = styled('h3', {
   fontFamily:  theme.prose.fontFamily,
@@ -76,13 +76,7 @@ const ProjectBody = styled('div', {
 const BaseProject = styled('div', {
   alignItems: 'start',
   display:    'flex',
-  padding:    '1rem 0',
-
-  nested: {
-    [theme.print]: {
-      padding: '1rem 0 0',
-    },
-  },
+  padding:    '1rem 0 0',
 });
 
 interface ProjectProps {
