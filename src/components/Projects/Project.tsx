@@ -1,6 +1,6 @@
 import { GitHubLogo }            from '@/components/GitHubLogo';
 import { ProjectData }           from '@/data/projects';
-import { clamp, styled, theme }  from '@/lib/styles';
+import { styled, theme }  from '@/lib/styles';
 import { projectsTwoUpQuery }    from './ProjectsTwoUp';
 import { ProjectDescription }    from './ProjectDescription.jsx';
 import { TimeRange } from '../TimeRange.jsx';
