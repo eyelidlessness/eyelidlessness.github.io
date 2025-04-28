@@ -10,9 +10,6 @@ export const ProjectsTwoUp = styled('div', {
   nested: {
     '& > *': {
       containerType: 'inline-size',
-    },
-
-    '& > * + *': {
       paddingTop: '1rem',
     },
 
