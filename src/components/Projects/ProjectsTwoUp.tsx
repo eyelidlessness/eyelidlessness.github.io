@@ -1,4 +1,4 @@
-import { styled } from '@/lib/styles';
+import { styled, theme } from '@/lib/styles';
 
 export const projectsTwoUpQuery = '@media screen and (min-width: 41.666rem)';
 
@@ -22,6 +22,10 @@ export const ProjectsTwoUp = styled('div', {
           margin:    '1rem',
         },
       },
+    },
+
+    [theme.print]: {
+      display: 'none',
     },
   },
 });
