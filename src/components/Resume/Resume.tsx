@@ -390,6 +390,7 @@ const ResumeEmploymentListItemHeader = styled('div', {
 const ResumeEmploymentListItemEmployerHeading = styled('h3', {
   gridArea:     'employer',
   marginBottom: 0,
+  whiteSpace:   'nowrap',
 });
 
 const ResumeEmploymentListItemTimeRange = styled(TimeRange, {
