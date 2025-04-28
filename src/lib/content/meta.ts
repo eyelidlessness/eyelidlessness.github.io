@@ -53,6 +53,7 @@ export interface PageMetadata<Path extends string> {
   readonly CustomArt?: ComponentType<CustomArtProps>;
   readonly hash:       string;
   readonly host:       string;
+  readonly pageId?:    string;
   readonly path:       Path;
   readonly redirect?:  string;
   readonly stat:       PageStat;

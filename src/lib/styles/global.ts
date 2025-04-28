@@ -316,6 +316,27 @@ export const setGlobalStyles = () => {
         ${jsToCSS([ 'aside' ], theme[theme.darkMode].aside)}
         ${jsToCSS([ 'hr:after' ], theme[theme.darkMode].separator)}
       }
+
+      ${theme.print} {
+        ${jsToCSS(['a', 'a:hover', 'code'], {
+          color: 'inherit',
+          cursor: 'text',
+          fontWeight: 'inherit',
+          textDecoration: 'none',
+        })}
+
+        ${jsToCSS(['abbr'], {
+          backgroundImage: 'none',
+        })}
+
+        ${jsToCSS([ 'code' ], {
+          backgroundColor: 'transparent',
+          borderRadius:    0,
+          display:         'inline-flex',
+          lineHeight:      'inherit',
+          padding:         0,
+        })}
+      }
     `)
   );
 };

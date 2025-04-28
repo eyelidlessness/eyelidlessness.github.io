@@ -16,6 +16,8 @@ const baseFontSizeRange = {
 
 const darkMode = '@media (prefers-color-scheme: dark)' as const;
 
+const print = '@media print';
+
 const headingElements = [
   'h1',
   'h2',
@@ -302,6 +304,7 @@ export const theme = {
 
   baseFontSizeRange,
   darkMode,
+  print,
 
   abbreviation: {
     '--abbreviation-highlight': 'hsl(64deg 100% 50% / 0.25)',
@@ -707,6 +710,9 @@ export const theme = {
         [darkMode]: {
           backgroundColor: 'hsl(336deg, 100%, 7%)',
         },
+        [print]: {
+          backgroundColor: '#fafafa',
+        },
       },
     },
 
@@ -736,6 +742,10 @@ export const theme = {
           [darkMode]: {
             backgroundColor: 'hsl(41deg, 100%, 8%)',
           },
+
+          [print]: {
+            backgroundColor: 'oklch(0.98 0 0)',
+          },
         },
       },
 
@@ -750,47 +760,51 @@ export const theme = {
           [darkMode]: {
             backgroundColor: 'oklch(0.26 0.06 71.28)',
           },
+
+          [print]: {
+            backgroundColor: 'oklch(0.99 0 0)',
+          },
         },
       },
     },
 
     skillLevel: {
       [ResumeSkillLevel.BASIC]: {
-        backgroundColor: 'hsl(207deg, 25%, 83%)',
+        color: 'hsl(207deg, 25%, 83%)',
 
         nested: {
           [darkMode]: {
-            backgroundColor: 'hsl(207deg, 15%, 43%)',
+            color: 'hsl(207deg, 15%, 43%)',
           },
         },
       },
 
       [ResumeSkillLevel.INTERMEDIATE]: {
-        backgroundColor: 'hsl(188deg, 53%, 74%)',
+        color: 'hsl(188deg, 53%, 74%)',
 
         nested: {
           [darkMode]: {
-            backgroundColor: 'hsl(188deg, 53%, 34%)',
+            color: 'hsl(188deg, 53%, 34%)',
           },
         },
       },
 
       [ResumeSkillLevel.ADVANCED]: {
-        backgroundColor: 'hsl(188deg, 70%, 59%)',
+        color: 'hsl(188deg, 70%, 59%)',
 
         nested: {
           [darkMode]: {
-            backgroundColor: 'hsl(188deg, 80%, 39%)',
+            color: 'hsl(188deg, 80%, 39%)',
           },
         },
       },
 
       [ResumeSkillLevel.EXPERT]: {
-        backgroundColor: 'hsl(152deg, 100%, 39%)',
+        color: 'hsl(152deg, 100%, 39%)',
 
         nested: {
           [darkMode]: {
-            backgroundColor: 'hsl(152deg, 100%, 29%)',
+            color: 'hsl(152deg, 100%, 29%)',
           },
         },
       },
