@@ -770,41 +770,41 @@ export const theme = {
 
     skillLevel: {
       [ResumeSkillLevel.BASIC]: {
-        backgroundColor: 'hsl(207deg, 25%, 83%)',
+        color: 'hsl(207deg, 25%, 83%)',
 
         nested: {
           [darkMode]: {
-            backgroundColor: 'hsl(207deg, 15%, 43%)',
+            color: 'hsl(207deg, 15%, 43%)',
           },
         },
       },
 
       [ResumeSkillLevel.INTERMEDIATE]: {
-        backgroundColor: 'hsl(188deg, 53%, 74%)',
+        color: 'hsl(188deg, 53%, 74%)',
 
         nested: {
           [darkMode]: {
-            backgroundColor: 'hsl(188deg, 53%, 34%)',
+            color: 'hsl(188deg, 53%, 34%)',
           },
         },
       },
 
       [ResumeSkillLevel.ADVANCED]: {
-        backgroundColor: 'hsl(188deg, 70%, 59%)',
+        color: 'hsl(188deg, 70%, 59%)',
 
         nested: {
           [darkMode]: {
-            backgroundColor: 'hsl(188deg, 80%, 39%)',
+            color: 'hsl(188deg, 80%, 39%)',
           },
         },
       },
 
       [ResumeSkillLevel.EXPERT]: {
-        backgroundColor: 'hsl(152deg, 100%, 39%)',
+        color: 'hsl(152deg, 100%, 39%)',
 
         nested: {
           [darkMode]: {
-            backgroundColor: 'hsl(152deg, 100%, 29%)',
+            color: 'hsl(152deg, 100%, 29%)',
           },
         },
       },

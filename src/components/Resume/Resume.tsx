@@ -205,27 +205,63 @@ const ResumeSkillsListItem = styled('li', {
   },
 });
 
+const BaseResumeSkillLevelMarker = styled('svg', {
+  display:       'inline-block',
+  margin:        '0 0.325rem 0 0',
+  verticalAlign: 'middle',
+
+  nested: {
+    [theme.print]: {
+      height: '0.325rem',
+      width:  '0.325rem',
+    },
+  },
+});
+
+const ResumeSkillLevelMarkerCircle = styled('circle', {
+  fill: 'currentcolor',
+});
+
+interface ResumeSkillLevelMarkerProps {
+  readonly className?: string;
+  readonly level:      ResumeSkillLevel;
+}
+
+const ResumeSkillLevelMarker = (props: ResumeSkillLevelMarkerProps) => {
+  return (
+    <BaseResumeSkillLevelMarker
+      xmlns="http://www.w3.org/2000/svg"
+      className={ props.className }
+      width="8"
+      height="8"
+      viewBox="0 0 8 8"
+    >
+      <ResumeSkillLevelMarkerCircle
+        cx="4"
+        cy="4"
+        r="4"
+      />
+      <title>Skill level: { props.level }</title>
+    </BaseResumeSkillLevelMarker>
+  );
+}
+
 type ResumeSkillLevelMarker = ElementType<JSX.IntrinsicElements['span']>;
 
-const ResumeSkillLevelMarkers = Object.values(ResumeSkillLevel)
-  .reduce<Record<ResumeSkillLevel, ResumeSkillLevelMarker>>((acc, level) => ({
-    ...acc,
-
-    [level]: styled('span', {
-      ...theme.resume.skillLevel[level],
-
-      borderRadius:  '4px',
-      display:       'inline-block',
-      height:        '8px',
-      margin:        '0 0.325rem 0 0',
-      width:         '8px',
-      verticalAlign: 'middle',
-
-      nested: {
-        ...theme.resume.skillLevel[level].nested,
-      },
-    })
-  }), {} as Record<ResumeSkillLevel, ResumeSkillLevelMarker>);
+const ResumeSkillLevelMarkers = {
+  [ResumeSkillLevel.BASIC]: styled(ResumeSkillLevelMarker, {
+    ...theme.resume.skillLevel[ResumeSkillLevel.BASIC],
+  }),
+  [ResumeSkillLevel.INTERMEDIATE]: styled(ResumeSkillLevelMarker, {
+    ...theme.resume.skillLevel[ResumeSkillLevel.INTERMEDIATE],
+  }),
+  [ResumeSkillLevel.ADVANCED]: styled(ResumeSkillLevelMarker, {
+    ...theme.resume.skillLevel[ResumeSkillLevel.ADVANCED],
+  }),
+  [ResumeSkillLevel.EXPERT]: styled(ResumeSkillLevelMarker, {
+    ...theme.resume.skillLevel[ResumeSkillLevel.EXPERT],
+  }),
+} as const;
 
 const BaseResumeSkillsetListing = styled('div', {
   display: 'contents',
@@ -252,10 +288,7 @@ const ResumeSkillsetListing = ({
 
         return (
           <ResumeSkillsListItem key={ name } itemprop="itemListElement">
-            <Marker
-              role="img"
-              title={ `Skill level: ${level}` }
-            />
+            <Marker level={ level } />
 
             { mdxInline`${name}` }
           </ResumeSkillsListItem>
