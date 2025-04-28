@@ -55,7 +55,7 @@ const employmentHistory = validateEmploymentHistory([
 
     highlights: [
       `
-        Initially hired to maintain Enketo—ODK's inherited/legacy web-based data
+        Initially joined to maintain Enketo—ODK's inherited/legacy web-based data
         collection tool.
       `,
 
