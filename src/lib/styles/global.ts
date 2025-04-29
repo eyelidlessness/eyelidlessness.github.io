@@ -320,9 +320,8 @@ export const setGlobalStyles = () => {
       ${theme.print} {
         ${jsToCSS(['a', 'a:hover', 'code'], {
           color: 'inherit',
-          cursor: 'text',
           fontWeight: 'inherit',
-          textDecoration: 'none',
+          textDecorationColor: 'currentcolor',
         })}
 
         ${jsToCSS(['abbr'], {

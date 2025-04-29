@@ -624,7 +624,7 @@ export const Resume = ({
       <ResumeSection>
         <h2>References</h2>
 
-        { mdx('Available upon request') }
+        { mdx('Available upon request, email <gnosis@gmail.com>') }
       </ResumeSection>
     </BaseResume>
   );
