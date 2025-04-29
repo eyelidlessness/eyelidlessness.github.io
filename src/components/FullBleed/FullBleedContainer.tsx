@@ -59,6 +59,10 @@ export const FullBleedContainer = styled('div', {
     '& > ul': {
       marginTop: 0,
     },
+
+    [theme.print]: {
+      gridTemplateColumns: '0 0 auto 0 0',
+    },
   },
 
   display: 'grid',

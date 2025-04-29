@@ -318,6 +318,10 @@ export const setGlobalStyles = () => {
       }
 
       ${theme.print} {
+        @page {
+          margin: 0.325in;
+        }
+
         ${jsToCSS(['a', 'a:hover', 'code'], {
           color: 'inherit',
           fontWeight: 'inherit',
