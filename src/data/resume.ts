@@ -1,4 +1,3 @@
-import dedent       from 'dedent';
 import {
   ProjectTimestamp,
   ProjectTimestamp as ResumeTimestamp,
@@ -310,11 +309,11 @@ const resumeSkills = {
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'OpenAPI & JSON Schema',
+      name:  'OpenAPI & documentation-driven APIs',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'Django REST framework',
+      name:  'Microservice architecture',
       level: ResumeSkillLevel.ADVANCED,
     },
     {
@@ -322,22 +321,14 @@ const resumeSkills = {
       level: ResumeSkillLevel.ADVANCED,
     },
     {
-      name:  'Microservice architecture',
+      name:  'Composable systems',
       level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name:  'Apache Storm',
-      level: ResumeSkillLevel.INTERMEDIATE,
-    },
-    {
-      name:  'Redis',
-      level: ResumeSkillLevel.BASIC,
     },
   ],
 
   [ResumeSkillset.USER_INTERFACE_EXPERIENCE]: [
     {
-      name:  'React & JSX',
+      name:  'Component-based UI & JSX',
       level: ResumeSkillLevel.EXPERT,
     },
     {
@@ -346,6 +337,10 @@ const resumeSkills = {
     },
     {
       name:  'Web performance',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'Reactivity',
       level: ResumeSkillLevel.ADVANCED,
     },
     {
@@ -360,26 +355,34 @@ const resumeSkills = {
 
   [ResumeSkillset.DOMAIN_SPECIFIC_LANGUAGES]: [
     {
-      name:  'Interpreter runtime',
+      name: 'Domain modeling & extensibility',
+      level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name:  'Interpreters & runtime',
       level: ResumeSkillLevel.ADVANCED,
     },
     {
-      name: 'Interpreter optimization',
+      name: 'Grammar-defined parsers',
       level: ResumeSkillLevel.INTERMEDIATE,
     },
     {
-      name: 'Domain-specific tooling',
+      name: 'Domain-specialized tools',
+      level: ResumeSkillLevel.INTERMEDIATE,
+    },
+    {
+      name: 'Runtime optimization',
       level: ResumeSkillLevel.INTERMEDIATE,
     },
   ],
 
   [ResumeSkillset.LANGUAGES_PLATFORMS]: [
     {
-      name:  'TypeScript (Node.js & web)',
+      name:  'TypeScript',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'Clojure & ClojureScript',
+      name:  'Clojure',
       level: ResumeSkillLevel.EXPERT,
     },
     {
@@ -391,11 +394,19 @@ const resumeSkills = {
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'HTML & CSS',
+      name:  'CSS',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'SQL (PostgreSQL)',
+      name:  'HTML',
+      level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name:  'SQL',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'XSLT',
       level: ResumeSkillLevel.ADVANCED,
     },
     {
@@ -469,13 +480,9 @@ export const resume = validateResume({
 
   info: {
     class: 'Software Engineer',
-    brief: dedent(`
-      Senior full-stack software engineer with 15+ years experience
-      building and maintaining high-quality services and distributed
-      systems; powerful tooling and libraries that accelerate
-      development; and high-performance, highly usable and attractive
-      websites & web applications.
-    `).trim().replace(/\n\s+/g, ' '),
+    brief: `
+Senior full-stack software engineer with 15+ years experience building & maintaining quality services, systems and solutions; tools and libraries to accelerate development; usable, performant and attractive applications.
+    `.trim(),
     label: 'Senior Full-Stack Software Engineer',
   },
 

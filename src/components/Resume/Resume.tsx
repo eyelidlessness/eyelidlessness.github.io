@@ -32,6 +32,7 @@ import { TimeRange } from '../TimeRange.jsx';
 const ResumeArtContainer = styled(FullBleedContainer, {
   nested: {
     [theme.print]: {
+      display: 'none',
       paddingInline: '0.125rem',
     },
   },
@@ -69,6 +70,10 @@ const ResumeHeader = styled(BaseFlex, {
     '& > *': {
       margin:   '0 0.5rem',
       minWidth: 'auto',
+    },
+
+    [theme.print]: {
+      paddingTop: 0,
     },
   },
 });
@@ -152,6 +157,12 @@ const ResumeBrief = styled(FullBleedContainer, {
     '& > *': {
       fontSize: '0.88889em',
       minWidth: 'auto',
+    },
+
+    [theme.print]: {
+      ...theme.resume.brief.nested[theme.print],
+
+      padding: 0,
     },
   },
 });
@@ -362,6 +373,7 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
     },
 
     [theme.print]: {
+      breakInside:   'avoid',
       paddingBottom: 0,
     },
   },
@@ -624,7 +636,7 @@ export const Resume = ({
       <ResumeSection>
         <h2>References</h2>
 
-        { mdx('Available upon request') }
+        { mdx('Available upon request, email <gnosis@gmail.com>') }
       </ResumeSection>
     </BaseResume>
   );
