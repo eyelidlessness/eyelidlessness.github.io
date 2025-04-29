@@ -136,7 +136,6 @@ interface HashPlotProps {
   readonly points:        AnyPointSequence;
   readonly scaleOptions?: HashPlotScaleOptions;
   readonly segments:      SegmentList<any, any>;
-  readonly sortIndexes:   readonly number[];
   readonly topics:        readonly Topic[];
   readonly width?:        number;
 }
@@ -148,7 +147,6 @@ const HashPlot = ({
   pointSize      = 6,
   scaleOptions,
   segments,
-  sortIndexes,
   topics,
   ...props
 }: HashPlotProps) => {
@@ -171,29 +169,13 @@ const HashPlot = ({
   const plotPoint = ({
     x: pointX,
     y: pointY,
-  }: ArrayType<typeof points>, index: number) => {
-    const sortedIndex = sortIndexes[index];
-    const {
-      x: sortedX,
-      y: sortedY,
-    } = points[sortedIndex];
-
+  }: ArrayType<typeof points>) => {
     const cx = toFixed((pointX + xShift) / xRange * 100, 4);
     const cy = 100 - toFixed((pointY - yShift) / yRange * 100, 4);
-
-    const sortedCx = toFixed((sortedX + xShift) / xRange * 100, 4);
-    const sortedCy = 100 - toFixed((sortedY - yShift) / yRange * 100, 4);
-
-    const sortedTranslateXPercent = 0 - toFixed(cx - sortedCx, 4);
-    const sortedTranslateyPercent = 0 - toFixed(cy - sortedCy, 4);
 
     return {
       cx,
       cy,
-      sortedCx,
-      sortedCy,
-      sortedTranslateXPercent,
-      sortedTranslateyPercent,
     };
   };
 
@@ -306,7 +288,7 @@ const HashPlot = ({
           <>
             { curvesPoints.map((curvePoints) => {
               const d = curvePoints.map((point, curvePointIndex) => {
-                const { cx, cy } = plotPoint(point, index);
+                const { cx, cy } = plotPoint(point);
                 const x = cx / 100 * width;
                 const y = cy / 100 * height;
 
@@ -340,7 +322,7 @@ const HashPlot = ({
                 return '';
               }
 
-              const { cx, cy } = plotPoint(point, index);
+              const { cx, cy } = plotPoint(point);
               const x = cx / 100 * width;
               const y = cy / 100 * height;
 
@@ -433,8 +415,6 @@ export const ResumeArt = ({
     return scalePoint(point, scaleOptions);
   });
 
-  const sortIndexes = scaledPoints.map((_, index) => index);
-
   const renderHexPoints = scaledPoints.map((point) => (
     hexPoints[scaledPoints.indexOf(point)]
   ));
@@ -521,7 +501,6 @@ export const ResumeArt = ({
         points={ scaledPoints }
         scaleOptions={ scaleOptions }
         segments={ segments }
-        sortIndexes={ sortIndexes }
         topics={ topics }
         width={ graphicWidth }
       />
