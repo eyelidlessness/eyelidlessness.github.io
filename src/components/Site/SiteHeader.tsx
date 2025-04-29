@@ -148,7 +148,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
 
     {
       label:    'Hire me',
-      location: '/resume/',
+      location: '/resume/#resume',
     },
 
     {
