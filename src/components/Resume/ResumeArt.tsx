@@ -26,7 +26,6 @@ import {
 } from '@/lib/content';
 import { sortBy } from '@/lib/collections';
 import {
-  identifier,
   renderer,
   styled,
   StylesProvider as DefaultStylesProvider,
@@ -130,17 +129,15 @@ type HashPlotPointSize =
   | 'data-driven';
 
 interface HashPlotProps {
-  readonly className?:      string;
-  readonly height?:         number;
-  readonly hexPoints:       ReadonlyArray<ArrayType<HexPointSequence>>;
-  readonly pointSize?:      HashPlotPointSize;
-  readonly points:          AnyPointSequence;
-  readonly scaleOptions?:   HashPlotScaleOptions;
-  readonly segments:        SegmentList<any, any>;
-  readonly sortIndexes:     readonly number[];
-  readonly sortToggleClass: string;
-  readonly topics:          readonly Topic[];
-  readonly width?:          number;
+  readonly className?:    string;
+  readonly height?:       number;
+  readonly hexPoints:     ReadonlyArray<ArrayType<HexPointSequence>>;
+  readonly pointSize?:    HashPlotPointSize;
+  readonly points:        AnyPointSequence;
+  readonly scaleOptions?: HashPlotScaleOptions;
+  readonly segments:      SegmentList<any, any>;
+  readonly topics:        readonly Topic[];
+  readonly width?:        number;
 }
 
 const HashPlot = ({
@@ -150,8 +147,6 @@ const HashPlot = ({
   pointSize      = 6,
   scaleOptions,
   segments,
-  sortIndexes,
-  sortToggleClass,
   topics,
   ...props
 }: HashPlotProps) => {
@@ -174,29 +169,13 @@ const HashPlot = ({
   const plotPoint = ({
     x: pointX,
     y: pointY,
-  }: ArrayType<typeof points>, index: number) => {
-    const sortedIndex = sortIndexes[index];
-    const {
-      x: sortedX,
-      y: sortedY,
-    } = points[sortedIndex];
-
+  }: ArrayType<typeof points>) => {
     const cx = toFixed((pointX + xShift) / xRange * 100, 4);
     const cy = 100 - toFixed((pointY - yShift) / yRange * 100, 4);
-
-    const sortedCx = toFixed((sortedX + xShift) / xRange * 100, 4);
-    const sortedCy = 100 - toFixed((sortedY - yShift) / yRange * 100, 4);
-
-    const sortedTranslateXPercent = 0 - toFixed(cx - sortedCx, 4);
-    const sortedTranslateyPercent = 0 - toFixed(cy - sortedCy, 4);
 
     return {
       cx,
       cy,
-      sortedCx,
-      sortedCy,
-      sortedTranslateXPercent,
-      sortedTranslateyPercent,
     };
   };
 
@@ -309,7 +288,7 @@ const HashPlot = ({
           <>
             { curvesPoints.map((curvePoints) => {
               const d = curvePoints.map((point, curvePointIndex) => {
-                const { cx, cy } = plotPoint(point, index);
+                const { cx, cy } = plotPoint(point);
                 const x = cx / 100 * width;
                 const y = cy / 100 * height;
 
@@ -343,7 +322,7 @@ const HashPlot = ({
                 return '';
               }
 
-              const { cx, cy } = plotPoint(point, index);
+              const { cx, cy } = plotPoint(point);
               const x = cx / 100 * width;
               const y = cy / 100 * height;
 
@@ -389,7 +368,6 @@ export const ResumeArt = ({
   className:  propsClassName = '',
   hash,
   height,
-  identifier: identifier_    = identifier,
   renderType,
   StylesProvider             = DefaultStylesProvider,
   styleRenderer              = renderer,
@@ -437,15 +415,11 @@ export const ResumeArt = ({
     return scalePoint(point, scaleOptions);
   });
 
-  const sortIndexes = scaledPoints.map((_, index) => index);
-
   const renderHexPoints = scaledPoints.map((point) => (
     hexPoints[scaledPoints.indexOf(point)]
   ));
 
   const xMax = (COORDINATE_MAX + xPadding) * xScale;
-
-  const sortToggleClass = identifier_();
 
   const naiveSegments = getNaiveSegments({
     points: scaledPoints as any,
@@ -527,8 +501,6 @@ export const ResumeArt = ({
         points={ scaledPoints }
         scaleOptions={ scaleOptions }
         segments={ segments }
-        sortIndexes={ sortIndexes }
-        sortToggleClass={ sortToggleClass }
         topics={ topics }
         width={ graphicWidth }
       />
