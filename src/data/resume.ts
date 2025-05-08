@@ -54,15 +54,14 @@ const employmentHistory = validateEmploymentHistory([
 
     highlights: [
       `
-        Initially joined to maintain Enketo—ODK's inherited/legacy web-based data
+        Initially joined to maintain Enketo, ODK's inherited/legacy web-based data
         collection tool.
       `,
 
       `
-        Conceived, created & led development of ODK Web Forms—ODK's
-        greenfield replacement for Enketo & complement to their flagship Collect
-        product for Andriod devices—successfully shipping to real users as of
-        early 2025.
+        Conceived, created & led development of ODK Web Forms, ODK's replacement
+        for Enketo & complement to their flagship Collect product for Andriod
+        devices. Successfully shipped to users as of early 2025.
       `,
 
       `
@@ -298,7 +297,7 @@ export enum ResumeSkillLevel {
 export enum ResumeSkillset {
   LANGUAGES_PLATFORMS          = 'Languages',
   SERVICES_DISTRIBUTED_SYSTEMS = 'Services',
-  USER_INTERFACE_EXPERIENCE    = 'UI/UX',
+  WEB_UI_UX                    = 'Web UI & UX',
   DOMAIN_SPECIFIC_LANGUAGES    = 'DSL\u200bs',
 }
 
@@ -326,14 +325,18 @@ const resumeSkills = {
     },
   ],
 
-  [ResumeSkillset.USER_INTERFACE_EXPERIENCE]: [
+  [ResumeSkillset.WEB_UI_UX]: [
     {
-      name:  'Component-based UI & JSX',
+      name: 'React',
       level: ResumeSkillLevel.EXPERT,
     },
     {
       name:  'DOM & Web APIs',
       level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name: 'Solid',
+      level: ResumeSkillLevel.ADVANCED,
     },
     {
       name:  'Web performance',
@@ -346,6 +349,14 @@ const resumeSkills = {
     {
       name:  'UI & UX design',
       level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'Custom JSX',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'Vue',
+      level: ResumeSkillLevel.INTERMEDIATE,
     },
     {
       name:  'A11y',
@@ -379,6 +390,10 @@ const resumeSkills = {
   [ResumeSkillset.LANGUAGES_PLATFORMS]: [
     {
       name:  'TypeScript',
+      level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name:  'JavaScript',
       level: ResumeSkillLevel.EXPERT,
     },
     {
