@@ -25,6 +25,8 @@ const generatePDF = async () => {
     args.push('--no-sandbox');
   }
 
+  const scale = process.env.CI ? 0.95 : 0.99;
+
   const browser = await puppeteer.launch({
     headless: 'new',
     args,
@@ -35,7 +37,7 @@ const generatePDF = async () => {
   });
   await page.pdf({
     path: './dist/Trevor_Schmidt_resume.pdf',
-    scale: 0.99,
+    scale,
   });
   await browser.close();
 
