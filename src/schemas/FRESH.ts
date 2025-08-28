@@ -170,11 +170,15 @@ const employmentHistory = array(object({
   summary: optional(string({
     description: 'A summary of your achievements and responsibilities under this employer.',
   })),
-  highlights: optional(array(string({
-    description: `For ex, 'Led 5-person development team, increasing profits by 50% year-over-year'.`,
-  }), {
-    description: 'Noteworthy achievements and/or highlights.',
-  })),
+  marginalia: optional(string()),
+  highlights: optional(
+    array(
+      union([
+        string(),
+        array(string())
+      ])
+    )
+  ),
   location: optional(string({
     description: `Freeform location of the job or position, e.g., 'San Francisco, CA' or 'Tokyo'.`,
   })),

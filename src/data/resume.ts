@@ -16,13 +16,37 @@ const validateResume = <T extends Immutable<FRESHResume>>(
   value: ValidResume<T>
 ): T => value;
 
+export type FlatEmploymentHistoryItemHighlights = readonly [string, ...string[]];
+
+export type NestedEmploymentHistoryItemHighlight = readonly [
+  subEmployer: string,
+  subRange: string,
+  ...actualHighlights: [string, ...string[]]
+];
+
+export type NestedEmploymentHistoryItemHighlights = readonly [
+  NestedEmploymentHistoryItemHighlight,
+  ...NestedEmploymentHistoryItemHighlight[],
+]
+
+export type EmploymentHistoryItemHighlights =
+  | FlatEmploymentHistoryItemHighlights
+  | NestedEmploymentHistoryItemHighlights;
+
+export const isFlatEmploymentHistoryHighlights = (
+  highlights: EmploymentHistoryItemHighlights
+): highlights is FlatEmploymentHistoryItemHighlights => {
+  return typeof highlights[0] === 'string';
+};
+
 export interface EmploymentHistoryItem extends FRESHResumeEmploymentHistoryItem {
-  readonly employer:    string;
-  readonly end:         ProjectTimestamp;
-  readonly highlights?: readonly string[];
-  readonly position:    string;
-  readonly start:       ProjectTimestamp;
-  readonly summary?:    string;
+  readonly employer:   string;
+  readonly end:        ProjectTimestamp;
+  readonly highlights: EmploymentHistoryItemHighlights;
+  readonly position:   string;
+  readonly start:      ProjectTimestamp;
+  readonly summary?:   string;
+  readonly marginalia?: string;
 }
 
 export type EmploymentHistory = readonly EmploymentHistoryItem[];
@@ -47,187 +71,194 @@ const employmentHistory = validateEmploymentHistory([
     end:      '2025-04',
 
     summary: `
-      ODK builds a comprehensive suite of open source data collection tools, used
-      globally across a wide variety of campaigns with high social impact in
-      public health & beyond.
+      Created & led development of ODK Web Forms, a web-based complement to their flagship Android app.
     `,
+    marginalia: "2021-2023: Maintainer of ODK Web Forms' legacy predecessor, Enketo.",
 
     highlights: [
       `
-        Initially joined to maintain Enketo, ODK's inherited/legacy web-based data
-        collection tool.
+        Conceived and prototyped foundations for ODK Web Forms—first as a skunkworks project on personal time, ultimately forming the basis for formally evaluating the project's viability.
       `,
-
       `
-        Conceived, created & led development of ODK Web Forms, ODK's replacement
-        for Enketo & complement to their flagship Collect product for Andriod
-        devices. Successfully shipped to users as of early 2025.
+        Led design & architecture to ensure core product/business goals: initial alignment with the flagship Collect app for Andriod; sustainable productivity and maintainability for user-facing functionality core to the business; anticipation of long-term unification on a single tool/platform.
       `,
-
       `
-        Prototyped initial design, architecture & implementation of Web Forms,
-        supporting evaluation of long-term viability for the project by ODK
-        leadership.
+        Primary development of ODK XForms and XPath engines. Responsible for design & implementation of parsing, data model, runtime computational architecture, and client-agnostic rendering APIs.
       `,
-
       `
-        Primarily responsible for design & implementation of Web Forms XPath
-        functionality. Achieved full W3C XPath 1.0 standards compliance;
-        extension of XPath language semantics to support additional data types;
-        development of a broad library of custom functions supporting the
-        underlying ODK XForms specification; adapted interpreter to provide XPath
-        evaluation semantics in arbitrary runtime contexts, with a small &
-        flexible adapter API.
-      `,
-
-      `
-        Primarily responsible for design & implementation of the Web Forms XForms
-        Engine. Implemented the engine's core data model and computational
-        graph, according to ODK XForms spec; developed the engine's fundamental
-        abstractions for computation as an internal reactive graph; conceived and
-        matured the engine's external interfaces, providing simple, cohesive & client-agnostic access to the engine's underlying ODK XForms semantics.`,
-
-      `
-        Directed design & architecture of Web forms to support long-term vision
-        for the project—anticipating unification of ODK's data collection
-        software across all supported platforms, and expanding functionality well
-        beyond the project's current, core data capture feature set.
+        Prototyped initial UI/UX; collaborated with dedicated UI developers as team grew; coordinated downstream integration with team developing ODK Central software for form and submission management.
       `,
     ],
   },
   {
-    employer: 'Treez',
+    employer: 'Reup → Mister Kraken → Treez',
     position: 'Senior Software Engineer',
-    start:    '2018-12',
-    end:      '2020-09',
+    start: '2015-11',
+    end: '2020-09',
 
     summary: `
-      Treez provides a full seed-to-sale catalogue of tools for
-      inventory & process management, regulatory reporting, B2B
-      sales, and point of sale for the legal cannabis market.
+      Full-stack web service & application development serving a diverse range of
+      responsibilities related to the legal cannabis industry.
     `,
+    marginalia: 'Reup partnered with Mister Kraken in 2017; both companies were acquired by Treez in 2018.',
 
     highlights: [
-      `
-        Created and maintained a set of libraries designed for rapid
-        development of REST API services, providing simple,
-        declarative API boundaries with runtime & static type safety,
-        automatically generated documentation, and a clear separation
-        of concerns between those boundaries and a service's business
-        logic. These libraries had been used in production for one
-        successful service, adopted by another team for a greenfield
-        service, and ports of all other Treez API services planned,
-        with no significant maintenance requests.
-      `,
-
-      `
-        Expanded the API translation layer built at Mister Kraken to
-        support the regulatory reporting APIs used in markets served by
-        Treez in CA, MI, and beyond. This also allowed the original
-        Mister Kraken product to expand integration into those markets,
-        and Treez to expand its operations from point of sale to a full
-        seed-to-sale suite.
-      `,
-
-      `
-        Led and maintained a robust fault tolerance service layer
-        between Treez end-user products and regulator reporting services.
-        This ensured that frequent and widespread errors in the
-        regulatory agencies' APIs did not result in a loss of compliance
-        for Treez customers.
-      `,
-
-      `
-        Promoted a team culture shift to embrace automated data
-        correction with a historical record, and built a standard set
-        of tools for data correction operations. These tools were used
-        successfully for two major incidents, ensuring compliance was
-        maintained with an auditable proof of operations log.
-      `,
+      [
+        'Treez',
+        '2018-2020',
+        "Led integration between Treez B2B inventory management services, and Mister Kraken's extant integrations with state-mandated traceability services; expanded on prior success maturing said integration to all major regulatory & vendor environments.",
+        "Built robust & general web service tooling as basis for Treez/Mister Kraken integration. By time of my departure, this tooling had become a foundation for all new and anticipated service development.",
+        "Intervened on personal initiative in the wake of widespread vendor outages and data corruption, instituting reliable, auditable, and reproducible processes to recover/reconcile customer regulatory reporting and inventory data.",
+      ],
+      [
+        'Mister Kraken',
+        '2017-2018',
+        "Led efforts to mature and adapt early-stage integrations with WA state-mandated traceability services, ensuring stable continuation of service for customers through abrupt/rapid changes to the state's regulatory environment and service vendor.",
+        "Promoted a team culture shift to embrace automation & other safeguard processes, significantly improving velocity and product quality alike.",
+        "Integrated Reup's B2B marketplace software, filling the remaining gaps in Mister Kraken's end-to-end inventory management offering."
+      ],
+      [
+        'Reup',
+        '2015-2018',
+        "Led technical design & development of Reup's core web application, a B2B cannabis supply chain marketplace.",
+        'Shared leadership & development of associated web services.',
+        'Joined founders & design team in user research to ensure direct engineering involvement in product-market fit.',
+      ],
     ],
   },
+  // {
+  //   employer: 'Treez',
+  //   position: 'Senior Software Engineer',
+  //   start:    '2018-12',
+  //   end:      '2020-09',
 
-  {
-    employer: 'Mister Kraken',
-    position: 'Senior Software Engineer',
-    start:    '2017-04',
-    end:      '2018-12',
+  //   summary: `
+  //     Treez provides a full seed-to-sale catalogue of tools for
+  //     inventory & process management, regulatory reporting, B2B
+  //     sales, and point of sale for the legal cannabis market.
+  //   `,
 
-    summary: `
-      Mister Kraken provided a rich suite of inventory and process
-      management tools for the legal cannabis market. The Reup and
-      Mister Kraken teams joined forces and products in 2017.
+  //   highlights: [
+  //     `
+  //       Created and maintained a set of libraries designed for rapid
+  //       development of REST API services, providing simple,
+  //       declarative API boundaries with runtime & static type safety,
+  //       automatically generated documentation, and a clear separation
+  //       of concerns between those boundaries and a service's business
+  //       logic. These libraries had been used in production for one
+  //       successful service, adopted by another team for a greenfield
+  //       service, and ports of all other Treez API services planned,
+  //       with no significant maintenance requests.
+  //     `,
 
-      **Mister Kraken was acquired by Treez in late 2018.**
-    `,
+  //     `
+  //       Expanded the API translation layer built at Mister Kraken to
+  //       support the regulatory reporting APIs used in markets served by
+  //       Treez in CA, MI, and beyond. This also allowed the original
+  //       Mister Kraken product to expand integration into those markets,
+  //       and Treez to expand its operations from point of sale to a full
+  //       seed-to-sale suite.
+  //     `,
 
-    highlights: [
-      `
-        Led design and development of an API translation layer which
-        ensured a zero downtime transition for regulatory compliance
-        when the WSLCB abruptly selected a new vendor's
-        incompatible reporting APIs. This ensured minimal changes in
-        the original Mister Kraken codebase while also preparing the
-        product for expansion into other markets where other vendor
-        APIs were common.
-      `,
+  //     `
+  //       Led and maintained a robust fault tolerance service layer
+  //       between Treez end-user products and regulator reporting services.
+  //       This ensured that frequent and widespread errors in the
+  //       regulatory agencies' APIs did not result in a loss of compliance
+  //       for Treez customers.
+  //     `,
 
-      `
-        Promoted a team culture shift in development and collaboration
-        to embrace automated testing, type safety, tool-based quality
-        assurance, CI & automated review tools, thorough manual review
-        by team members, and collaborative design & planning processes.
-        This significantly improved the team's ability to deliver and
-        maintain quality and value at a faster pace.
-      `,
+  //     `
+  //       Promoted a team culture shift to embrace automated data
+  //       correction with a historical record, and built a standard set
+  //       of tools for data correction operations. These tools were used
+  //       successfully for two major incidents, ensuring compliance was
+  //       maintained with an auditable proof of operations log.
+  //     `,
+  //   ],
+  // },
 
-      `
-        Adapted Reup's frontend web app to integrate with Mister
-        Kraken's existing B2B sales platform. From time of release,
-        through the Treez acquisition, to my departure, the app
-        remained in active use with no significant change requests.
-      `,
-    ],
-  },
+  // {
+  //   employer: 'Mister Kraken',
+  //   position: 'Senior Software Engineer',
+  //   start:    '2017-04',
+  //   end:      '2018-12',
 
-  {
-    employer: 'Reup',
-    position: 'Senior Software Engineer',
-    start:    '2015-11',
-    end:      '2018-12',
+  //   summary: `
+  //     Mister Kraken provided a rich suite of inventory and process
+  //     management tools for the legal cannabis market. The Reup and
+  //     Mister Kraken teams joined forces and products in 2017.
 
-    summary: `
-      Reup was a startup in the legal recreational cannabis market,
-      providing a B2B marketplace for retailers and manufacturers
-      to discover and order cannabis products and supplies.
+  //     **Mister Kraken was acquired by Treez in late 2018.**
+  //   `,
 
-      **Reup was acquired by Treez in late 2018.**
-    `,
+  //   highlights: [
+  //     `
+  //       Led design and development of an API translation layer which
+  //       ensured a zero downtime transition for regulatory compliance
+  //       when the WSLCB abruptly selected a new vendor's
+  //       incompatible reporting APIs. This ensured minimal changes in
+  //       the original Mister Kraken codebase while also preparing the
+  //       product for expansion into other markets where other vendor
+  //       APIs were common.
+  //     `,
 
-    highlights: [
-      `
-        Shaped and refined product direction as the second engineer
-        and fourth employee, sharing leadership on market & user
-        research to inform core user stories and product decisions.
-      `,
+  //     `
+  //       Promoted a team culture shift in development and collaboration
+  //       to embrace automated testing, type safety, tool-based quality
+  //       assurance, CI & automated review tools, thorough manual review
+  //       by team members, and collaborative design & planning processes.
+  //       This significantly improved the team's ability to deliver and
+  //       maintain quality and value at a faster pace.
+  //     `,
 
-      `
-        Led frontend architecture and spearheaded development of
-        Reup's web app.
-      `,
+  //     `
+  //       Adapted Reup's frontend web app to integrate with Mister
+  //       Kraken's existing B2B sales platform. From time of release,
+  //       through the Treez acquisition, to my departure, the app
+  //       remained in active use with no significant change requests.
+  //     `,
+  //   ],
+  // },
 
-      `
-        Shared leadership in defining core abstractions in the
-        product's backend API layer to improve development safety
-        and velocity.
-      `,
+  // {
+  //   employer: 'Reup',
+  //   position: 'Senior Software Engineer',
+  //   start:    '2015-11',
+  //   end:      '2018-12',
 
-      `
-        Took ownership of refining and adapting UI & UX design as
-        product requirements changed and use case complexities grew.
-      `,
-    ],
-  },
+  //   summary: `
+  //     Reup was a startup in the legal recreational cannabis market,
+  //     providing a B2B marketplace for retailers and manufacturers
+  //     to discover and order cannabis products and supplies.
+
+  //     **Reup was acquired by Treez in late 2018.**
+  //   `,
+
+  //   highlights: [
+  //     `
+  //       Shaped and refined product direction as the second engineer
+  //       and fourth employee, sharing leadership on market & user
+  //       research to inform core user stories and product decisions.
+  //     `,
+
+  //     `
+  //       Led frontend architecture and spearheaded development of
+  //       Reup's web app.
+  //     `,
+
+  //     `
+  //       Shared leadership in defining core abstractions in the
+  //       product's backend API layer to improve development safety
+  //       and velocity.
+  //     `,
+
+  //     `
+  //       Took ownership of refining and adapting UI & UX design as
+  //       product requirements changed and use case complexities grew.
+  //     `,
+  //   ],
+  // },
 
   {
     employer: 'ClipCard',
@@ -295,117 +326,56 @@ export enum ResumeSkillLevel {
 }
 
 export enum ResumeSkillset {
+  EXPERTISE = 'Expertise',
   LANGUAGES_PLATFORMS          = 'Languages',
   SERVICES_DISTRIBUTED_SYSTEMS = 'Services',
   WEB_UI_UX                    = 'Web UI & UX',
   DOMAIN_SPECIFIC_LANGUAGES    = 'DSL\u200bs',
+  NICHE_ESOTERIC               = 'Niche/Esoteric',
 }
 
 const resumeSkills = {
-  [ResumeSkillset.SERVICES_DISTRIBUTED_SYSTEMS]: [
+  [ResumeSkillset.EXPERTISE]: [
     {
-      name:  'REST & HATEOAS',
+      name: 'Domain-driven design & architecture',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'OpenAPI & documentation-driven APIs',
+      name: 'Technical vision, direction & execution',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'Microservice architecture',
+      name: 'Web apps & services',
       level: ResumeSkillLevel.ADVANCED,
     },
     {
-      name:  'Fault tolerance',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name:  'Composable systems',
+      name: 'Performance',
       level: ResumeSkillLevel.ADVANCED,
     },
   ],
 
   [ResumeSkillset.WEB_UI_UX]: [
     {
-      name: 'React',
+      name: 'React (+ Preact & similar)',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'DOM & Web APIs',
+      name: 'Reactivity (framework-agnostic)',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name: 'Solid',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name:  'Web performance',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name: 'Reactivity',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name:  'UI & UX design',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name: 'Custom JSX',
-      level: ResumeSkillLevel.ADVANCED,
+      name:  '“Vanilla” JS',
+      level: ResumeSkillLevel.EXPERT,
     },
     {
       name: 'Vue',
-      level: ResumeSkillLevel.INTERMEDIATE,
-    },
-    {
-      name:  'A11y',
-      level: ResumeSkillLevel.INTERMEDIATE,
-    },
-  ],
-
-  [ResumeSkillset.DOMAIN_SPECIFIC_LANGUAGES]: [
-    {
-      name: 'Domain modeling & extensibility',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name:  'Interpreters & runtime',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name: 'Grammar-defined parsers',
-      level: ResumeSkillLevel.INTERMEDIATE,
-    },
-    {
-      name: 'Domain-specialized tools',
-      level: ResumeSkillLevel.INTERMEDIATE,
-    },
-    {
-      name: 'Runtime optimization',
       level: ResumeSkillLevel.INTERMEDIATE,
     },
   ],
 
   [ResumeSkillset.LANGUAGES_PLATFORMS]: [
     {
-      name:  'TypeScript',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name:  'JavaScript',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name:  'Clojure',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name: 'XPath',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name: 'ODK XForms',
+      name:  'TypeScript/JavaScript',
       level: ResumeSkillLevel.EXPERT,
     },
     {
@@ -421,10 +391,6 @@ const resumeSkills = {
       level: ResumeSkillLevel.ADVANCED,
     },
     {
-      name: 'XSLT',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
       name:  'Python',
       level: ResumeSkillLevel.INTERMEDIATE,
     },
@@ -436,6 +402,33 @@ const resumeSkills = {
       name:  'Java',
       level: ResumeSkillLevel.BASIC,
     },
+  ],
+
+  [ResumeSkillset.NICHE_ESOTERIC]: [
+    {
+      name: 'ODK XForms & XPath',
+      level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name:  'Clojure',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'SolidJS',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'DSL\u200bs (parsers, semantics & runtime)',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    // {
+    //   name: 'XSLT',
+    //   level: ResumeSkillLevel.INTERMEDIATE,
+    // },
+    // {
+    //   name: 'JSX (custom)',
+    //   level: ResumeSkillLevel.INTERMEDIATE,
+    // },
   ],
 };
 
@@ -459,7 +452,8 @@ export const resume = validateResume({
 
   contact: {
     email:   'gnosis@gmail.com',
-    website: 'https://eyelidlessness.github.io/',
+    website: undefined,
+    // website: 'https://eyelidlessness.github.io/',
   },
 
   disposition: {
@@ -496,7 +490,12 @@ export const resume = validateResume({
   info: {
     class: 'Software Engineer',
     brief: `
-Senior full-stack software engineer with 15+ years experience building & maintaining quality services, systems and solutions; tools and libraries to accelerate development; usable, performant and attractive applications.
+Senior software engineer with a proven record of technical leadership and achievement, across a wide range of problems and disciplines:
+
+- driving projects from conception to successful adoption and sustainable growth
+- acquiring and applying deep domain/subject matter expertise
+- fostering an engineering culture of velocity, quality, and continuous improvement of both
+- reducing and overcoming risk, to grow and deliver on new project/business opportunities
     `.trim(),
     label: 'Senior Full-Stack Software Engineer',
   },

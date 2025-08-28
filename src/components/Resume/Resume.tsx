@@ -1,6 +1,7 @@
 import {
   ComponentProps,
   ElementType,
+  FunctionComponent,
 } from 'preact';
 import { BlogArtProps }       from '@/components/Blog';
 import { FullBleedContainer } from '@/components/FullBleed';
@@ -11,8 +12,9 @@ import {
 import {
   ProjectTimestamp,
 } from '@/data/projects';
-import type { ResumeData } from '@/data/resume';
+import type { EmploymentHistoryItemHighlights, ResumeData } from '@/data/resume';
 import {
+  isFlatEmploymentHistoryHighlights,
   ResumeSkillLevel,
 } from '@/data/resume';
 import {
@@ -28,6 +30,7 @@ import { ResumeProjects } from './ResumeProjects.jsx';
 import { ResumeSection }      from './ResumeSection';
 import { ResumeArt } from './ResumeArt.jsx';
 import { TimeRange } from '../TimeRange.jsx';
+import { GitHubLogo } from '../GitHubLogo.jsx';
 
 const ResumeArtContainer = styled(FullBleedContainer, {
   nested: {
@@ -90,8 +93,14 @@ const ResumeHeaderLinksContainer = styled(Flex, {
 const BaseResumeHeaderLink = styled('a', {
   ...theme.resume.contactList.link,
 
-  fontSize:       '0.88889em',
-  minWidth:       'auto',
+  display: 'inline-flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: '0.5ch',
+  fontSize: '0.88889em',
+  fontWeight: 400,
+  minWidth: 'auto',
+  color: 'var(--color-prose)',
   textDecoration: 'none',
 
   nested: {
@@ -119,19 +128,74 @@ const ResumeHeaderLinkInner = styled('span', {
 
 type ResumeHeaderLinkProps =
   & ComponentProps<typeof BaseResumeHeaderLink>
-  & { readonly printLabel: string };
+  & {
+      readonly printLabel: string;
+      readonly screenLabel?: string;
+      readonly Icon?: FunctionComponent
+    };
 
 const ResumeHeaderLink = ({
   children,
+  screenLabel,
   printLabel,
+  Icon,
   ...props
 }: ResumeHeaderLinkProps) => (
   <BaseResumeHeaderLink { ...props }>
+    {Icon && <Icon />}
     <ResumeHeaderLinkInner data-print-label={ printLabel }>
-      <span>{ children }</span>
+      <span>{ screenLabel ?? children }</span>
     </ResumeHeaderLinkInner>
   </BaseResumeHeaderLink>
 );
+
+const ResumeHeaderLinkIcon = styled('svg', {
+  width: '1rem',
+  height: '1rem',
+  color: 'var(--color-prose)',
+});
+
+const ResumeHeaderLinkPath = styled('path', {
+  color: 'currentColor',
+});
+
+const ResumeEmailIcon = () => {
+  return (
+    <ResumeHeaderLinkIcon
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
+      <ResumeHeaderLinkPath
+        d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z"
+      />
+    </ResumeHeaderLinkIcon>
+  );
+};
+
+const ResumeGitHubLogo = () => {
+  return (<ResumeHeaderLinkIcon as={GitHubLogo} />);
+};
+
+const socialLogos: Readonly<Record<string, FunctionComponent>> = {
+  GitHub: ResumeGitHubLogo,
+};
+
+const arrowListItemStyles = {
+  display:             'grid',
+  gridTemplateColumns: '1.25rem 1fr',
+  listStyle:           'none',
+
+  nested: {
+    '&:before': {
+      content:    '"›"',
+      fontWeight: 'bolder',
+      lineHeight: 1.2222,
+      textAlign:  'center',
+    },
+  },
+} as const;
 
 const ResumeBrief = styled(FullBleedContainer, {
   ...theme.resume.brief,
@@ -142,9 +206,16 @@ const ResumeBrief = styled(FullBleedContainer, {
   nested: {
     ...theme.resume.brief.nested,
 
-    '& p, & ul, & li': {
+    '& p': {
       margin: '0.5em 0',
     },
+
+    '& ul, & ul li': {
+      margin: 0,
+      padding: 0,
+    },
+
+    '& li': arrowListItemStyles,
 
     '& :first-child': {
       marginTop: 0,
@@ -167,7 +238,10 @@ const ResumeBrief = styled(FullBleedContainer, {
   },
 });
 
-const resumeSkillsetsColumnarQuery = '@media (min-width: 44.625rem)';
+const resumeSkillsetsColumnarQueries = {
+  screen: '@media screen and (min-width: 40rem)',
+  print: '@media print',
+} as const;
 
 const ResumeFlexHeading = styled('h2', {
   fontSize:    '1em',
@@ -176,9 +250,8 @@ const ResumeFlexHeading = styled('h2', {
   textIndent:   0,
 
   nested: {
-    [resumeSkillsetsColumnarQuery]: {
-      justifySelf: 'end',
-    },
+    [resumeSkillsetsColumnarQueries.screen]: { justifySelf: 'end' },
+    [resumeSkillsetsColumnarQueries.print]: { justifySelf: 'end' },
   },
 });
 
@@ -191,9 +264,8 @@ const ResumeSkillsetsContainer = styled('div', {
   fontSize:            '0.88889em',
 
   nested: {
-    [resumeSkillsetsColumnarQuery]: {
-      gridTemplateColumns: 'auto 1fr',
-    },
+    [resumeSkillsetsColumnarQueries.screen]: { gridTemplateColumns: 'auto 1fr' },
+    [resumeSkillsetsColumnarQueries.print]: { gridTemplateColumns: 'auto 1fr' },
   },
 });
 
@@ -321,6 +393,11 @@ const ResumeEmployerSummary = styled('div', {
   margin:   '0.5rem 0',
 });
 
+const ResumeEmployerMarginalia = styled('p', {
+  fontSize: '0.88889rem',
+  opacity: 0.8,
+});
+
 const ResumeEmploymentHeading = styled('h2', {
   marginBottom: 0,
 });
@@ -330,20 +407,7 @@ const ResumeEmploymentHighlightsList = styled('ul', {
   paddingInlineStart: 0,
 });
 
-const ResumeEmploymentHighlightsListItem = styled('li', {
-  display:             'grid',
-  gridTemplateColumns: '1.25rem 1fr',
-  listStyle:           'none',
-
-  nested: {
-    '&:before': {
-      content:    '"›"',
-      fontWeight: 'bolder',
-      lineHeight: 1.2222,
-      textAlign:  'center',
-    },
-  },
-});
+const ResumeEmploymentHighlightsListItem = styled('li', arrowListItemStyles);
 
 const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
   padding:  '1.5rem 0',
@@ -373,7 +437,7 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
     },
 
     [theme.print]: {
-      breakInside:   'avoid',
+      // breakInside:   'avoid',
       paddingBottom: 0,
     },
   },
@@ -407,6 +471,12 @@ const ResumeEmploymentListItemEmployerHeading = styled('h3', {
 
 const ResumeEmploymentListItemTimeRange = styled(TimeRange, {
   gridArea: 'time-range',
+
+  nested: {
+    '&.has-marginalia::after': {
+      content: '"*"',
+    },
+  },
 });
 
 const ResumeEmploymentPosition = styled('div', {
@@ -425,13 +495,65 @@ const ResumeEmploymentPosition = styled('div', {
   },
 });
 
+interface ResumeEmploymentHighlightsProps {
+  readonly subEmployer?: string;
+  readonly subRange?: string;
+  readonly highlights: readonly [string, ...string[]];
+}
+
+const SubEmployerHeading = styled('p', {
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  alignItems: 'baseline',
+  gap: '1ch',
+});
+
+const SubEmployer = styled('span', {
+  fontWeight: 500,
+});
+
+const SubRange = styled('span', {
+  fontSize: '0.88889rem',
+  opacity: 0.8,
+});
+
+const ResumeEmploymentHighlights = (props: ResumeEmploymentHighlightsProps) => {
+  const {
+    subEmployer,
+    subRange,
+    highlights,
+  } = props;
+
+  return <>
+    {(subEmployer || subRange) && (
+      <SubEmployerHeading>
+        {subEmployer && <SubEmployer>{subEmployer}</SubEmployer>}
+        {subRange && <SubRange>{subRange}</SubRange>}
+      </SubEmployerHeading>
+    )}
+
+    <ResumeEmploymentHighlightsList itemtype="http://schema.org/ItemList">
+      { highlights.map((highlight) => (
+        <ResumeEmploymentHighlightsListItem
+          key={ highlight }
+          itemprop="itemListElement"
+        >
+          { mdx(highlight) }
+        </ResumeEmploymentHighlightsListItem>
+      )) }
+    </ResumeEmploymentHighlightsList>
+  </>
+};
+
 interface ResumeEmploymentListItemProps  {
-  readonly employer:    string;
-  readonly position:    string;
-  readonly start:       ProjectTimestamp;
-  readonly end:         ProjectTimestamp;
-  readonly summary?:    string;
-  readonly highlights?: readonly string[];
+  readonly employer:   string;
+  readonly position:   string;
+  readonly start:      ProjectTimestamp;
+  readonly end:        ProjectTimestamp;
+  readonly summary?:   string;
+  readonly marginalia?: string;
+  readonly highlights: EmploymentHistoryItemHighlights;
 }
 
 const ResumeEmploymentListItem = ({
@@ -441,6 +563,7 @@ const ResumeEmploymentListItem = ({
   position,
   start,
   summary,
+  marginalia,
   ...props
 }: ResumeEmploymentListItemProps) => (
   <BaseResumeTopLevelListingItem
@@ -455,7 +578,10 @@ const ResumeEmploymentListItem = ({
       <ResumeEmploymentPosition itemprop="roleName">
         { position }
       </ResumeEmploymentPosition>
-      <ResumeEmploymentListItemTimeRange range={ [ start, end ] } />
+      <ResumeEmploymentListItemTimeRange
+        className={marginalia ? 'has-marginalia' : ''}
+        range={ [ start, end ] }
+      />
     </ResumeEmploymentListItemHeader>
 
     {(
@@ -467,20 +593,27 @@ const ResumeEmploymentListItem = ({
             </ResumeEmployerSummary>
           )
     )}
+    {marginalia && (
+      <ResumeEmployerMarginalia>* {marginalia}</ResumeEmployerMarginalia>
+    )}
+
     {(
-      highlights == null
-        ? null
+      isFlatEmploymentHistoryHighlights(highlights)
+        ? (
+            <ResumeEmploymentHighlights highlights={highlights} />
+          )
         : (
-          <ResumeEmploymentHighlightsList itemtype="http://schema.org/ItemList">
-            { highlights.map((highlight) => (
-              <ResumeEmploymentHighlightsListItem
-                key={ highlight }
-                itemprop="itemListElement"
-              >
-                { mdx(highlight) }
-              </ResumeEmploymentHighlightsListItem>
-            )) }
-          </ResumeEmploymentHighlightsList>
+          highlights.map((subHighlights) => {
+            const [subEmployer, subRange, ...actualHighlights] = subHighlights;
+
+            return (
+              <ResumeEmploymentHighlights
+                subEmployer={subEmployer}
+                subRange={subRange}
+                highlights={actualHighlights}
+              />
+            );
+          })
         )
     )}
   </BaseResumeTopLevelListingItem>
@@ -508,6 +641,16 @@ const ResumeEmployment = ({ employment }: ResumeEmploymentProps) => (
     )) }
   </BaseResumeEmployment>
 );
+
+const ResumePDFSection = styled(ResumeSection, {
+  textAlign: 'right',
+
+  nested: {
+    [theme.print]: {
+      display: 'none',
+    },
+  },
+})
 
 const BaseResume = styled(FullBleedContainer, {
   nested: {
@@ -582,33 +725,40 @@ export const Resume = ({
             <ResumeHeaderLink
               href={ `mailto:${email}` }
               itemprop="email"
+              screenLabel={email}
               printLabel={ email }
+              Icon={ResumeEmailIcon}
             >
               Email
             </ResumeHeaderLink>
 
-            <ResumeHeaderLink
+            {website != null && <ResumeHeaderLink
               href={ website }
               itemprop="url"
               printLabel={ shortURL(website) }
               rel="me"
             >
               Website
-            </ResumeHeaderLink>
+            </ResumeHeaderLink>}
 
             { social.map(({
+              user,
               network,
               url,
-            }) => (
-              <ResumeHeaderLink
-                href={ url }
-                itemprop="url"
-                printLabel={ shortURL(url) }
-                rel="me"
-              >
-                { network }
-              </ResumeHeaderLink>
-            )) }
+            }) => {
+              return (
+                <ResumeHeaderLink
+                  href={ url }
+                  itemprop="url"
+                  screenLabel={user ?? network}
+                  printLabel={ user ?? shortURL(url) }
+                  Icon={socialLogos[network]}
+                  rel="me"
+                >
+                  {network}
+                </ResumeHeaderLink>
+              );
+            }) }
           </ResumeHeaderLinksContainer>
         </ResumeHeader>
 
@@ -638,6 +788,10 @@ export const Resume = ({
 
         { mdx('Available upon request, email <gnosis@gmail.com>') }
       </ResumeSection>
+
+      <ResumePDFSection>
+        <a href="/Trevor_Schmidt_resume.pdf">View as PDF</a>
+      </ResumePDFSection>
     </BaseResume>
   );
 };
