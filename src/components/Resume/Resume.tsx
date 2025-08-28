@@ -190,8 +190,16 @@ const ResumeBrief = styled(FullBleedContainer, {
   nested: {
     ...theme.resume.brief.nested,
 
-    '& p, & ul, & li': {
+    '& p': {
       margin: '0.5em 0',
+    },
+
+    '& ul': {
+    },
+
+    '& li': {
+      margin: '0 0 0.25em',
+      lineHeight: 1.3,
     },
 
     '& :first-child': {

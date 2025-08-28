@@ -497,7 +497,12 @@ export const resume = validateResume({
   info: {
     class: 'Software Engineer',
     brief: `
-Senior full-stack software engineer with 15+ years experience building & maintaining quality services, systems and solutions; tools and libraries to accelerate development; usable, performant and attractive applications.
+Senior software engineer with a proven record of technical leadership and achievement, across a wide range of problems and disciplines:
+
+- driving projects from conception to successful adoption and sustainable growth
+- acquiring and applying deep domain/subject matter expertise
+- fostering an engineering culture of velocity, quality, and continuous improvement of both
+- reducing and overcoming risk, to grow and deliver on new project/business opportunities
     `.trim(),
     label: 'Senior Full-Stack Software Engineer',
   },
