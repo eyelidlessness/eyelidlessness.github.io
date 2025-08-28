@@ -1,6 +1,7 @@
 import {
   ComponentProps,
   ElementType,
+  FunctionComponent,
 } from 'preact';
 import { BlogArtProps }       from '@/components/Blog';
 import { FullBleedContainer } from '@/components/FullBleed';
@@ -28,6 +29,7 @@ import { ResumeProjects } from './ResumeProjects.jsx';
 import { ResumeSection }      from './ResumeSection';
 import { ResumeArt } from './ResumeArt.jsx';
 import { TimeRange } from '../TimeRange.jsx';
+import { GitHubLogo } from '../GitHubLogo.jsx';
 
 const ResumeArtContainer = styled(FullBleedContainer, {
   nested: {
@@ -90,8 +92,14 @@ const ResumeHeaderLinksContainer = styled(Flex, {
 const BaseResumeHeaderLink = styled('a', {
   ...theme.resume.contactList.link,
 
-  fontSize:       '0.88889em',
-  minWidth:       'auto',
+  display: 'inline-flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: '0.5ch',
+  fontSize: '0.88889em',
+  fontWeight: 400,
+  minWidth: 'auto',
+  color: 'var(--color-prose)',
   textDecoration: 'none',
 
   nested: {
@@ -119,19 +127,59 @@ const ResumeHeaderLinkInner = styled('span', {
 
 type ResumeHeaderLinkProps =
   & ComponentProps<typeof BaseResumeHeaderLink>
-  & { readonly printLabel: string };
+  & {
+      readonly printLabel: string;
+      readonly screenLabel?: string;
+      readonly Icon?: FunctionComponent
+    };
 
 const ResumeHeaderLink = ({
   children,
+  screenLabel,
   printLabel,
+  Icon,
   ...props
 }: ResumeHeaderLinkProps) => (
   <BaseResumeHeaderLink { ...props }>
+    {Icon && <Icon />}
     <ResumeHeaderLinkInner data-print-label={ printLabel }>
-      <span>{ children }</span>
+      <span>{ screenLabel ?? children }</span>
     </ResumeHeaderLinkInner>
   </BaseResumeHeaderLink>
 );
+
+const ResumeHeaderLinkIcon = styled('svg', {
+  width: '1rem',
+  height: '1rem',
+  color: 'var(--color-prose)',
+});
+
+const ResumeHeaderLinkPath = styled('path', {
+  color: 'currentColor',
+});
+
+const ResumeEmailIcon = () => {
+  return (
+    <ResumeHeaderLinkIcon
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
+      <ResumeHeaderLinkPath
+        d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z"
+      />
+    </ResumeHeaderLinkIcon>
+  );
+};
+
+const ResumeGitHubLogo = () => {
+  return (<ResumeHeaderLinkIcon as={GitHubLogo} />);
+};
+
+const socialLogos: Readonly<Record<string, FunctionComponent>> = {
+  GitHub: ResumeGitHubLogo,
+}
 
 const ResumeBrief = styled(FullBleedContainer, {
   ...theme.resume.brief,
@@ -592,33 +640,40 @@ export const Resume = ({
             <ResumeHeaderLink
               href={ `mailto:${email}` }
               itemprop="email"
+              screenLabel={email}
               printLabel={ email }
+              Icon={ResumeEmailIcon}
             >
               Email
             </ResumeHeaderLink>
 
-            <ResumeHeaderLink
+            {website != null && <ResumeHeaderLink
               href={ website }
               itemprop="url"
               printLabel={ shortURL(website) }
               rel="me"
             >
               Website
-            </ResumeHeaderLink>
+            </ResumeHeaderLink>}
 
             { social.map(({
+              user,
               network,
               url,
-            }) => (
-              <ResumeHeaderLink
-                href={ url }
-                itemprop="url"
-                printLabel={ shortURL(url) }
-                rel="me"
-              >
-                { network }
-              </ResumeHeaderLink>
-            )) }
+            }) => {
+              return (
+                <ResumeHeaderLink
+                  href={ url }
+                  itemprop="url"
+                  screenLabel={user ?? network}
+                  printLabel={ user ?? shortURL(url) }
+                  Icon={socialLogos[network]}
+                  rel="me"
+                >
+                  {network}
+                </ResumeHeaderLink>
+              );
+            }) }
           </ResumeHeaderLinksContainer>
         </ResumeHeader>
 

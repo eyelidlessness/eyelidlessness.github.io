@@ -459,7 +459,8 @@ export const resume = validateResume({
 
   contact: {
     email:   'gnosis@gmail.com',
-    website: 'https://eyelidlessness.github.io/',
+    website: undefined,
+    // website: 'https://eyelidlessness.github.io/',
   },
 
   disposition: {
