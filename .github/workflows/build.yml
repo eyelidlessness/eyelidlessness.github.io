@@ -15,12 +15,6 @@ jobs:
           node-version: '14.21.3'
           yarn-version: '1.22.22'
 
-      - uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-          key: install-14.21.3-${{ hashFiles('yarn.lock', '.github/workflows/build.yml') }}
-
       # Per https://stackoverflow.com/a/74732671, hopefully addresses current
       # failure of `yarn install --frozen-lockfile`
       - uses: actions/setup-python@v5.6.0
