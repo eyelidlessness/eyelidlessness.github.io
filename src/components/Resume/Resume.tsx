@@ -437,7 +437,7 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
     },
 
     [theme.print]: {
-      breakInside:   'avoid',
+      // breakInside:   'avoid',
       paddingBottom: 0,
     },
   },
