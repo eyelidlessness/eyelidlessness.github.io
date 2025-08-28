@@ -16,13 +16,36 @@ const validateResume = <T extends Immutable<FRESHResume>>(
   value: ValidResume<T>
 ): T => value;
 
+export type FlatEmploymentHistoryItemHighlights = readonly [string, ...string[]];
+
+export type NestedEmploymentHistoryItemHighlight = readonly [
+  subEmployer: string,
+  subRange: string,
+  ...actualHighlights: [string, ...string[]]
+];
+
+export type NestedEmploymentHistoryItemHighlights = readonly [
+  NestedEmploymentHistoryItemHighlight,
+  ...NestedEmploymentHistoryItemHighlight[],
+]
+
+export type EmploymentHistoryItemHighlights =
+  | FlatEmploymentHistoryItemHighlights
+  | NestedEmploymentHistoryItemHighlights;
+
+export const isFlatEmploymentHistoryHighlights = (
+  highlights: EmploymentHistoryItemHighlights
+): highlights is FlatEmploymentHistoryItemHighlights => {
+  return typeof highlights[0] === 'string';
+};
+
 export interface EmploymentHistoryItem extends FRESHResumeEmploymentHistoryItem {
-  readonly employer:    string;
-  readonly end:         ProjectTimestamp;
-  readonly highlights?: readonly string[];
-  readonly position:    string;
-  readonly start:       ProjectTimestamp;
-  readonly summary?:    string;
+  readonly employer:   string;
+  readonly end:        ProjectTimestamp;
+  readonly highlights: EmploymentHistoryItemHighlights;
+  readonly position:   string;
+  readonly start:      ProjectTimestamp;
+  readonly summary?:   string;
 }
 
 export type EmploymentHistory = readonly EmploymentHistoryItem[];
@@ -96,138 +119,175 @@ const employmentHistory = validateEmploymentHistory([
     ],
   },
   {
-    employer: 'Treez',
+    employer: 'Reup → Mister Kraken → Treez',
     position: 'Senior Software Engineer',
-    start:    '2018-12',
-    end:      '2020-09',
+    start: '2015-11',
+    end: '2020-09',
 
     summary: `
-      Treez provides a full seed-to-sale catalogue of tools for
-      inventory & process management, regulatory reporting, B2B
-      sales, and point of sale for the legal cannabis market.
+      Full-stack web service & application development serving a diverse range of
+      responsibilities related to the legal cannabis industry.
+
+      <p class="business-esoterica">Reup partnered with Mister Kraken in 2017; both companies were acquired by Treez in 2018.</p>
     `,
 
     highlights: [
-      `
-        Created and maintained a set of libraries designed for rapid
-        development of REST API services, providing simple,
-        declarative API boundaries with runtime & static type safety,
-        automatically generated documentation, and a clear separation
-        of concerns between those boundaries and a service's business
-        logic. These libraries had been used in production for one
-        successful service, adopted by another team for a greenfield
-        service, and ports of all other Treez API services planned,
-        with no significant maintenance requests.
-      `,
-
-      `
-        Expanded the API translation layer built at Mister Kraken to
-        support the regulatory reporting APIs used in markets served by
-        Treez in CA, MI, and beyond. This also allowed the original
-        Mister Kraken product to expand integration into those markets,
-        and Treez to expand its operations from point of sale to a full
-        seed-to-sale suite.
-      `,
-
-      `
-        Led and maintained a robust fault tolerance service layer
-        between Treez end-user products and regulator reporting services.
-        This ensured that frequent and widespread errors in the
-        regulatory agencies' APIs did not result in a loss of compliance
-        for Treez customers.
-      `,
-
-      `
-        Promoted a team culture shift to embrace automated data
-        correction with a historical record, and built a standard set
-        of tools for data correction operations. These tools were used
-        successfully for two major incidents, ensuring compliance was
-        maintained with an auditable proof of operations log.
-      `,
+      [
+        'Treez',
+        '2018-2020',
+        "Led integration between Treez B2B inventory management services, and Mister Kraken's extant integrations with state-mandated traceability services; expanded on prior success maturing said integration to all major regulatory & vendor environments.",
+        "Built robust & general web service tooling as basis for Treez/Mister Kraken integration. By time of my departure, this tooling had become a foundation for all new and anticipated service development.",
+        "Spearheaded "
+      ],
+      [
+        'Mister Kraken',
+        '2017-2018',
+        "Led efforts to mature and adapt early-stage integrations with WA state-mandated traceability services, ensuring stable continuation of service for customers through abrupt/rapid changes to the state's regulatory environment and service vendor.",
+        "Promoted a team culture shift to embrace automation & other safeguard processes, significantly improving velocity and product quality alike.",
+        "Integrated Reup's B2B marketplace software, filling the remaining gaps in Mister Kraken's end-to-end inventory management offering."
+      ],
+      [
+        'Reup',
+        '2015-2018',
+        "Led technical design & development of Reup's core web application, a B2B cannabis supply chain marketplace.",
+        'Shared leadership & development of associated web services.',
+        'Joined founders & design team in user research to ensure direct engineering involvement in product-market fit.',
+      ],
     ],
   },
+  // {
+  //   employer: 'Treez',
+  //   position: 'Senior Software Engineer',
+  //   start:    '2018-12',
+  //   end:      '2020-09',
 
-  {
-    employer: 'Mister Kraken',
-    position: 'Senior Software Engineer',
-    start:    '2017-04',
-    end:      '2018-12',
+  //   summary: `
+  //     Treez provides a full seed-to-sale catalogue of tools for
+  //     inventory & process management, regulatory reporting, B2B
+  //     sales, and point of sale for the legal cannabis market.
+  //   `,
 
-    summary: `
-      Mister Kraken provided a rich suite of inventory and process
-      management tools for the legal cannabis market. The Reup and
-      Mister Kraken teams joined forces and products in 2017.
+  //   highlights: [
+  //     `
+  //       Created and maintained a set of libraries designed for rapid
+  //       development of REST API services, providing simple,
+  //       declarative API boundaries with runtime & static type safety,
+  //       automatically generated documentation, and a clear separation
+  //       of concerns between those boundaries and a service's business
+  //       logic. These libraries had been used in production for one
+  //       successful service, adopted by another team for a greenfield
+  //       service, and ports of all other Treez API services planned,
+  //       with no significant maintenance requests.
+  //     `,
 
-      **Mister Kraken was acquired by Treez in late 2018.**
-    `,
+  //     `
+  //       Expanded the API translation layer built at Mister Kraken to
+  //       support the regulatory reporting APIs used in markets served by
+  //       Treez in CA, MI, and beyond. This also allowed the original
+  //       Mister Kraken product to expand integration into those markets,
+  //       and Treez to expand its operations from point of sale to a full
+  //       seed-to-sale suite.
+  //     `,
 
-    highlights: [
-      `
-        Led design and development of an API translation layer which
-        ensured a zero downtime transition for regulatory compliance
-        when the WSLCB abruptly selected a new vendor's
-        incompatible reporting APIs. This ensured minimal changes in
-        the original Mister Kraken codebase while also preparing the
-        product for expansion into other markets where other vendor
-        APIs were common.
-      `,
+  //     `
+  //       Led and maintained a robust fault tolerance service layer
+  //       between Treez end-user products and regulator reporting services.
+  //       This ensured that frequent and widespread errors in the
+  //       regulatory agencies' APIs did not result in a loss of compliance
+  //       for Treez customers.
+  //     `,
 
-      `
-        Promoted a team culture shift in development and collaboration
-        to embrace automated testing, type safety, tool-based quality
-        assurance, CI & automated review tools, thorough manual review
-        by team members, and collaborative design & planning processes.
-        This significantly improved the team's ability to deliver and
-        maintain quality and value at a faster pace.
-      `,
+  //     `
+  //       Promoted a team culture shift to embrace automated data
+  //       correction with a historical record, and built a standard set
+  //       of tools for data correction operations. These tools were used
+  //       successfully for two major incidents, ensuring compliance was
+  //       maintained with an auditable proof of operations log.
+  //     `,
+  //   ],
+  // },
 
-      `
-        Adapted Reup's frontend web app to integrate with Mister
-        Kraken's existing B2B sales platform. From time of release,
-        through the Treez acquisition, to my departure, the app
-        remained in active use with no significant change requests.
-      `,
-    ],
-  },
+  // {
+  //   employer: 'Mister Kraken',
+  //   position: 'Senior Software Engineer',
+  //   start:    '2017-04',
+  //   end:      '2018-12',
 
-  {
-    employer: 'Reup',
-    position: 'Senior Software Engineer',
-    start:    '2015-11',
-    end:      '2018-12',
+  //   summary: `
+  //     Mister Kraken provided a rich suite of inventory and process
+  //     management tools for the legal cannabis market. The Reup and
+  //     Mister Kraken teams joined forces and products in 2017.
 
-    summary: `
-      Reup was a startup in the legal recreational cannabis market,
-      providing a B2B marketplace for retailers and manufacturers
-      to discover and order cannabis products and supplies.
+  //     **Mister Kraken was acquired by Treez in late 2018.**
+  //   `,
 
-      **Reup was acquired by Treez in late 2018.**
-    `,
+  //   highlights: [
+  //     `
+  //       Led design and development of an API translation layer which
+  //       ensured a zero downtime transition for regulatory compliance
+  //       when the WSLCB abruptly selected a new vendor's
+  //       incompatible reporting APIs. This ensured minimal changes in
+  //       the original Mister Kraken codebase while also preparing the
+  //       product for expansion into other markets where other vendor
+  //       APIs were common.
+  //     `,
 
-    highlights: [
-      `
-        Shaped and refined product direction as the second engineer
-        and fourth employee, sharing leadership on market & user
-        research to inform core user stories and product decisions.
-      `,
+  //     `
+  //       Promoted a team culture shift in development and collaboration
+  //       to embrace automated testing, type safety, tool-based quality
+  //       assurance, CI & automated review tools, thorough manual review
+  //       by team members, and collaborative design & planning processes.
+  //       This significantly improved the team's ability to deliver and
+  //       maintain quality and value at a faster pace.
+  //     `,
 
-      `
-        Led frontend architecture and spearheaded development of
-        Reup's web app.
-      `,
+  //     `
+  //       Adapted Reup's frontend web app to integrate with Mister
+  //       Kraken's existing B2B sales platform. From time of release,
+  //       through the Treez acquisition, to my departure, the app
+  //       remained in active use with no significant change requests.
+  //     `,
+  //   ],
+  // },
 
-      `
-        Shared leadership in defining core abstractions in the
-        product's backend API layer to improve development safety
-        and velocity.
-      `,
+  // {
+  //   employer: 'Reup',
+  //   position: 'Senior Software Engineer',
+  //   start:    '2015-11',
+  //   end:      '2018-12',
 
-      `
-        Took ownership of refining and adapting UI & UX design as
-        product requirements changed and use case complexities grew.
-      `,
-    ],
-  },
+  //   summary: `
+  //     Reup was a startup in the legal recreational cannabis market,
+  //     providing a B2B marketplace for retailers and manufacturers
+  //     to discover and order cannabis products and supplies.
+
+  //     **Reup was acquired by Treez in late 2018.**
+  //   `,
+
+  //   highlights: [
+  //     `
+  //       Shaped and refined product direction as the second engineer
+  //       and fourth employee, sharing leadership on market & user
+  //       research to inform core user stories and product decisions.
+  //     `,
+
+  //     `
+  //       Led frontend architecture and spearheaded development of
+  //       Reup's web app.
+  //     `,
+
+  //     `
+  //       Shared leadership in defining core abstractions in the
+  //       product's backend API layer to improve development safety
+  //       and velocity.
+  //     `,
+
+  //     `
+  //       Took ownership of refining and adapting UI & UX design as
+  //       product requirements changed and use case complexities grew.
+  //     `,
+  //   ],
+  // },
 
   {
     employer: 'ClipCard',

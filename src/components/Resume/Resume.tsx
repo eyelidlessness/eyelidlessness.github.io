@@ -12,8 +12,9 @@ import {
 import {
   ProjectTimestamp,
 } from '@/data/projects';
-import type { ResumeData } from '@/data/resume';
+import type { EmploymentHistoryItemHighlights, ResumeData } from '@/data/resume';
 import {
+  isFlatEmploymentHistoryHighlights,
   ResumeSkillLevel,
 } from '@/data/resume';
 import {
@@ -390,6 +391,16 @@ const ResumeTopLevelListingItem = styled(FullBleedContainer, {
 const ResumeEmployerSummary = styled('div', {
   fontSize: '0.94444em',
   margin:   '0.5rem 0',
+
+  nested: {
+    '& .business-esoterica::before': {
+      content: '"* "'
+    },
+    '& .business-esoterica': {
+      fontSize: '0.88889rem',
+      opacity: 0.8,
+    },
+  },
 });
 
 const ResumeEmploymentHeading = styled('h2', {
@@ -483,13 +494,64 @@ const ResumeEmploymentPosition = styled('div', {
   },
 });
 
+interface ResumeEmploymentHighlightsProps {
+  readonly subEmployer?: string;
+  readonly subRange?: string;
+  readonly highlights: readonly [string, ...string[]];
+}
+
+const SubEmployerHeading = styled('p', {
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  alignItems: 'baseline',
+  gap: '1ch',
+});
+
+const SubEmployer = styled('span', {
+  fontWeight: 500,
+});
+
+const SubRange = styled('span', {
+  fontSize: '0.88889rem',
+  opacity: 0.8,
+});
+
+const ResumeEmploymentHighlights = (props: ResumeEmploymentHighlightsProps) => {
+  const {
+    subEmployer,
+    subRange,
+    highlights,
+  } = props;
+
+  return <>
+    {(subEmployer || subRange) && (
+      <SubEmployerHeading>
+        {subEmployer && <SubEmployer>{subEmployer}</SubEmployer>}
+        {subRange && <SubRange>{subRange}</SubRange>}
+      </SubEmployerHeading>
+    )}
+
+    <ResumeEmploymentHighlightsList itemtype="http://schema.org/ItemList">
+      { highlights.map((highlight) => (
+        <ResumeEmploymentHighlightsListItem
+          key={ highlight }
+          itemprop="itemListElement"
+        >
+          { mdx(highlight) }
+        </ResumeEmploymentHighlightsListItem>
+      )) }
+    </ResumeEmploymentHighlightsList>
+  </>
+};
+
 interface ResumeEmploymentListItemProps  {
-  readonly employer:    string;
-  readonly position:    string;
-  readonly start:       ProjectTimestamp;
-  readonly end:         ProjectTimestamp;
-  readonly summary?:    string;
-  readonly highlights?: readonly string[];
+  readonly employer:   string;
+  readonly position:   string;
+  readonly start:      ProjectTimestamp;
+  readonly end:        ProjectTimestamp;
+  readonly summary?:   string;
+  readonly highlights: EmploymentHistoryItemHighlights;
 }
 
 const ResumeEmploymentListItem = ({
@@ -526,19 +588,22 @@ const ResumeEmploymentListItem = ({
           )
     )}
     {(
-      highlights == null
-        ? null
+      isFlatEmploymentHistoryHighlights(highlights)
+        ? (
+            <ResumeEmploymentHighlights highlights={highlights} />
+          )
         : (
-          <ResumeEmploymentHighlightsList itemtype="http://schema.org/ItemList">
-            { highlights.map((highlight) => (
-              <ResumeEmploymentHighlightsListItem
-                key={ highlight }
-                itemprop="itemListElement"
-              >
-                { mdx(highlight) }
-              </ResumeEmploymentHighlightsListItem>
-            )) }
-          </ResumeEmploymentHighlightsList>
+          highlights.map((subHighlights) => {
+            const [subEmployer, subRange, ...actualHighlights] = subHighlights;
+
+            return (
+              <ResumeEmploymentHighlights
+                subEmployer={subEmployer}
+                subRange={subRange}
+                highlights={actualHighlights}
+              />
+            );
+          })
         )
     )}
   </BaseResumeTopLevelListingItem>
