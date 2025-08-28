@@ -16,6 +16,10 @@ const startServer = () => {
 };
 
 const generatePDF = async () => {
+  if (process.env.CI) {
+    throw new Error('This does not work yet!');
+  }
+
   const server = startServer();
 
   /** @type {string[]} */
@@ -24,8 +28,6 @@ const generatePDF = async () => {
   if (process.env.CI) {
     args.push('--no-sandbox');
   }
-
-  const scale = process.env.CI ? 0.95 : 0.99;
 
   const browser = await puppeteer.launch({
     headless: 'new',
@@ -37,7 +39,7 @@ const generatePDF = async () => {
   });
   await page.pdf({
     path: './dist/Trevor_Schmidt_resume.pdf',
-    scale,
+    scale: 0.99,
   });
   await browser.close();
 
