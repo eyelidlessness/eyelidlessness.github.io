@@ -17,8 +17,17 @@ const startServer = () => {
 
 const generatePDF = async () => {
   const server = startServer();
+
+  /** @type {string[]} */
+  const args = Array();
+
+  if (process.env.CI) {
+    args.push('--no-sandbox');
+  }
+
   const browser = await puppeteer.launch({
     headless: 'new',
+    args,
   });
   const page = await browser.newPage();
   await page.goto(`http://localhost:${SERVE_PORT}/resume/`, {
