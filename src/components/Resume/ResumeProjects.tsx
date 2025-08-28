@@ -94,7 +94,7 @@ export const ResumeProjects = (props: ResumeProjectsProps) => {
       <ResumeProjectsPrintOnly>
         <h2>Projects</h2>
         {totalProjects} projects listed at {' '}
-        <a href="https://eyelidlessness.github.io/resume/#projects">
+        <a href="https://eyelidlessness.github.io/projects">
           eyelidlessness.github.io/projects
         </a>
       </ResumeProjectsPrintOnly>

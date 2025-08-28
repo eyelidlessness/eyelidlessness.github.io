@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "yarn run build:watch & yarn run test:watch",
-    "build": "microsite build",
+    "build": "microsite build && yarn build:pdf && echo 'Full build complete!'",
+    "build:pdf": "node ./scripts/pdf.js",
     "build:watch": "yarn serve --listen ${SERVE_PORT:-'5000'} & yarn build & chokidar \"src/**/*.{cjs,css,md,mdx,mjs,js,jsx,ts,tsx}\" -c 'pkill -f microsite; yarn build'",
     "serve": "mkdir -p ./dist && serve ./dist",
     "test": "./scripts/test.js --once",
@@ -53,6 +54,7 @@
     "preact": "^10.5.10",
     "preact-fela": "^11.5.1",
     "preact-render-to-string": "^5.1.12",
+    "puppeteer": "^19.0.0",
     "react": "npm:@preact/compat",
     "rehype-accessible-emojis": "^0.3.2",
     "rehype-parse": "^7.0.1",
