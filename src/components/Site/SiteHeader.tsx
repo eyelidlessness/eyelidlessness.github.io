@@ -64,6 +64,12 @@ const SiteHeaderPagesList = styled('ul', {
   marginBottom:   0,
   marginTop:      0,
   padding:        0,
+
+  nested: {
+    '&[data-page-id="resume"]': {
+      display: 'none',
+    },
+  },
 });
 
 const listItemMarginRem = 1;
@@ -134,21 +140,26 @@ interface SiteHeaderProps {
   readonly meta: PageMetadata<any>;
 }
 
+const BLOG_HREF = '/blog/';
+const RESUME_HREF = '/resume/#resume';
+
 export const SiteHeader = (props: SiteHeaderProps) => {
   const metaProps = (
     props.meta.pageId == null
       ? {}
       : { 'data-page-id': props.meta.pageId }
   );
+  const isResume = props.meta.pageId === 'resume';
+  const homeHREF = isResume ? RESUME_HREF : BLOG_HREF;
   const siteLinks: readonly SiteLink[] = [
     {
       label:    'Blog',
-      location: '/',
+      location: BLOG_HREF,
     },
 
     {
       label:    'Hire me',
-      location: '/resume/#resume',
+      location: RESUME_HREF,
     },
 
     {
@@ -184,12 +195,12 @@ export const SiteHeader = (props: SiteHeaderProps) => {
           gap={ gap }
         >
           <SiteHeaderHomeLinkContainer>
-            <SiteHeaderHomeLink href="/">
+            <SiteHeaderHomeLink href={homeHREF}>
               <SiteLogo />
             </SiteHeaderHomeLink>
           </SiteHeaderHomeLinkContainer>
 
-          <SiteHeaderPagesList>
+          <SiteHeaderPagesList {...metaProps}>
           { siteLinks.map(({ location, label }) => (
             <SiteHeaderPagesListItem>
               <SiteHeaderPageLink href={ location }>

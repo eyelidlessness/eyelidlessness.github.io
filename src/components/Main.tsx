@@ -42,18 +42,20 @@ const mainMetaProps = (meta: PageMetadata<any>) => {
 export const Main = ({
   meta,
   ...props
-}: MainProps) => (
-  <StylesProvider>
-    { meta.redirect == null
-      ? (<>
-          <GitHubLogoDefs />
-          <SiteHeader meta={ meta } />
-          <BaseMain
-            as="main"
-            { ...mainMetaProps(meta) }
-            { ...props }
-          />
-        </>)
-      : <></> }
-  </StylesProvider>
-);
+}: MainProps): JSX.Element => {
+  if (meta.redirect) {
+    return <></>;
+  }
+
+  return (
+    <StylesProvider>
+      <GitHubLogoDefs />
+      <SiteHeader meta={meta}/>
+      <BaseMain
+        as="main"
+        {...mainMetaProps(meta)}
+        {...props}
+      />
+    </StylesProvider>
+  );
+}
