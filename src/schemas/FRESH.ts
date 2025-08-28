@@ -170,6 +170,7 @@ const employmentHistory = array(object({
   summary: optional(string({
     description: 'A summary of your achievements and responsibilities under this employer.',
   })),
+  marginalia: optional(string()),
   highlights: optional(
     array(
       union([

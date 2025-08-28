@@ -391,16 +391,11 @@ const ResumeTopLevelListingItem = styled(FullBleedContainer, {
 const ResumeEmployerSummary = styled('div', {
   fontSize: '0.94444em',
   margin:   '0.5rem 0',
+});
 
-  nested: {
-    '& .business-esoterica::before': {
-      content: '"* "'
-    },
-    '& .business-esoterica': {
-      fontSize: '0.88889rem',
-      opacity: 0.8,
-    },
-  },
+const ResumeEmployerMarginalia = styled('p', {
+  fontSize: '0.88889rem',
+  opacity: 0.8,
 });
 
 const ResumeEmploymentHeading = styled('h2', {
@@ -476,6 +471,12 @@ const ResumeEmploymentListItemEmployerHeading = styled('h3', {
 
 const ResumeEmploymentListItemTimeRange = styled(TimeRange, {
   gridArea: 'time-range',
+
+  nested: {
+    '&.has-marginalia::after': {
+      content: '"*"',
+    },
+  },
 });
 
 const ResumeEmploymentPosition = styled('div', {
@@ -551,6 +552,7 @@ interface ResumeEmploymentListItemProps  {
   readonly start:      ProjectTimestamp;
   readonly end:        ProjectTimestamp;
   readonly summary?:   string;
+  readonly marginalia?: string;
   readonly highlights: EmploymentHistoryItemHighlights;
 }
 
@@ -561,6 +563,7 @@ const ResumeEmploymentListItem = ({
   position,
   start,
   summary,
+  marginalia,
   ...props
 }: ResumeEmploymentListItemProps) => (
   <BaseResumeTopLevelListingItem
@@ -575,7 +578,10 @@ const ResumeEmploymentListItem = ({
       <ResumeEmploymentPosition itemprop="roleName">
         { position }
       </ResumeEmploymentPosition>
-      <ResumeEmploymentListItemTimeRange range={ [ start, end ] } />
+      <ResumeEmploymentListItemTimeRange
+        className={marginalia ? 'has-marginalia' : ''}
+        range={ [ start, end ] }
+      />
     </ResumeEmploymentListItemHeader>
 
     {(
@@ -587,6 +593,10 @@ const ResumeEmploymentListItem = ({
             </ResumeEmployerSummary>
           )
     )}
+    {marginalia && (
+      <ResumeEmployerMarginalia>* {marginalia}</ResumeEmployerMarginalia>
+    )}
+
     {(
       isFlatEmploymentHistoryHighlights(highlights)
         ? (

@@ -46,6 +46,7 @@ export interface EmploymentHistoryItem extends FRESHResumeEmploymentHistoryItem 
   readonly position:   string;
   readonly start:      ProjectTimestamp;
   readonly summary?:   string;
+  readonly marginalia?: string;
 }
 
 export type EmploymentHistory = readonly EmploymentHistoryItem[];
@@ -70,51 +71,22 @@ const employmentHistory = validateEmploymentHistory([
     end:      '2025-04',
 
     summary: `
-      ODK builds a comprehensive suite of open source data collection tools, used
-      globally across a wide variety of campaigns with high social impact in
-      public health & beyond.
+      Created & led development of ODK Web Forms, a web-based complement to their flagship Android app.
     `,
+    marginalia: "2021-2023: Maintainer of ODK Web Forms' legacy predecessor, Enketo.",
 
     highlights: [
       `
-        Initially joined to maintain Enketo, ODK's inherited/legacy web-based data
-        collection tool.
+        Conceived and prototyped foundations for ODK Web Forms—first as a skunkworks project on personal time, ultimately forming the basis for formally evaluating the project's viability.
       `,
-
       `
-        Conceived, created & led development of ODK Web Forms, ODK's replacement
-        for Enketo & complement to their flagship Collect product for Andriod
-        devices. Successfully shipped to users as of early 2025.
+        Led design & architecture to ensure core product/business goals: initial alignment with the flagship Collect app for Andriod; sustainable productivity and maintainability for user-facing functionality core to the business; anticipation of long-term unification on a single tool/platform.
       `,
-
       `
-        Prototyped initial design, architecture & implementation of Web Forms,
-        supporting evaluation of long-term viability for the project by ODK
-        leadership.
+        Primary development of ODK XForms and XPath engines. Responsible for design & implementation of parsing, data model, runtime computational architecture, and client-agnostic rendering APIs.
       `,
-
       `
-        Primarily responsible for design & implementation of Web Forms XPath
-        functionality. Achieved full W3C XPath 1.0 standards compliance;
-        extension of XPath language semantics to support additional data types;
-        development of a broad library of custom functions supporting the
-        underlying ODK XForms specification; adapted interpreter to provide XPath
-        evaluation semantics in arbitrary runtime contexts, with a small &
-        flexible adapter API.
-      `,
-
-      `
-        Primarily responsible for design & implementation of the Web Forms XForms
-        Engine. Implemented the engine's core data model and computational
-        graph, according to ODK XForms spec; developed the engine's fundamental
-        abstractions for computation as an internal reactive graph; conceived and
-        matured the engine's external interfaces, providing simple, cohesive & client-agnostic access to the engine's underlying ODK XForms semantics.`,
-
-      `
-        Directed design & architecture of Web forms to support long-term vision
-        for the project—anticipating unification of ODK's data collection
-        software across all supported platforms, and expanding functionality well
-        beyond the project's current, core data capture feature set.
+        Prototyped initial UI/UX; collaborated with dedicated UI developers as team grew; coordinated downstream integration with team developing ODK Central software for form and submission management.
       `,
     ],
   },
@@ -127,9 +99,8 @@ const employmentHistory = validateEmploymentHistory([
     summary: `
       Full-stack web service & application development serving a diverse range of
       responsibilities related to the legal cannabis industry.
-
-      <p class="business-esoterica">Reup partnered with Mister Kraken in 2017; both companies were acquired by Treez in 2018.</p>
     `,
+    marginalia: 'Reup partnered with Mister Kraken in 2017; both companies were acquired by Treez in 2018.',
 
     highlights: [
       [
@@ -137,7 +108,7 @@ const employmentHistory = validateEmploymentHistory([
         '2018-2020',
         "Led integration between Treez B2B inventory management services, and Mister Kraken's extant integrations with state-mandated traceability services; expanded on prior success maturing said integration to all major regulatory & vendor environments.",
         "Built robust & general web service tooling as basis for Treez/Mister Kraken integration. By time of my departure, this tooling had become a foundation for all new and anticipated service development.",
-        "Spearheaded "
+        "Intervened on personal initiative in the wake of widespread vendor outages and data corruption, instituting reliable, auditable, and reproducible processes to recover/reconcile customer regulatory reporting and inventory data.",
       ],
       [
         'Mister Kraken',

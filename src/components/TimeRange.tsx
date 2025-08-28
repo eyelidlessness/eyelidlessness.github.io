@@ -80,7 +80,7 @@ export const TimeRange = ({
   }
 
   return (
-    <BaseTimeRange>
+    <BaseTimeRange className={className}>
       <Timestamp
         date={ startDate }
         itemprop="startDate"
