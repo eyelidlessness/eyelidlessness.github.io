@@ -16,6 +16,10 @@ const startServer = () => {
 };
 
 const generatePDF = async () => {
+  if (process.env.CI) {
+    throw new Error('This does not work yet!');
+  }
+
   const server = startServer();
 
   /** @type {string[]} */

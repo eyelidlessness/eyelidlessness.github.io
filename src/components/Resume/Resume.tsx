@@ -642,15 +642,15 @@ const ResumeEmployment = ({ employment }: ResumeEmploymentProps) => (
   </BaseResumeEmployment>
 );
 
-const ResumePDFSection = styled(ResumeSection, {
-  textAlign: 'right',
+// const ResumePDFSection = styled(ResumeSection, {
+//   textAlign: 'right',
 
-  nested: {
-    [theme.print]: {
-      display: 'none',
-    },
-  },
-})
+//   nested: {
+//     [theme.print]: {
+//       display: 'none',
+//     },
+//   },
+// });
 
 const BaseResume = styled(FullBleedContainer, {
   nested: {
@@ -789,9 +789,9 @@ export const Resume = ({
         { mdx('Available upon request, email <gnosis@gmail.com>') }
       </ResumeSection>
 
-      <ResumePDFSection>
+      {/* <ResumePDFSection>
         <a href="/Trevor_Schmidt_resume.pdf">View as PDF</a>
-      </ResumePDFSection>
+      </ResumePDFSection> */}
     </BaseResume>
   );
 };

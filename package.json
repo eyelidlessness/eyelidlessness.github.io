@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "yarn run build:watch & yarn run test:watch",
-    "build": "microsite build && yarn build:pdf && echo 'Full build complete!'",
+    "build": "microsite build",
     "build:pdf": "node ./scripts/pdf.js",
     "build:watch": "yarn serve --listen ${SERVE_PORT:-'5000'} & yarn build & chokidar \"src/**/*.{cjs,css,md,mdx,mjs,js,jsx,ts,tsx}\" -c 'pkill -f microsite; yarn build'",
     "serve": "mkdir -p ./dist && serve ./dist",
