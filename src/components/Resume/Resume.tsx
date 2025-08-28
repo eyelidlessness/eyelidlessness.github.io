@@ -179,7 +179,22 @@ const ResumeGitHubLogo = () => {
 
 const socialLogos: Readonly<Record<string, FunctionComponent>> = {
   GitHub: ResumeGitHubLogo,
-}
+};
+
+const arrowListItemStyles = {
+  display:             'grid',
+  gridTemplateColumns: '1.25rem 1fr',
+  listStyle:           'none',
+
+  nested: {
+    '&:before': {
+      content:    '"›"',
+      fontWeight: 'bolder',
+      lineHeight: 1.2222,
+      textAlign:  'center',
+    },
+  },
+} as const;
 
 const ResumeBrief = styled(FullBleedContainer, {
   ...theme.resume.brief,
@@ -194,13 +209,12 @@ const ResumeBrief = styled(FullBleedContainer, {
       margin: '0.5em 0',
     },
 
-    '& ul': {
+    '& ul, & ul li': {
+      margin: 0,
+      padding: 0,
     },
 
-    '& li': {
-      margin: '0 0 0.25em',
-      lineHeight: 1.3,
-    },
+    '& li': arrowListItemStyles,
 
     '& :first-child': {
       marginTop: 0,
@@ -223,7 +237,10 @@ const ResumeBrief = styled(FullBleedContainer, {
   },
 });
 
-const resumeSkillsetsColumnarQuery = '@media (min-width: 44.625rem)';
+const resumeSkillsetsColumnarQueries = {
+  screen: '@media screen and (min-width: 40rem)',
+  print: '@media print',
+} as const;
 
 const ResumeFlexHeading = styled('h2', {
   fontSize:    '1em',
@@ -232,9 +249,8 @@ const ResumeFlexHeading = styled('h2', {
   textIndent:   0,
 
   nested: {
-    [resumeSkillsetsColumnarQuery]: {
-      justifySelf: 'end',
-    },
+    [resumeSkillsetsColumnarQueries.screen]: { justifySelf: 'end' },
+    [resumeSkillsetsColumnarQueries.print]: { justifySelf: 'end' },
   },
 });
 
@@ -247,9 +263,8 @@ const ResumeSkillsetsContainer = styled('div', {
   fontSize:            '0.88889em',
 
   nested: {
-    [resumeSkillsetsColumnarQuery]: {
-      gridTemplateColumns: 'auto 1fr',
-    },
+    [resumeSkillsetsColumnarQueries.screen]: { gridTemplateColumns: 'auto 1fr' },
+    [resumeSkillsetsColumnarQueries.print]: { gridTemplateColumns: 'auto 1fr' },
   },
 });
 
@@ -386,20 +401,7 @@ const ResumeEmploymentHighlightsList = styled('ul', {
   paddingInlineStart: 0,
 });
 
-const ResumeEmploymentHighlightsListItem = styled('li', {
-  display:             'grid',
-  gridTemplateColumns: '1.25rem 1fr',
-  listStyle:           'none',
-
-  nested: {
-    '&:before': {
-      content:    '"›"',
-      fontWeight: 'bolder',
-      lineHeight: 1.2222,
-      textAlign:  'center',
-    },
-  },
-});
+const ResumeEmploymentHighlightsListItem = styled('li', arrowListItemStyles);
 
 const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
   padding:  '1.5rem 0',

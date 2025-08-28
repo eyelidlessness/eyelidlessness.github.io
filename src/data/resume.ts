@@ -295,117 +295,56 @@ export enum ResumeSkillLevel {
 }
 
 export enum ResumeSkillset {
+  EXPERTISE = 'Expertise',
   LANGUAGES_PLATFORMS          = 'Languages',
   SERVICES_DISTRIBUTED_SYSTEMS = 'Services',
   WEB_UI_UX                    = 'Web UI & UX',
   DOMAIN_SPECIFIC_LANGUAGES    = 'DSL\u200bs',
+  NICHE_ESOTERIC               = 'Niche/Esoteric',
 }
 
 const resumeSkills = {
-  [ResumeSkillset.SERVICES_DISTRIBUTED_SYSTEMS]: [
+  [ResumeSkillset.EXPERTISE]: [
     {
-      name:  'REST & HATEOAS',
+      name: 'Domain-driven design & architecture',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'OpenAPI & documentation-driven APIs',
+      name: 'Technical vision, direction & execution',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'Microservice architecture',
+      name: 'Web apps & services',
       level: ResumeSkillLevel.ADVANCED,
     },
     {
-      name:  'Fault tolerance',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name:  'Composable systems',
+      name: 'Performance',
       level: ResumeSkillLevel.ADVANCED,
     },
   ],
 
   [ResumeSkillset.WEB_UI_UX]: [
     {
-      name: 'React',
+      name: 'React (+ Preact & similar)',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name:  'DOM & Web APIs',
+      name: 'Reactivity (framework-agnostic)',
       level: ResumeSkillLevel.EXPERT,
     },
     {
-      name: 'Solid',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name:  'Web performance',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name: 'Reactivity',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name:  'UI & UX design',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name: 'Custom JSX',
-      level: ResumeSkillLevel.ADVANCED,
+      name:  '“Vanilla” JS',
+      level: ResumeSkillLevel.EXPERT,
     },
     {
       name: 'Vue',
-      level: ResumeSkillLevel.INTERMEDIATE,
-    },
-    {
-      name:  'A11y',
-      level: ResumeSkillLevel.INTERMEDIATE,
-    },
-  ],
-
-  [ResumeSkillset.DOMAIN_SPECIFIC_LANGUAGES]: [
-    {
-      name: 'Domain modeling & extensibility',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name:  'Interpreters & runtime',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
-      name: 'Grammar-defined parsers',
-      level: ResumeSkillLevel.INTERMEDIATE,
-    },
-    {
-      name: 'Domain-specialized tools',
-      level: ResumeSkillLevel.INTERMEDIATE,
-    },
-    {
-      name: 'Runtime optimization',
       level: ResumeSkillLevel.INTERMEDIATE,
     },
   ],
 
   [ResumeSkillset.LANGUAGES_PLATFORMS]: [
     {
-      name:  'TypeScript',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name:  'JavaScript',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name:  'Clojure',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name: 'XPath',
-      level: ResumeSkillLevel.EXPERT,
-    },
-    {
-      name: 'ODK XForms',
+      name:  'TypeScript/JavaScript',
       level: ResumeSkillLevel.EXPERT,
     },
     {
@@ -421,10 +360,6 @@ const resumeSkills = {
       level: ResumeSkillLevel.ADVANCED,
     },
     {
-      name: 'XSLT',
-      level: ResumeSkillLevel.ADVANCED,
-    },
-    {
       name:  'Python',
       level: ResumeSkillLevel.INTERMEDIATE,
     },
@@ -436,6 +371,33 @@ const resumeSkills = {
       name:  'Java',
       level: ResumeSkillLevel.BASIC,
     },
+  ],
+
+  [ResumeSkillset.NICHE_ESOTERIC]: [
+    {
+      name: 'ODK XForms & XPath',
+      level: ResumeSkillLevel.EXPERT,
+    },
+    {
+      name:  'Clojure',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'SolidJS',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    {
+      name: 'DSL\u200bs (parsers, semantics & runtime)',
+      level: ResumeSkillLevel.ADVANCED,
+    },
+    // {
+    //   name: 'XSLT',
+    //   level: ResumeSkillLevel.INTERMEDIATE,
+    // },
+    // {
+    //   name: 'JSX (custom)',
+    //   level: ResumeSkillLevel.INTERMEDIATE,
+    // },
   ],
 };
 
