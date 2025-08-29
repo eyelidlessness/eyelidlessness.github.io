@@ -62,6 +62,12 @@ const generatePDF = async () => {
   await page.goto(`http://localhost:${port}/resume/`, {
     waitUntil: 'networkidle0',
   });
+
+  await page.emulateMediaType('print');
+  await page.waitForNetworkIdle({
+    idleTime: 500,
+  });
+
   await page.pdf({
     path: './dist/Trevor_Schmidt_resume.pdf',
     scale: 0.99,

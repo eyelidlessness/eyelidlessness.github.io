@@ -25,7 +25,14 @@ interface ResumePageProps extends PageMetadata<any> {
 
 const ResumePage = (props: ResumePageProps) => (
   <>
-    <Head meta={ props } />
+    <Head meta={ props }>
+      <link
+        rel="preload"
+        href="/fonts/pdf-print.woff"
+        as="font"
+        type="font/woff"
+      />
+    </Head>
 
     <Main meta={ props }>
       <ResumePageResume

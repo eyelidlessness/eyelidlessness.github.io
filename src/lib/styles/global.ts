@@ -56,7 +56,23 @@ const blockElements = Array.from(new Set([
   'pre',
 ] as const));
 
+const PRINT_FONT_FAMILY = 'PDFPrint';
+const PRINT_FONT_URL = '/fonts/pdf-print.woff';
+
 export const criticalStyles = cleanWhitespace(`
+  @font-face {
+    font-family: "${PRINT_FONT_FAMILY}";
+    font-weight: 400;
+    src: url("${PRINT_FONT_URL}");
+  }
+
+  ${theme.print} {
+    :root {
+      --prose-font-family: "${PRINT_FONT_FAMILY}";
+      font-family: "${PRINT_FONT_FAMILY}";
+    }
+  }
+
   @font-face {
     font-display: fallback;
     font-family:  Minipax;
@@ -112,17 +128,9 @@ export const criticalStyles = cleanWhitespace(`
   }
 `);
 
-const PRINT_FONT_FAMILY = 'SanFranciscoPrint';
-
 export const setGlobalStyles = () => {
   css.global(
     cleanWhitespace(`
-      @font-face {
-        font-family: "${PRINT_FONT_FAMILY}";
-        font-weight: 400;
-        src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
-      }
-
       @media (prefers-reduced-motion) {
         * {
           transition: none !important;
@@ -328,10 +336,6 @@ export const setGlobalStyles = () => {
       ${theme.print} {
         @page {
           margin: 0.325in;
-        }
-
-        :root {
-          --prose-font-family: "${PRINT_FONT_FAMILY}";
         }
 
         ${jsToCSS(['a', 'a:hover', 'code'], {
