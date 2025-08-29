@@ -60,7 +60,7 @@ const generatePDF = async () => {
   });
   const page = await browser.newPage();
   await page.goto(`http://localhost:${port}/resume/`, {
-    waitUntil: 'networkidle2',
+    waitUntil: 'networkidle0',
   });
   await page.pdf({
     path: './dist/Trevor_Schmidt_resume.pdf',
