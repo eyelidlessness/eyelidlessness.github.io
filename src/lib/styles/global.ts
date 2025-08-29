@@ -112,9 +112,17 @@ export const criticalStyles = cleanWhitespace(`
   }
 `);
 
+const PRINT_FONT_FAMILY = 'SanFranciscoPrint';
+
 export const setGlobalStyles = () => {
   css.global(
     cleanWhitespace(`
+      @font-face {
+        font-family: "${PRINT_FONT_FAMILY}";
+        font-weight: 400;
+        src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+      }
+
       @media (prefers-reduced-motion) {
         * {
           transition: none !important;
@@ -320,6 +328,10 @@ export const setGlobalStyles = () => {
       ${theme.print} {
         @page {
           margin: 0.325in;
+        }
+
+        :root {
+          --prose-font-family: "${PRINT_FONT_FAMILY}";
         }
 
         ${jsToCSS(['a', 'a:hover', 'code'], {
