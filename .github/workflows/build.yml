@@ -32,6 +32,7 @@ jobs:
 
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
+        if: ${{ github.ref != 'refs/heads/main' }}
         with:
           name: dist
           path: dist.tar
