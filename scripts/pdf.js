@@ -1,26 +1,51 @@
 // @ts-check
 
-import { spawn } from 'node:child_process';
+import { createServer } from 'node:http';
+import { resolve as resolvePath } from 'node:path';
+import { cwd } from 'node:process';
 import puppeteer from 'puppeteer';
+import handler from 'serve-handler';
 
-const SERVE_PORT = '5001';
+const CWD = cwd();
+const SERVE_PATH = resolvePath(CWD, './dist');
 
 /**
- * @return {import('node:child_process').ChildProcess}
+ * @typedef {import('node:http').Server} Server
+ */
+
+/**
+ * @return {Promise<{ server: Server, port: number }>}
  */
 const startServer = () => {
-  return spawn('yarn', ['serve', '--listen', SERVE_PORT], {
-    detached: true,
-    stdio: 'ignore',
+  /** @type {Server} */
+  const server = createServer((request, response) => {
+    // You pass two more arguments for config and middleware
+    // More details here: https://github.com/vercel/serve-handler#options
+    return handler(request, response, {
+      public: SERVE_PATH,
+    });
+  });
+
+  return new Promise((resolve, reject) => {
+    server.once('listening', () => {
+      const address = server.address();
+
+      if (typeof address !== 'object' || address == null) {
+        reject(new Error(`Unexpected server address: ${address}`));
+        return;
+      }
+
+      resolve({ server, port: address.port });
+    });
+
+    server.listen();
   });
 };
 
 const generatePDF = async () => {
-  if (process.env.CI) {
-    throw new Error('This does not work yet!');
-  }
+  const { server, port } = await startServer();
 
-  const server = startServer();
+  console.log('Server listening on port:', port);
 
   /** @type {string[]} */
   const args = Array();
@@ -34,7 +59,7 @@ const generatePDF = async () => {
     args,
   });
   const page = await browser.newPage();
-  await page.goto(`http://localhost:${SERVE_PORT}/resume/`, {
+  await page.goto(`http://localhost:${port}/resume/`, {
     waitUntil: 'networkidle2',
   });
   await page.pdf({
@@ -43,8 +68,16 @@ const generatePDF = async () => {
   });
   await browser.close();
 
-  server.kill();
-  server.unref();
+  await new Promise((resolve, reject) => {
+    server.close((err) => {
+      if (err == null) {
+        resolve(null);
+      } else {
+        console.error(err);
+        reject(err);
+      }
+    });
+  });
 
   console.log('PDF rendered: ./dist/Trevor_Schmidt_resume.pdf');
 };
