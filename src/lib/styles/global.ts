@@ -56,7 +56,23 @@ const blockElements = Array.from(new Set([
   'pre',
 ] as const));
 
+const PRINT_FONT_FAMILY = 'PDFPrint';
+const PRINT_FONT_URL = '/fonts/pdf-print.woff';
+
 export const criticalStyles = cleanWhitespace(`
+  @font-face {
+    font-family: "${PRINT_FONT_FAMILY}";
+    font-weight: 400;
+    src: url("${PRINT_FONT_URL}");
+  }
+
+  ${theme.print} {
+    :root {
+      --prose-font-family: "${PRINT_FONT_FAMILY}";
+      font-family: "${PRINT_FONT_FAMILY}";
+    }
+  }
+
   @font-face {
     font-display: fallback;
     font-family:  Minipax;

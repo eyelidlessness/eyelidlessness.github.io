@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "yarn run build:watch & yarn run test:watch",
-    "build": "microsite build",
+    "build": "microsite build && yarn build:pdf && echo 'Full build complete!'",
     "build:pdf": "node ./scripts/pdf.js",
     "build:watch": "yarn serve --listen ${SERVE_PORT:-'5000'} & yarn build & chokidar \"src/**/*.{cjs,css,md,mdx,mjs,js,jsx,ts,tsx}\" -c 'pkill -f microsite; yarn build'",
     "serve": "mkdir -p ./dist && serve ./dist",
@@ -70,6 +70,7 @@
     "remark-stringify": "^9.0.1",
     "rollup": "^2.0.0",
     "serve": "^11.3.2",
+    "serve-handler": "6.1.3",
     "sharp": "^0.27.1",
     "shiki-languages": "^0.2.7",
     "typescript": "~5.8.3"

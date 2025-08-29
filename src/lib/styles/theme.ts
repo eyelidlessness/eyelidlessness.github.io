@@ -681,7 +681,7 @@ export const theme = {
   prose: {
     '--color-prose': 'hsl(210deg 12% 5% / 95%)',
     color:      'var(--color-prose)',
-    fontFamily: proseFontFamily,
+    fontFamily: `var(--prose-font-family, ${proseFontFamily})`,
   },
 
   // quoted: {
