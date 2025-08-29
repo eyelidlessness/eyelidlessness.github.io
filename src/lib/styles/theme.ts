@@ -576,6 +576,7 @@ export const theme = {
 
     prose: {
       '--color-prose': 'hsl(190deg 20% 97%)',
+      '--color-prose-decoration': 'hsl(190deg 20% 97% / 55%)',
     },
 
     separator: {
@@ -680,6 +681,7 @@ export const theme = {
 
   prose: {
     '--color-prose': 'hsl(210deg 12% 5% / 95%)',
+    '--color-prose-decoration': 'hsl(210deg 12% 5% / 55%)',
     color:      'var(--color-prose)',
     fontFamily: `var(--prose-font-family, ${proseFontFamily})`,
   },

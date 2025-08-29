@@ -203,8 +203,7 @@ export const projects = validateProjects([
     `,
 
     summary: `
-      Several bug fixes and feature enhancements, with ongoing involvement
-      on the project. Microsite powers my site, thanks [@natemoo-re][1]!
+      Several bug fixes and feature enhancements. Microsite powers my site, thanks [@natemoo-re][1]!
 
       [1]: https://github.com/natemoo-re
     `,

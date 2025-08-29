@@ -187,7 +187,9 @@ export const SiteHeader = (props: SiteHeaderProps) => {
   ].join(' + ')}`;
 
   return (
-    <BaseSiteHeader { ...metaProps }>
+    props.meta.pageId === 'resume' ?
+      <></>
+    : <BaseSiteHeader { ...metaProps }>
       <SiteHeaderNavOuter>
         <DevilsAlbatross
           as="nav"

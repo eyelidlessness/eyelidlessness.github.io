@@ -104,8 +104,11 @@ const BaseResumeHeaderLink = styled('a', {
   textDecoration: 'none',
 
   nested: {
-    '&, &:hover': {
-      fontWeight: 500,
+    '&:hover, &:focus': {
+      color: 'var(--color-prose)',
+      fontWeight: 400,
+      textDecoration: 'underline',
+      textDecorationColor: 'var(--color-prose-decoration, currentColor)',
     },
   },
 });
