@@ -26,6 +26,16 @@ jobs:
       - run: yarn test
       - run: TZ=America/Los_Angeles yarn build
 
+      - name: Dist tarball
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: tar -cvf dist.tar ./dist
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist.tar
+
       - uses: JamesIves/github-pages-deploy-action@v4.7.3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
