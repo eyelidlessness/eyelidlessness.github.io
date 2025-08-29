@@ -33,13 +33,18 @@ const ProjectHeading = styled('h3', {
 });
 
 const ProjectHeadingLink = styled('a', {
-  color:          'inherit',
+  color:          'var(--color-prose)',
   fontWeight:     'inherit',
   textDecoration: 'none',
 
   nested: {
     '&:active, &:focus, &:hover, &:visited': {
       color: 'inherit',
+    },
+    '&:hover, &:focus': {
+      color: 'var(--color-prose)',
+      textDecoration: 'underline',
+      textDecorationColor: 'var(--color-prose-decoration, currentColor)',
     },
   },
 });
@@ -71,6 +76,12 @@ const ProjectIconLink = styled('a', {
 const ProjectBody = styled('div', {
   flexGrow:   1,
   paddingTop: '0.05556rem',
+
+  nested: {
+    '& a': {
+      fontWeight: 'inherit',
+    },
+  },
 });
 
 const BaseProject = styled('div', {
