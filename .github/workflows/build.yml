@@ -12,7 +12,7 @@ jobs:
 
       - uses: volta-cli/action@v4
         with:
-          node-version: '14.21.3'
+          node-version: '24.7.0'
           yarn-version: '1.22.22'
 
       # Per https://stackoverflow.com/a/74732671, hopefully addresses current
