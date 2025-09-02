@@ -273,7 +273,20 @@ export const BlogArt = (props: BlogArtProps) => {
   );
 
   if (rawSVG) {
-    return svg;
+    // Wrapper `<svg>` "crops" the nested `<svg>`'s content, as detected by
+    // downstream tooling (`sharp`).
+    //
+    // NOTE: this *just happens to work* because I know that the viewBox exceeds
+    // width/height. It's a terrible solution!
+    //
+    // It only needs to be applied here because I also know that the ResumeArt
+    // implementation **does not** exceed the dimensions. So, that's probably a
+    // better frame of reference for a proper solution 🙃
+    return (
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
+        {svg}
+      </svg>
+    );
   }
 
   return (
