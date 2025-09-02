@@ -2,9 +2,9 @@ import fs                from 'fs';
 import hasher            from 'node-object-hash';
 import path              from 'path';
 import { ComponentType } from 'preact';
-import { BlogArtProps }  from '@/components/Blog';
-import { RasterType }    from '@/lib/art';
-import { Topic }         from '@/lib/content/topics';
+import { BlogArtProps }  from '../../components/Blog/BlogArt.js';
+import { RasterType }    from '../art/raster.js';
+import { Topic }         from '../content/topics.js';
 import {
   getCurrentCommitDate,
   getInitialCommitDate,
@@ -12,7 +12,7 @@ import {
   getInitialFileHash,
   getInitialFileMergeHash,
   getSHA1Hash,
-} from '@/lib/git';
+} from '../git/index.js';
 
 export const SOCIAL_IMAGE_DIMENSIONS = {
   height: 630,

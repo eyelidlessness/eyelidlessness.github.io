@@ -3,7 +3,7 @@ import {
   css,
   styled,
   theme,
-} from '@/lib/styles';
+} from '../../lib/styles/index.js';
 
 export const gridTemplateColumns = `
   ${theme.mainGridColumns[0]}

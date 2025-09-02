@@ -5,7 +5,7 @@ import path   from 'path';
 import {
   getInitialCommitDate,
   getInitialFileHash,
-} from './log';
+} from './log.js';
 
 const cwd = process.cwd();
 const packageJSONPath = path.resolve(cwd, './package.json');

@@ -12,14 +12,14 @@ import {
   BlogPost,
   BlogPostProps,
   getBlogPostStaticProps,
-} from '@/components/Blog';
-import { CommentaryAside }   from '@/components/CommentaryAside';
+} from '../../../../../components/Blog/index.js';
+import { CommentaryAside }   from '../../../../../components/CommentaryAside.js';
 import {
   FullBleedContainer,
   FullBleedScrollableOverflow,
   FullBleedScrollableOverflowProps,
-} from '@/components/FullBleed';
-import { VisiblyHidden }     from '@/components/VisiblyHidden';
+} from '../../../../../components/FullBleed/index.js';
+import { VisiblyHidden }     from '../../../../../components/VisiblyHidden.js';
 import {
   AnyPoint,
   AnyPointSequence,
@@ -43,13 +43,13 @@ import {
   toHexPointSequence,
   toPointSequence,
   yBounds,
-} from '@/lib/art';
+} from '../../../../../lib/art/index.js';
 import {
   CustomArtProps,
   mdx as baseMDX,
   Topic,
-} from '@/lib/content';
-import { sortBy }            from '@/lib/collections';
+} from '../../../../../lib/content/index.js';
+import { sortBy }            from '../../../../../lib/collections/arrays.js';
 import {
   identifier,
   renderer,
@@ -58,7 +58,7 @@ import {
   StylesProvider as DefaultStylesProvider,
   theme,
   StyleableClassName,
-} from '@/lib/styles';
+} from '../../../../../lib/styles/index.js';
 
 const repoURL = (...segments: readonly string[]) => ([
   'https://github.com/eyelidlessness/eyelidlessness.github.io',

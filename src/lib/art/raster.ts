@@ -12,7 +12,7 @@ import sharp              from 'sharp';
 import {
   IRenderer,
   theme,
-} from '@/lib/styles';
+} from '../styles/index.js';
 
 export enum RasterType {
   PNG = 'png',

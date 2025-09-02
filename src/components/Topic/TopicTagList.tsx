@@ -1,9 +1,9 @@
 import {
   getTopicKey,
   TopicLike,
-} from '@/lib/content';
-import { styled }   from '@/lib/styles';
-import { TopicTag } from './TopicTag';
+} from '../../lib/content/topics.js';
+import { styled }   from '../../lib/styles/styles.js';
+import { TopicTag } from './TopicTag.js';
 
 const StyledTopicTagList = styled('ul', {
   nested: {

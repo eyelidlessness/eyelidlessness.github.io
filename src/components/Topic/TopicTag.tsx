@@ -2,11 +2,11 @@ import {
   getHyphenatedTopicKey,
   getTopic,
   TopicLike,
-} from '@/lib/content';
+} from '../../lib/content/index.js';
 import {
   styled,
   theme,
-} from '@/lib/styles';
+} from '../../lib/styles/index.js';
 
 const TopicTagLink = styled('a', {
   ...theme.topicTagLink(theme.topicTagIdentifier.className),

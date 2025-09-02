@@ -1,13 +1,13 @@
 import { ComponentProps }     from 'preact';
+import { PageMetadata } from '../lib/content/meta.js';
 import {
   styled,
   StylesProvider,
   theme,
-} from '@/lib/styles';
-import { FullBleedContainer } from './FullBleed';
-import { SiteHeader }         from './Site';
+} from '../lib/styles/index.js';
+import { FullBleedContainer } from './FullBleed/FullBleedContainer.js';
+import { SiteHeader }         from './Site/SiteHeader.js';
 import { GitHubLogoDefs } from './GitHubLogo.jsx';
-import { PageMetadata } from '@/lib/content/meta.js';
 
 const BaseMain = styled(FullBleedContainer, {
   paddingTop:    0,

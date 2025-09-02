@@ -3,34 +3,34 @@ import {
   ElementType,
   FunctionComponent,
 } from 'preact';
-import { BlogArtProps }       from '@/components/Blog';
-import { FullBleedContainer } from '@/components/FullBleed';
+import { BlogArtProps }       from '../Blog/BlogArt.js';
+import { FullBleedContainer } from '../FullBleed/FullBleedContainer.js';
 import {
   Timestamp,
   TimestampMode,
-} from '@/components/Timestamp';
+} from '../Timestamp.js';
 import {
   ProjectTimestamp,
-} from '@/data/projects';
-import type { EmploymentHistoryItemHighlights, ResumeData } from '@/data/resume';
+} from '../../data/projects.js';
+import type { EmploymentHistoryItemHighlights, ResumeData } from '../../data/resume.js';
 import {
   isFlatEmploymentHistoryHighlights,
   ResumeSkillLevel,
-} from '@/data/resume';
+} from '../../data/resume.js';
 import {
   mdx,
   mdxInline,
-} from '@/lib/content';
+} from '../../lib/content/index.js';
 import {
   clamp,
   styled,
   theme,
-} from '@/lib/styles';
-import { ResumeProjects } from './ResumeProjects.jsx';
-import { ResumeSection }      from './ResumeSection';
-import { ResumeArt } from './ResumeArt.jsx';
-import { TimeRange } from '../TimeRange.jsx';
-import { GitHubLogo } from '../GitHubLogo.jsx';
+} from '../../lib/styles/index.js';
+import { ResumeProjects } from './ResumeProjects.js';
+import { ResumeSection }      from './ResumeSection.js';
+import { ResumeArt } from './ResumeArt.js';
+import { TimeRange } from '../TimeRange.js';
+import { GitHubLogo } from '../GitHubLogo.js';
 
 const ResumeArtContainer = styled(FullBleedContainer, {
   nested: {

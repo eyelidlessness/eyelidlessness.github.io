@@ -17,8 +17,8 @@ import {
   RendererProvider,
   Style,
 } from 'preact-fela';
-import { identity }       from '@/lib/helpers';
-import hashed             from './hashed';
+import { identity }       from '../helpers/values.js';
+import hashed             from './hashed.js';
 
 export type StyleableIntrinsicElements = JSX.IntrinsicElements;
 export type StyleableIntrinsicElement = keyof JSX.IntrinsicElements;
@@ -143,9 +143,7 @@ interface Styled {
   <T extends keyof JSX.IntrinsicElements>(
     Component: T,
     style:     Style<JSX.IntrinsicElements[T]>
-  ): StyledComponent<
-    & JSX.IntrinsicElements[T]
-  >;
+  ): StyledComponent<JSX.IntrinsicElements[T]>;
 
   <P extends StyleableProps>(
     Component: ComponentType<P>,

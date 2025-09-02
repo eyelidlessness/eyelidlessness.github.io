@@ -3,8 +3,8 @@ import {
   ComponentProps,
   ComponentType,
 } from 'preact';
-import { styled }             from '@/lib/styles';
-import { FullBleedContainer } from './FullBleedContainer';
+import { styled }             from '../../lib/styles/index.js';
+import { FullBleedContainer } from './FullBleedContainer.js';
 
 const BaseOuterContainer = styled(FullBleedContainer, {
   margin:   '1rem 0 2rem',

@@ -1,6 +1,6 @@
 import emojiRegex          from 'emoji-regex';
-import { styled }          from '@/lib/styles';
-import { isUnknownObject } from '@/lib/collections';
+import { styled }          from '../lib/styles/styles.js';
+import { isUnknownObject } from '../lib/collections/objects.js';
 
 const StyledEmoji = styled('span', {
   // nested: {

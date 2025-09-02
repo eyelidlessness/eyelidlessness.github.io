@@ -4,11 +4,11 @@ import {
   BlogPost,
   BlogPostProps,
   getBlogPostStaticProps,
-} from '@/components/Blog';
+} from '../../../../../components/Blog/BlogPost.js';
 import {
   mdx,
   Topic,
-} from '@/lib/content';
+} from '../../../../../lib/content/index.js';
 
 const WhatTheArtPost = (props: BlogPostProps<any>) => {
   return (

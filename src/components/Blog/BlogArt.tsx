@@ -1,23 +1,23 @@
 import {
-  fullBleedClassName,
-  FullBleedContainer,
-} from '@/components/FullBleed';
-import {
   computeBasicArt,
   toFixed,
-} from '@/lib/art';
+} from '../../lib/art/index.js';
 import {
   DEFAULT_TOPIC,
   Topic,
-} from '@/lib/content';
+} from '../../lib/content/index.js';
 import {
   clamp,
   IRenderer,
   renderer,
   styled,
   theme,
-} from '@/lib/styles';
-import { BlogArtStaticDefs } from './BlogArtDefs';
+} from '../../lib/styles/index.js';
+import {
+  fullBleedClassName,
+  FullBleedContainer,
+} from '../FullBleed/FullBleedContainer.js';
+import { BlogArtStaticDefs } from './BlogArtDefs.js';
 
 const GOLDEN_RATIO = 1.6180334 as const;
 

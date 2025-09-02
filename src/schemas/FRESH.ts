@@ -10,7 +10,7 @@ import {
   string,
   todo,
   union,
-} from '@/lib/schemas';
+} from '../lib/schemas.js';
 import type { Static, TSchema } from '@sinclair/typebox';
 
 type Infer<Schema extends TSchema> = Immutable<Static<Schema>>;

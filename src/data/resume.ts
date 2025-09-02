@@ -1,14 +1,14 @@
-import {
-  ProjectTimestamp,
-  ProjectTimestamp as ResumeTimestamp,
-} from '@/data/projects';
-import { identity } from '@/lib/helpers';
+import { identity } from '../lib/helpers/index.js';
 import {
   FRESH_SCHEMA_FORMAT,
   FRESHResume,
   FRESHResumeEmploymentHistoryItem,
-} from '@/schemas/FRESH';
-import { projects } from './projects';
+} from '../schemas/FRESH.js';
+import type {
+  ProjectTimestamp,
+  ProjectTimestamp as ResumeTimestamp,
+} from './projects.js';
+import { projects } from './projects.js';
 
 type ValidResume<T extends Immutable<FRESHResume>> = Merge<T>;
 
@@ -523,4 +523,4 @@ export type ResumeData = typeof resume;
 export {
   ProjectCategory as ResumeProjectCategory,
   ProjectRole     as ResumeProjectRole,
-} from './projects';
+} from './projects.js';

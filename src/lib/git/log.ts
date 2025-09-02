@@ -2,7 +2,7 @@ import childProcess from 'child_process';
 import crypto       from 'crypto';
 import fs           from 'fs';
 import path         from 'path';
-import { identity } from '@/lib/helpers';
+import { identity } from '../helpers/values.js';
 
 const cwd = process.cwd();
 
@@ -59,7 +59,7 @@ interface FormattedGitLogDataOptions<T> {
 const DEFAULT_REMOTE_REF = 'origin';
 const DEFAULT_BRANCH_REF = 'main';
 
-const getFormattedGitLogData = <T>(
+const getFormattedGitLogData = <T = string>(
   options: FormattedGitLogDataOptions<T>
 ): readonly T[] => {
   const {

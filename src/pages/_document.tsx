@@ -5,8 +5,8 @@ import {
   Main,
   MicrositeScript,
 } from 'microsite/document';
-import { resetAbbrContext } from '@/lib/content';
-import { StylesProvider }   from '@/lib/styles';
+import { resetAbbrContext } from '../lib/content/abbr.js';
+import { StylesProvider }   from '../lib/styles/styles.js';
 
 const Document = () => {
   return (

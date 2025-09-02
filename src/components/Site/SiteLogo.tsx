@@ -1,7 +1,7 @@
 import {
   styled,
   theme,
-} from '@/lib/styles';
+} from '../../lib/styles/index.js';
 
 export const siteLogoDimensionsPx = {
   height: 60,

@@ -3,14 +3,14 @@ import {
   BlogArtDefs,
   BlogListing,
   BlogPostProps,
-} from '@/components/Blog';
-import { Head }       from '@/components/Head';
-import { Main }       from '@/components/Main';
+} from '../../components/Blog/index.js';
+import { Head }       from '../../components/Head.js';
+import { Main }       from '../../components/Main.js';
 import {
   getPageMetadata,
   PageMetadata,
   PageMetadataType,
-} from '@/lib/content';
+} from '../../lib/content/meta.js';
 
 interface BlogIndexPageProps extends PageMetadata<any> {
   readonly description: string;

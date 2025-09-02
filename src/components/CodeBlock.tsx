@@ -1,13 +1,13 @@
 import { ComponentProps } from 'preact';
 import {
+  styled,
+  theme,
+} from '../lib/styles/index.js';
+import {
   FullBleedContainer,
   FullBleedScrollableOverflow,
   FullBleedSymbolBlock,
-} from '@/components/FullBleed';
-import {
-  styled,
-  theme,
-} from '@/lib/styles';
+} from './FullBleed/index.js';
 
 const ContentContainer = styled('pre', {
   fontSize: '1rem',

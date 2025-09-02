@@ -1,10 +1,10 @@
 import { definePage } from 'microsite/page';
-import { Head }       from '@/components/Head';
+import { Head }       from '../../components/Head.js';
 import {
   getPageMetadata,
   PageMetadata,
   PageMetadataType,
-} from '@/lib/content';
+} from '../../lib/content/index.js';
 
 interface ProjectPageProps extends PageMetadata<any> {}
 

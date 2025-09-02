@@ -2,20 +2,42 @@
 
 // @ts-check
 
+import path                       from 'node:path';
 import chalk                      from 'chalk';
 import { set as setChalkContext } from 'ava/lib/chalk.js';
 import { controlFlow }            from 'ava/lib/ipc-flow-control.js';
 import del                        from 'del';
 import estrella                   from 'estrella';
 import globby                     from 'globby';
-import path                       from 'path';
+
+/**
+ * @typedef {(expression: unknown, message?: string) => asserts expression} Assert
+ */
+
+/** @type {Assert} */
+const assert = (expression, message) => {
+  if (!expression) {
+    throw new Error(message ?? `Assertion failed. Expected ${expression} not to be falsy`);
+  }
+};
+
+/**
+ * @template T
+ * @param {T} value
+ * @returns {NonNullable<T>}
+ */
+const asserted = (value) => {
+  assert(value);
+
+  return value;
+};
 
 const cwd         = process.cwd();
 const entriesGlob = '{src,test}/**/*.{cjs,js,jsx,mjs,ts,tsx}';
 const outDir      = path.resolve(cwd, './.test');
 
-/** @type {estrella.BuildProcess | null} */
-let testProcess = null;
+/** @type {estrella.BuildProcess} */
+let testProcess;
 
 // We cannot use the built-in `watch` flag, because the built-in
 // watch mode doesn't handle file-system updates, and the `build`
@@ -31,8 +53,8 @@ const avaCacheDir = path.join(cwd, 'node_modules', '.cache', 'ava');
 /** @type {import('ava/lib/api') | null} */
 let ava = null;
 
-/** @type {import('ava/lib/reporters/default') | null} */
-let reporter = null;
+/** @type {import('ava/lib/reporters/default')} */
+let reporter;
 
 const chalkOptions = {
   level: chalk.level || 3,
@@ -45,8 +67,6 @@ class TestFailure extends Error {
     super('Test failure');
   }
 }
-
-const tsconfigPathsLoader = path.resolve(outDir, 'lib/loaders/tsconfig-paths.js');
 
 const runTests = () => {
   return estrella.build({
@@ -82,7 +102,6 @@ const runTests = () => {
           moduleTypes: { cjs: 'commonjs', mjs: 'module', js: 'module' },
           nodeArguments: [
             '--no-warnings',
-            `--experimental-loader=${tsconfigPathsLoader}`,
           ],
           parallelRuns: null,
           projectDir: cwd,
@@ -127,7 +146,7 @@ const runTests = () => {
       }
 
       const runStatus = await ava.run();
-      const exitCode = runStatus.suggestExitCode({ matching: false });
+      const exitCode = runStatus?.suggestExitCode({ matching: false });
 
       reporter.endRun();
 
@@ -139,12 +158,11 @@ const runTests = () => {
 };
 
 /** @type {estrella.CancellablePromise<void>} */
-let watchProcess = null;
+let watchProcess;
 
 const main = async () => {
   if (testProcess != null) {
     testProcess.cancel();
-    testProcess = null;
   }
 
   await Promise.all([
@@ -173,7 +191,6 @@ const main = async () => {
   finally {
     if (isWatch) {
       testProcess.cancel();
-      testProcess = null;
 
       if (watchProcess == null) {
         watchProcess = estrella.watch([ 'src' ], {

@@ -3,13 +3,13 @@ import path from 'path';
 import {
   getCurrentFileHash,
   getInitialFileMergeHash,
-} from '@/lib/git';
+} from '../../lib/git/index.js';
 import {
   coordinate,
   InvalidHashError,
   toHexPointSequence,
   toPointSequence,
-} from './math';
+} from './math.js';
 
 const knownFile = path.resolve(process.cwd(), './tsconfig.json');
 

@@ -1,9 +1,9 @@
-import { FullBleedSymbolBlock } from '@/components/FullBleed';
 import {
   clamp,
   styled,
   theme,
-} from '@/lib/styles';
+} from '../lib/styles/index.js';
+import { FullBleedSymbolBlock } from './FullBleed/FullBleedSymbolBlock.js';
 
 const ContentContainer = styled('div', {
   fontSize:    '0.8889em',

@@ -1,15 +1,15 @@
 import { ComponentChildren } from 'preact';
-import { DevilsAlbatross }   from '@/components/DevilsAlbatross';
-import { GitHubLogo }        from '@/components/GitHubLogo';
+import { DevilsAlbatross }   from '../DevilsAlbatross.js';
+import { GitHubLogo }        from '../GitHubLogo.js';
 import {
   styled,
   theme,
-} from '@/lib/styles';
+} from '../../lib/styles/index.js';
+import { PageMetadata } from '../../lib/content/meta.js';
 import {
   SiteLogo,
   siteLogoDimensionsPx,
-} from './SiteLogo';
-import { PageMetadata } from '@/lib/content/meta.js';
+} from './SiteLogo.js';
 
 const { columns } = theme.siteHeader;
 

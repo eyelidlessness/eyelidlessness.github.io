@@ -1,2 +1,2 @@
-export * from './SiteHeader';
-export * from './SiteLogo';
+export * from './SiteHeader.js';
+export * from './SiteLogo.js';

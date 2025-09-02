@@ -2,11 +2,11 @@ import {
   renderer,
   styled,
   theme,
-} from '@/lib/styles';
+} from '../../lib/styles/index.js';
 import {
   FullBleedContainer,
   FullBleedContainerProps,
-} from './FullBleedContainer';
+} from './FullBleedContainer.js';
 
 type RGBA = readonly [ r: number, g: number, b: number, a: number ];
 

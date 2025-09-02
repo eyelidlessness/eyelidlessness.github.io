@@ -1,18 +1,18 @@
 import { Fragment }            from 'preact';
-import { FullBleedContainer }  from '@/components/FullBleed';
-import { Timestamp }           from '@/components/Timestamp';
-import { TopicTagList }        from '@/components/Topic/TopicTagList';
+import { FullBleedContainer }  from '../../components/FullBleed/FullBleedContainer.js';
+import { Timestamp }           from '../../components/Timestamp.js';
+import { TopicTagList }        from '../../components/Topic/TopicTagList.js';
 import {
   css,
   styled,
   theme,
-} from '@/lib/styles';
+} from '../../lib/styles/index.js';
 import {
   BlogArt,
   BlogArtDefsUsage,
   BLOG_ART_HEIGHT,
-} from './BlogArt';
-import { BlogPostProps }       from './BlogPost';
+} from './BlogArt.js';
+import { BlogPostProps }       from './BlogPost.js';
 
 interface BlogPostsByYear {
   readonly [key: number]: readonly BlogPostProps[];

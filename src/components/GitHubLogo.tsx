@@ -1,7 +1,7 @@
 import {
   styled,
   theme,
-} from '@/lib/styles';
+} from '../lib/styles/index.js';
 import { SVGDefs } from './SVGDefs.jsx';
 
 const baseSize        = 512;

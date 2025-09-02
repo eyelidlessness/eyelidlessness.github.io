@@ -23,15 +23,15 @@ import remarkMDX                  from 'remark-mdx';
 import remarkMDXToPlainText       from 'remark-mdx-to-plain-text';
 import remarkSlug                 from 'remark-slug';
 import { Plugin }                 from 'unified';
-import { CodeBlock }              from '@/components/CodeBlock';
+import { CodeBlock }              from '../../components/CodeBlock.js';
 import {
   Emoji,
   isEmojiProps,
-} from '@/components/Emoji';
-import { abbreviations }          from '@/lib/a11y';
-import { StylesProvider }         from '@/lib/styles';
-import { remarkDistinctAbbr }     from './abbr';
-import { syntaxHighlighting }     from './syntax';
+} from '../../components/Emoji.js';
+import { abbreviations }          from '../a11y/abbreviations.js';
+import { StylesProvider }         from '../styles/styles.js';
+import { remarkDistinctAbbr }     from './abbr.js';
+import { syntaxHighlighting }     from './syntax.js';
 
 const _require = module.createRequire(import.meta.url);
 

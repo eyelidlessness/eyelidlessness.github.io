@@ -1,6 +1,6 @@
 import { ComponentProps }     from 'preact';
-import { FullBleedContainer } from '@/components/FullBleed';
-import { styled }             from '@/lib/styles';
+import { FullBleedContainer } from '../FullBleed/FullBleedContainer.js';
+import { styled }             from '../../lib/styles/styles.js';
 
 const BaseResumeSection = styled(FullBleedContainer, {
   // ...theme.resume.section,

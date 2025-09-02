@@ -1,4 +1,4 @@
-import { styled, theme } from '@/lib/styles';
+import { styled, theme } from '../../lib/styles/index.js';
 
 export const projectsTwoUpQuery = '@media screen and (min-width: 41.666rem)';
 

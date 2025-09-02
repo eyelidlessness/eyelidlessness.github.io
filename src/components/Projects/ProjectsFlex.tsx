@@ -1,4 +1,4 @@
-import { styled } from '@/lib/styles';
+import { styled } from '../../lib/styles/index.js';
 
 export const ProjectsFlex = styled('div', {
   alignItems: 'start',

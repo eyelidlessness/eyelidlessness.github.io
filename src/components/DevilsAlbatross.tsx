@@ -6,7 +6,7 @@ import {
 import {
   StyleableProps,
   styled,
-} from '@/lib/styles';
+} from '../lib/styles/index.js';
 
 interface DevilsAlbatrossGap {
   readonly horizontal?: string;

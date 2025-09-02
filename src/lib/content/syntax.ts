@@ -28,7 +28,7 @@ import {
   styled,
   StylesProvider,
   theme,
-} from '@/lib/styles';
+} from '../styles/index.js';
 
 interface RichNode extends Node {
   children:  Node[];

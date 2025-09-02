@@ -1,5 +1,5 @@
-import { ProjectTimestamp } from '@/data/projects.js';
-import { styled, theme } from '@/lib/styles';
+import { ProjectTimestamp } from '../data/projects.js';
+import { styled, theme } from '../lib/styles/index.js';
 import { Timestamp, TimestampMode, TimestampProps } from './Timestamp.jsx';
 
 interface OptionalTimestampProps extends Omit<TimestampProps, 'date'> {

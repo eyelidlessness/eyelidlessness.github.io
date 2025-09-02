@@ -2,9 +2,9 @@ import {
   clamp,
   cleanWhitespace,
   jsToCSS
-} from './functions';
-import { css }   from './styles';
-import { theme } from './theme';
+} from './functions.js';
+import { css }   from './styles.js';
+import { theme } from './theme.js';
 
 const emphasisElements = [
   'b',

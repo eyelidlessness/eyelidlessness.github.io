@@ -1,10 +1,10 @@
-import { ResumeSkillLevel } from '@/data/resume';
+import { ResumeSkillLevel } from '../../data/resume.js';
 import {
   DEFAULT_TOPIC,
   Topic,
-} from '@/lib/content/topics';
-import { cleanWhitespace }  from './functions';
-import { identifier }       from './styles';
+} from '../content/topics.js';
+import { cleanWhitespace }  from './functions.js';
+import { identifier }       from './styles.js';
 
 const vwRatio = 2;
 

@@ -1,9 +1,9 @@
-import { ProjectData } from '@/data/projects.js';
-import { ResumeProjectRole } from '@/data/resume.js';
+import { ProjectData } from '../../data/projects.js';
+import { ResumeProjectRole } from '../../data/resume.js';
+import { styled } from '../../lib/styles/styles.js';
+import { clamp } from '../../lib/styles/functions.js';
+import { theme } from '../../lib/styles/theme.js';
 import { ProjectsTwoUp } from '../Projects/ProjectsTwoUp.jsx';
-import { styled } from '@/lib/styles/styles.js';
-import { clamp } from '@/lib/styles/functions.js';
-import { theme } from '@/lib/styles/theme.js';
 import { Project } from '../Projects/Project.jsx';
 
 const FlexHeading = styled('h2', {

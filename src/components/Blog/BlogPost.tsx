@@ -2,11 +2,11 @@ import { PathParams }          from 'microsite/page';
 import { StaticPropsContext }  from 'microsite/utils/router';
 import { ComponentChildren }   from 'preact';
 import { renderToString }      from 'preact-render-to-string';
-import { FullBleedContainer }  from '@/components/FullBleed';
-import { Head }                from '@/components/Head';
-import { Main }                from '@/components/Main';
-import { Timestamp }           from '@/components/Timestamp';
-import { TopicTagList }        from '@/components/Topic/TopicTagList';
+import { FullBleedContainer }  from '../../components/FullBleed/FullBleedContainer.js';
+import { Head }                from '../../components/Head.js';
+import { Main }                from '../../components/Main.js';
+import { Timestamp }           from '../../components/Timestamp.js';
+import { TopicTagList }        from '../../components/Topic/TopicTagList.js';
 import {
   getPageMetadata,
   mdxRaw,
@@ -15,13 +15,13 @@ import {
   PageStat,
   PageSocial,
   Topic,
-} from '@/lib/content';
+} from '../../lib/content/index.js';
 import {
   styled,
   StylesProvider,
-} from '@/lib/styles';
-import { BlogArt }             from './BlogArt';
-import { BlogPostDescription } from './BlogPostDescription';
+} from '../../lib/styles/index.js';
+import { BlogArt }             from './BlogArt.js';
+import { BlogPostDescription } from './BlogPostDescription.js';
 
 const BlogPostHeadingContent = styled(FullBleedContainer, {
   paddingTop: '1rem',

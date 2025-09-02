@@ -3,11 +3,11 @@ import {
   BlogPost,
   BlogPostProps,
   getBlogPostStaticProps,
-} from '@/components/Blog';
+} from '../../../../../components/Blog/BlogPost.js';
 import {
   mdx as baseMDX,
   Topic,
-} from '@/lib/content';
+} from '../../../../../lib/content/index.js';
 
 const WhatTheArt3Post = (props: BlogPostProps<any>) => (
   <BlogPost { ...props } />

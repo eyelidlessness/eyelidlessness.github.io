@@ -1,2 +1,2 @@
-export * from './math';
-export * from './raster';
+export * from './math.js';
+export * from './raster.js';

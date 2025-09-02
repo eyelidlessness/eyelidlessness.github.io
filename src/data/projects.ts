@@ -1,4 +1,4 @@
-import { FRESHResumeProject } from '@/schemas/FRESH.js';
+import { FRESHResumeProject } from '../schemas/FRESH.js';
 
 export enum ProjectCategory {
   OPEN_SOURCE   = 'Open source',

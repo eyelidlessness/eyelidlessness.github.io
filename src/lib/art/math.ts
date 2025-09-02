@@ -1,4 +1,4 @@
-import { sortBy } from '@/lib/collections';
+import { sortBy } from '../collections/arrays.js';
 
 export const toFixed = (value: number, fractionalDigits: number) => (
   Number(value.toFixed(fractionalDigits))

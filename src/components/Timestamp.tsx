@@ -2,7 +2,7 @@ import { ComponentProps } from 'preact';
 import {
   styled,
   theme,
-} from '@/lib/styles';
+} from '../lib/styles/index.js';
 
 const months = [
   ,

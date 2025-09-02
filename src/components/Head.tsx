@@ -6,9 +6,9 @@ import {
   criticalStyles,
   setGlobalStyles,
   theme,
-} from '@/lib/styles';
-import { Favicons }     from './Favicons';
-import { PageMetadata } from '@/lib/content';
+} from '../lib/styles/index.js';
+import { Favicons }     from './Favicons.js';
+import { PageMetadata } from '../lib/content/meta.js';
 
 setGlobalStyles();
 

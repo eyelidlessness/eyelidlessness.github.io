@@ -1,6 +1,6 @@
-import { ProjectRole } from '@/data/projects.js';
-import { mdx } from '@/lib/content/mdx.js';
-import { styled } from '@/lib/styles/styles.js';
+import { ProjectRole } from '../../data/projects.js';
+import { mdx } from '../../lib/content/mdx.js';
+import { styled } from '../../lib/styles/styles.js';
 
 const BaseProjectDescription = styled('div', {
   fontSize: '0.88889em',

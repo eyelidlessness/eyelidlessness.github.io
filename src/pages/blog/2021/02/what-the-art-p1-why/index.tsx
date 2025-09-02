@@ -4,13 +4,13 @@ import {
   BlogPost,
   BlogPostProps,
   getBlogPostStaticProps,
-} from '@/components/Blog';
-import { TopicTag }   from '@/components/Topic';
+} from '../../../../../components/Blog/BlogPost.js';
+import { TopicTag }   from '../../../../../components/Topic/TopicTag.js';
 import {
   mdx,
   Topic,
-} from '@/lib/content';
-import { styled }     from '@/lib/styles';
+} from '../../../../../lib/content/index.js';
+import { styled }     from '../../../../../lib/styles/styles.js';
 
 const VerticallyCenterTopicTagChild = styled('span', {
   nested: {

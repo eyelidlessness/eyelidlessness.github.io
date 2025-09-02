@@ -1,7 +1,7 @@
 import {
   blogArtDefaultParameters,
   BLOG_ART_HEIGHT,
-} from '@/components/Blog';
+} from '../Blog/BlogArt.js';
 import {
   AnyPointSequence,
   COORDINATE_MAX,
@@ -18,19 +18,19 @@ import {
   toFixed,
   toHexPointSequence,
   toPointSequence,
-} from '@/lib/art';
+} from '../../lib/art/index.js';
 import {
   CustomArtProps,
   Topic,
-} from '@/lib/content';
-import { sortBy } from '@/lib/collections';
+} from '../../lib/content/index.js';
+import { sortBy } from '../../lib/collections/arrays.js';
 import {
   renderer,
   styled,
   StylesProvider as DefaultStylesProvider,
   theme,
   IStyle,
-} from '@/lib/styles';
+} from '../../lib/styles/index.js';
 
 type Indexed<P> =
   & Omit<P, 'as'>
