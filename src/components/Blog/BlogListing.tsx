@@ -15,10 +15,10 @@ import {
 import { BlogPostProps }       from './BlogPost';
 
 interface BlogPostsByYear {
-  readonly [key: number]: readonly BlogPostProps<any>[];
+  readonly [key: number]: readonly BlogPostProps[];
 }
 
-const groupByYear = (posts: readonly BlogPostProps<any>[]) => (
+const groupByYear = (posts: readonly BlogPostProps[]) => (
   posts.reduce<BlogPostsByYear>((acc, post) => {
     const year = post.stat.created.getFullYear();
     const group = acc[year] ?? [];

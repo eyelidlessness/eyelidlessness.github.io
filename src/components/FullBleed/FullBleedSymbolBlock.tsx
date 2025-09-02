@@ -2,7 +2,6 @@ import {
   ComponentChildren,
   ComponentProps,
   ComponentType,
-  VNode,
 } from 'preact';
 import { styled }             from '@/lib/styles';
 import { FullBleedContainer } from './FullBleedContainer';
@@ -78,7 +77,7 @@ interface FullBleedSymbolBlockProps<
   C extends FullBleedSymbolBlockComponent,
   S extends FullBleedSymbolBlockComponent
 > {
-  children?:            VNode;
+  children?:            ComponentChildren;
   ContentContainer?:    C;
   InnerContainer?:      I;
   OuterContainer?:      O;

@@ -1,7 +1,5 @@
 // @ts-check
 
-/// <reference path="../typings/preact/index.d.ts" />
-
 /**
  * @typedef {import('preact').ElementType} ElementType
  * @typedef {ReturnType<import('microsite/page').definePage>} PageDefinition

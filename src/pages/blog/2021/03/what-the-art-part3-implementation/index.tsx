@@ -57,6 +57,7 @@ import {
   styled,
   StylesProvider as DefaultStylesProvider,
   theme,
+  StyleableClassName,
 } from '@/lib/styles';
 
 const repoURL = (...segments: readonly string[]) => ([
@@ -123,7 +124,7 @@ const BaseHashExampleGraphic = styled('svg', {
 });
 
 interface HashExampleGraphicProps {
-  readonly className?: string;
+  readonly className?: StyleableClassName;
   readonly children?:  ComponentChildren;
   readonly height?:    number;
   readonly width?:     number;
@@ -190,7 +191,7 @@ const FlexText = styled('text', {
 });
 
 interface BaseSHA1ExampleProps {
-  readonly className?: string;
+  readonly className?: StyleableClassName;
   readonly hash:       string;
 }
 
@@ -232,7 +233,7 @@ type Indexed<P> =
 const sortableClassName = identifier();
 
 type BaseSortableProps<P> =
-  & { readonly className?: string }
+  & { readonly className?: StyleableClassName }
   & P;
 
 const sortableProps = <P,>(

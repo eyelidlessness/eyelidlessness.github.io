@@ -41,7 +41,7 @@ export interface BlogPostDescription {
 }
 
 export interface BlogPostProps<
-  Path extends string
+  Path extends string = string,
 > extends BlogPostDescription, PageMetadata<Path> {
   readonly children?: ComponentChildren;
   readonly hash:      string;

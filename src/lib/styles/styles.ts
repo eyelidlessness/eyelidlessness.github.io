@@ -20,6 +20,13 @@ import {
 import { identity }       from '@/lib/helpers';
 import hashed             from './hashed';
 
+export type StyleableIntrinsicElements = JSX.IntrinsicElements;
+export type StyleableIntrinsicElement = keyof JSX.IntrinsicElements;
+export type AnyStyleableIntrinsicElement = StyleableIntrinsicElements[
+  StyleableIntrinsicElement
+];
+export type StyleableClassName = AnyStyleableIntrinsicElement['className'];
+
 const _require = module.createRequire(import.meta.url);
 
 const { default: createIdentifier } = _require('fela-identifier');
@@ -58,19 +65,7 @@ export const {
   renderer,
 } = createRenderer();
 
-// let currentStyles: () => string = () => '';
-
-// if (
-//   !devMode &&
-//   import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
-// ) {
-//   renderer.subscribe(async () => {
-//     currentStyles = () => renderToString(renderer);
-//   });
-// }
-
 export const writeCurrentStyles = async () => {
-  // if (!devMode && currentStyles != null) {
   if (
     !devMode &&
     import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
@@ -117,36 +112,32 @@ export const css = Object.assign(baseCSS, {
 });
 
 export interface StyleableProps {
-  className?: string;
+  readonly className?: StyleableClassName;
 }
 
 interface BaseStyledProps extends StyleableProps {
   as?: ElementType<StyleableProps>;
 }
 
-type StyledProps<P> =
+type IntrinsicElementCastProps<As extends keyof JSX.IntrinsicElements> =
+  & { readonly as: As }
   & BaseStyledProps
-  & (
-    P extends { as: infer T }
-      ? T extends keyof JSX.IntrinsicElements
-        ? (
-          & { as: T }
-          & JSX.IntrinsicElements[T]
-        )
-      : T extends ComponentType<infer P2>
-        ? P2 extends StyleableProps
-          ? (
-            & { as: ComponentType<P2> }
-            & Omit<P2, 'as'>
-          )
-          : never
-        : Omit<P, 'as'>
-      : Omit<P, 'as'>
-    );
+  & JSX.IntrinsicElements[As];
 
-type StyledComponent<P> = ComponentType<
-  StyledProps<P>
->;
+// prettier-ignore
+type StyledComponentProps<P> =
+  & BaseStyledProps
+  & Omit<P, 'as'>;
+
+interface StyledComponent<P> {
+  <As extends keyof JSX.IntrinsicElements>(
+    props: IntrinsicElementCastProps<As>
+  ): JSX.Element;
+  <P extends StyleableProps>(
+    props: { readonly as: ComponentType<P> } & Omit<P, 'as'>
+  ): JSX.Element;
+  (props: StyledComponentProps<P>): JSX.Element;
+}
 
 interface Styled {
   <T extends keyof JSX.IntrinsicElements>(
@@ -170,7 +161,7 @@ export const styled: Styled = <P extends StyleableProps>(
     ? style
     : () => style;
 
-  return createComponent(rule, Component as ComponentType<P>, Object.keys);
+  return createComponent(rule, Component as ComponentType<P>, Object.keys) as never;
 };
 
 export { combineRules };

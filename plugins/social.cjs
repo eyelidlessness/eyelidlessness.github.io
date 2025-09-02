@@ -1,8 +1,7 @@
 // @ts-check
 
-/// <reference path="../typings/preact/index.d.ts" />
-
-const { writeFileSync } = require('fs');
+const fs = require('fs');
+const { writeFileSync } = fs;
 
 /**
  * @typedef {import('preact').ElementType} ElementType

@@ -1,4 +1,3 @@
-import { Fragment } from 'preact';
 import {
   blogArtDefaultParameters,
   BLOG_ART_HEIGHT,
