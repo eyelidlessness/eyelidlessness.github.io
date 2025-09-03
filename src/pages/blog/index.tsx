@@ -50,6 +50,7 @@ export default definePage(BlogIndexPage, {
     } = await import('path');
 
     const basePath  = dirname(selfPath);
+    const pagesPath = basePath.replace(/(^.*?\/pages)\/.*$/, '$1');
     const blogGlob = resolve(basePath, './**/*.js');
     const blogFiles = await glob(blogGlob);
     const postFiles = blogFiles.filter((filePath) => {
@@ -66,7 +67,7 @@ export default definePage(BlogIndexPage, {
         throw new Error(`Couldn't get post props for post at path: ${path}`);
       }
 
-      const relativePath = path.replace(basePath, '').replace(/(\/index)?\.js$/, '/');
+      const relativePath = path.replace(pagesPath, '').replace(/(\/index)?\.js$/, '/');
 
       return {
         ...postProps.props,
