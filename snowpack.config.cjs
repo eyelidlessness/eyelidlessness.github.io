@@ -1,8 +1,6 @@
 // @ts-check
 
-// const glob = require('globby');
 const path = require('path');
-
 const cwd = process.cwd();
 
 const externalEntries = [
@@ -19,8 +17,6 @@ const externalEntries = [
   'sharp',
   'strip-markdown',
 ];
-
-// const styleEntries = glob.sync(path.resolve(cwd, './src/lib/styles/**/*.{ts,tsx}'));
 
 const shikiEntries = [
   'remark-shiki-twoslash',
@@ -42,13 +38,10 @@ const config = {
       'typescript',
       ...externalEntries,
       ...shikiEntries,
-      // ...styleEntries,
     ],
 
     knownEntrypoints: [
-      // ...externalEntries,
       ...shikiEntries,
-      // ...styleEntries,
     ],
   },
 
