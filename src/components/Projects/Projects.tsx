@@ -1,17 +1,15 @@
 import { FullBleedContainer } from '../../components/FullBleed/FullBleedContainer.js';
-import { BlogArtProps }       from '../../components/Blog/BlogArt.js';
-import {
-  ProjectData,
-  ProjectRole,
-} from '../../data/projects.js';
+import type { BlogArtProps } from '../../components/Blog/BlogArt.js';
+import type { ProjectData } from '../../data/projects.js';
+import { ProjectRole } from '../../data/projects.js';
 import {
   clamp,
   styled,
   theme,
 } from '../../lib/styles/index.js';
-import { Project }            from './Project.js';
-import { ProjectsArt }        from './ProjectsArt.js';
-import { ProjectsTwoUp }      from './ProjectsTwoUp.js';
+import { Project } from './Project.js';
+import { ProjectsArt } from './ProjectsArt.js';
+import { ProjectsTwoUp } from './ProjectsTwoUp.js';
 
 const ProjectsCurrent = styled(FullBleedContainer, {
   ...theme.projects.current,

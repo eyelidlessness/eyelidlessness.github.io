@@ -1,8 +1,6 @@
-import {
-  getTopicKey,
-  TopicLike,
-} from '../../lib/content/topics.js';
-import { styled }   from '../../lib/styles/styles.js';
+import type { TopicLike } from '../../lib/content/topics.js';
+import { getTopicKey } from '../../lib/content/topics.js';
+import { styled } from '../../lib/styles/styles.js';
 import { TopicTag } from './TopicTag.js';
 
 const StyledTopicTagList = styled('ul', {

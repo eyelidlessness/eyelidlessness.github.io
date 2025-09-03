@@ -1,54 +1,55 @@
-import { definePage }        from 'microsite/page';
-import hasher                from 'node-object-hash';
-import {
-  ComponentChildren,
-  Fragment,
-} from 'preact';
+import { definePage } from 'microsite/page';
+import hasher from 'node-object-hash';
+import type { ComponentChildren } from 'preact';
+import { Fragment } from 'preact';
+import type { BlogPostProps } from '../../../../../components/Blog/index.js';
 import {
   blogArtDefaultParameters,
   BLOG_ART_HEIGHT,
   BlogArt,
   BlogPost,
-  BlogPostProps,
   getBlogPostStaticProps,
 } from '../../../../../components/Blog/index.js';
-import { CommentaryAside }   from '../../../../../components/CommentaryAside.js';
+import { CommentaryAside } from '../../../../../components/CommentaryAside.js';
+import type { FullBleedScrollableOverflowProps } from '../../../../../components/FullBleed/FullBleedScrollableOverflow.js';
 import {
   FullBleedContainer,
   FullBleedScrollableOverflow,
-  FullBleedScrollableOverflowProps,
 } from '../../../../../components/FullBleed/index.js';
-import { VisiblyHidden }     from '../../../../../components/VisiblyHidden.js';
-import {
+import { VisiblyHidden } from '../../../../../components/VisiblyHidden.js';
+import type {
   AnyPoint,
   AnyPointSequence,
-  COORDINATE_MAX,
-  COORDINATE_MIN,
   CubicBezierPoints,
-  cubicBezierPoints,
-  getNaiveSegments,
-  getNonPhallicSegments,
   HexChar,
-  hexChars,
   HexPointSequence,
-  InvalidHashError,
-  MIN_SMOOTHING,
-  SMOOTHING_RATIO,
   PointSequence,
   ScalePointOptions,
   SegmentList,
+} from '../../../../../lib/art/index.js';
+import {
+  COORDINATE_MAX,
+  COORDINATE_MIN,
+  cubicBezierPoints,
+  getNaiveSegments,
+  getNonPhallicSegments,
+  hexChars,
+  InvalidHashError,
+  MIN_SMOOTHING,
+  SMOOTHING_RATIO,
   scalePoint,
   toFixed,
   toHexPointSequence,
   toPointSequence,
   yBounds,
 } from '../../../../../lib/art/index.js';
+import type { CustomArtProps } from '../../../../../lib/content/index.js';
 import {
-  CustomArtProps,
   mdx as baseMDX,
   Topic,
 } from '../../../../../lib/content/index.js';
-import { sortBy }            from '../../../../../lib/collections/arrays.js';
+import { sortBy } from '../../../../../lib/collections/arrays.js';
+import type { StyleableClassName } from '../../../../../lib/styles/index.js';
 import {
   identifier,
   renderer,
@@ -56,7 +57,6 @@ import {
   styled,
   StylesProvider as DefaultStylesProvider,
   theme,
-  StyleableClassName,
 } from '../../../../../lib/styles/index.js';
 import type { OKLCHLightDarkStyle } from '../../../../../lib/styles/oklch.js';
 import { oklchLightDark } from '../../../../../lib/styles/oklch.js';

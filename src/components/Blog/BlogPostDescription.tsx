@@ -1,12 +1,12 @@
-import { ComponentProps }     from 'preact';
+import type {
+  ComponentChildren,
+  ComponentProps,
+  ElementType,
+} from 'preact';
 import {
   styled,
   theme,
 } from '../../lib/styles/index.js';
-import {
-  ComponentChildren,
-  ElementType,
-} from 'preact';
 import { FullBleedContainer } from '../../components/FullBleed/FullBleedContainer.js';
 
 const BlogPostDescriptionOuter = styled(FullBleedContainer, {

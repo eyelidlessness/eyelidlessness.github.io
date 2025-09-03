@@ -2,34 +2,34 @@ import {
   blogArtDefaultParameters,
   BLOG_ART_HEIGHT,
 } from '../Blog/BlogArt.js';
-import {
+import type {
   AnyPointSequence,
-  COORDINATE_MAX,
   CubicBezierPoints,
+  HexPointSequence,
+  ScalePointOptions,
+  SegmentList,
+} from '../../lib/art/index.js';
+import {
+  COORDINATE_MAX,
   cubicBezierPoints,
   getNaiveSegments,
   getNonPhallicSegments,
-  HexPointSequence,
   MIN_SMOOTHING,
   SMOOTHING_RATIO,
-  ScalePointOptions,
-  SegmentList,
   scalePoint,
   toFixed,
   toHexPointSequence,
   toPointSequence,
 } from '../../lib/art/index.js';
-import {
-  CustomArtProps,
-  Topic,
-} from '../../lib/content/index.js';
+import type { CustomArtProps } from '../../lib/content/index.js';
+import { Topic } from '../../lib/content/index.js';
 import { sortBy } from '../../lib/collections/arrays.js';
+import type { IStyle } from '../../lib/styles/styles.js';
 import {
   renderer,
   styled,
   StylesProvider as DefaultStylesProvider,
   theme,
-  IStyle,
 } from '../../lib/styles/index.js';
 
 type Indexed<P> =

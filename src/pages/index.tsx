@@ -1,8 +1,8 @@
 import { definePage } from 'microsite/page';
 import { Head } from '../components/Head.js';
+import type { PageMetadata } from '../lib/content/meta.js';
 import {
   getPageMetadata,
-  PageMetadata,
   PageMetadataType,
 } from '../lib/content/meta.js';
 

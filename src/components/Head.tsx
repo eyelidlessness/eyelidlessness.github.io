@@ -7,8 +7,8 @@ import {
   setGlobalStyles,
   theme,
 } from '../lib/styles/index.js';
-import { Favicons }     from './Favicons.js';
-import { PageMetadata } from '../lib/content/meta.js';
+import { Favicons } from './Favicons.js';
+import type { PageMetadata } from '../lib/content/meta.js';
 
 setGlobalStyles();
 

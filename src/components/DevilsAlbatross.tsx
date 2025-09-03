@@ -1,12 +1,10 @@
-import {
+import type {
   ComponentChild,
   ComponentType,
   ElementType,
 } from 'preact';
-import {
-  StyleableProps,
-  styled,
-} from '../lib/styles/index.js';
+import type { StyleableProps } from '../lib/styles/styles.js';
+import { styled } from '../lib/styles/styles.js';
 
 interface DevilsAlbatrossGap {
   readonly horizontal?: string;

@@ -1,21 +1,20 @@
-import { PathParams }          from 'microsite/page';
-import { StaticPropsContext }  from 'microsite/utils/router';
-import { ComponentChildren }   from 'preact';
-import { renderToString }      from 'preact-render-to-string';
-import { FullBleedContainer }  from '../../components/FullBleed/FullBleedContainer.js';
-import { Head }                from '../../components/Head.js';
-import { Main }                from '../../components/Main.js';
-import { Timestamp }           from '../../components/Timestamp.js';
-import { TopicTagList }        from '../../components/Topic/TopicTagList.js';
-import {
-  getPageMetadata,
-  mdxRaw,
+import type { PathParams } from 'microsite/page';
+import type { StaticPropsContext } from 'microsite/utils/router';
+import type { ComponentChildren } from 'preact';
+import { renderToString } from 'preact-render-to-string';
+import { FullBleedContainer } from '../../components/FullBleed/FullBleedContainer.js';
+import { Head } from '../../components/Head.js';
+import { Main } from '../../components/Main.js';
+import { Timestamp } from '../../components/Timestamp.js';
+import { TopicTagList } from '../../components/Topic/TopicTagList.js';
+import type {
   PageMetadata,
-  PageMetadataType,
   PageStat,
   PageSocial,
-  Topic,
 } from '../../lib/content/index.js';
+import { getPageMetadata, PageMetadataType } from '../../lib/content/meta.js';
+import { mdxRaw } from '../../lib/content/mdx.js';
+import { Topic } from '../../lib/content/topics.js';
 import {
   styled,
   StylesProvider,
@@ -107,14 +106,14 @@ type AnyBlogPostProps<Path extends string> =
     readonly stat?:   Partial<PageStat>;
   };
 
-export type BlogMetadataType =
-  | PageMetadataType.IMMUTABLE
-  | PageMetadataType.IMMUTABLE_MERGE;
-
 export const BlogMetadataType = {
   IMMUTABLE:       PageMetadataType.IMMUTABLE,
   IMMUTABLE_MERGE: PageMetadataType.IMMUTABLE_MERGE,
 } as const;
+
+type BlogMetadataTypes = typeof BlogMetadataType;
+
+export type BlogMetadataType = BlogMetadataTypes[keyof BlogMetadataTypes];
 
 interface GetBlogPostStaticPropsOptions<Path extends string> extends Omit<
   StaticPropsContext<AnyBlogPostProps<Path>>,

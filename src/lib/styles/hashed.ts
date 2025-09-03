@@ -1,9 +1,14 @@
 /**
- * This is an exact copy of the current state of the `fela-hashed`
- * module at <https://github.com/10xjs/fela-hashed/blob/f53517360009e6a0600d1b80bb30874e1bf35f96/src/index.ts>
+ * This ~~is~~ an exact copy of the current state of the `fela-hashed` module at
+ * <https://github.com/10xjs/fela-hashed/blob/f53517360009e6a0600d1b80bb30874e1bf35f96/src/index.ts>
  *
- * This is because its `"module"` entry in `package.json` doesn't
- * match its actual ESM build path. TODO: open a PR to fix upstream.
+ * This is because its `"module"` entry in `package.json` doesn't match its
+ * actual ESM build path. TODO: open a PR to fix upstream.
+ *
+ * - - -
+ *
+ * This module has now been modified to satisfy TypeScript's
+ * `verbatimModuleSyntax` config.
  */
 
 declare module 'fela' {
@@ -67,7 +72,7 @@ declare module 'fela-utils' {
   ): Record<string, any>;
 }
 
-import {IRenderer} from 'fela';
+import type { IRenderer } from 'fela';
 import isPlainObject from 'isobject';
 import {
   generateDeclarationReference,

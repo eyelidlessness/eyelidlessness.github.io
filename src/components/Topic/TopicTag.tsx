@@ -1,8 +1,8 @@
+import type { TopicLike } from '../../lib/content/topics.js';
 import {
   getHyphenatedTopicKey,
   getTopic,
-  TopicLike,
-} from '../../lib/content/index.js';
+} from '../../lib/content/topics.js';
 import {
   styled,
   theme,

@@ -1,9 +1,9 @@
-import { Plugin } from 'unified';
-import {
+import type { Plugin } from 'unified';
+import type {
   Data,
   Node,
 } from 'unist';
-import visit      from 'unist-util-visit';
+import visit from 'unist-util-visit';
 
 interface AbbrData extends Data {
   readonly hName:       string;

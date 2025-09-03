@@ -1,4 +1,4 @@
-import { ComponentProps } from 'preact';
+import type { ComponentProps } from 'preact';
 import {
   styled,
   theme,
@@ -30,11 +30,15 @@ const Time = styled('time', {
   ...theme.deemphasize,
 });
 
-export enum TimestampMode {
-  DEFAULT = 'DEFAULT',
-  META    = 'META',
-  SHORT   = 'SHORT',
-}
+export const TimestampMode = {
+  DEFAULT: 'DEFAULT',
+  META: 'META',
+  SHORT: 'SHORT',
+} as const;
+
+type TimestampModes = typeof TimestampMode;
+
+export type TimestampMode = TimestampModes[keyof TimestampModes]
 
 export type TimestampProps =
   & ComponentProps<typeof Time>

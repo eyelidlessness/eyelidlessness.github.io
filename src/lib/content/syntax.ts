@@ -1,28 +1,21 @@
-import {
-  // twoslasher,
-  TwoSlashReturn,
-} from '@typescript/twoslash';
-import { IStyle }           from 'fela';
-import path                 from 'path';
-import { VNode }            from 'preact';
-import { renderToString }   from 'preact-render-to-string';
+import type { TwoSlashReturn } from '@typescript/twoslash';
+import type { IStyle } from 'fela';
+import path from 'path';
+import type { VNode } from 'preact';
+import { renderToString } from 'preact-render-to-string';
+import type { IThemedToken } from 'shiki';
 import {
   getHighlighter,
   loadTheme,
-  IThemedToken,
 } from 'shiki';
+import type { Lang } from 'shiki-languages';
 import {
   BUNDLED_LANGUAGES,
-  Lang,
 } from 'shiki-languages';
-import {
-  renderers,
-  // runTwoSlash,
-  // ShikiTwoslashSettings,
-} from 'shiki-twoslash';
-import visit                from 'unist-util-visit';
-import { Node }             from 'unist';
-import { IRawThemeSetting } from 'vscode-textmate';
+import { renderers } from 'shiki-twoslash';
+import visit from 'unist-util-visit';
+import type { Node } from 'unist';
+import type { IRawThemeSetting } from 'vscode-textmate';
 import {
   css,
   styled,

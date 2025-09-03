@@ -1,6 +1,7 @@
-import { ProjectTimestamp } from '../data/projects.js';
+import type { ProjectTimestamp } from '../data/projects.js';
 import { styled, theme } from '../lib/styles/index.js';
-import { Timestamp, TimestampMode, TimestampProps } from './Timestamp.jsx';
+import type { TimestampProps } from './Timestamp.js';
+import { Timestamp, TimestampMode } from './Timestamp.js';
 
 interface OptionalTimestampProps extends Omit<TimestampProps, 'date'> {
   readonly date: Date | null;

@@ -1,15 +1,23 @@
-import { FRESHResumeProject } from '../schemas/FRESH.js';
+import type { FRESHResumeProject } from '../schemas/FRESH.js';
 
-export enum ProjectCategory {
-  OPEN_SOURCE   = 'Open source',
-  PUBLIC_ACCESS = 'Public access',
-}
+export const ProjectCategory = {
+  OPEN_SOURCE: 'Open source',
+  PUBLIC_ACCESS: 'Public access',
+} as const;
 
-export enum ProjectRole {
-  CONTRIBUTOR = 'Contributor',
-  CREATOR     = 'Creator',
-  DEVELOPER   = 'Developer',
-}
+type ProjectCategories = typeof ProjectCategory;
+
+export type ProjectCategory = ProjectCategories[keyof ProjectCategories];
+
+export const ProjectRole = {
+  CONTRIBUTOR: 'Contributor',
+  CREATOR: 'Creator',
+  DEVELOPER: 'Developer',
+} as const;
+
+type ProjectRoles = typeof ProjectRole;
+
+export type ProjectRole = ProjectRoles[keyof ProjectRoles];
 
 export type ProjectTimestamp = `${number}${number}${number}${number}-${number}${number}`;
 

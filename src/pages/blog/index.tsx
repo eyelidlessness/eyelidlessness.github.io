@@ -1,14 +1,14 @@
 import { definePage } from 'microsite/page';
+import type { BlogPostProps } from '../../components/Blog/BlogPost.js';
 import {
   BlogArtDefs,
   BlogListing,
-  BlogPostProps,
 } from '../../components/Blog/index.js';
-import { Head }       from '../../components/Head.js';
-import { Main }       from '../../components/Main.js';
+import { Head } from '../../components/Head.js';
+import { Main } from '../../components/Main.js';
+import type { PageMetadata } from '../../lib/content/meta.js';
 import {
   getPageMetadata,
-  PageMetadata,
   PageMetadataType,
 } from '../../lib/content/meta.js';
 

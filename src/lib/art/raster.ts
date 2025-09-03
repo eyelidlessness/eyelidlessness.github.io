@@ -2,21 +2,23 @@
 import {
   renderToString as renderStylesToString,
 } from 'fela-tools';
+import type { ComponentChildren } from 'preact';
 import {
-  ComponentChildren,
   Fragment,
   h,
 } from 'preact';
 import { renderToString } from 'preact-render-to-string';
-import sharp              from 'sharp';
-import {
-  IRenderer,
-  theme,
-} from '../styles/index.js';
+import sharp from 'sharp';
+import type { IRenderer } from '../styles/styles.js';
+import { theme } from '../styles/theme.js';
 
-export enum RasterType {
-  PNG = 'png',
-}
+export const RasterType = {
+  PNG: 'png',
+} as const;
+
+type RasterTypes = typeof RasterType;
+
+export type RasterType = RasterTypes[keyof RasterTypes];
 
 interface GenerateRasterFromSVGOptions {
   readonly debug?:        boolean;

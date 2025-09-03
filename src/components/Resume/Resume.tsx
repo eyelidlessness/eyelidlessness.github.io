@@ -1,17 +1,15 @@
-import {
+import type {
   ComponentProps,
   ElementType,
   FunctionComponent,
 } from 'preact';
-import { BlogArtProps }       from '../Blog/BlogArt.js';
+import type { BlogArtProps } from '../Blog/BlogArt.js';
 import { FullBleedContainer } from '../FullBleed/FullBleedContainer.js';
 import {
   Timestamp,
   TimestampMode,
 } from '../Timestamp.js';
-import {
-  ProjectTimestamp,
-} from '../../data/projects.js';
+import type { ProjectTimestamp } from '../../data/projects.js';
 import type { EmploymentHistoryItemHighlights, ResumeData } from '../../data/resume.js';
 import {
   isFlatEmploymentHistoryHighlights,

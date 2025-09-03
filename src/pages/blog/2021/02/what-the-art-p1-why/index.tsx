@@ -1,16 +1,16 @@
 import { definePage } from 'microsite/page';
+import type { BlogPostProps } from '../../../../../components/Blog/BlogPost.js';
 import {
   BlogMetadataType,
   BlogPost,
-  BlogPostProps,
   getBlogPostStaticProps,
 } from '../../../../../components/Blog/BlogPost.js';
-import { TopicTag }   from '../../../../../components/Topic/TopicTag.js';
+import { TopicTag } from '../../../../../components/Topic/TopicTag.js';
 import {
   mdx,
   Topic,
 } from '../../../../../lib/content/index.js';
-import { styled }     from '../../../../../lib/styles/styles.js';
+import { styled } from '../../../../../lib/styles/styles.js';
 
 const VerticallyCenterTopicTagChild = styled('span', {
   nested: {

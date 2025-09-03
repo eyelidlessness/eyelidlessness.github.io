@@ -1,10 +1,10 @@
-import fs                from 'fs';
-import hasher            from 'node-object-hash';
-import path              from 'path';
-import { ComponentType } from 'preact';
-import { BlogArtProps }  from '../../components/Blog/BlogArt.js';
-import { RasterType }    from '../art/raster.js';
-import { Topic }         from '../content/topics.js';
+import fs from 'fs';
+import hasher from 'node-object-hash';
+import path from 'path';
+import type { ComponentType } from 'preact';
+import type { BlogArtProps } from '../../components/Blog/BlogArt.js';
+import { RasterType } from '../art/raster.js';
+import { Topic } from '../content/topics.js';
 import {
   getCurrentCommitDate,
   getInitialCommitDate,
@@ -96,11 +96,15 @@ const getPageSocialMetadata = (
   };
 };
 
-export enum PageMetadataType {
-  IMMUTABLE       = 'immutable',
-  IMMUTABLE_MERGE = 'immutable-merge',
-  MUTABLE         = 'mutable',
-}
+export const PageMetadataType = {
+  IMMUTABLE: 'immutable',
+  IMMUTABLE_MERGE: 'immutable-merge',
+  MUTABLE: 'mutable',
+} as const;
+
+type PageMetadataTypes = typeof PageMetadataType;
+
+export type PageMetadataType = PageMetadataTypes[keyof PageMetadataTypes];
 
 export const getPageMetadata = <Path extends string>(
   path:      Path,

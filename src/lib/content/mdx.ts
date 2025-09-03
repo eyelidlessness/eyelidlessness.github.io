@@ -1,37 +1,37 @@
-import mdxjs, {
-  AnyPlugin,
-  PluginsList,
-} from '@mdx-js/mdx';
+import type { AnyPlugin, PluginsList } from '@mdx-js/mdx';
+import mdxjs from '@mdx-js/mdx';
 import {
   mdx as h,
   MDXProvider,
 } from '@mdx-js/preact';
-import remarkSmartypants          from '@silvenon/remark-smartypants'
-import { transform }              from 'buble-jsx-only';
-import dedent                     from 'dedent';
-import module                     from 'module';
-import {
+import remarkSmartypants from '@silvenon/remark-smartypants'
+import { transform } from 'buble-jsx-only';
+import dedent from 'dedent';
+import module from 'module';
+import type {
   ElementType,
-  Fragment,
   FunctionComponent,
-  h as preactH,
-  toChildArray,
   VNode,
 } from 'preact';
+import {
+  Fragment,
+  h as preactH,
+  toChildArray,
+} from 'preact';
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
-import remarkMDX                  from 'remark-mdx';
-import remarkMDXToPlainText       from 'remark-mdx-to-plain-text';
-import remarkSlug                 from 'remark-slug';
-import { Plugin }                 from 'unified';
-import { CodeBlock }              from '../../components/CodeBlock.js';
+import remarkMDX from 'remark-mdx';
+import remarkMDXToPlainText from 'remark-mdx-to-plain-text';
+import remarkSlug from 'remark-slug';
+import type { Plugin } from 'unified';
+import { CodeBlock } from '../../components/CodeBlock.js';
 import {
   Emoji,
   isEmojiProps,
 } from '../../components/Emoji.js';
-import { abbreviations }          from '../a11y/abbreviations.js';
-import { StylesProvider }         from '../styles/styles.js';
-import { remarkDistinctAbbr }     from './abbr.js';
-import { syntaxHighlighting }     from './syntax.js';
+import { abbreviations } from '../a11y/abbreviations.js';
+import { StylesProvider } from '../styles/styles.js';
+import { remarkDistinctAbbr } from './abbr.js';
+import { syntaxHighlighting } from './syntax.js';
 
 const _require = module.createRequire(import.meta.url);
 

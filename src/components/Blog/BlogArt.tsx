@@ -6,9 +6,9 @@ import {
   DEFAULT_TOPIC,
   Topic,
 } from '../../lib/content/index.js';
+import type { IRenderer } from '../../lib/styles/styles.js';
 import {
   clamp,
-  IRenderer,
   renderer,
   styled,
   theme,
@@ -48,10 +48,14 @@ const Segment = styled('path', {
   opacity:  0.85,
 });
 
-export enum BlogArtDefsUsage {
-  INLINE = 'inline',
-  NONE   = 'none',
-}
+export const BlogArtDefsUsage = {
+  INLINE: 'inline',
+  NONE: 'none',
+} as const;
+
+type BlogArtDefsUsages = typeof BlogArtDefsUsage;
+
+export type BlogArtDefsUsage = BlogArtDefsUsages[keyof BlogArtDefsUsages];
 
 export const blogArtDefaultParameters = {
   xPadding: X_PADDING,

@@ -33,17 +33,23 @@ const resolveModulePath = (basePath: string) => (
       : basePath
 );
 
-enum GitFilter {
-  ALL         = '',
-  CURRENT     = '--diff-filter=M',
-  FIRST       = '--diff-filter=A',
-  FIRST_MERGE = '--full-history --reverse --merges',
-}
+const GitFilter = {
+  ALL: '',
+  CURRENT: '--diff-filter=M',
+  FIRST: '--diff-filter=A',
+  FIRST_MERGE: '--full-history --reverse --merges',
+} as const;
 
-enum GitFormat {
-  HASH     = '%H',
-  ISO_DATE = '%aI',
-}
+type GitFilters = typeof GitFilter;
+type GitFilter = GitFilters[keyof GitFilters];
+
+const GitFormat = {
+  HASH: '%H',
+  ISO_DATE: '%aI',
+} as const;
+
+type GitFormats = typeof GitFormat;
+type GitFormat = GitFormats[keyof GitFormats];
 
 type GitLogEntryDecoder<T> = (str: string) => T;
 

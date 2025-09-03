@@ -6,6 +6,7 @@
     "baseUrl": "src",
     "declaration": false,
     "downlevelIteration": true,
+    "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
@@ -28,7 +29,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2024"
+    "target": "es2024",
+    "verbatimModuleSyntax": true
   },
   "exclude": [
     "node_modules"

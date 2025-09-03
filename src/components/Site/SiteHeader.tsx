@@ -1,11 +1,11 @@
-import { ComponentChildren } from 'preact';
-import { DevilsAlbatross }   from '../DevilsAlbatross.js';
-import { GitHubLogo }        from '../GitHubLogo.js';
+import type { ComponentChildren } from 'preact';
+import { DevilsAlbatross } from '../DevilsAlbatross.js';
+import { GitHubLogo } from '../GitHubLogo.js';
 import {
   styled,
   theme,
 } from '../../lib/styles/index.js';
-import { PageMetadata } from '../../lib/content/meta.js';
+import type { PageMetadata } from '../../lib/content/meta.js';
 import {
   SiteLogo,
   siteLogoDimensionsPx,

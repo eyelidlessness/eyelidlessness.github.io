@@ -1,10 +1,10 @@
-import { ProjectData } from '../../data/projects.js';
+import type { ProjectData } from '../../data/projects.js';
 import { ResumeProjectRole } from '../../data/resume.js';
 import { styled } from '../../lib/styles/styles.js';
 import { clamp } from '../../lib/styles/functions.js';
 import { theme } from '../../lib/styles/theme.js';
-import { ProjectsTwoUp } from '../Projects/ProjectsTwoUp.jsx';
-import { Project } from '../Projects/Project.jsx';
+import { ProjectsTwoUp } from '../Projects/ProjectsTwoUp.js';
+import { Project } from '../Projects/Project.js';
 
 const FlexHeading = styled('h2', {
   fontSize:    clamp(

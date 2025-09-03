@@ -1,9 +1,9 @@
 import { identity } from '../lib/helpers/index.js';
-import {
-  FRESH_SCHEMA_FORMAT,
+import type {
   FRESHResume,
   FRESHResumeEmploymentHistoryItem,
 } from '../schemas/FRESH.js';
+import { FRESH_SCHEMA_FORMAT } from '../schemas/FRESH.js';
 import type {
   ProjectTimestamp,
   ProjectTimestamp as ResumeTimestamp,
@@ -318,21 +318,29 @@ type ResumeHistory =
 
 const history = employmentHistory as ResumeHistory;
 
-export enum ResumeSkillLevel {
-  BASIC        = 'Basic',
-  INTERMEDIATE = 'Intermediate',
-  ADVANCED     = 'Advanced',
-  EXPERT       = 'Expert',
-}
+export const ResumeSkillLevel = {
+  BASIC: 'Basic',
+  INTERMEDIATE: 'Intermediate',
+  ADVANCED: 'Advanced',
+  EXPERT: 'Expert',
+} as const;
 
-export enum ResumeSkillset {
-  EXPERTISE = 'Expertise',
-  LANGUAGES_PLATFORMS          = 'Languages',
-  SERVICES_DISTRIBUTED_SYSTEMS = 'Services',
-  WEB_UI_UX                    = 'Web UI & UX',
-  DOMAIN_SPECIFIC_LANGUAGES    = 'DSL\u200bs',
-  NICHE_ESOTERIC               = 'Niche/Esoteric',
-}
+type ResumeSkillLevels = typeof ResumeSkillLevel;
+
+export type ResumeSkillLevel = ResumeSkillLevels[keyof ResumeSkillLevels]
+
+export const ResumeSkillset = {
+  EXPERTISE: 'Expertise',
+  LANGUAGES_PLATFORMS: 'Languages',
+  SERVICES_DISTRIBUTED_SYSTEMS: 'Services',
+  WEB_UI_UX: 'Web UI & UX',
+  DOMAIN_SPECIFIC_LANGUAGES: 'DSL\u200bs',
+  NICHE_ESOTERIC: 'Niche/Esoteric',
+} as const;
+
+type ResumeSkillsets = typeof ResumeSkillset;
+
+export type ResumeSkillset = ResumeSkillsets[keyof ResumeSkillsets];
 
 const resumeSkills = {
   [ResumeSkillset.EXPERTISE]: [

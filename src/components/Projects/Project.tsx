@@ -1,8 +1,8 @@
-import { ProjectData }           from '../../data/projects.js';
-import { styled, theme }  from '../../lib/styles/index.js';
-import { GitHubLogo }            from '../GitHubLogo.js';
-import { projectsTwoUpQuery }    from './ProjectsTwoUp.js';
-import { ProjectDescription }    from './ProjectDescription.js';
+import type { ProjectData } from '../../data/projects.js';
+import { styled, theme } from '../../lib/styles/index.js';
+import { GitHubLogo } from '../GitHubLogo.js';
+import { projectsTwoUpQuery } from './ProjectsTwoUp.js';
+import { ProjectDescription } from './ProjectDescription.js';
 import { TimeRange } from '../TimeRange.js';
 
 const ProjectHeader = styled('div', {

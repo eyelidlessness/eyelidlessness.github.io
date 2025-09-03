@@ -1,21 +1,23 @@
-import {
-  combineRules,
-  createRenderer as baseCreateRenderer,
+import type {
   IRenderer,
   IStyle,
 } from 'fela';
+import {
+  combineRules,
+  createRenderer as baseCreateRenderer,
+} from 'fela';
 import { renderToString } from 'fela-tools';
 import module             from 'module';
-import {
+import type {
   ComponentChildren,
   ComponentType,
   ElementType,
-  h,
 } from 'preact';
+import { h } from 'preact';
+import type { Style } from 'preact-fela';
 import {
   createComponent,
   RendererProvider,
-  Style,
 } from 'preact-fela';
 import { identity }       from '../helpers/values.js';
 import hashed             from './hashed.js';

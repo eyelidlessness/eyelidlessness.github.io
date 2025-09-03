@@ -12,7 +12,7 @@ import {
   BlogArtDefsUsage,
   BLOG_ART_HEIGHT,
 } from './BlogArt.js';
-import { BlogPostProps }       from './BlogPost.js';
+import type { BlogPostProps } from './BlogPost.js';
 
 interface BlogPostsByYear {
   readonly [key: number]: readonly BlogPostProps[];
@@ -114,14 +114,22 @@ const ReadMoreLink = styled('a', {
   fontSize: '0.875em',
 });
 
-export enum BlogListingSort {
-  DATE = 'date',
-}
+export const BlogListingSort = {
+  DATE: 'date',
+} as const;
 
-export enum BlogListingOrder {
-  ASC  = 'asc',
-  DESC = 'desc',
-}
+type BlogListingSorts = typeof BlogListingSort;
+
+export type BlogListingSort = BlogListingSorts[keyof BlogListingSorts];
+
+export const BlogListingOrder = {
+  ASC: 'asc',
+  DESC: 'desc',
+} as const;
+
+type BlogListingOrders = typeof BlogListingOrder;
+
+export type BlogListingOrder = BlogListingOrders[keyof BlogListingOrders];
 
 export interface BlogListingProps {
   readonly order?: BlogListingOrder;

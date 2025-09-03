@@ -1,8 +1,8 @@
 import { definePage } from 'microsite/page';
+import type { BlogPostProps } from '../../../../../components/Blog/BlogPost.js';
 import {
   BlogMetadataType,
   BlogPost,
-  BlogPostProps,
   getBlogPostStaticProps,
 } from '../../../../../components/Blog/BlogPost.js';
 import {

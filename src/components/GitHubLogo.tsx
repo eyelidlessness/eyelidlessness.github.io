@@ -2,7 +2,7 @@ import {
   styled,
   theme,
 } from '../lib/styles/index.js';
-import { SVGDefs } from './SVGDefs.jsx';
+import { SVGDefs } from './SVGDefs.js';
 
 const baseSize        = 512;
 const viewBox         = [ 0, 0, baseSize, baseSize ].join(' ');
