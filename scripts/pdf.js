@@ -59,11 +59,12 @@ const generatePDF = async () => {
     args,
   });
   const page = await browser.newPage();
+
+  await page.emulateMediaType('print');
   await page.goto(`http://localhost:${port}/resume/`, {
     waitUntil: 'networkidle0',
   });
 
-  await page.emulateMediaType('print');
   await page.waitForNetworkIdle({
     idleTime: 500,
   });

@@ -31,6 +31,7 @@ const ResumePage = (props: ResumePageProps) => (
         href="/fonts/pdf-print.woff"
         as="font"
         type="font/woff"
+        media="print"
       />
     </Head>
 
