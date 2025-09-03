@@ -44,7 +44,6 @@
     "fela-plugin-typescript": "^12.2.1",
     "fela-preset-web": "^12.2.1",
     "fela-tools": "^12.2.1",
-    "hsluv": "^0.1.0",
     "localtunnel": "^2.0.1",
     "md5": "^2.3.0",
     "microsite": "npm:@eyelidlessness/microsite@^1.1.0-next.7",

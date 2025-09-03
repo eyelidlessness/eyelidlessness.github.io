@@ -1,4 +1,3 @@
-import hsluv                 from 'hsluv';
 import { definePage }        from 'microsite/page';
 import hasher                from 'node-object-hash';
 import {
@@ -59,6 +58,8 @@ import {
   theme,
   StyleableClassName,
 } from '../../../../../lib/styles/index.js';
+import type { OKLCHLightDarkStyle } from '../../../../../lib/styles/oklch.js';
+import { oklchLightDark } from '../../../../../lib/styles/oklch.js';
 
 const repoURL = (...segments: readonly string[]) => ([
   'https://github.com/eyelidlessness/eyelidlessness.github.io',
@@ -159,29 +160,44 @@ const HashExample = ({
   );
 };
 
-const hsluvColors = '0123456789'.split('').map((value) => {
-  const offset = Number(value);
+interface OKLCHColorScheme {
+  readonly emphasize: OKLCHLightDarkStyle;
+  readonly hover: OKLCHLightDarkStyle;
+  readonly plot: OKLCHLightDarkStyle;
+  readonly selected: OKLCHLightDarkStyle;
+  readonly x: OKLCHLightDarkStyle;
+  readonly y: OKLCHLightDarkStyle;
+}
 
+const oklchColors = '0123456789'.split('').map((value): OKLCHColorScheme => {
+  const offset = Number(value);
   const hue = offset * 36;
 
-  return {
-    dark: {
-      emphasize: hsluv.hsluvToHex([ hue, 100, 35 ]),
-      hover:     hsluv.hsluvToHex([ hue, 100, 3 ]),
-      plot:      hsluv.hsluvToHex([ hue, 100, 74 ]),
-      selected:  hsluv.hsluvToHex([ hue, 100, 64 ]),
-      x:         hsluv.hsluvToHex([ hue, 100, 84 ]),
-      y:         hsluv.hsluvToHex([ hue, 100, 74 ]),
-    },
+  interface FactoryOptions {
+    readonly lightness: number;
+    readonly darkLightness: number;
 
-    light: {
-      emphasize: hsluv.hsluvToHex([ hue, 100, 80 ]),
-      hover:     hsluv.hsluvToHex([ hue, 100, 97 ]),
-      plot:      hsluv.hsluvToHex([ hue, 100, 64 ]),
-      selected:  hsluv.hsluvToHex([ hue, 100, 64 ]),
-      x:         hsluv.hsluvToHex([ hue, 100, 54 ]),
-      y:         hsluv.hsluvToHex([ hue, 100, 44 ]),
-    },
+    /** @default 100 */
+    readonly chroma?: number;
+  }
+  const factory = (
+    options: FactoryOptions
+  ): OKLCHLightDarkStyle => {
+    return oklchLightDark({
+      lightness: options.lightness,
+      chroma: options.chroma ?? 100,
+      hue,
+      darkLightness: options.darkLightness,
+    });
+  };
+
+  return {
+    emphasize: factory({ lightness: 93, darkLightness: 34, chroma: 20 }),
+    hover: factory({ lightness: 97, darkLightness: 30, chroma: 10 }),
+    plot: factory({ lightness: 64, darkLightness: 74, chroma: 60 }),
+    selected: factory({ lightness: 71, darkLightness: 71, chroma: 60 }),
+    x: factory({ lightness: 54, darkLightness: 94, chroma: 70 }),
+    y: factory({ lightness: 44, darkLightness: 84, chroma: 70 }),
   };
 });
 
@@ -214,14 +230,8 @@ const BaseSHA1Example = ({
 );
 
 const SHA1Example = styled(BaseSHA1Example, {
-  color:      hsluvColors[9].light.x,
+  color:      oklchColors[9].x,
   marginTop: '0.5rem',
-
-  nested: {
-    [theme.darkMode]: {
-      color: hsluvColors[9].dark.y,
-    },
-  },
 });
 
 type Indexed<P> =
@@ -292,16 +302,9 @@ const FlexPoint = styled(BaseFlexPoint, ({
   index,
   sortedIndex,
 }) => ({
-  '--sorted-color': hsluvColors[sortedIndex].light[coordinate],
-  color:            hsluvColors[index].light[coordinate],
+  '--sorted-color': oklchColors[sortedIndex][coordinate],
+  color:            oklchColors[index][coordinate],
   whiteSpace:       'pre',
-
-  nested: {
-    [theme.darkMode]: {
-      '--sorted-color': hsluvColors[sortedIndex].dark[coordinate],
-      color:            hsluvColors[index].dark[coordinate],
-    },
-  },
 }));
 
 const flexPointBackgroundClassName = identifier();
@@ -322,23 +325,14 @@ const FlexColumnBackground = styled(BaseFlexPointBackground, ({
   index,
   sortedIndex,
 }) => ({
-  '--selected-color':        hsluvColors[index].light.selected,
-  '--selected-sorted-color': hsluvColors[sortedIndex].light.selected,
-  '--sorted-color':          hsluvColors[sortedIndex].light.hover,
-  color:                     hsluvColors[index].light.hover,
+  '--selected-color':        oklchColors[index].selected,
+  '--selected-sorted-color': oklchColors[sortedIndex].selected,
+  '--sorted-color':          oklchColors[sortedIndex].hover,
+  color:                     oklchColors[index].hover,
   fill:                      'currentcolor',
   opacity:                   0,
   transition:                'opacity 0.1s ease-in-out',
   zIndex:                    -1,
-
-  nested: {
-    [theme.darkMode]: {
-      '--selected-color':        hsluvColors[index].dark.selected,
-      '--selected-sorted-color': hsluvColors[sortedIndex].dark.selected,
-      '--sorted-color':          hsluvColors[sortedIndex].dark.hover,
-      color:                     hsluvColors[index].dark.hover,
-    },
-  },
 }));
 
 type BasePlotPointProps =
@@ -412,18 +406,17 @@ const PlotPoint = styled(BasePlotPoint, ({
 
   : isSegment
     ? {
-      '--emphasized-color': hsluvColors[index].light.plot,
+      '--emphasized-color': oklchColors[index].plot,
       // '--emphasized-r':     '6',
       color:                '#dadada',
       fill:                 'currentcolor',
-      stroke:               hsluvColors[index].light.plot,
+      stroke:               oklchColors[index].plot,
       strokeWidth:          0,
       // r:                    '4',
       transition:           segmentTransition,
 
       nested: {
         [theme.darkMode]: {
-          '--emphasized-color': hsluvColors[index].dark.plot,
           color:                '#666',
         },
       },
@@ -431,21 +424,21 @@ const PlotPoint = styled(BasePlotPoint, ({
 
     : {
       // '--emphasized-r':            pointSize,
-      '--emphasized-color':        hsluvColors[index].light.plot,
-      '--emphasized-sorted-color': hsluvColors[sortedIndex].light.plot,
+      '--emphasized-color':        oklchColors[index].plot,
+      '--emphasized-sorted-color': oklchColors[sortedIndex].plot,
 
       '--unsorted-transform': `translate(${[
         `${sortedTranslateXPercent}%`,
         `${sortedTranslateyPercent}%`,
       ].join(',')})`,
 
-      '--sorted-color':  hsluvColors[sortedIndex].light.plot,
-      '--sorted-stroke': hsluvColors[sortedIndex].light.emphasize,
+      '--sorted-color':  oklchColors[sortedIndex].plot,
+      '--sorted-stroke': oklchColors[sortedIndex].emphasize,
 
-      color:                       hsluvColors[index].light.plot,
+      color:                       oklchColors[index].plot,
       fill:                        'currentcolor',
       paintOrder:                  'stroke fill',
-      stroke:                      hsluvColors[index].light.emphasize,
+      stroke:                      oklchColors[index].emphasize,
       strokeWidth:                 0,
       transition: Object.entries({
         fill:           '0.1s',
@@ -455,17 +448,6 @@ const PlotPoint = styled(BasePlotPoint, ({
       }).map(([ property, duration ]) => (
         `${property} ${duration} ease-in-out`
       )).join(', '),
-
-      nested: {
-        [theme.darkMode]: {
-          '--emphasized-color':        hsluvColors[index].dark.plot,
-          '--emphasized-sorted-color': hsluvColors[sortedIndex].dark.plot,
-          '--sorted-color':            hsluvColors[sortedIndex].dark.plot,
-          '--sorted-stroke':           hsluvColors[sortedIndex].dark.emphasize,
-          color:                       hsluvColors[index].dark.plot,
-          stroke:                      hsluvColors[index].dark.emphasize,
-        },
-      },
     }
 ));
 
@@ -479,11 +461,11 @@ type SegmentLinePathProps<P> =
 const topicColorStyles = (index: number, topic?: Topic) => (
   topic == null
     ? {
-      color: hsluvColors[index].light.plot,
+      color: oklchColors[index].plot,
 
       nested: {
         [theme.darkMode]: {
-          color: hsluvColors[index].dark.plot,
+          color: oklchColors[index].plot,
         },
       },
     }

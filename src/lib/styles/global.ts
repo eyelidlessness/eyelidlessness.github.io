@@ -84,6 +84,10 @@ export const criticalStyles = cleanWhitespace(`
       url('/fonts/Minipax/regular.woff2') format('woff2');
   }
 
+  :root {
+    color-scheme: light dark;
+  }
+
   html, body {
     margin:     0;
     max-width:  100%;
@@ -310,6 +314,10 @@ export const setGlobalStyles = () => {
       }
 
       ${theme.darkMode} {
+        :root {
+          color-scheme: dark light;
+        }
+
         ${jsToCSS([ 'html', 'body' ], {
           ...theme[theme.darkMode].document,
         })}
