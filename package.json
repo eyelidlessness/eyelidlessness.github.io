@@ -32,7 +32,6 @@
     "buble-jsx-only": "^0.19.8",
     "chokidar-cli": "^2.1.0",
     "dedent": "^0.7.0",
-    "domexception": "^2.0.1",
     "emoji-regex": "^9.2.1",
     "eslint": "^3.14.1",
     "fela": "^12.2.1",
