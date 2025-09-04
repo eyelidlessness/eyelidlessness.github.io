@@ -9,5 +9,6 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 .env
 /.test
+/.tsimp
 /coverage
 /yarn-error.log

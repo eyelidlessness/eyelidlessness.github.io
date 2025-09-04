@@ -1,4 +1,4 @@
-import it   from 'ava';
+import test from 'ava';
 import path from 'path';
 import {
   getCurrentFileHash,
@@ -20,10 +20,11 @@ const validHashes = Object.entries({
   upper:   'C0A6A0B1A80898B178FAD939D6E31BA378ED10F6',
 });
 
-// Prerequisites
-it.before((assert) => {
+test('prerequisites', (assert) => {
   assert.snapshot(validHashes);
 });
+
+const it = test;
 
 validHashes.forEach(([ key, validHash ]) => {
   it(`gets a hex point sequence (${key})`, (assert) => {
