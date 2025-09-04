@@ -11,8 +11,8 @@
   "scripts": {
     "start": "yarn run build:watch & yarn run test:watch",
     "build": "yarn build:microsite && yarn build:pdf && echo 'Full build complete!'",
-    "build:microsite": "node ./scripts/microsite-build.js",
-    "build:pdf": "./scripts/node-ts ./scripts/pdf.ts",
+    "build:microsite": "node ./scripts/microsite-build.ts",
+    "build:pdf": "node ./scripts/pdf.ts",
     "build:watch": "yarn serve --listen ${SERVE_PORT:-'5000'} & yarn build & yarn test & chokidar \"src/**/*.{cjs,css,md,mdx,mjs,js,jsx,ts,tsx}\" -c 'pkill -f microsite; yarn build & yarn test'",
     "serve": "mkdir -p ./dist && serve ./dist",
     "test": "ava",

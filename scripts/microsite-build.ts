@@ -1,5 +1,3 @@
-// @ts-check
-
 import { spawnSync } from 'node:child_process';
 import {
   existsSync,
@@ -27,11 +25,7 @@ const MICROSITE_REQUIRED_PATHS = [
   DIST_DIR,
 ];
 
-/**
- * @param {string} path
- * @returns {void}
- */
-const rmRf = (path) => {
+const rmRf = (path: string): void => {
   rmSync(path, {
     recursive: true,
     force: true,
@@ -48,16 +42,12 @@ export const pre = () => {
 
 const MICROSITE_BIN = resolvePath(CWD, 'node_modules/.bin/microsite');
 
-/**
- * @typedef BuildResult
- * @property {number | null} status
- * @property {Error | undefined} [error]
- */
+interface BuildResult {
+  readonly status: number | null;
+  readonly error?: Error | undefined;
+}
 
-/**
- * @returns {BuildResult}
- */
-export const build = () => {
+export const build = (): BuildResult => {
   const { status, error } = spawnSync(MICROSITE_BIN, ['build', '--no-clean'], {
     stdio: 'inherit',
   });
