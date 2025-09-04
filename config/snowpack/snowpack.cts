@@ -14,8 +14,11 @@ const externalEntries = [
   'globby',
   'md5',
   'node-object-hash',
+  'rehype-parse',
+  'remark',
   'remark-mdx',
   'remark-mdx-to-plain-text',
+  'remark-stringify',
   'sharp',
   'strip-markdown',
 ];

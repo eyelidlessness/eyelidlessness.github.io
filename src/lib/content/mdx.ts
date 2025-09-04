@@ -7,7 +7,6 @@ import {
 import remarkSmartypants from '@silvenon/remark-smartypants'
 import { transform } from 'buble-jsx-only';
 import dedent from 'dedent';
-import module from 'module';
 import type {
   ElementType,
   FunctionComponent,
@@ -19,10 +18,14 @@ import {
   toChildArray,
 } from 'preact';
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
+import remarkAbbr from 'remark-abbr';
+import rehypeParse from 'rehype-parse';
+import rehypeRemark from 'rehype-remark';
+import remark from 'remark';
 import remarkMDX from 'remark-mdx';
 import remarkMDXToPlainText from 'remark-mdx-to-plain-text';
 import remarkSlug from 'remark-slug';
-import type { Plugin } from 'unified';
+import remarkStringify from 'remark-stringify';
 import { CodeBlock } from '../../components/CodeBlock.js';
 import {
   Emoji,
@@ -32,14 +35,6 @@ import { abbreviations } from '../a11y/abbreviations.js';
 import { StylesProvider } from '../styles/styles.js';
 import { remarkDistinctAbbr } from './abbr.js';
 import { syntaxHighlighting } from './syntax.js';
-
-const _require = module.createRequire(import.meta.url);
-
-const remarkParse     = _require('rehype-parse')     as typeof import('rehype-parse');
-const rehypeRemark    = _require('rehype-remark')    as typeof import('rehype-remark') & Plugin;
-const remark          = _require('remark')           as typeof import('remark');
-const remarkAbbr      = _require('remark-abbr')      as typeof import('remark-abbr');
-const remarkStringify = _require('remark-stringify') as typeof import('remark-stringify');
 
 const Div = ({ className, children, ...rest }: JSX.IntrinsicElements['div']) => (
   className === 'language-id'
@@ -207,7 +202,7 @@ export const mdxRaw: TemplateTag<string> = (...args) => {
   const str = getMDXString(args, { includeAbbreviations: false });
 
   return remark()
-    .use(remarkParse)
+    .use(rehypeParse)
     .use(rehypeRemark)
     .use(remarkStringify)
     .use(remarkMDX)
