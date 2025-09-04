@@ -1,0 +1,3 @@
+#!/bin/sh
+
+TSIMP_DIAG=ignore node --import=tsimp "$@"

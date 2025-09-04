@@ -1,5 +1,4 @@
-// @ts-check
-
+import type { Server } from 'node:http';
 import { createServer } from 'node:http';
 import { resolve as resolvePath } from 'node:path';
 import { cwd } from 'node:process';
@@ -9,18 +8,13 @@ import handler from 'serve-handler';
 const CWD = cwd();
 const SERVE_PATH = resolvePath(CWD, './dist');
 
-/**
- * @typedef {import('node:http').Server} Server
- */
+interface StartServerResult {
+  readonly server: Server;
+  readonly port: number;
+}
 
-/**
- * @return {Promise<{ server: Server, port: number }>}
- */
-const startServer = () => {
-  /** @type {Server} */
+const startServer = (): Promise<StartServerResult> => {
   const server = createServer((request, response) => {
-    // You pass two more arguments for config and middleware
-    // More details here: https://github.com/vercel/serve-handler#options
     return handler(request, response, {
       public: SERVE_PATH,
     });
@@ -47,8 +41,7 @@ const generatePDF = async () => {
 
   console.log('Server listening on port:', port);
 
-  /** @type {string[]} */
-  const args = Array();
+  const args = Array<string>();
 
   if (process.env.CI) {
     args.push('--no-sandbox');
