@@ -2,10 +2,7 @@ import type {
   IRenderer,
   IStyle,
 } from 'fela';
-import {
-  combineRules,
-  createRenderer as baseCreateRenderer,
-} from 'fela';
+import { createRenderer as baseCreateRenderer } from 'fela';
 import { renderToString } from 'fela-tools';
 import module             from 'module';
 import type {
@@ -164,7 +161,6 @@ export const styled: Styled = <P extends StyleableProps>(
   return createComponent(rule, Component as ComponentType<P>, Object.keys) as never;
 };
 
-export { combineRules };
 export type {
   IRenderer,
   IStyle,
