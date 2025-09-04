@@ -197,7 +197,7 @@ export const BlogListing = ({
                   <BlogListingTopicTagList link={ false } topics={ topics } />
 
                   <BlogListingDescription
-                    className={ theme.blog.listing.descriptionIdentifier}
+                    className={ theme.blog.listing.descriptionIdentifier }
                   >
                     { description }
                   </BlogListingDescription>

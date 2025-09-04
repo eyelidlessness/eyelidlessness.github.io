@@ -12,9 +12,7 @@ const TopicTagLink = styled('a', {
   ...theme.topicTagLink(theme.topicTagIdentifier.className),
 });
 
-const BaseTopicTagInner = styled('span', theme.topicTagIdentifier());
-
-const TopicTagInner = styled(BaseTopicTagInner, {
+const TopicTagInner = styled('span', {
   ...theme.topicTagInner,
 
   display:    'inline-block',
@@ -59,7 +57,7 @@ export const BaseTopicTag = ({
 
       { ...outerProps }
     >
-      <TopicTagInner>
+      <TopicTagInner className={theme.topicTagIdentifier.className}>
         { topic }
       </TopicTagInner>
     </TopicTagOuter>

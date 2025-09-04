@@ -239,7 +239,7 @@ type Indexed<P> =
     readonly index: number;
   };
 
-const sortableClassName = identifier();
+const sortableClassName = identifier().className;
 
 type BaseSortableProps<P> =
   & { readonly className?: StyleableClassName }
@@ -276,7 +276,7 @@ type BaseFlexPointProps =
     readonly padLength:  number;
   };
 
-const flexPointClassName = identifier();
+const flexPointClassName = identifier().className;
 
 const BaseFlexPoint = ({
   children,
@@ -306,7 +306,7 @@ const FlexPoint = styled(BaseFlexPoint, ({
   whiteSpace:       'pre',
 }));
 
-const flexPointBackgroundClassName = identifier();
+const flexPointBackgroundClassName = identifier().className;
 
 const BaseFlexPointBackground = ({
   children,
@@ -350,7 +350,7 @@ type BasePlotPointProps =
     readonly yShift:                  number;
   };
 
-const plotPointClassName = identifier();
+const plotPointClassName = identifier().className;
 
 const BasePlotPoint = ({
   children,
@@ -738,7 +738,7 @@ type BaseHashPointConversionProps =
   & Omit<JSX.IntrinsicElements['label'], 'as'>
   & { readonly sortedIndex: number };
 
-const hashPointClassName = identifier();
+const hashPointClassName = identifier().className;
 
 const BaseHashPointConversion = ({
   children,
@@ -775,7 +775,7 @@ const BaseToggleButton = styled('span', {
   verticalAlign:   'middle',
 });
 
-const toggleSwitchClassName = identifier();
+const toggleSwitchClassName = identifier().className;
 
 type ToggleButtonProps = Omit<JSX.IntrinsicElements['span'], 'as'>;
 
@@ -809,7 +809,7 @@ const HashPointsExampleSortToggleLabelText = styled('span', {
   marginRight: '0.5rem',
 });
 
-const sortToggleLabelClassName = identifier();
+const sortToggleLabelClassName = identifier().className;
 
 type HashPointsExampleSortToggleLabelProps =
   & Omit<JSX.IntrinsicElements['label'], 'as'>
@@ -1698,7 +1698,7 @@ const HashPointsExample = ({
     ? scaledPoints
     : sortedPoints;
 
-  const sortToggleClass = identifier();
+  const sortToggleClass = identifier().className;
 
   const {
     xScale,
@@ -2047,7 +2047,7 @@ export const CustomArt = ({
 
   const xMax = (COORDINATE_MAX + xPadding) * xScale;
 
-  const sortToggleClass = identifier_();
+  const sortToggleClass = identifier_().className;
 
   const naiveSegments = getNaiveSegments({
     points: scaledPoints as any,

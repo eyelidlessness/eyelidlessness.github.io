@@ -297,7 +297,7 @@ const topicColors = {
 };
 
 
-const blogListingDescriptionIdentifier = identifier();
+const blogListingDescriptionIdentifier = identifier().className;
 
 export const theme = {
   HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME,

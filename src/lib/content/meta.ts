@@ -13,6 +13,7 @@ import {
   getInitialFileMergeHash,
   getSHA1Hash,
 } from '../git/index.js';
+import type { UniqueIdentifierFactory } from 'lib/styles/styles.js';
 
 export const SOCIAL_IMAGE_DIMENSIONS = {
   height: 630,
@@ -44,7 +45,7 @@ export interface PageStat {
 }
 
 export interface CustomArtProps extends BlogArtProps {
-  readonly identifier?:     () => string;
+  readonly identifier?:     UniqueIdentifierFactory;
   readonly renderType:      'listing' | 'meta' | 'post';
   readonly StylesProvider?: ComponentType;
 }

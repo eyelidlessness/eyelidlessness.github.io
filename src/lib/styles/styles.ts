@@ -1,10 +1,14 @@
 import type {
   IRenderer,
   IStyle,
+  TRule,
 } from 'fela';
 import { createRenderer as baseCreateRenderer } from 'fela';
+import createIdentifier from 'fela-identifier';
+import pluginEmbedded from 'fela-plugin-embedded';
+import pluginSelectors from 'fela-plugin-multiple-selectors';
+import pluginTypescript from 'fela-plugin-typescript';
 import { renderToString } from 'fela-tools';
-import module             from 'module';
 import type {
   ComponentChildren,
   ComponentType,
@@ -16,29 +20,39 @@ import {
   createComponent,
   RendererProvider,
 } from 'preact-fela';
-import { identity }       from '../helpers/values.js';
-import hashed             from './hashed.js';
+import { identity } from '../helpers/values.js';
+import hashed from './hashed.js';
 
 export type StyleableIntrinsicElements = JSX.IntrinsicElements;
 export type StyleableIntrinsicElement = keyof JSX.IntrinsicElements;
 export type AnyStyleableIntrinsicElement = StyleableIntrinsicElements[
   StyleableIntrinsicElement
 ];
+
 export type StyleableClassName = AnyStyleableIntrinsicElement['className'];
-
-const _require = module.createRequire(import.meta.url);
-
-const { default: createIdentifier } = _require('fela-identifier');
-const { default: pluginEmbedded }   = _require('fela-plugin-embedded');
-const { default: pluginSelectors }  = _require('fela-plugin-multiple-selectors');
-
-/** @type {import('fela-plugin-typescript')} */
-const { default: pluginTypescript } = _require('fela-plugin-typescript');
 
 const devMode = import.meta.env?.MODE === 'development';
 
-export const createRenderer = () => {
-  const identifier = createIdentifier();
+type CreateIdentifierResult = ReturnType<typeof createIdentifier>;
+
+export interface SerializableUniqueIdentifier {
+  readonly className: string
+  toString(): string
+}
+
+// prettier-ignore
+export type UniqueIdentifierFactory = (name?: string) => (
+  & TRule
+  & SerializableUniqueIdentifier
+);
+
+interface StyleRenderer {
+  readonly identifier: UniqueIdentifierFactory;
+  readonly renderer: IRenderer;
+}
+
+export const createRenderer = (): StyleRenderer => {
+  const identifier: CreateIdentifierResult = createIdentifier();
 
   const renderer = baseCreateRenderer({
     devMode,
