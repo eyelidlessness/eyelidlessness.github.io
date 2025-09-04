@@ -49,5 +49,3 @@ export const clamp = (...args: readonly string[]) => (
 export const cleanWhitespace = (str: string) => (
   str.replace(/\s+/g, ' ').trim()
 );
-
-export * from 'polished';

@@ -53,7 +53,6 @@ import type { StyleableClassName } from '../../../../../lib/styles/index.js';
 import {
   identifier,
   renderer,
-  rgba,
   styled,
   StylesProvider as DefaultStylesProvider,
   theme,
@@ -631,7 +630,7 @@ const PlotPointEmphasisChoice = styled(BasePlotPointEmphasisChoice, ({
 
       nested: {
         [theme.darkMode]: {
-          color: rgba(255, 255, 255, 0.9),
+          color: 'rgba(255, 255, 255, 0.9)',
         },
       },
     },
