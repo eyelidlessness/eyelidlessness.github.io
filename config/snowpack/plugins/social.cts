@@ -1,74 +1,59 @@
-// @ts-check
+import type {
+  AnyPage,
+  BlogArtModule,
+  PageMetadata,
+  PluginFactory,
+  RasterLib,
+  StylesLib,
+} from './types.js';
 
-const fs = require('fs');
-const { writeFileSync } = fs;
+const fs = require('node:fs') as typeof import('node:fs');
+const path = require('node:path') as typeof import('node:path');
 
-/**
- * @typedef {import('preact').ElementType} ElementType
- * @typedef {ReturnType<import('microsite/page').definePage>} PageDefinition
- * @typedef {ElementType | PageDefinition} AnyPage
- */
-
-/**
- * @type {import('snowpack').SnowpackPluginFactory}
- */
-const pluginSocial = () => ({
+const pluginSocial: PluginFactory = () => ({
   name: 'plugin-social',
 
   async optimize({ buildDirectory }) {
     console.time('social');
 
     try {
-      const glob  = require('globby');
-      const path  = require('path');
-
-      const pagePaths = glob.sync(
+      const pagePaths = fs.globSync(
         path.resolve(buildDirectory, 'src/pages/**/*.js')
       );
-
-      const { mkdirSync } = await import('fs');
-      const { dirname }   = await import('path');
 
       const { h } = await import('preact');
       const documentPath = path.resolve(buildDirectory, 'src/pages/_document.js');
 
       const stylesPath = path.resolve(buildDirectory, 'src/lib/styles/styles.js');
-
-      /** @type {import('../src/lib/styles/styles')} */
       const {
         createRenderer,
         createStylesProvider,
-      } = await import(stylesPath);
+      } = await import(stylesPath) as StylesLib;
 
       const rasterPath = path.resolve(buildDirectory, 'src/lib/art/raster.js');
-      /** @type {import('../src/lib/art/raster')} */
       const {
         generateRasterFromSVG,
         RasterType,
-      } = await import(rasterPath);
+      } = await import(rasterPath) as RasterLib;
 
       const blogArtPath = path.resolve(
         buildDirectory,
         'src/components/Blog/BlogArt.js'
       );
-
-      /** @type {import('../src/components/Blog/BlogArt')} */
       const {
         BlogArt,
         BlogArtDefsUsage,
-      } = await import(blogArtPath);
+      } = await import(blogArtPath) as BlogArtModule;
 
       await Promise.all(pagePaths.map(async (pagePath) => {
         if (pagePath === documentPath) {
           return;
         }
 
-        /** @type {AnyPage | null} */
-        let page = null;
+        let page: AnyPage | null = null;
 
         try {
-          /** @type {{default: AnyPage}} */
-          page = (await import(pagePath)).default;
+          page = ((await import(pagePath)) as { default: AnyPage }).default;
         }
         catch (error) {
           console.trace(pagePath, error);
@@ -89,10 +74,11 @@ const pluginSocial = () => ({
             : { props: {} }
         );
 
-        /** @type {import('../src/lib/content/meta').PageMetadata<any> | null} */
-        const props = typeof staticProps === 'object' && staticProps != null
-          ? staticProps.props
-          : null;
+        const props: PageMetadata<string> | null = (
+          typeof staticProps === 'object' && staticProps != null
+            ? staticProps.props
+            : null
+        );
 
         if (props == null) {
           return;
@@ -156,10 +142,10 @@ const pluginSocial = () => ({
           const baseDistPath = path.resolve(process.cwd(), './dist');
           const distPath = path.resolve(baseDistPath, `.${publicPath}`);
 
-          mkdirSync(dirname(distPath), {
+          fs.mkdirSync(path.dirname(distPath), {
             recursive: true,
           });
-          writeFileSync(distPath, new Uint8Array(artRaster), { encoding: null});
+          fs.writeFileSync(distPath, new Uint8Array(artRaster), { encoding: null});
         }
         catch (error) {
           console.trace('unexpected error', pagePath, error, 'el', rasterElement);

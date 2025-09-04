@@ -1,37 +1,30 @@
-// @ts-check
+import type {
+  AnyPage,
+  ElementType,
+  PluginFactory,
+  StylesLib,
+} from './types.js';
 
-/**
- * @typedef {import('preact').ElementType} ElementType
- * @typedef {ReturnType<import('microsite/page').definePage>} PageDefinition
- * @typedef {ElementType | PageDefinition} AnyPage
- */
+const fs = require('node:fs') as typeof import('node:fs');
+const path = require('node:path') as typeof import('node:path');
 
-/**
- * @param {AnyPage} page
- * @returns {ElementType}
- */
-const getPageComponent = (page) => (
-  (
-    typeof page === 'object' &&
-    page.Component != null
-  )
-    ? page.Component
-  : (typeof page === 'function')
-    ? page
-    : () => null
-);
+const getPageComponent = (page: AnyPage): ElementType => {
+  if (typeof page === 'object' && page != null && page.Component != null) {
+    return page.Component;
+  }
 
-/**
- * @type {import('snowpack').SnowpackPluginFactory}
- */
-const pluginFela = () => ({
+  if (typeof page === 'function') {
+    return page;
+  }
+
+  return () => null;
+};
+
+const pluginFela: PluginFactory = () => ({
   name: 'plugin-fela',
 
   async optimize({ buildDirectory }) {
     console.time('fela');
-
-    const glob  = require('globby');
-    const path  = require('path');
 
     const {
       h,
@@ -40,17 +33,16 @@ const pluginFela = () => ({
     const { default: render } = await import('preact-render-to-string');
     const documentPath = path.resolve(buildDirectory, 'src/pages/_document.js');
 
-    const pagePaths = glob.sync(
+    const pagePaths = fs.globSync(
       path.resolve(buildDirectory, 'src/pages/**/*.js')
     ).filter((pagePath) => (
       pagePath !== documentPath
     ));
 
     const pages = await Promise.all(pagePaths.map(async (pagePath) => {
-      /** @type {{default: AnyPage}} */
       const {
         default: page,
-      } = await import(pagePath);
+      } = await import(pagePath) as { default: AnyPage };
 
       const Page = getPageComponent(page);
 
@@ -72,7 +64,7 @@ const pluginFela = () => ({
     }));
 
     try {
-      await render(h(Fragment, {}, ...pages));
+      await Promise.resolve().then(() => render(h(Fragment, {}, ...pages)));
     }
     catch (error) {
       console.trace(error);
@@ -81,9 +73,9 @@ const pluginFela = () => ({
     }
 
     const stylesPath = path.resolve(buildDirectory, 'src/lib/styles/styles.js');
-
-    /** @type {import('../src/lib/styles/styles')} */
-    const { writeCurrentStyles } = await import(stylesPath);
+    const { writeCurrentStyles } = (
+      await import(stylesPath)
+    ) as StylesLib;
 
     await writeCurrentStyles();
 
