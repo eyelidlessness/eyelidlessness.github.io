@@ -1,5 +1,5 @@
 import { definePage } from 'microsite/page';
-import hasher from 'node-object-hash';
+import { hasher } from 'node-object-hash';
 import type { ComponentChildren } from 'preact';
 import { Fragment } from 'preact';
 import type { BlogPostProps } from '../../../../../components/Blog/index.js';

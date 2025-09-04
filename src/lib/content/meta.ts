@@ -1,5 +1,5 @@
 import fs from 'fs';
-import hasher from 'node-object-hash';
+import { hasher } from 'node-object-hash';
 import path from 'path';
 import type { ComponentType } from 'preact';
 import type { BlogArtProps } from '../../components/Blog/BlogArt.js';
