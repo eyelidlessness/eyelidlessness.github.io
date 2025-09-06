@@ -988,6 +988,7 @@ interface HashPlotProps {
 	readonly height?: number;
 	readonly hexPoints: ReadonlyArray<ArrayType<HexPointSequence>>;
 	readonly points: AnyPointSequence;
+	readonly pointSize?: number;
 	readonly renderAxis?: boolean;
 	readonly renderCurves?: RenderCurves;
 	readonly renderSegments?: boolean;
@@ -1004,6 +1005,7 @@ const HashPlot = ({
 	exampleId,
 	hexPoints,
 	points,
+	pointSize = 6,
 	renderAxis = true,
 	renderCurves,
 	renderSegments = false,
@@ -1013,7 +1015,7 @@ const HashPlot = ({
 	sortToggleClass,
 	topics,
 	...props
-}: HashPlotProps): ComponentChildren => {
+}: HashPlotProps) => {
 	const {
 		xScale,
 		xShift,
@@ -1040,29 +1042,37 @@ const HashPlot = ({
 	const axisMinLabel = baseAxisMin.padStart(2, baseAxisMin);
 
 	const pointSizes = hexPoints.map(({ x, y }, index) => {
+		if (typeof pointSize === 'number') {
+			return pointSize;
+		}
+
 		const hexPointCoordinate = index % 2 === 0 ? x : y;
 		const hexPointCoordinateChar = hexPointCoordinate[0] as HexChar;
 
-		return dataDrivenHexCharPointSizes[hexPointCoordinateChar];
+		return typeof pointSize === 'number'
+			? pointSize
+			: dataDrivenHexCharPointSizes[hexPointCoordinateChar];
 	});
 
-	const blurRadii = pointSizes.map((computedPointSize) => {
-		return computedPointSize * 0.666 + 4;
-	});
+	const blurRadii =
+		typeof pointSize === 'number'
+			? null
+			: pointSizes.map((computedPointSize) => computedPointSize * 0.666 + 4);
 
-	const filterIds = blurRadii.map((_, index) => {
-		return `hash-plot-blur-${exampleId}-${index}`;
-	});
-
-	const defs = (
-		<defs>
-			{blurRadii.map((radius, index) => (
-				<filter id={filterIds[index]}>
-					<feGaussianBlur in="SourceGraphic" stdDeviation={radius} />
-				</filter>
-			))}
-		</defs>
+	const filterIds = blurRadii?.map(
+		(_, index) => `hash-plot-blur-${exampleId}-${index}`
 	);
+
+	const defs =
+		blurRadii == null ? null : (
+			<defs>
+				{blurRadii.map((radius, index) => (
+					<filter id={filterIds?.[index]}>
+						<feGaussianBlur in="SourceGraphic" stdDeviation={radius} />
+					</filter>
+				))}
+			</defs>
+		);
 
 	const axis = renderAxis ? (
 		<>
@@ -1088,6 +1098,8 @@ const HashPlot = ({
 		</>
 	) : null;
 
+	const defaultPointSize = pointSize;
+
 	const plotPoint = (
 		{ x: pointX, y: pointY }: ArrayType<typeof points>,
 		index: number
@@ -1104,10 +1116,10 @@ const HashPlot = ({
 		const sortedTranslateXPercent = 0 - toFixed(cx - sortedCx, 4);
 		const sortedTranslateyPercent = 0 - toFixed(cy - sortedCy, 4);
 
-		const pointSize = pointSizes[index];
-		const filterId = filterIds[index];
+		const currentPointSize = pointSizes[index] ?? defaultPointSize;
+		const filterId = filterIds?.[index];
 
-		const filterProps: { readonly filter?: string } =
+		const filterProps =
 			filterId == null
 				? {}
 				: {
@@ -1119,7 +1131,7 @@ const HashPlot = ({
 			cy,
 			filterId,
 			filterProps,
-			pointSize,
+			pointSize: currentPointSize,
 			sortedCx,
 			sortedCy,
 			sortedTranslateXPercent,
@@ -1142,7 +1154,7 @@ const HashPlot = ({
 			cx,
 			cy,
 			filterProps,
-			pointSize = NaN,
+			pointSize: plotPointSize,
 			sortedCx,
 			sortedCy,
 			sortedTranslateXPercent,
@@ -1170,8 +1182,8 @@ const HashPlot = ({
 				index={index}
 				isControlPoint={isControlPoint}
 				isSegment={isSegment}
-				pointSize={pointSizeOverride ?? pointSize}
-				r={pointSizeOverride ?? pointSize}
+				pointSize={pointSizeOverride ?? plotPointSize}
+				r={pointSizeOverride ?? plotPointSize}
 				sortedIndex={sortedIndex}
 				sortedX={sortedCx - point.x}
 				sortedY={sortedCy - sortedCy}
@@ -1255,16 +1267,10 @@ const HashPlot = ({
 
 			const segmentWidth = endX - startX;
 
-			let smoothing: number;
-
-			if (segmentWidth === 0) {
-				smoothing = 0;
-			} else {
-				smoothing = Math.max(
-					(midY / segmentWidth) * SMOOTHING_RATIO,
-					MIN_SMOOTHING
-				);
-			}
+			const smoothing =
+				segmentWidth === 0
+					? 0
+					: Math.max((midY / segmentWidth) * SMOOTHING_RATIO, MIN_SMOOTHING);
 
 			const cubicPoints = segment.reduce<readonly CubicBezierPoints[]>(
 				(acc, point, index) => {
