@@ -1,51 +1,49 @@
-const hyphenate = (string: string) => (
-  string.replace(/[A-Z]/g, (match) => (
-    `-${match.toLowerCase()}`
-  ))
-);
+import type { UnknownObject } from '../helpers/values.js';
+import { isUnknownObject } from '../helpers/values.js';
 
-export const jsToCSS = (
-  selectors: readonly string[],
-  js:        Readonly<Record<string, any>>
-): string => ([
-  selectors.join(','),
-  '{',
-  Object.entries(js)
-    .reduce((acc, [ k, v ]) => (
-      typeof v === 'object' && (k === 'nested' || k.includes('&'))
-        ? acc
-        : `${acc}${hyphenate(k)}:${v};`
-    ), ''),
-  '}',
-  Object.entries(js)
-    .map(([ k, v ]) => {
-      if (typeof v === 'object') {
-        if (k === 'nested') {
-          return Object.entries(v).map(([ k, v ]) => {
-            const nestedSelectors = selectors.map((selector) => (
-              k.replace(/&/g, selector)
-            ));
+const hyphenate = (string: string) =>
+	string.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
 
-            return jsToCSS(nestedSelectors, v as any);
-          }).join('');
-        }
-        else if (k.includes('&')) {
-          const nestedSelectors = selectors.map((selector) => (
-            k.replace(/&/g, selector)
-          ));
+export const jsToCSS = (selectors: readonly string[], js: UnknownObject): string =>
+	[
+		selectors.join(','),
+		'{',
+		Object.entries(js).reduce(
+			(acc, [k, v]) =>
+				typeof v === 'object' && (k === 'nested' || k.includes('&'))
+					? acc
+					: `${acc}${hyphenate(k)}:${String(v)};`,
+			''
+		),
+		'}',
+		Object.entries(js)
+			.map(([key, value]) => {
+				if (isUnknownObject(value)) {
+					if (key === 'nested') {
+						return Object.entries(value)
+							.map(([k, v]) => {
+								const nestedSelectors = selectors.map((selector) =>
+									k.replace(/&/g, selector)
+								);
 
-          return jsToCSS(nestedSelectors, v);
-        }
-      }
+								return jsToCSS(nestedSelectors, v as UnknownObject);
+							})
+							.join('');
+					} else if (key.includes('&')) {
+						const nestedSelectors = selectors.map((selector) =>
+							key.replace(/&/g, selector)
+						);
 
-      return '';
-    }, []).join(''),
-].join(''));
+						return jsToCSS(nestedSelectors, value);
+					}
+				}
 
-export const clamp = (...args: readonly string[]) => (
-  `clamp(${args.join(',')})`
-);
+				return '';
+			}, [])
+			.join(''),
+	].join('');
 
-export const cleanWhitespace = (str: string) => (
-  str.replace(/\s+/g, ' ').trim()
-);
+export const clamp = (...args: readonly string[]): `clamp(${string})` =>
+	`clamp(${args.join(',')})`;
+
+export const cleanWhitespace = (str: string): string => str.replace(/\s+/g, ' ').trim();

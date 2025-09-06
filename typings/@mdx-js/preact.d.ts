@@ -1,14 +1,11 @@
 declare module '@mdx-js/preact' {
-  import {
-    h,
-    ComponentType,
-  } from 'preact';
+	import type { ComponentType, h } from 'preact';
 
-  export const mdx: typeof h;
+	export const mdx: typeof h;
 
-  interface MDXProviderProps {
-    readonly components?: Record<string, ElementType>;
-  }
+	interface MDXProviderProps {
+		readonly components?: Record<string, ElementType>;
+	}
 
-  export const MDXProvider: ComponentType<MDXProviderProps>;
+	export const MDXProvider: ComponentType<MDXProviderProps>;
 }

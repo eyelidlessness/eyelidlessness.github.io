@@ -1,37 +1,32 @@
 import { definePage } from 'microsite/page';
 import { Head } from '../../components/Head.js';
 import type { PageMetadata } from '../../lib/content/index.js';
-import {
-  getPageMetadata,
-  PageMetadataType,
-} from '../../lib/content/index.js';
+import { getPageMetadata, PageMetadataType } from '../../lib/content/index.js';
 
-interface ProjectPageProps extends PageMetadata<any> {}
+interface ProjectPageProps extends PageMetadata {}
 
-const ProjectPage = (props: ProjectPageProps) => (
-    <Head meta={ props } />
-);
+const ProjectPage = (props: ProjectPageProps) => <Head meta={props} />;
 
 export default definePage(ProjectPage, {
-  async getStaticProps({ path }) {
-    const description = 'My projects';
-    const title  = 'Projects';
-    const meta = getPageMetadata(
-      path,
-      import.meta.url,
-      title,
-      PageMetadataType.IMMUTABLE,
-      []
-    );
+	getStaticProps({ path }) {
+		const description = 'My projects';
+		const title = 'Projects';
+		const meta = getPageMetadata(
+			path,
+			import.meta.url,
+			title,
+			PageMetadataType.IMMUTABLE,
+			[]
+		);
 
-    return {
-      props: {
-        ...meta,
+		return Promise.resolve({
+			props: {
+				...meta,
 
-        description,
-        redirect: '/resume/#projects',
-        title,
-      },
-    };
-  },
+				description,
+				redirect: '/resume/#projects',
+				title,
+			},
+		});
+	},
 });

@@ -1,5 +1,5 @@
 declare module 'remark-slug' {
-  import { Plugin } from 'unified';
+  import type { Plugin } from 'unified';
 
   const plugin: Plugin;
 

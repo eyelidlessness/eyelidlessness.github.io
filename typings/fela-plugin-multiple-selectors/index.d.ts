@@ -1,5 +1,5 @@
 declare module 'fela-plugin-multiple-selectors' {
-  import { TPlugin } from 'fela'
+	import type { TPlugin } from 'fela';
 
-  export default function (): TPlugin
+	export default function (): TPlugin;
 }

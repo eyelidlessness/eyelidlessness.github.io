@@ -1,9 +1,70 @@
 {
-  "editor.tabSize": 2,
-  "typescript.tsdk": "node_modules/typescript/lib",
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,
-    ".tsimp": true
-  }
+    ".tsimp": true,
+    ".tsbuildinfo": true,
+  },
+
+  // #region TypeScript
+  // - VSCode TS Language Server uses locally installed version of TypeScript.
+  //   (TODO: This doesn't seem to take automatically on project load? But it
+  //   is the exact setting that VSCode writes when choosing it in the UI?!?)
+  "typescript.tsdk": "node_modules/typescript/lib",
+  // #endregion
+
+  // #region Linting
+  "eslint.enable": true,
+  "eslint.format.enable": true,
+  "eslint.nodePath": "../node_modules/.bin",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.prettier": "explicit",
+    "source.fixAll": "explicit",
+    "source.formatDocument": "explicit",
+    "source.organizeImports": "explicit",
+  },
+  // #endregion
+
+  // #region Formatting (global)
+  "prettier.configPath": "prettier.config.js",
+  "prettier.ignorePath": ".prettierignore",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  // #endregion
+
+  // #region Type-specific configs
+  "files.associations": {
+    ".vscode/extensions.json": "jsonc",
+    ".vscode/settings.json": "jsonc",
+  },
+
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+  },
+  // #endregion
+
+  // #region file explorer
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "$(capture).js, $(capture).d.ts.map, $(capture).*.ts, $(capture)_*.js, $(capture)_*.ts",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock, *.config.ts, *.config.js, *.config.cjs, serve.json, tsconfig.json, tsconfig.*.json, .yarnrc, .no*, .*ignore, .editorconfig",
+  },
 }

@@ -27,9 +27,9 @@ const BaseMain = styled(FullBleedContainer, {
 
 type MainProps =
   & ComponentProps<typeof FullBleedContainer>
-  & { readonly meta: PageMetadata<any> };
+  & { readonly meta: PageMetadata };
 
-const mainMetaProps = (meta: PageMetadata<any>) => {
+const mainMetaProps = (meta: PageMetadata) => {
   if (meta.pageId == null) {
     return;
   }

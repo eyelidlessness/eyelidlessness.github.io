@@ -6,7 +6,7 @@ import {
   PageMetadataType,
 } from '../lib/content/meta.js';
 
-interface IndexPageProps extends PageMetadata<any> {
+interface IndexPageProps extends PageMetadata {
   readonly description: string;
 }
 
@@ -17,7 +17,7 @@ const IndexPage = (props: IndexPageProps) => (
 );
 
 export default definePage(IndexPage, {
-  async getStaticProps({ path }) {
+  getStaticProps({ path }) {
     const title = 'Eyelidlessness';
     const description = `Trevor Schmidt's personal website`;
     const meta  = getPageMetadata(
@@ -27,13 +27,13 @@ export default definePage(IndexPage, {
       PageMetadataType.MUTABLE
     );
 
-    return {
+    return Promise.resolve({
       props: {
         ...meta,
 
         description,
         redirect: '/resume/#resume',
       },
-    };
+    });
   },
 });

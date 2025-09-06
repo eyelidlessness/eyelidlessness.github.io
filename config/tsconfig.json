@@ -1,0 +1,13 @@
+{
+  "extends": ["../tsconfig.json"],
+  "compilerOptions": {
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    ".",
+    "../typings",
+    "../eslint.config.ts",
+    "../prettier.config.js",
+    "../snowpack.config.cjs"
+  ]
+}
