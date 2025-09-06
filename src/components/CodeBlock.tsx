@@ -8,6 +8,7 @@ import {
 
 const ContentContainer = styled('pre', {
 	fontSize: '1rem',
+	tabSize: 2,
 });
 
 const BaseInnerContainer = styled(FullBleedScrollableOverflow, {
