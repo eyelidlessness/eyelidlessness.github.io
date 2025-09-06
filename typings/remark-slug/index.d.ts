@@ -1,7 +1,7 @@
 declare module 'remark-slug' {
-  import type { Plugin } from 'unified';
+	import type { Plugin } from 'unified';
 
-  const plugin: Plugin;
+	const plugin: Plugin;
 
-  export = plugin;
+	export = plugin;
 }

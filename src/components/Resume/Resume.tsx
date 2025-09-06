@@ -5,7 +5,10 @@ import type {
 	FunctionComponent,
 } from 'preact';
 import type { ProjectTimestamp } from '../../data/projects.js';
-import type { EmploymentHistoryItemHighlights, ResumeData } from '../../data/resume.js';
+import type {
+	EmploymentHistoryItemHighlights,
+	ResumeData,
+} from '../../data/resume.js';
 import {
 	isFlatEmploymentHistoryHighlights,
 	ResumeSkillLevel,
@@ -252,7 +255,9 @@ const ResumeSkillsetsContainer = styled('div', {
 	fontSize: '0.88889em',
 
 	nested: {
-		[resumeSkillsetsColumnarQueries.screen]: { gridTemplateColumns: 'auto 1fr' },
+		[resumeSkillsetsColumnarQueries.screen]: {
+			gridTemplateColumns: 'auto 1fr',
+		},
 		[resumeSkillsetsColumnarQueries.print]: { gridTemplateColumns: 'auto 1fr' },
 	},
 });
@@ -339,9 +344,14 @@ interface ResumeSkillsListProps {
 	readonly skills: ResumeData['skills']['list'];
 }
 
-const ResumeSkillsetListing = ({ name: skillsetName, skills }: ResumeSkillsListProps) => (
+const ResumeSkillsetListing = ({
+	name: skillsetName,
+	skills,
+}: ResumeSkillsListProps) => (
 	<BaseResumeSkillsetListing itemscope itemtype="http://schema.org/ItemList">
-		<ResumeFlexHeading itemprop="name">{mdxInline(skillsetName)}</ResumeFlexHeading>
+		<ResumeFlexHeading itemprop="name">
+			{mdxInline(skillsetName)}
+		</ResumeFlexHeading>
 
 		<ResumeSkillsList>
 			{skills.map(({ level, name: skillName }) => {
@@ -509,7 +519,10 @@ const ResumeEmploymentHighlights = (props: ResumeEmploymentHighlightsProps) => {
 
 			<ResumeEmploymentHighlightsList itemtype="http://schema.org/ItemList">
 				{highlights.map((highlight) => (
-					<ResumeEmploymentHighlightsListItem key={highlight} itemprop="itemListElement">
+					<ResumeEmploymentHighlightsListItem
+						key={highlight}
+						itemprop="itemListElement"
+					>
 						{mdx(highlight)}
 					</ResumeEmploymentHighlightsListItem>
 				))}
@@ -548,7 +561,9 @@ const ResumeEmploymentListItem = ({
 			<ResumeEmploymentListItemEmployerHeading itemprop="name">
 				{employer}
 			</ResumeEmploymentListItemEmployerHeading>
-			<ResumeEmploymentPosition itemprop="roleName">{position}</ResumeEmploymentPosition>
+			<ResumeEmploymentPosition itemprop="roleName">
+				{position}
+			</ResumeEmploymentPosition>
 			<ResumeEmploymentListItemTimeRange
 				className={marginalia ? 'has-marginalia' : ''}
 				range={[start, end]}
@@ -556,9 +571,13 @@ const ResumeEmploymentListItem = ({
 		</ResumeEmploymentListItemHeader>
 
 		{summary == null ? null : (
-			<ResumeEmployerSummary itemprop="description">{mdx(summary)}</ResumeEmployerSummary>
+			<ResumeEmployerSummary itemprop="description">
+				{mdx(summary)}
+			</ResumeEmployerSummary>
 		)}
-		{marginalia && <ResumeEmployerMarginalia>* {marginalia}</ResumeEmployerMarginalia>}
+		{marginalia && (
+			<ResumeEmployerMarginalia>* {marginalia}</ResumeEmployerMarginalia>
+		)}
 
 		{isFlatEmploymentHistoryHighlights(highlights) ? (
 			<ResumeEmploymentHighlights highlights={highlights} />
@@ -702,7 +721,9 @@ export const Resume = ({
 									href={url}
 									itemprop="url"
 									screenLabel={(user as string | null | undefined) ?? network}
-									printLabel={(user as string | null | undefined) ?? shortURL(url)}
+									printLabel={
+										(user as string | null | undefined) ?? shortURL(url)
+									}
 									Icon={socialLogos[network]}
 									rel="me"
 								>
@@ -718,13 +739,15 @@ export const Resume = ({
 
 			<ResumeSection aria-label="Skillsets">
 				<ResumeSkillsetsContainer>
-					{Object.entries(skills.merged).map(([skillsetName, skillsetSkills]) => (
-						<ResumeSkillsetListing
-							key={skillsetName}
-							name={skillsetName}
-							skills={skillsetSkills}
-						/>
-					))}
+					{Object.entries(skills.merged).map(
+						([skillsetName, skillsetSkills]) => (
+							<ResumeSkillsetListing
+								key={skillsetName}
+								name={skillsetName}
+								skills={skillsetSkills}
+							/>
+						)
+					)}
 				</ResumeSkillsetsContainer>
 			</ResumeSection>
 

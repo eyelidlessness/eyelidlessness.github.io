@@ -1,6 +1,11 @@
 import type NodeFS from 'node:fs';
 import type NodePath from 'node:path';
-import type { AnyPage, ElementType, PluginFactory, StylesLib } from './types.js';
+import type {
+	AnyPage,
+	ElementType,
+	PluginFactory,
+	StylesLib,
+} from './types.js';
 
 const fs = require('node:fs') as typeof NodeFS;
 const path = require('node:path') as typeof NodePath;
@@ -34,7 +39,9 @@ const pluginFela: PluginFactory = () => ({
 
 		const pages = await Promise.all(
 			pagePaths.map(async (pagePath) => {
-				const { default: page } = (await import(pagePath)) as { default: AnyPage };
+				const { default: page } = (await import(pagePath)) as {
+					default: AnyPage;
+				};
 
 				const Page = getPageComponent(page);
 
@@ -47,7 +54,9 @@ const pluginFela: PluginFactory = () => ({
 						: { props: {} };
 
 				const props = (
-					typeof staticProps === 'object' && staticProps != null ? staticProps.props : {}
+					typeof staticProps === 'object' && staticProps != null
+						? staticProps.props
+						: {}
 				) as object;
 
 				return h(Page, props);

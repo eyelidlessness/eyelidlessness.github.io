@@ -105,16 +105,23 @@ export const BlogArt = (props: BlogArtProps): ComponentChildren => {
 			width={width}
 		>
 			<title>
-				Generated art for the page or post titled <i>{title}</i>, with the content or
-				commit hash {hash}{' '}
-				{topics.length > 0 ? [', and the topics: ', topics.map(String).join(', ')] : null}
+				Generated art for the page or post titled <i>{title}</i>, with the
+				content or commit hash {hash}{' '}
+				{topics.length > 0
+					? [', and the topics: ', topics.map(String).join(', ')]
+					: null}
 			</title>
 
 			<defs>
 				{defsUsage === BlogArtDefsUsage.INLINE ? <BlogArtStaticDefs /> : null}
 
 				<filter id={id('blur')}>
-					<feOffset in="SourceGraphic" dx="0" dy={glowOffset} result="glowOffsetOut" />
+					<feOffset
+						in="SourceGraphic"
+						dx="0"
+						dy={glowOffset}
+						result="glowOffsetOut"
+					/>
 
 					<feGaussianBlur
 						in="glowOffsetOut"
@@ -130,7 +137,12 @@ export const BlogArt = (props: BlogArtProps): ComponentChildren => {
 				</clipPath>
 
 				<filter id={id('blurOverlay')}>
-					<feOffset result="glowOffsetOut" in="SourceGraphic" dx="0" dy={glowOffset} />
+					<feOffset
+						result="glowOffsetOut"
+						in="SourceGraphic"
+						dx="0"
+						dy={glowOffset}
+					/>
 
 					<feGaussianBlur
 						result="glowBlurOut"
@@ -140,7 +152,12 @@ export const BlogArt = (props: BlogArtProps): ComponentChildren => {
 				</filter>
 
 				<filter id={id('blurUnderlay')}>
-					<feOffset result="glowOffsetOut" in="SourceGraphic" dx="0" dy={glowOffset} />
+					<feOffset
+						result="glowOffsetOut"
+						in="SourceGraphic"
+						dx="0"
+						dy={glowOffset}
+					/>
 
 					<feGaussianBlur
 						in="glowOffsetOut"
@@ -164,7 +181,12 @@ export const BlogArt = (props: BlogArtProps): ComponentChildren => {
 						yChannelSelector="G"
 					/>
 
-					<feColorMatrix in="dither" result="saturated" type="saturate" values="5" />
+					<feColorMatrix
+						in="dither"
+						result="saturated"
+						type="saturate"
+						values="5"
+					/>
 
 					<feGaussianBlur
 						in="saturated"

@@ -45,7 +45,9 @@ type Tuple<
 	T,
 	Length extends number,
 	Acc extends readonly T[] = readonly [],
-> = Acc extends { length: Length } ? Acc : Tuple<T, Length, readonly [...Acc, T]>;
+> = Acc extends { length: Length }
+	? Acc
+	: Tuple<T, Length, readonly [...Acc, T]>;
 
 type HexCoordinate = `${HexChar}${HexChar}`;
 
@@ -56,8 +58,9 @@ interface HexPoint {
 
 export type HexPointSequence = Tuple<HexPoint, 10>;
 
-const isHexPointSequence = (value: readonly HexPoint[]): value is HexPointSequence =>
-	value.length === 10;
+const isHexPointSequence = (
+	value: readonly HexPoint[]
+): value is HexPointSequence => value.length === 10;
 
 const hexPointPattern = /([0-9a-f]{2})([0-9a-f]{2})/gi;
 
@@ -158,7 +161,9 @@ export interface DimensionalBounds {
 	readonly max: number;
 }
 
-export const yBounds = (points: readonly VerticallyPositioned[]): DimensionalBounds => {
+export const yBounds = (
+	points: readonly VerticallyPositioned[]
+): DimensionalBounds => {
 	return points.reduce(
 		({ max, min }, { y }) => ({
 			max: Math.max(max, Number(y)),
@@ -171,12 +176,18 @@ export const yBounds = (points: readonly VerticallyPositioned[]): DimensionalBou
 	);
 };
 
-const scaledCoordinate = <Scale>(value: number, scale: Scale): ScaledCoordinate<Scale> =>
+const scaledCoordinate = <Scale>(
+	value: number,
+	scale: Scale
+): ScaledCoordinate<Scale> =>
 	Object.assign(toFixed(value, 2), {
 		[scaledCoordinateSymbol]: scale,
 	} as const);
 
-export interface ScalePointOptions<X extends number = number, Y extends number = number> {
+export interface ScalePointOptions<
+	X extends number = number,
+	Y extends number = number,
+> {
 	readonly xScale: X;
 	readonly xShift: number;
 	readonly yScale: Y;
@@ -292,8 +303,11 @@ export const getNonPhallicSegments = <X extends number, Y extends number>({
 	yScale,
 }: GetNonPhallicSegmentsOptions<X, Y>): SegmentList<X, Y> =>
 	segments.map<Segment<X, Y>>((segment) => {
-		const [{ x: startX, y: startY }, { x: midX, y: midY }, { x: endX, y: endY }] =
-			segment;
+		const [
+			{ x: startX, y: startY },
+			{ x: midX, y: midY },
+			{ x: endX, y: endY },
+		] = segment;
 
 		const width = endX - startX;
 		const ratio = midY / width;
@@ -513,95 +527,119 @@ export const getSegmentPaths = <X extends number, Y extends number>(
 		yTilt = false,
 	} = options;
 
-	return options.segments.reduce<readonly string[]>((acc, segment, index, segments) => {
-		const { length } = segments;
-		const [baseStartPoint, baseMidPoint, baseEndPoint] = segment;
+	return options.segments.reduce<readonly string[]>(
+		(acc, segment, index, segments) => {
+			const { length } = segments;
+			const [baseStartPoint, baseMidPoint, baseEndPoint] = segment;
 
-		const { x: startX, y: baseStartY } = baseStartPoint;
-		const { x: midX, y: midY } = baseMidPoint;
-		const { x: endX, y: baseEndY } = baseEndPoint;
+			const { x: startX, y: baseStartY } = baseStartPoint;
+			const { x: midX, y: midY } = baseMidPoint;
+			const { x: endX, y: baseEndY } = baseEndPoint;
 
-		const width = endX - startX;
+			const width = endX - startX;
 
-		const smoothing =
-			width === 0 ? 0 : Math.max((midY / width) * SMOOTHING_RATIO, MIN_SMOOTHING);
+			const smoothing =
+				width === 0
+					? 0
+					: Math.max((midY / width) * SMOOTHING_RATIO, MIN_SMOOTHING);
 
-		const Y_TILT = yTilt ? 0.1 : 0;
+			const Y_TILT = yTilt ? 0.1 : 0;
 
-		const Y_TILT_NEG = 1 - Y_TILT;
-		const Y_TILT_POS = 1 + Y_TILT;
+			const Y_TILT_NEG = 1 - Y_TILT;
+			const Y_TILT_POS = 1 + Y_TILT;
 
-		const startYTilt = index % 2 === 0 ? Y_TILT_NEG : Y_TILT_POS;
+			const startYTilt = index % 2 === 0 ? Y_TILT_NEG : Y_TILT_POS;
 
-		const startY = isBaselineBelowMidpoint
-			? baseStartY + baseYCoordinate
-			: yMax - baseStartY + baseYCoordinate;
+			const startY = isBaselineBelowMidpoint
+				? baseStartY + baseYCoordinate
+				: yMax - baseStartY + baseYCoordinate;
 
-		const startPoint: ScaledPoint<X, Y> = {
-			x: startX,
-			y: scaledCoordinate(startY * startYTilt, yScale),
-		};
+			const startPoint: ScaledPoint<X, Y> = {
+				x: startX,
+				y: scaledCoordinate(startY * startYTilt, yScale),
+			};
 
-		const endYTilt = index % 2 === 0 ? Y_TILT_NEG : Y_TILT_POS;
+			const endYTilt = index % 2 === 0 ? Y_TILT_NEG : Y_TILT_POS;
 
-		const endY = isBaselineBelowMidpoint
-			? baseEndY + baseYCoordinate
-			: yMax - baseEndY + baseYCoordinate;
+			const endY = isBaselineBelowMidpoint
+				? baseEndY + baseYCoordinate
+				: yMax - baseEndY + baseYCoordinate;
 
-		const endPoint: ScaledPoint<X, Y> = {
-			x: scaledCoordinate(endX, xScale),
-			y: scaledCoordinate(endY * endYTilt, yScale),
-		};
+			const endPoint: ScaledPoint<X, Y> = {
+				x: scaledCoordinate(endX, xScale),
+				y: scaledCoordinate(endY * endYTilt, yScale),
+			};
 
-		const startMidXDistance = midX - startX;
-		const midEndXDistance = endX - midX;
+			const startMidXDistance = midX - startX;
+			const midEndXDistance = endX - midX;
 
-		const forwardMidPointXAdjustment =
-			midEndXDistance > startMidXDistance ? 0 : 0 - (midX - startX) * MID_POINT_TILT;
+			const forwardMidPointXAdjustment =
+				midEndXDistance > startMidXDistance
+					? 0
+					: 0 - (midX - startX) * MID_POINT_TILT;
 
-		const midPointYAdjustment = (length - index) * ((yScale / 100) * yMax);
+			const midPointYAdjustment = (length - index) * ((yScale / 100) * yMax);
 
-		const forwardMidPoint: ScaledPoint<X, Y> = {
-			x: scaledCoordinate(midX + forwardMidPointXAdjustment, xScale),
-			y: scaledCoordinate(midY - midPointYAdjustment, yScale),
-		};
+			const forwardMidPoint: ScaledPoint<X, Y> = {
+				x: scaledCoordinate(midX + forwardMidPointXAdjustment, xScale),
+				y: scaledCoordinate(midY - midPointYAdjustment, yScale),
+			};
 
-		const forwardSegment: Segment<X, Y> = [startPoint, forwardMidPoint, endPoint];
+			const forwardSegment: Segment<X, Y> = [
+				startPoint,
+				forwardMidPoint,
+				endPoint,
+			];
 
-		const forwardPoints = getCubicPoints({
-			segment: forwardSegment,
-			smoothing,
-			xScale,
-			yScale,
-		});
+			const forwardPoints = getCubicPoints({
+				segment: forwardSegment,
+				smoothing,
+				xScale,
+				yScale,
+			});
 
-		const reverseMidPointXAdjustment =
-			midEndXDistance > startMidXDistance ? (endX - midX) * MID_POINT_TILT : 0;
+			const reverseMidPointXAdjustment =
+				midEndXDistance > startMidXDistance
+					? (endX - midX) * MID_POINT_TILT
+					: 0;
 
-		const reverseMidPoint: ScaledPoint<X, Y> = {
-			x: scaledCoordinate(midX + reverseMidPointXAdjustment, xScale),
-			y: scaledCoordinate(yMax - midPointYAdjustment, yScale),
-		};
+			const reverseMidPoint: ScaledPoint<X, Y> = {
+				x: scaledCoordinate(midX + reverseMidPointXAdjustment, xScale),
+				y: scaledCoordinate(yMax - midPointYAdjustment, yScale),
+			};
 
-		const reverseSegment: Segment<X, Y> = [endPoint, reverseMidPoint, startPoint];
+			const reverseSegment: Segment<X, Y> = [
+				endPoint,
+				reverseMidPoint,
+				startPoint,
+			];
 
-		const reversePoints = getCubicPoints({
-			segment: reverseSegment,
-			smoothing,
-			xScale,
-			yScale,
-		});
+			const reversePoints = getCubicPoints({
+				segment: reverseSegment,
+				smoothing,
+				xScale,
+				yScale,
+			});
 
-		return [
-			...acc,
-			[`M ${startPoint.x},${startPoint.y}`, ...forwardPoints, ...reversePoints, 'Z'].join(
-				' '
-			),
-		];
-	}, []);
+			return [
+				...acc,
+				[
+					`M ${startPoint.x},${startPoint.y}`,
+					...forwardPoints,
+					...reversePoints,
+					'Z',
+				].join(' '),
+			];
+		},
+		[]
+	);
 };
 
-interface ComputeBasicArtOptions<T extends string, X extends number, Y extends number> {
+interface ComputeBasicArtOptions<
+	T extends string,
+	X extends number,
+	Y extends number,
+> {
 	readonly hash: T;
 	readonly xPadding?: number;
 	readonly xScale?: X;
@@ -616,7 +654,11 @@ export interface ComputedBasicArt {
 	readonly yMax: number;
 }
 
-export const computeBasicArt = <T extends string, X extends number, Y extends number>({
+export const computeBasicArt = <
+	T extends string,
+	X extends number,
+	Y extends number,
+>({
 	hash,
 	xPadding = 0,
 	xScale = 1 as X,
@@ -664,7 +706,9 @@ export const computeBasicArt = <T extends string, X extends number, Y extends nu
 
 	const isBaselineBelowMidpoint = yOffset > 0.5;
 
-	const baseYCoordinate = isBaselineBelowMidpoint ? yMax * yOffset : -1 * yMax * yOffset;
+	const baseYCoordinate = isBaselineBelowMidpoint
+		? yMax * yOffset
+		: -1 * yMax * yOffset;
 
 	const segmentPaths = getSegmentPaths({
 		baseYCoordinate,

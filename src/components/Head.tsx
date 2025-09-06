@@ -35,7 +35,11 @@ export const Head = ({
 	return (
 		<BaseHead {...rest}>
 			<seo.title>{title} | Eyelidlessness</seo.title>
-			{description != null ? <seo.description>{description}</seo.description> : <></>}
+			{description != null ? (
+				<seo.description>{description}</seo.description>
+			) : (
+				<></>
+			)}
 
 			<meta name="theme-color" content={theme.siteLogo.color} />
 

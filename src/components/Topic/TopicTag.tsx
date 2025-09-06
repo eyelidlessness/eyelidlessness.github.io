@@ -34,11 +34,15 @@ export const BaseTopicTag = ({
 	}
 
 	const TopicTagOuter = link ? TopicTagLink : 'span';
-	const outerProps = link ? ({ href: `/blog/topics/${pathSegment}/` } as const) : {};
+	const outerProps = link
+		? ({ href: `/blog/topics/${pathSegment}/` } as const)
+		: {};
 
 	return (
 		<TopicTagOuter
-			className={[className, theme.HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME].join(' ')}
+			className={[className, theme.HOVER_INHERIT_TOPIC_COLOR_CLASS_NAME].join(
+				' '
+			)}
 			{...outerProps}
 		>
 			<TopicTagInner className={theme.topicTagIdentifier.className}>

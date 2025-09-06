@@ -61,7 +61,10 @@ const main = () => {
 	const { status, error } = build();
 	if (status !== 0 || error != null) {
 		// eslint-disable-next-line no-console
-		console.error('Microsite build error!', error ?? new Error('Unknown build error'));
+		console.error(
+			'Microsite build error!',
+			error ?? new Error('Unknown build error')
+		);
 		exit(status ?? 1);
 	}
 

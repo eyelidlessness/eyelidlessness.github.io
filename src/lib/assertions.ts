@@ -1,4 +1,7 @@
-export type Assert = (expression: unknown, message?: string) => asserts expression;
+export type Assert = (
+	expression: unknown,
+	message?: string
+) => asserts expression;
 
 export const assert: Assert = (expression, message = 'Assertion failed') => {
 	if (!expression) {

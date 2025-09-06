@@ -177,17 +177,21 @@ const renderTokens = (
 				h(
 					'code',
 					{},
-					...lightLines.reduce<Array<VNode | string>>((acc, line, lineIndex) => {
-						const tokens = line.map((lightToken, columnIndex) => {
-							const darkToken = asserted(darkLines[lineIndex]?.[columnIndex]);
-							const props = columnIndex === line.length - 1 ? lastLineProps : {};
+					...lightLines.reduce<Array<VNode | string>>(
+						(acc, line, lineIndex) => {
+							const tokens = line.map((lightToken, columnIndex) => {
+								const darkToken = asserted(darkLines[lineIndex]?.[columnIndex]);
+								const props =
+									columnIndex === line.length - 1 ? lastLineProps : {};
 
-							return renderToken(lightToken, darkToken, props);
-						});
-						const separator = lineIndex === 0 ? '' : '\n';
+								return renderToken(lightToken, darkToken, props);
+							});
+							const separator = lineIndex === 0 ? '' : '\n';
 
-						return [...acc, separator, ...tokens];
-					}, [])
+							return [...acc, separator, ...tokens];
+						},
+						[]
+					)
 				)
 			)
 		)

@@ -4,7 +4,11 @@ import { Main } from '../../components/Main.js';
 import { Resume, ResumeArt } from '../../components/Resume/index.js';
 import { resume } from '../../data/resume.js';
 import type { PageMetadata } from '../../lib/content/index.js';
-import { getPageMetadata, PageMetadataType, Topic } from '../../lib/content/index.js';
+import {
+	getPageMetadata,
+	PageMetadataType,
+	Topic,
+} from '../../lib/content/index.js';
 import { styled } from '../../lib/styles/styles.js';
 
 const ResumePageResume = styled(Resume, {

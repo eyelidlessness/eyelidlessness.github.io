@@ -86,9 +86,15 @@ interface StylesProviderProps {
 
 type StylesProvider = ComponentType<StylesProviderProps>;
 
-export const createStylesProvider = (providerRenderer: IRenderer): StylesProvider => {
+export const createStylesProvider = (
+	providerRenderer: IRenderer
+): StylesProvider => {
 	return ({ children }: StylesProviderProps) => {
-		return h(RendererProvider, { renderer: providerRenderer }, ...toChildArray(children));
+		return h(
+			RendererProvider,
+			{ renderer: providerRenderer },
+			...toChildArray(children)
+		);
 	};
 };
 
@@ -146,7 +152,11 @@ export const styled: Styled = <P extends StyleableProps>(
 ) => {
 	const rule = typeof style === 'function' ? style : () => style;
 
-	return createComponent(rule, Component as ComponentType<P>, Object.keys) as never;
+	return createComponent(
+		rule,
+		Component as ComponentType<P>,
+		Object.keys
+	) as never;
 };
 
 export type { IRenderer, IStyle };

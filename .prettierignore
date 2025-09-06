@@ -13,6 +13,9 @@ node_modules
 .tsimp
 dist
 
+# SEO nonsense
+public/google*.html
+
 # Tools
 tsconfig.tsbuildinfo
 yarn.lock

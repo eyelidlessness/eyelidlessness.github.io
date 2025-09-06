@@ -63,9 +63,10 @@ type FullBleedSymbolBlockComponent =
 	| ContainerElement
 	| ComponentType<FullBleedSymbolBlockComponentProps>;
 
-type PropsOf<T extends FullBleedSymbolBlockComponent> = T extends ContainerElement
-	? JSX.IntrinsicElements[T]
-	: JSX.LibraryManagedAttributes<T, ComponentProps<T>>;
+type PropsOf<T extends FullBleedSymbolBlockComponent> =
+	T extends ContainerElement
+		? JSX.IntrinsicElements[T]
+		: JSX.LibraryManagedAttributes<T, ComponentProps<T>>;
 
 interface FullBleedSymbolBlockProps<
 	O extends FullBleedSymbolBlockComponent = FullBleedSymbolBlockComponent,
@@ -98,7 +99,10 @@ type PropsWithDefaults = Omit<
 	Required<
 		Pick<
 			FullBleedSymbolBlockProps,
-			'ContentContainer' | 'InnerContainer' | 'OuterContainer' | 'SymbolContainer'
+			| 'ContentContainer'
+			| 'InnerContainer'
+			| 'OuterContainer'
+			| 'SymbolContainer'
 		>
 	>;
 

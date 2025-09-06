@@ -36,7 +36,12 @@ export default definePage(IndexPage, {
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-template-expression
 		const description = `Just a little sneak peak of my personal site and${' '} statically generated art project.`;
 
-		const meta = getPageMetadata(path, import.meta.url, title, PageMetadataType.MUTABLE);
+		const meta = getPageMetadata(
+			path,
+			import.meta.url,
+			title,
+			PageMetadataType.MUTABLE
+		);
 
 		return Promise.resolve({
 			props: {

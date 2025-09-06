@@ -1,7 +1,10 @@
 import test from 'ava';
 import path from 'node:path';
 import process from 'node:process';
-import { getCurrentFileHash, getInitialFileMergeHash } from '../../lib/git/index.js';
+import {
+	getCurrentFileHash,
+	getInitialFileMergeHash,
+} from '../../lib/git/index.js';
 import {
 	coordinate,
 	InvalidHashError,

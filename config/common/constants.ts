@@ -7,21 +7,24 @@ import pkgJSON from '../../package.json' with { type: 'json' };
 // #region Re-exports
 
 export const BUILTIN_MODULES = builtinModules;
-export const UNPREFIXED_NODE_BUILTIN_MODULES = BUILTIN_MODULES.filter((moduleName) => {
-	return !moduleName.startsWith('node:');
-});
-
-export const PREFIXED_NODE_BUILTIN_MODULES = UNPREFIXED_NODE_BUILTIN_MODULES.map(
+export const UNPREFIXED_NODE_BUILTIN_MODULES = BUILTIN_MODULES.filter(
 	(moduleName) => {
-		return `node:${moduleName}`;
+		return !moduleName.startsWith('node:');
 	}
 );
+
+export const PREFIXED_NODE_BUILTIN_MODULES =
+	UNPREFIXED_NODE_BUILTIN_MODULES.map((moduleName) => {
+		return `node:${moduleName}`;
+	});
 
 export const PKG_JSON = pkgJSON;
 
 // #endregion Re-exports
 
-export const PKG_JSON_PATH = fileURLToPath(import.meta.resolve('../../package.json'));
+export const PKG_JSON_PATH = fileURLToPath(
+	import.meta.resolve('../../package.json')
+);
 
 // #region PROJECT_PATH
 
@@ -39,7 +42,10 @@ if (packagePath !== PKG_JSON_PATH || !existsSync(packagePath)) {
 
 // #region Other paths
 
-export const PRETTIER_IGNORE_PATH = resolvePath(PROJECT_PATH, './.prettierignore');
+export const PRETTIER_IGNORE_PATH = resolvePath(
+	PROJECT_PATH,
+	'./.prettierignore'
+);
 
 export const VITEST_PATTERN = /(^@?vitest(\/|$)|\/vitest$)/;
 

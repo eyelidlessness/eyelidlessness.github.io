@@ -8,7 +8,9 @@
 interface ObjectConstructor {
 	entries<T>(o: T): Entries<T>;
 
-	fromEntries<K extends PropertyKey, T>(entries: Iterable<readonly [K, T]>): Record<K, T>;
+	fromEntries<K extends PropertyKey, T>(
+		entries: Iterable<readonly [K, T]>
+	): Record<K, T>;
 }
 
 // TODO: This should probably be readonly first, if it even needs to account for

@@ -46,7 +46,9 @@ interface GitHubLogoProps {
  *
  * @see {@link https://github.com/edent/SuperTinyIcons}
  */
-export const GitHubLogo = ({ className }: GitHubLogoProps): ComponentChildren => (
+export const GitHubLogo = ({
+	className,
+}: GitHubLogoProps): ComponentChildren => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		aria-label="GitHub"
@@ -55,6 +57,10 @@ export const GitHubLogo = ({ className }: GitHubLogoProps): ComponentChildren =>
 		viewBox={viewBox}
 	>
 		<title>GitHub</title>
-		<BaseGitHubLogo height={baseSize} mask="url(#octocat-knockout)" width={baseSize} />
+		<BaseGitHubLogo
+			height={baseSize}
+			mask="url(#octocat-knockout)"
+			width={baseSize}
+		/>
 	</svg>
 );

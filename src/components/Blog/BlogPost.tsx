@@ -7,7 +7,11 @@ import { Head } from '../../components/Head.js';
 import { Main } from '../../components/Main.js';
 import { Timestamp } from '../../components/Timestamp.js';
 import { TopicTagList } from '../../components/Topic/TopicTagList.js';
-import type { PageMetadata, PageSocial, PageStat } from '../../lib/content/index.js';
+import type {
+	PageMetadata,
+	PageSocial,
+	PageStat,
+} from '../../lib/content/index.js';
 import { mdxRaw } from '../../lib/content/mdx.js';
 import { getPageMetadata, PageMetadataType } from '../../lib/content/meta.js';
 import type { Topic } from '../../lib/content/topics.js';

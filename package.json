@@ -15,8 +15,10 @@
     "build:pdf": "node ./scripts/pdf.ts",
     "build:watch": "yarn serve --listen ${SERVE_PORT:-'5000'} & yarn build & yarn test & chokidar \"src/**/*.{cjs,css,md,mdx,mjs,js,jsx,ts,tsx}\" -c 'pkill -f microsite; yarn build & yarn test'",
     "serve": "mkdir -p ./dist && serve ./dist",
-    "test": "yarn test:ava && yarn test:types && yarn test:lint",
+    "format": "prettier --write .",
+    "test": "yarn test:ava && yarn test:types && yarn test:lint && yarn test:format",
     "test:ava": "ava",
+    "test:format": "prettier --check .",
     "test:lint": "eslint --flag unstable_native_nodejs_ts_config",
     "test:types": "tsc --noEmit && tsc --noEmit --project config/tsconfig.json"
   },

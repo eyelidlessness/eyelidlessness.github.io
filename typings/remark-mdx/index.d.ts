@@ -1,7 +1,7 @@
 declare module 'remark-mdx' {
-  import type { Plugin } from 'unified';
+	import type { Plugin } from 'unified';
 
-  const remarkMDX: Plugin;
+	const remarkMDX: Plugin;
 
-  export default remarkMDX;
+	export default remarkMDX;
 }

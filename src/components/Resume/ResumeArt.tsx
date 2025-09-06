@@ -34,7 +34,8 @@ type Indexed<P> = Omit<P, 'as'> & {
 	readonly index: number;
 };
 
-const segmentTransition = 'stroke-width 0.1s ease-in-out, color 0.1s ease-in-out';
+const segmentTransition =
+	'stroke-width 0.1s ease-in-out, color 0.1s ease-in-out';
 
 // prettier-ignore
 type LinePathProps =
@@ -49,7 +50,10 @@ type SegmentLinePathProps<P extends LinePathProps = LinePathProps> =
 			readonly topic: Topic;
 		};
 
-const segmentLinePathStyles = ({ fill, topic }: SegmentLinePathProps): IStyle => {
+const segmentLinePathStyles = ({
+	fill,
+	topic,
+}: SegmentLinePathProps): IStyle => {
 	const colors = theme.topicColors[topic];
 
 	return {
@@ -83,11 +87,17 @@ const segmentLinePathStyles = ({ fill, topic }: SegmentLinePathProps): IStyle =>
 
 type BaseSegmentPathProps = SegmentLinePathProps<JSX.IntrinsicElements['path']>;
 
-const BaseSegmentPath = ({ fill, index, topic, ...props }: BaseSegmentPathProps) => (
-	<path {...props} />
-);
+const BaseSegmentPath = ({
+	fill,
+	index,
+	topic,
+	...props
+}: BaseSegmentPathProps) => <path {...props} />;
 
-const SegmentPath = styled<BaseSegmentPathProps>(BaseSegmentPath, segmentLinePathStyles);
+const SegmentPath = styled<BaseSegmentPathProps>(
+	BaseSegmentPath,
+	segmentLinePathStyles
+);
 
 const CurvesContainer = styled('svg', {
 	overflow: 'visible',
@@ -229,12 +239,14 @@ const HashPlot = ({
 			{segmentData.map(({ cubicPoints, segment }, index) => {
 				const [baseStartPoint, baseMidPoint, baseEndPoint] = segment;
 
-				const curvesPoints = cubicPoints.map(([controlStart, controlEnd], curveIndex) => {
-					const start = curveIndex === 0 ? baseStartPoint : baseMidPoint;
-					const end = curveIndex === 0 ? baseMidPoint : baseEndPoint;
+				const curvesPoints = cubicPoints.map(
+					([controlStart, controlEnd], curveIndex) => {
+						const start = curveIndex === 0 ? baseStartPoint : baseMidPoint;
+						const end = curveIndex === 0 ? baseMidPoint : baseEndPoint;
 
-					return [start, controlStart, controlEnd, end];
-				});
+						return [start, controlStart, controlEnd, end];
+					}
+				);
 
 				const StrokePath = () => (
 					<>
@@ -246,7 +258,11 @@ const HashPlot = ({
 									const y = (cy / 100) * height;
 
 									const command =
-										curvePointIndex === 0 ? 'M ' : curvePointIndex === 1 ? 'C ' : '';
+										curvePointIndex === 0
+											? 'M '
+											: curvePointIndex === 1
+												? 'C '
+												: '';
 
 									return `${command} ${x},${y}`;
 								})
@@ -273,7 +289,11 @@ const HashPlot = ({
 									const y = (cy / 100) * height;
 
 									const command =
-										curvePointIndex === 0 ? 'M ' : curvePointIndex === 1 ? 'C ' : '';
+										curvePointIndex === 0
+											? 'M '
+											: curvePointIndex === 1
+												? 'C '
+												: '';
 
 									return `${command} ${x},${y}`;
 								})
@@ -383,9 +403,12 @@ export const ResumeArt = ({
 	const renderHeight = isMeta
 		? scaled(height ?? defaultRenderHeight, 0.95)
 		: BLOG_ART_HEIGHT;
-	const renderWidth = isMeta ? scaled(width ?? defaultRenderWidth, 0.95) : '100%';
+	const renderWidth = isMeta
+		? scaled(width ?? defaultRenderWidth, 0.95)
+		: '100%';
 
-	const graphicHeight = isMeta && height != null ? scaled(height, 0.95) : height;
+	const graphicHeight =
+		isMeta && height != null ? scaled(height, 0.95) : height;
 	const graphicWidth = isMeta && width != null ? scaled(width, 0.95) : width;
 
 	const hashPlotClassName = styleRenderer.renderRule(
@@ -402,7 +425,9 @@ export const ResumeArt = ({
 		Object.keys
 	);
 
-	const className = isMeta ? propsClassName : `${propsClassName} ${hashPlotClassName}`;
+	const className = isMeta
+		? propsClassName
+		: `${propsClassName} ${hashPlotClassName}`;
 
 	return (
 		<StylesProvider>

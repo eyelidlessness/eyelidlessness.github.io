@@ -3,7 +3,11 @@ import { BlogArt, BlogArtDefs } from '../../../components/Blog/index.js';
 import { Head } from '../../../components/Head.js';
 import { Main } from '../../../components/Main.js';
 import type { PageMetadata } from '../../../lib/content/index.js';
-import { getPageMetadata, PageMetadataType, Topic } from '../../../lib/content/index.js';
+import {
+	getPageMetadata,
+	PageMetadataType,
+	Topic,
+} from '../../../lib/content/index.js';
 
 const HuhPage = (props: PageMetadata) => {
 	const { hash, topics } = props;

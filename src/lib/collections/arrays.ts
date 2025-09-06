@@ -3,8 +3,9 @@ import { asserted } from '../assertions.js';
 type EmptyArray<T extends readonly unknown[]> = T &
 	(T extends unknown[] ? [] : readonly []);
 
-export const isEmpty = <T extends readonly unknown[]>(array: T): array is EmptyArray<T> =>
-	array.length === 0;
+export const isEmpty = <T extends readonly unknown[]>(
+	array: T
+): array is EmptyArray<T> => array.length === 0;
 
 export const indexes = (value: readonly unknown[]): readonly number[] =>
 	value.map((_, index) => index);

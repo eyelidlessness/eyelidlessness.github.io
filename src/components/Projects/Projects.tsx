@@ -51,27 +51,28 @@ export const Projects = ({
 	meta,
 	...props
 }: ProjectsProps): ComponentChildren => {
-	const { contributor, creator, current } = projects.reduce<TemporalProjectSets>(
-		(acc, project) => {
-			const setKey =
-				(project.end as string | null) == null
-					? 'current'
-					: project.role === ProjectRole.CREATOR
-						? 'creator'
-						: 'contributor';
+	const { contributor, creator, current } =
+		projects.reduce<TemporalProjectSets>(
+			(acc, project) => {
+				const setKey =
+					(project.end as string | null) == null
+						? 'current'
+						: project.role === ProjectRole.CREATOR
+							? 'creator'
+							: 'contributor';
 
-			return {
-				...acc,
+				return {
+					...acc,
 
-				[setKey]: [...acc[setKey], project],
-			};
-		},
-		{
-			contributor: [],
-			creator: [],
-			current: [],
-		}
-	);
+					[setKey]: [...acc[setKey], project],
+				};
+			},
+			{
+				contributor: [],
+				creator: [],
+				current: [],
+			}
+		);
 
 	return (
 		<>

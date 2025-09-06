@@ -14,7 +14,9 @@ interface ProjectDescriptionProps {
 	readonly summary: string | null;
 }
 
-export const ProjectDescription = (props: ProjectDescriptionProps): ComponentChildren => {
+export const ProjectDescription = (
+	props: ProjectDescriptionProps
+): ComponentChildren => {
 	const texts = Array<string>();
 
 	if (props.role === ProjectRole.CREATOR) {
@@ -30,6 +32,8 @@ export const ProjectDescription = (props: ProjectDescriptionProps): ComponentChi
 	}
 
 	return (
-		<BaseProjectDescription>{texts.map((text) => mdx(text))}</BaseProjectDescription>
+		<BaseProjectDescription>
+			{texts.map((text) => mdx(text))}
+		</BaseProjectDescription>
 	);
 };

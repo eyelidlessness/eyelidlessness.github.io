@@ -53,7 +53,10 @@ declare module 'fela-utils' {
 		nestedMediaQuery: string
 	): string;
 
-	export function generateCSSSelector(className: string, pseudo: string): string;
+	export function generateCSSSelector(
+		className: string,
+		pseudo: string
+	): string;
 
 	export function isMediaQuery(property: string): boolean;
 
@@ -163,7 +166,8 @@ export default function hashed() {
 			if (!renderer.cache.hasOwnProperty(keyframeReference)) {
 				const hash = md5(keyframeReference);
 
-				const animationName = (renderer.selectorPrefix || '_') + hash.slice(0, 8);
+				const animationName =
+					(renderer.selectorPrefix || '_') + hash.slice(0, 8);
 
 				const cssKeyframe = cssifyKeyframe(
 					processedKeyframe,
@@ -276,7 +280,8 @@ Check http://fela.js.org/docs/basics/Rules.html#styleobject for more information
 						renderer._emitChange(change);
 					}
 
-					const cachedClassName = renderer.cache[declarationReference].className;
+					const cachedClassName =
+						renderer.cache[declarationReference].className;
 
 					// only append if we got a class cached
 					if (cachedClassName) {

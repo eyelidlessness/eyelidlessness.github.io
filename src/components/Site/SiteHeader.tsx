@@ -162,7 +162,8 @@ export const SiteHeader = (props: SiteHeaderProps): ComponentChildren => {
 		},
 	] as const;
 	const characterCount = siteLinks.reduce(
-		(acc, link) => (typeof link.label === 'string' ? acc + link.label.length : acc),
+		(acc, link) =>
+			typeof link.label === 'string' ? acc + link.label.length : acc,
 		0
 	);
 

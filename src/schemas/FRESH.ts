@@ -45,10 +45,12 @@ const info = partial(
 				description: `Profession type or 'character class'.`,
 			}),
 			image: string({
-				description: 'URL or path to your picture in JPEG, PNG, GIF, or BMP format.',
+				description:
+					'URL or path to your picture in JPEG, PNG, GIF, or BMP format.',
 			}),
 			brief: string({
-				description: 'A short description or summary of yourself as a candidate.',
+				description:
+					'A short description or summary of yourself as a candidate.',
 			}),
 			quote: string({
 				description: 'Candidate quote or byline.',
@@ -93,10 +95,12 @@ const disposition = partial(
 			}),
 			commitment: array(
 				string({
-					description: 'One of: contract, permanent, part-time, seasonal, full-time.',
+					description:
+						'One of: contract, permanent, part-time, seasonal, full-time.',
 				}),
 				{
-					description: 'Types of work commitment desired: contract, perm, seasonal, etc.',
+					description:
+						'Types of work commitment desired: contract, perm, seasonal, etc.',
 				}
 			),
 			remote: boolean({
@@ -120,7 +124,8 @@ const contactOther = array(
 				description: 'A label for this contact information.',
 			}),
 			category: string({
-				description: 'Type of contact information: email, phone, url, postal, or IM.',
+				description:
+					'Type of contact information: email, phone, url, postal, or IM.',
 			}),
 			value: string({
 				description: 'Phone number, email address, website, etc.',
@@ -203,13 +208,15 @@ const employmentHistory = array(
 		),
 		start: optional(
 			string({
-				description: 'Date you began work, in YYYY, YYYY-MM, or YYYY-MM-DD format.',
+				description:
+					'Date you began work, in YYYY, YYYY-MM, or YYYY-MM-DD format.',
 				format: 'date',
 			})
 		),
 		end: optional(
 			string({
-				description: 'Date you finished work, in YYYY, YYYY-MM, or YYYY-MM-DD format.',
+				description:
+					'Date you finished work, in YYYY, YYYY-MM, or YYYY-MM-DD format.',
 				format: 'date',
 			})
 		),
@@ -241,7 +248,8 @@ const employmentHistory = array(
 
 export type FRESHResumeEmploymentHistory = Infer<typeof employmentHistory>;
 
-export type FRESHResumeEmploymentHistoryItem = FRESHResumeEmploymentHistory[number];
+export type FRESHResumeEmploymentHistoryItem =
+	FRESHResumeEmploymentHistory[number];
 
 const employment = partial(
 	object(
@@ -263,7 +271,8 @@ export type FRESHResumeEmployment = Infer<typeof employment>;
 const projectMedia = array(
 	object({
 		category: string({
-			description: 'Media category: image, thumbnail, screenshot, MP3, download, etc.',
+			description:
+				'Media category: image, thumbnail, screenshot, MP3, download, etc.',
 		}),
 		name: optional(
 			string({
@@ -345,7 +354,8 @@ const projects = array(
 					description: `For ex, 'Led 5-person development team, increasing profits by 50% year-over-year'.`,
 				}),
 				{
-					description: 'Noteworthy project-related achievements and/or highlights.',
+					description:
+						'Noteworthy project-related achievements and/or highlights.',
 				}
 			)
 		),
@@ -408,7 +418,8 @@ const skills = partial(
 					),
 					summary: optional(
 						string({
-							description: 'A short summary of your experience with this skill.',
+							description:
+								'A short summary of your experience with this skill.',
 						})
 					),
 					years: optional(
@@ -451,13 +462,15 @@ const educationHistory = array(
 		),
 		start: optional(
 			string({
-				description: 'Date this schooling began, in YYYY, YYYY-MM, or YYYY-MM-DD format.',
+				description:
+					'Date this schooling began, in YYYY, YYYY-MM, or YYYY-MM-DD format.',
 				format: 'date',
 			})
 		),
 		end: optional(
 			string({
-				description: 'Date this schooling ended, in YYYY, YYYY-MM, or YYYY-MM-DD format.',
+				description:
+					'Date this schooling ended, in YYYY, YYYY-MM, or YYYY-MM-DD format.',
 				format: 'date',
 			})
 		),
@@ -472,7 +485,8 @@ const educationHistory = array(
 					description: 'The course name and number or other identifying info.',
 				}),
 				{
-					description: 'Notable courses, subjects, and educational experiences.',
+					description:
+						'Notable courses, subjects, and educational experiences.',
 				}
 			)
 		),
@@ -545,7 +559,8 @@ export type FRESHResumeEducation = Infer<typeof education>;
 const social = array(
 	object({
 		network: string({
-			description: 'The name of the social network, such as Facebook or GitHub.',
+			description:
+				'The name of the social network, such as Facebook or GitHub.',
 		}),
 		user: string({
 			description: 'Your username or handle on the social network.',

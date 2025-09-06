@@ -57,7 +57,10 @@ const defaultProps = {
 	],
 };
 
-interface MDXProps<RH extends readonly AnyPlugin[], RM extends readonly AnyPlugin[]> {
+interface MDXProps<
+	RH extends readonly AnyPlugin[],
+	RM extends readonly AnyPlugin[],
+> {
 	readonly children?: string | VNode;
 	readonly components?: Readonly<Record<string, ElementType>>;
 	readonly rehypePlugins?: PluginsList<RH>;
@@ -89,7 +92,9 @@ export const MDX: MDXComponent = (props): VNode => {
 	};
 
 	const children =
-		typeof baseChildren === 'string' ? dedent(baseChildren).trim() : baseChildren;
+		typeof baseChildren === 'string'
+			? dedent(baseChildren).trim()
+			: baseChildren;
 
 	const rehypePlugins = [...defaultProps.rehypePlugins, ...baseRehypePlugins];
 
@@ -142,7 +147,9 @@ const getMDXString = (
 	{ includeAbbreviations = true }: GetMDXStringOptions
 ) => {
 	const raw =
-		typeof first === 'string' ? [first, ...rest].join('') : String.raw(first, ...rest);
+		typeof first === 'string'
+			? [first, ...rest].join('')
+			: String.raw(first, ...rest);
 
 	if (includeAbbreviations) {
 		return withAbbreviations(raw);

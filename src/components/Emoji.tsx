@@ -24,7 +24,10 @@ interface EmojiProps {
 	readonly role: 'img';
 }
 
-export const isEmojiProps = (props: unknown, children: unknown): props is EmojiProps =>
+export const isEmojiProps = (
+	props: unknown,
+	children: unknown
+): props is EmojiProps =>
 	isUnknownObject(props) &&
 	props.role === 'img' &&
 	typeof props['aria-label'] === 'string' &&

@@ -1,5 +1,8 @@
 import { identity } from '../lib/helpers/index.js';
-import type { FRESHResume, FRESHResumeEmploymentHistoryItem } from '../schemas/FRESH.js';
+import type {
+	FRESHResume,
+	FRESHResumeEmploymentHistoryItem,
+} from '../schemas/FRESH.js';
 import { FRESH_SCHEMA_FORMAT } from '../schemas/FRESH.js';
 import type {
 	ProjectTimestamp,
@@ -9,10 +12,14 @@ import { projects } from './projects.js';
 
 type ValidResume<T extends Immutable<FRESHResume>> = Merge<T>;
 
-const validateResume = <T extends Immutable<FRESHResume>>(value: ValidResume<T>): T =>
-	value;
+const validateResume = <T extends Immutable<FRESHResume>>(
+	value: ValidResume<T>
+): T => value;
 
-export type FlatEmploymentHistoryItemHighlights = readonly [string, ...string[]];
+export type FlatEmploymentHistoryItemHighlights = readonly [
+	string,
+	...string[],
+];
 
 export type NestedEmploymentHistoryItemHighlight = readonly [
 	subEmployer: string,
@@ -35,7 +42,8 @@ export const isFlatEmploymentHistoryHighlights = (
 	return typeof highlights[0] === 'string';
 };
 
-export interface EmploymentHistoryItem extends FRESHResumeEmploymentHistoryItem {
+export interface EmploymentHistoryItem
+	extends FRESHResumeEmploymentHistoryItem {
 	readonly employer: string;
 	readonly end: ProjectTimestamp;
 	readonly highlights: EmploymentHistoryItemHighlights;
@@ -65,7 +73,8 @@ const employmentHistory = validateEmploymentHistory([
 		summary: `
       Created & led development of ODK Web Forms, a web-based complement to their flagship Android app.
     `,
-		marginalia: "2021-2023: Maintainer of ODK Web Forms' legacy predecessor, Enketo.",
+		marginalia:
+			"2021-2023: Maintainer of ODK Web Forms' legacy predecessor, Enketo.",
 
 		highlights: [
 			`

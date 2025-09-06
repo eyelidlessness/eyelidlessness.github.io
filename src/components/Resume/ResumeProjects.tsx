@@ -41,7 +41,9 @@ interface ResumeProjectsProps {
 	readonly projects: readonly ProjectData[];
 }
 
-export const ResumeProjects = (props: ResumeProjectsProps): ComponentChildren => {
+export const ResumeProjects = (
+	props: ResumeProjectsProps
+): ComponentChildren => {
 	const { creator, contributor } = props.projects.reduce<ResumeProjectSets>(
 		(acc, project) => {
 			const setKey =

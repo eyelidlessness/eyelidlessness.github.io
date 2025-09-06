@@ -58,7 +58,9 @@ export const BlogPostDescription = ({
 	...rest
 }: BlogPostDescriptionProps): ComponentChildren => (
 	<BlogPostDescriptionOuter as={as} itemprop="description">
-		{title ? <BlogPostDescriptionTitle>{title}</BlogPostDescriptionTitle> : null}
+		{title ? (
+			<BlogPostDescriptionTitle>{title}</BlogPostDescriptionTitle>
+		) : null}
 		<BlogPostDescriptionInner {...rest} />
 	</BlogPostDescriptionOuter>
 );

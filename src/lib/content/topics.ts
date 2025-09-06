@@ -25,8 +25,9 @@ export type TopicKey = keyof typeof Topic;
 const isStringOrSymbol = (value: unknown): value is string | symbol =>
 	typeof value === 'string' || typeof value === 'symbol';
 
-const isTopicKey = <T extends TopicLike>(value: T): value is Extract<T, TopicKey> =>
-	isStringOrSymbol(value) && value in Topic;
+const isTopicKey = <T extends TopicLike>(
+	value: T
+): value is Extract<T, TopicKey> => isStringOrSymbol(value) && value in Topic;
 
 export type TopicLike = Topic | TopicKey;
 
@@ -54,7 +55,9 @@ type TopicKeyType<T extends TopicLike> = T extends symbol
 	: Exclude<TopicKey, DefaultTopic>;
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
-export const getTopicKey = <T extends TopicLike>(value: T & TopicLike): TopicKey =>
+export const getTopicKey = <T extends TopicLike>(
+	value: T & TopicLike
+): TopicKey =>
 	isTopicKey(value) ? value : (topicKeys[value as Topic] as TopicKeyType<T>);
 
 const hyphenate = (topicKey: string & TopicKey) =>
@@ -62,7 +65,9 @@ const hyphenate = (topicKey: string & TopicKey) =>
 
 const hyphenatedTopicKeys = Object.fromEntries(
 	Object.entries(topicKeys)
-		.map(([topic, key]) => (typeof key === 'string' ? [topic, hyphenate(key)] : null))
+		.map(([topic, key]) =>
+			typeof key === 'string' ? [topic, hyphenate(key)] : null
+		)
 		.filter((value): value is [Topic, string] => value != null)
 );
 

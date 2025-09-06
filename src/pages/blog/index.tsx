@@ -58,7 +58,9 @@ export default definePage(BlogIndexPage, {
 				const postProps = await postStaticProps?.props;
 
 				if (postProps == null) {
-					throw new Error(`Couldn't get post props for post at path: ${identifier}`);
+					throw new Error(
+						`Couldn't get post props for post at path: ${identifier}`
+					);
 				}
 
 				const relativePath = identifier
@@ -75,7 +77,12 @@ export default definePage(BlogIndexPage, {
 
 		const title = 'Blog';
 		const description = `Trevor Schmidt's tech blog`;
-		const meta = getPageMetadata(path, import.meta.url, title, PageMetadataType.MUTABLE);
+		const meta = getPageMetadata(
+			path,
+			import.meta.url,
+			title,
+			PageMetadataType.MUTABLE
+		);
 
 		return {
 			props: {

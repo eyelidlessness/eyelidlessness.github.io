@@ -129,7 +129,10 @@ export const BlogListing = ({
 	sort = BlogListingSort.DATE,
 }: BlogListingProps): ComponentChildren => {
 	const sorted = posts.slice().sort((a, b) => {
-		if (order === BlogListingOrder.DESC && (sort as string) === BlogListingSort.DATE) {
+		if (
+			order === BlogListingOrder.DESC &&
+			(sort as string) === BlogListingSort.DATE
+		) {
 			return a.stat.created > b.stat.created ? -1 : 1;
 		}
 
@@ -168,7 +171,9 @@ export const BlogListing = ({
 										</BlogArticleArtContainer>
 
 										<BlogPageArticleContent>
-											<BlogPageArticleTitle className={linkTextContentClassName}>
+											<BlogPageArticleTitle
+												className={linkTextContentClassName}
+											>
 												{title}
 											</BlogPageArticleTitle>
 

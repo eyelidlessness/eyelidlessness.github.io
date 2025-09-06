@@ -94,7 +94,10 @@ const siteHeaderPaddingRem = 1;
 export const siteHeaderColumns = [
 	'0.7fr',
 	`${siteHeaderPaddingRem}rem`,
-	[`${mainGridMaxWidthCh * 1.1875}ch`, `calc(100% - ${siteHeaderPaddingRem * 2}rem)`],
+	[
+		`${mainGridMaxWidthCh * 1.1875}ch`,
+		`calc(100% - ${siteHeaderPaddingRem * 2}rem)`,
+	],
 	`${siteHeaderPaddingRem}rem`,
 	'1.2fr',
 ] as const;

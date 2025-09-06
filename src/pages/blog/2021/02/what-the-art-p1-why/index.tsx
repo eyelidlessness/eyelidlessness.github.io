@@ -117,7 +117,12 @@ export default definePage(WhatTheArtPost, {
 			importURL: import.meta.url,
 			title: 'What the art, part 1: Why?',
 
-			topics: [Topic.ART, Topic.TECHNOLOGY, Topic.NEURODIVERGENCE, Topic.MENTAL_ILLNESS],
+			topics: [
+				Topic.ART,
+				Topic.TECHNOLOGY,
+				Topic.NEURODIVERGENCE,
+				Topic.MENTAL_ILLNESS,
+			],
 
 			type: BlogMetadataType.IMMUTABLE,
 		});

@@ -37,7 +37,9 @@ export const ResumeContactList = ({
 }: ResumeContactListProps): ComponentChildren => (
 	<BaseResumeContactList>
 		<ResumeContactListItem>
-			<ResumeContactListLink href={`mailto:${email}`}>{email}</ResumeContactListLink>
+			<ResumeContactListLink href={`mailto:${email}`}>
+				{email}
+			</ResumeContactListLink>
 		</ResumeContactListItem>
 
 		{website == null ? null : (

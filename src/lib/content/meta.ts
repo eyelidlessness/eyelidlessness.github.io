@@ -23,7 +23,8 @@ export const SOCIAL_IMAGE_DIMENSIONS = {
 
 export type PageSocialImageDimensions = typeof SOCIAL_IMAGE_DIMENSIONS;
 
-const HOST = process.env.EYELIDLESSNESS_HOST ?? 'https://eyelidlessness.github.io';
+const HOST =
+	process.env.EYELIDLESSNESS_HOST ?? 'https://eyelidlessness.github.io';
 
 type PageSocialImage = typeof SOCIAL_IMAGE_DIMENSIONS & {
 	readonly absolutePath: string;
@@ -72,7 +73,10 @@ const getPageSocialMetadata = (
 	imageType: RasterType = RasterType.PNG,
 	imageDimensions = SOCIAL_IMAGE_DIMENSIONS
 ): PageSocial => {
-	const imagesBasePath = importURL.replace(/^file:(\/\/)?(\/.*?)\/src\/.*$/, '$2/images');
+	const imagesBasePath = importURL.replace(
+		/^file:(\/\/)?(\/.*?)\/src\/.*$/,
+		'$2/images'
+	);
 	const hash = socialImageNameHasher.hash(hashSeed);
 	const absolutePath = path.resolve(imagesBasePath, `${hash}.${imageType}`);
 	const publicPath = absolutePath.replace(/^.*?\/images\//, '/images/');

@@ -43,7 +43,10 @@ const dateStringToDate = <T extends string | null>(
 
 	const [, year, month] = matches;
 
-	return new Date(`${year}-${month}-01T00:00:00`) as PreserveNullability<T, Date>;
+	return new Date(`${year}-${month}-01T00:00:00`) as PreserveNullability<
+		T,
+		Date
+	>;
 };
 
 const BaseTimeRange = styled('div', {
@@ -72,16 +75,28 @@ export const TimeRange = ({
 	if (start == end) {
 		return (
 			<BaseTimeRange className={className}>
-				<Timestamp date={startDate} itemprop="endDate" mode={TimestampMode.SHORT} />
+				<Timestamp
+					date={startDate}
+					itemprop="endDate"
+					mode={TimestampMode.SHORT}
+				/>
 			</BaseTimeRange>
 		);
 	}
 
 	return (
 		<BaseTimeRange className={className}>
-			<Timestamp date={startDate} itemprop="startDate" mode={TimestampMode.SHORT} />
+			<Timestamp
+				date={startDate}
+				itemprop="startDate"
+				mode={TimestampMode.SHORT}
+			/>
 			<TimeRangeText>-</TimeRangeText>
-			<OptionalTimestamp date={endDate} itemprop="endDate" mode={TimestampMode.SHORT} />
+			<OptionalTimestamp
+				date={endDate}
+				itemprop="endDate"
+				mode={TimestampMode.SHORT}
+			/>
 		</BaseTimeRange>
 	);
 };

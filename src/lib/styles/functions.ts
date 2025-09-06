@@ -4,7 +4,10 @@ import { isUnknownObject } from '../helpers/values.js';
 const hyphenate = (string: string) =>
 	string.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
 
-export const jsToCSS = (selectors: readonly string[], js: UnknownObject): string =>
+export const jsToCSS = (
+	selectors: readonly string[],
+	js: UnknownObject
+): string =>
 	[
 		selectors.join(','),
 		'{',
@@ -46,4 +49,5 @@ export const jsToCSS = (selectors: readonly string[], js: UnknownObject): string
 export const clamp = (...args: readonly string[]): `clamp(${string})` =>
 	`clamp(${args.join(',')})`;
 
-export const cleanWhitespace = (str: string): string => str.replace(/\s+/g, ' ').trim();
+export const cleanWhitespace = (str: string): string =>
+	str.replace(/\s+/g, ' ').trim();

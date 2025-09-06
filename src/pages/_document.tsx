@@ -1,4 +1,10 @@
-import { defineDocument, Head, Html, Main, MicrositeScript } from 'microsite/document';
+import {
+	defineDocument,
+	Head,
+	Html,
+	Main,
+	MicrositeScript,
+} from 'microsite/document';
 import { resetAbbrContext } from '../lib/content/abbr.js';
 import { StylesProvider } from '../lib/styles/styles.js';
 

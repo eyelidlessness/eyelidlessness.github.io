@@ -20,12 +20,20 @@ const pluginSocial: PluginFactory = () => ({
 		console.time('social');
 
 		try {
-			const pagePaths = fs.globSync(path.resolve(buildDirectory, 'src/pages/**/*.js'));
+			const pagePaths = fs.globSync(
+				path.resolve(buildDirectory, 'src/pages/**/*.js')
+			);
 
 			const { h } = await import('preact');
-			const documentPath = path.resolve(buildDirectory, 'src/pages/_document.js');
+			const documentPath = path.resolve(
+				buildDirectory,
+				'src/pages/_document.js'
+			);
 
-			const stylesPath = path.resolve(buildDirectory, 'src/lib/styles/styles.js');
+			const stylesPath = path.resolve(
+				buildDirectory,
+				'src/lib/styles/styles.js'
+			);
 			const { createRenderer, createStylesProvider } = (await import(
 				stylesPath
 			)) as StylesLib;
@@ -35,8 +43,13 @@ const pluginSocial: PluginFactory = () => ({
 				rasterPath
 			)) as RasterLib;
 
-			const blogArtPath = path.resolve(buildDirectory, 'src/components/Blog/BlogArt.js');
-			const { BlogArt, BlogArtDefsUsage } = (await import(blogArtPath)) as BlogArtModule;
+			const blogArtPath = path.resolve(
+				buildDirectory,
+				'src/components/Blog/BlogArt.js'
+			);
+			const { BlogArt, BlogArtDefsUsage } = (await import(
+				blogArtPath
+			)) as BlogArtModule;
 
 			await Promise.all(
 				pagePaths.map(async (pagePath) => {
@@ -47,7 +60,9 @@ const pluginSocial: PluginFactory = () => ({
 					let page: AnyPage | null;
 
 					try {
-						page = ((await import(pagePath)) as { default?: AnyPage }).default ?? null;
+						page =
+							((await import(pagePath)) as { default?: AnyPage }).default ??
+							null;
 					} catch (error) {
 						// eslint-disable-next-line no-console
 						console.trace(pagePath, error);
@@ -60,7 +75,8 @@ const pluginSocial: PluginFactory = () => ({
 					}
 
 					const staticProps =
-						typeof page === 'object' && typeof page.getStaticProps === 'function'
+						typeof page === 'object' &&
+						typeof page.getStaticProps === 'function'
 							? await page.getStaticProps({
 									params: {},
 									path: pagePath,
@@ -129,10 +145,18 @@ const pluginSocial: PluginFactory = () => ({
 						fs.mkdirSync(path.dirname(distPath), {
 							recursive: true,
 						});
-						fs.writeFileSync(distPath, new Uint8Array(artRaster), { encoding: null });
+						fs.writeFileSync(distPath, new Uint8Array(artRaster), {
+							encoding: null,
+						});
 					} catch (error) {
 						// eslint-disable-next-line no-console
-						console.trace('unexpected error', pagePath, error, 'el', rasterElement);
+						console.trace(
+							'unexpected error',
+							pagePath,
+							error,
+							'el',
+							rasterElement
+						);
 					}
 				})
 			);

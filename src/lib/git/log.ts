@@ -23,7 +23,10 @@ const cwd = process.cwd();
  */
 const resolveModulePath = (basePath: string) =>
 	basePath.startsWith('/')
-		? resolvePath(cwd, basePath.replace(/^.*?\/src\//, './src/').replace(/\.js$/, '.tsx'))
+		? resolvePath(
+				cwd,
+				basePath.replace(/^.*?\/src\//, './src/').replace(/\.js$/, '.tsx')
+			)
 		: extname(basePath) == ''
 			? resolvePath(cwd, './src/pages/', `${basePath}.tsx`)
 			: basePath;
@@ -182,7 +185,10 @@ export const getInitialFileMergeHash = (basePath: string): string => {
 };
 
 export const getCurrentCommitHash = (): string => {
-	const { error, stdout } = childProcess.spawnSync('git', ['rev-parse', 'HEAD']);
+	const { error, stdout } = childProcess.spawnSync('git', [
+		'rev-parse',
+		'HEAD',
+	]);
 
 	if (error) {
 		throw error;
