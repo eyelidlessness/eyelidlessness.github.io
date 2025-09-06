@@ -93,8 +93,12 @@ const linkReferences = Object.entries(links)
 	.map(([key, url]) => `[${key}]: ${url}`)
 	.join('\n');
 
-const mdx = (...args: Parameters<TemplateTag<unknown>>) =>
-	baseMDX(String.raw(...args), '\n\n', linkReferences);
+const mdx = (...args: Parameters<TemplateTag<unknown>>) => {
+	const [strings, ...rest] = args;
+	const raw = String.raw({ raw: strings }, ...rest);
+
+	return baseMDX(raw, '\n\n', linkReferences);
+};
 
 const ExampleHeading = styled('h3', {
 	fontFamily: 'inherit',

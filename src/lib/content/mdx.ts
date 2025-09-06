@@ -149,7 +149,7 @@ const getMDXString = (
 	const raw =
 		typeof first === 'string'
 			? [first, ...rest].join('')
-			: String.raw(first, ...rest);
+			: String.raw({ raw: first }, ...rest);
 
 	if (includeAbbreviations) {
 		return withAbbreviations(raw);
