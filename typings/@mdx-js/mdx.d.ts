@@ -1,43 +1,39 @@
 declare module '@mdx-js/mdx' {
-  import { VNode }  from 'preact';
-  import { Plugin } from 'unified'
+	import type { VNode } from 'preact';
+	import type { Plugin } from 'unified';
 
-  export type AnyPlugin<S extends any[] = [Settings?], P = Settings> =
-    | Plugin<S, P>
-    | [ Plugin<S, P>, ...S ];
+	export type AnyPlugin<S extends unknown[] = [Settings?], P = Settings> =
+		| Plugin<S, P>
+		| [Plugin<S, P>, ...S];
 
-  export type PluginsList<T extends ReadonlyArray<AnyPlugin>> =
-    & T
-    & {
-      [K in keyof T]:
-        T[K] extends AnyPlugin<any, any>
-          ? T[K]
-        : T[K] extends [ AnyPlugin<infer S, infer P>, ...any[] ]
-          ? S extends any[]
-            ? T[K] extends [ AnyPlugin<S, P>, ...S ]
-              ? T[K]
-            : never
-          : never
-        : never;
-    };
+	// prettier-ignore
+	export type PluginsList<T extends readonly AnyPlugin[]> =
+		& T
+		& {
+			[K in keyof T]:
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				T[K] extends AnyPlugin<any, any>
+					? T[K]
+				: T[K] extends [ AnyPlugin<infer S, infer P>, ...unknown[] ]
+					? S extends unknown[]
+						? T[K] extends [ AnyPlugin<S, P>, ...S ]
+							? T[K]
+						: never
+					: never
+				: never;
+		};
 
-  export interface MDXOptions<
-    RH extends readonly AnyPlugin[],
-    RM extends readonly AnyPlugin[]
-  > {
-    readonly rehypePlugins?: PluginsList<RH>;
-    readonly remarkPlugins?: PluginsList<RM>;
-    readonly skipExport?:    boolean;
-  }
+	export interface MDXOptions {
+		readonly rehypePlugins?: readonly AnyPlugin[];
+		readonly remarkPlugins?: readonly AnyPlugin[];
+		readonly skipExport?: boolean;
+	}
 
-  interface MDX {
-    readonly sync: (
-      children: string | VNode,
-      options:  MDXOptions<any, any>
-    ) => string;
-  }
+	interface MDX {
+		readonly sync: (children: string | VNode, options: MDXOptions) => string;
+	}
 
-  const mdx: MDX;
+	const mdx: MDX;
 
-  export default mdx;
+	export default mdx;
 }

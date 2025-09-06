@@ -1,48 +1,44 @@
-import it     from 'ava';
-import crypto from 'crypto';
-import fs     from 'fs';
-import path   from 'path';
-import {
-  getInitialCommitDate,
-  getInitialFileHash,
-} from './log.js';
+import it from 'ava';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import { asserted } from '../assertions.js';
+import { getInitialCommitDate, getInitialFileHash } from './log.js';
 
 const cwd = process.cwd();
 const packageJSONPath = path.resolve(cwd, './package.json');
 const knownUncommittedPath = path.resolve(cwd, './node_modules/.bin/microsite');
 
 it('gets the first commit date of a file', (t) => {
-  const date = getInitialCommitDate(packageJSONPath);
+	const date = asserted(getInitialCommitDate(packageJSONPath));
 
-  t.assert(date instanceof Date);
-  t.assert(date! > new Date('2020-09-30T00:00:00Z'));
-  t.assert(date! < new Date('2020-10-10T00:00:00Z'));
+	t.assert(date instanceof Date);
+	t.assert(date > new Date('2020-09-30T00:00:00Z'));
+	t.assert(date < new Date('2020-10-10T00:00:00Z'));
 });
 
 it(`doesn't get a date for a file with no commit history`, (t) => {
-  const date = getInitialCommitDate(knownUncommittedPath);
+	const date = getInitialCommitDate(knownUncommittedPath);
 
-  t.is(date, null);
+	t.is(date, null);
 });
 
 const validHashPattern = /^[0-9a-f]{40}$/;
 
 it('gets the initial commit hash of the file', (t) => {
-  const hash = getInitialFileHash(packageJSONPath);
+	const hash = getInitialFileHash(packageJSONPath);
 
-  t.assert(validHashPattern.test(hash));
-  t.snapshot(hash);
+	t.assert(validHashPattern.test(hash));
+	t.snapshot(hash);
 });
 
 it('gets a hash of the contents of a file with no commit history', (t) => {
-  const hash = getInitialFileHash(knownUncommittedPath);
+	const hash = getInitialFileHash(knownUncommittedPath);
 
-  const contents = fs.readFileSync(knownUncommittedPath).toString();
-  const expected = crypto
-    .createHash('sha1')
-    .update(contents)
-    .digest('hex');
+	const contents = fs.readFileSync(knownUncommittedPath).toString();
+	const expected = crypto.createHash('sha1').update(contents).digest('hex');
 
-  t.assert(validHashPattern.test(hash));
-  t.is(hash, expected);
+	t.assert(validHashPattern.test(hash));
+	t.is(hash, expected);
 });

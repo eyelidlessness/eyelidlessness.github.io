@@ -1,19 +1,16 @@
 import { definePage } from 'microsite/page';
 import type { BlogPostProps } from '../../../../../components/Blog/BlogPost.js';
 import {
-  BlogMetadataType,
-  BlogPost,
-  getBlogPostStaticProps,
+	BlogMetadataType,
+	BlogPost,
+	getBlogPostStaticProps,
 } from '../../../../../components/Blog/BlogPost.js';
-import {
-  mdx,
-  Topic,
-} from '../../../../../lib/content/index.js';
+import { mdx, Topic } from '../../../../../lib/content/index.js';
 
-const WhatTheArtPost = (props: BlogPostProps<any>) => {
-  return (
-    <BlogPost { ...props }>
-      {mdx`
+const WhatTheArtPost = (props: BlogPostProps) => {
+	return (
+		<BlogPost {...props}>
+			{mdx`
         Previous: [What the art, part 1: Why?](/blog/2021/02/what-the-art-p1-why/)
 
         In any creative project, constraints are an important
@@ -45,7 +42,7 @@ const WhatTheArtPost = (props: BlogPostProps<any>) => {
         Since every commit to a Git repository has a unique hash,
         I'm able to use a hash associated with a commit of each
         post to guarantee its uniqueness. For instance, this
-        post's unique commit hash is \`${ props.hash }\`.
+        post's unique commit hash is \`${props.hash}\`.
 
         ## Cohesiveness
 
@@ -111,33 +108,30 @@ const WhatTheArtPost = (props: BlogPostProps<any>) => {
 
         [implementation]: /blog/2021/03/what-the-art-part3-implementation/
       `}
-    </BlogPost>
-  );
+		</BlogPost>
+	);
 };
 
 export default definePage(WhatTheArtPost, {
-  async getStaticProps(context) {
-    const props = await getBlogPostStaticProps({
-      ...context,
+	async getStaticProps(context) {
+		const props = await getBlogPostStaticProps({
+			...context,
 
-      description: mdx`
+			description: mdx`
         In part two in a three part series revealing my new site's
         art project, I talk through some of the constraints I
         chose for the project, the motivation behind them, and
         how they were achieved in broad strokes.
       `,
 
-      importURL: import.meta.url,
-      title:     'What the art, part 2: Constraints',
+			importURL: import.meta.url,
+			title: 'What the art, part 2: Constraints',
 
-      topics: [
-        Topic.ART,
-        Topic.TECHNOLOGY,
-      ],
+			topics: [Topic.ART, Topic.TECHNOLOGY],
 
-      type: BlogMetadataType.IMMUTABLE,
-    });
+			type: BlogMetadataType.IMMUTABLE,
+		});
 
-    return { props };
-  },
+		return { props };
+	},
 });

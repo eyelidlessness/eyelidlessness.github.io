@@ -8,165 +8,155 @@ import { Main } from '../../components/Main.js';
 import { Timestamp } from '../../components/Timestamp.js';
 import { TopicTagList } from '../../components/Topic/TopicTagList.js';
 import type {
-  PageMetadata,
-  PageStat,
-  PageSocial,
+	PageMetadata,
+	PageSocial,
+	PageStat,
 } from '../../lib/content/index.js';
-import { getPageMetadata, PageMetadataType } from '../../lib/content/meta.js';
 import { mdxRaw } from '../../lib/content/mdx.js';
-import { Topic } from '../../lib/content/topics.js';
-import {
-  styled,
-  StylesProvider,
-} from '../../lib/styles/index.js';
-import { BlogArt }             from './BlogArt.js';
+import { getPageMetadata, PageMetadataType } from '../../lib/content/meta.js';
+import type { Topic } from '../../lib/content/topics.js';
+import { styled, StylesProvider } from '../../lib/styles/index.js';
+import { BlogArt } from './BlogArt.js';
 import { BlogPostDescription } from './BlogPostDescription.js';
 
 const BlogPostHeadingContent = styled(FullBleedContainer, {
-  paddingTop: '1rem',
+	paddingTop: '1rem',
 });
 
 const BlogPostTitle = styled('h1', {
-  marginBottom: '0.25rem',
+	marginBottom: '0.25rem',
 });
 
 const BlogPostHeading = styled(FullBleedContainer, {
-  paddingBlock: '1rem',
+	paddingBlock: '1rem',
 });
 
 export interface BlogPostDescription {
-  readonly description:    ComponentChildren;
-  readonly descriptionRaw: string;
+	readonly description: ComponentChildren;
+	readonly descriptionRaw: string;
 }
 
-export interface BlogPostProps<
-  Path extends string = string,
-> extends BlogPostDescription, PageMetadata<Path> {
-  readonly children?: ComponentChildren;
-  readonly hash:      string;
-  readonly path:      Path;
-  readonly title:     string;
-  readonly topics:    readonly Topic[];
+export interface BlogPostProps<Path extends string = string>
+	extends BlogPostDescription,
+		PageMetadata<Path> {
+	readonly children?: ComponentChildren;
+	readonly hash: string;
+	readonly path: Path;
+	readonly title: string;
+	readonly topics: readonly Topic[];
 }
 
-export const BlogPost = <Path extends string>(props: BlogPostProps<Path>) => {
-  const {
-    children,
-    CustomArt,
-    description,
-    descriptionRaw,
-    hash,
-    stat: { created },
-    title,
-    topics,
-  } = props;
+export const BlogPost = <Path extends string>(
+	props: BlogPostProps<Path>
+): ComponentChildren => {
+	const {
+		children,
+		CustomArt,
+		description,
+		descriptionRaw,
+		hash,
+		stat: { created },
+		title,
+		topics,
+	} = props;
 
-  return (
-    <>
-      <Head meta={ {
-        ...props,
-        description: descriptionRaw,
-      } } />
+	return (
+		<>
+			<Head
+				meta={{
+					...props,
+					description: descriptionRaw,
+				}}
+			/>
 
-      <Main as="article" meta={ props }>
-        <BlogPostHeading>
-          {( CustomArt == null
-              ? (<BlogArt hash={ hash } title={ title } topics={ topics } />)
-              : (
-                  <CustomArt
-                    hash={ hash }
-                    renderType="post"
-                    StylesProvider={ StylesProvider }
-                    title={ title }
-                    topics={ topics }
-                  />
-                )
-          )}
+			<Main as="article" meta={props}>
+				<BlogPostHeading>
+					{CustomArt == null ? (
+						<BlogArt hash={hash} title={title} topics={topics} />
+					) : (
+						<CustomArt
+							hash={hash}
+							renderType="post"
+							StylesProvider={StylesProvider}
+							title={title}
+							topics={topics}
+						/>
+					)}
 
-          <BlogPostHeadingContent>
-            <BlogPostTitle>{ title }</BlogPostTitle>
-            <Timestamp date={ created } itemprop="datePublished" />
-            <TopicTagList link={ false } topics={ topics } />
-          </BlogPostHeadingContent>
-        </BlogPostHeading>
+					<BlogPostHeadingContent>
+						<BlogPostTitle>{title}</BlogPostTitle>
+						<Timestamp date={created} itemprop="datePublished" />
+						<TopicTagList link={false} topics={topics} />
+					</BlogPostHeadingContent>
+				</BlogPostHeading>
 
-        <BlogPostDescription>{ description }</BlogPostDescription>
+				<BlogPostDescription>{description}</BlogPostDescription>
 
-        { children }
-      </Main>
-    </>
-  );
+				{children}
+			</Main>
+		</>
+	);
 };
 
-type AnyBlogPostProps<Path extends string> =
-  & PathParams<Path>
-  & Partial<Omit<BlogPostProps<Path>, 'children' | 'stat'>>
-  & {
-    readonly social?: PageSocial;
-    readonly stat?:   Partial<PageStat>;
-  };
+type AnyBlogPostProps<Path extends string> = PathParams<Path> &
+	Partial<Omit<BlogPostProps<Path>, 'children' | 'stat'>> & {
+		readonly social?: PageSocial;
+		readonly stat?: Partial<PageStat>;
+	};
 
 export const BlogMetadataType = {
-  IMMUTABLE:       PageMetadataType.IMMUTABLE,
-  IMMUTABLE_MERGE: PageMetadataType.IMMUTABLE_MERGE,
+	IMMUTABLE: PageMetadataType.IMMUTABLE,
+	IMMUTABLE_MERGE: PageMetadataType.IMMUTABLE_MERGE,
 } as const;
 
 type BlogMetadataTypes = typeof BlogMetadataType;
 
 export type BlogMetadataType = BlogMetadataTypes[keyof BlogMetadataTypes];
 
-interface GetBlogPostStaticPropsOptions<Path extends string> extends Omit<
-  StaticPropsContext<AnyBlogPostProps<Path>>,
-  'params'
-> {
-  readonly description: ComponentChildren;
-  readonly importURL:   string;
-  readonly path:        Path;
-  readonly redirect?:   string;
-  readonly title:       string;
-  readonly topics:      readonly Topic[];
-  readonly type?:       BlogMetadataType;
+interface GetBlogPostStaticPropsOptions<Path extends string>
+	extends Omit<StaticPropsContext<AnyBlogPostProps<Path>>, 'params'> {
+	readonly description: ComponentChildren;
+	readonly importURL: string;
+	readonly path: Path;
+	readonly redirect?: string;
+	readonly title: string;
+	readonly topics: readonly Topic[];
+	readonly type?: BlogMetadataType;
 }
 
-export const getBlogPostStaticProps = async <Path extends string>(
-  options: GetBlogPostStaticPropsOptions<Path>
+export const getBlogPostStaticProps = <Path extends string>(
+	options: GetBlogPostStaticPropsOptions<Path>
 ): Promise<BlogPostProps<Path>> => {
-  const {
-    description,
-    importURL,
-    path,
-    redirect,
-    title,
-    topics,
-    type = BlogMetadataType.IMMUTABLE_MERGE,
-  } = options;
-  const {
-    CustomArt,
-    hash,
-    host,
-    social,
-    stat,
-  } = getPageMetadata(
-    path,
-    importURL,
-    title,
-    type,
-    topics
-  );
+	const {
+		description,
+		importURL,
+		path,
+		redirect,
+		title,
+		topics,
+		type = BlogMetadataType.IMMUTABLE_MERGE,
+	} = options;
+	const { CustomArt, hash, host, social, stat } = getPageMetadata(
+		path,
+		importURL,
+		title,
+		type,
+		topics
+	);
 
-  const descriptionRaw = mdxRaw`${renderToString(<>{ description }</>)}`;
+	const descriptionRaw = mdxRaw`${renderToString(<>{description}</>)}`;
 
-  return {
-    CustomArt,
-    description,
-    descriptionRaw,
-    hash,
-    host,
-    path,
-    redirect,
-    social,
-    stat,
-    title,
-    topics,
-  };
+	return Promise.resolve({
+		CustomArt,
+		description,
+		descriptionRaw,
+		hash,
+		host,
+		path,
+		redirect,
+		social,
+		stat,
+		title,
+		topics,
+	});
 };

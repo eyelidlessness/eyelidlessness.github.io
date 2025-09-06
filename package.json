@@ -13,27 +13,37 @@
     "build": "yarn build:microsite && yarn build:pdf && echo 'Full build complete!'",
     "build:microsite": "node ./scripts/microsite-build.ts",
     "build:pdf": "node ./scripts/pdf.ts",
-    "build:watch": "yarn serve --listen ${SERVE_PORT:-'5000'} & yarn build & yarn test & chokidar \"src/**/*.{cjs,css,md,mdx,mjs,js,jsx,ts,tsx}\" -c 'pkill -f microsite; yarn build & yarn test'",
+    "build:watch": "yarn serve --listen ${SERVE_PORT:-'5000'} & yarn build & yarn test:ava & chokidar \"src/**/*.{cjs,css,md,mdx,mjs,js,jsx,ts,tsx}\" -c 'pkill -f microsite; yarn build & yarn test:ava'",
     "serve": "mkdir -p ./dist && serve ./dist",
-    "test": "ava",
-    "typecheck": "tsc"
+    "format": "prettier --write .",
+    "test": "yarn test:ava && yarn test:types && yarn test:lint && yarn test:format",
+    "test:ava": "ava",
+    "test:format": "prettier --check .",
+    "test:lint": "eslint --flag unstable_native_nodejs_ts_config",
+    "test:types": "tsc --noEmit && tsc --noEmit --project config/tsconfig.json"
   },
   "devDependencies": {
+    "@eslint/js": "^9.25.1",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/preact": "^1.6.22",
     "@prefresh/snowpack": "^3.0.1",
     "@silvenon/remark-smartypants": "^1.0.0",
     "@sinclair/typebox": "^0.34.33",
-    "@types/dedent": "^0.7.0",
+    "@types/eslint": "^9.6.1",
     "@types/md5": "^2.2.1",
     "@types/node": "^24.3.1",
     "@types/serve-handler": "^6.1.4",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
     "ava": "^6.4.1",
     "buble-jsx-only": "^0.19.8",
     "chokidar-cli": "^2.1.0",
-    "dedent": "^0.7.0",
+    "dedent": "^1.7.0",
     "emoji-regex": "^9.2.1",
-    "eslint": "^3.14.1",
+    "eslint": "^9.25.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsdoc": "^50.6.11",
+    "eslint-plugin-no-only-tests": "^3.3.0",
     "fela": "^12.2.1",
     "fela-dom": "^12.2.1",
     "fela-identifier": "^12.2.1",
@@ -42,6 +52,7 @@
     "fela-plugin-typescript": "^12.2.1",
     "fela-preset-web": "^12.2.1",
     "fela-tools": "^12.2.1",
+    "jiti": "^2.5.1",
     "md5": "^2.3.0",
     "microsite": "npm:@eyelidlessness/microsite@^1.1.0-next.7",
     "node-object-hash": "^3.1.1",
@@ -49,6 +60,7 @@
     "preact-fela": "^12.2.1",
     "preact-render-to-string": "^6.6.1",
     "puppeteer": "^19.0.0",
+    "prettier": "^3.5.3",
     "react": "npm:@preact/compat",
     "rehype-accessible-emojis": "^0.3.2",
     "rehype-parse": "^7.0.1",
@@ -68,7 +80,8 @@
     "snowpack": "3.0.11",
     "shiki-languages": "^0.2.7",
     "tsimp": "^2.0.12",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.31.1"
   },
   "optionalDependencies": {
     "fsevents": "*"
@@ -77,7 +90,9 @@
     "microsite/preact": "^10.27.1"
   },
   "ava": {
-    "files": ["{src,test}/**/*.test.*"],
+    "files": [
+      "{src,test}/**/*.test.*"
+    ],
     "extensions": {
       "ts": "module",
       "tsx": "module"
@@ -86,6 +101,8 @@
       "TSIMP_DIAG": "ignore"
     },
     "snapshotDir": "./snapshots",
-    "nodeArguments": ["--import=tsimp"]
+    "nodeArguments": [
+      "--import=tsimp"
+    ]
   }
 }

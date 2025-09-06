@@ -11,11 +11,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "inlineSourceMap": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "incremental": false,
     "isolatedModules": true,
     "jsx": "react-jsx",
@@ -24,6 +20,7 @@
     "moduleResolution": "bundler",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
@@ -32,18 +29,7 @@
     "target": "es2024",
     "verbatimModuleSyntax": true
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "files": [
-    "./env.d.ts"
-  ],
-  "include": [
-    "./env.d.ts",
-    "config",
-    "plugins",
-    "snowpack",
-    "src",
-    "typings"
-  ]
+  "exclude": ["node_modules", ".tsimp", ".microsite", ".test", "dist"],
+  "files": ["./env.d.ts"],
+  "include": ["./env.d.ts", "plugins", "snowpack", "src", "scripts", "typings"]
 }

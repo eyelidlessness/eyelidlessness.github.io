@@ -1,57 +1,40 @@
-export const Favicons = () => (
-  <>
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/favicons/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/favicons/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="192x192"
-      href="/favicons/android-chrome-192x192.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/favicons/favicon-16x16.png"
-    />
-    <link
-      rel="manifest"
-      href="/favicons/site.webmanifest"
-    />
-    <link
-      rel="mask-icon"
-      href="/favicons/safari-pinned-tab.svg"
-      // @ts-ignore
-      color="#ff0000"
-    />
-    <link
-      rel="shortcut icon"
-      href="/favicons/favicon.ico"
-    />
-    <meta
-      name="apple-mobile-web-app-title"
-      content="Eyelidlessness"
-    />
-    <meta
-      name="application-name"
-      content="Eyelidlessness"
-    />
-    <meta
-      name="msapplication-TileColor"
-      content="#555555"
-    />
-    <meta
-      name="msapplication-config"
-      content="/favicons/browserconfig.xml"
-    />
-  </>
+import type { ComponentChildren } from 'preact';
+
+export const Favicons = (): ComponentChildren => (
+	<>
+		<link
+			rel="apple-touch-icon"
+			sizes="180x180"
+			href="/favicons/apple-touch-icon.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="/favicons/favicon-32x32.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="192x192"
+			href="/favicons/android-chrome-192x192.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="16x16"
+			href="/favicons/favicon-16x16.png"
+		/>
+		<link rel="manifest" href="/favicons/site.webmanifest" />
+		<link
+			rel="mask-icon"
+			href="/favicons/safari-pinned-tab.svg"
+			color="#ff0000"
+		/>
+		<link rel="shortcut icon" href="/favicons/favicon.ico" />
+		<meta name="apple-mobile-web-app-title" content="Eyelidlessness" />
+		<meta name="application-name" content="Eyelidlessness" />
+		<meta name="msapplication-TileColor" content="#555555" />
+		<meta name="msapplication-config" content="/favicons/browserconfig.xml" />
+	</>
 );

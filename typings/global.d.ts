@@ -6,27 +6,30 @@
  */
 
 interface ObjectConstructor {
-  entries<T>(o: T): Entries<T>;
+	entries<T>(o: T): Entries<T>;
 
-  fromEntries<K extends PropertyKey, T>(
-    entries: Iterable<readonly [ K, T ]>
-  ): Record<K, T>;
+	fromEntries<K extends PropertyKey, T>(
+		entries: Iterable<readonly [K, T]>
+	): Record<K, T>;
 }
 
-type RecordType<T extends Readonly<Record<any, any>>> =
-  T extends Record<any, infer V>
+// TODO: This should probably be readonly first, if it even needs to account for
+// that? I don't think it actually does though.
+// prettier-ignore
+type RecordType<T extends Readonly<Record<unknown, unknown>>> =
+	T extends Record<unknown, infer V>
+		? V
+  : T extends Readonly<Record<unknown, infer V>>
     ? V
-  : T extends Readonly<Record<any, infer V>>
-    ? V
-  : never;
+    : never;
 
 interface Set<T> {
-  has<V>(this: Set<T>, value: V): value is Extract<V & T, T>;
+	has<V>(this: Set<T>, value: V): value is Extract<V & T, T>;
 }
 
 type TemplateTag<T> = (
-  strings:        TemplateStringsArray,
-  ...expressions: readonly any[]
+	strings: TemplateStringsArray,
+	...expressions: readonly unknown[]
 ) => T;
 
 /*
@@ -35,93 +38,79 @@ type TemplateTag<T> = (
  * ---------------------------------------------------------------------------
  */
 
-type ArrayType<T extends ReadonlyArray<any>> =
-  T extends Array<infer U>
-    ? U
-  : T extends ReadonlyArray<infer U>
-    ? U
-  : never;
+type ArrayType<T extends readonly unknown[]> =
+	T extends Array<infer U> ? U : T extends ReadonlyArray<infer U> ? U : never;
 
 type AtomicObject =
-  | Function
-  | Map<any, any>
-  | WeakMap<any, any>
-  | Set<any>
-  | WeakSet<any>
-  | Promise<any>
-  | Date
-  | RegExp
-  | Boolean
-  | Number
-  | String;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+	| Function
+	| Map<unknown, unknown>
+	| WeakMap<unknown, unknown>
+	| Set<unknown>
+	| WeakSet<unknown>
+	| Promise<unknown>
+	| Date
+	| RegExp
+	| Boolean // eslint-disable-line @typescript-eslint/no-wrapper-object-types
+	| Number // eslint-disable-line @typescript-eslint/no-wrapper-object-types
+	| String; // eslint-disable-line @typescript-eslint/no-wrapper-object-types
 
-type Entries<T> = ReadonlyArray<{
-  [K in keyof T]-?: readonly [ key: K, value: T[K] ];
-}[keyof T]>;
+type Entries<T> = ReadonlyArray<
+	{
+		[K in keyof T]-?: readonly [key: K, value: T[K]];
+	}[keyof T]
+>;
 
-type Equals<T, S> =
-  [T] extends [S]
-    ? [S] extends [T]
-      ? true
-      : false
-    : false;
+type Equals<T, S> = [T] extends [S] ? ([S] extends [T] ? true : false) : false;
 
 type Identity<T> = T;
 
-type ImmutableArray<T extends ReadonlyArray<any>> = {
-  [P in Extract<keyof T, number>]: ReadonlyArray<Immutable<T[number]>>
+type ImmutableArray<T extends readonly unknown[]> = {
+	[P in Extract<keyof T, number>]: ReadonlyArray<Immutable<T[number]>>;
 }[Extract<keyof T, number>];
 
-type ImmutableTuple<T extends ReadonlyArray<any>> = {
-  readonly [P in keyof T]: Immutable<T[P]>
+type ImmutableTuple<T extends readonly unknown[]> = {
+	readonly [P in keyof T]: Immutable<T[P]>;
 };
 
-type Immutable<T> =
-  T extends object
-    ? T extends AtomicObject
-      ? T
-    : T extends ReadonlyArray<any>
-      ? Array<T[number]> extends T
-        ? ImmutableArray<T>
-        : ImmutableTuple<T>
-      : { readonly [P in keyof T]: Immutable<T[P]> }
-    : T;
+type Immutable<T> = T extends object
+	? T extends AtomicObject
+		? T
+		: T extends readonly unknown[]
+			? Array<T[number]> extends T
+				? ImmutableArray<T>
+				: ImmutableTuple<T>
+			: { readonly [P in keyof T]: Immutable<T[P]> }
+	: T;
 
-type KnownKeys<T> =
-  {
-    [K in keyof T]:
-      string extends K
-        ? never
-      : number extends K
-        ? never
-        : K;
-  } extends { [_ in keyof T]: infer U }
-    ? U
-    : never;
+type KnownKeys<T> = {
+	[K in keyof T]: string extends K ? never : number extends K ? never : K;
+} extends { [_ in keyof T]: infer U }
+	? U
+	: never;
 
 type Merge<T> = Identity<{
-  [K in keyof T]: T[K];
+	[K in keyof T]: T[K];
 }>;
 
-type PromiseType<T> =
-  T extends Promise<infer U>
-    ? U
-  : T;
+type PromiseType<T> = T extends Promise<infer U> ? U : T;
 
-type SetType<T extends ReadonlySet<any> | Set<any>> =
-  T extends Set<infer U>
+// prettier-ignore
+type SetType<T extends ReadonlySet<unknown> | Set<unknown>> =
+	T extends Set<infer U>
     ? U
   : T extends ReadonlySet<infer U>
     ? U
-  : never;
+    : never;
 
+// prettier-ignore
 type Primitive =
-  | BigInt
+  | bigint
   | boolean
-  | null
   | number
   | string
   | symbol
+  | null
   | undefined;
 
 /*
@@ -135,9 +124,9 @@ const h: H;
 const Fragment: typeof import('preact').Fragment;
 
 namespace JSX {
-  import { JSX } from 'preact';
+	import { JSX as PreactJSX } from 'preact';
 
-  export = JSX;
+	export = PreactJSX;
 }
 
 /*
@@ -147,5 +136,5 @@ namespace JSX {
  */
 
 interface ImportMeta {
-  readonly env?: Readonly<Record<PropertyKey, unknown>>;
+	readonly env?: Readonly<Record<PropertyKey, unknown>>;
 }

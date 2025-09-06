@@ -1,7 +1,7 @@
 declare module 'remark-abbr' {
-  import { Plugin } from 'unified';
+	import type { Plugin } from 'unified';
 
-  const remarkAbbr: Plugin;
+	const remarkAbbr: Plugin;
 
-  export default remarkAbbr;
+	export default remarkAbbr;
 }

@@ -1,7 +1,7 @@
 declare module '@silvenon/remark-smartypants' {
-  import { Plugin } from 'unified';
+	import type { Plugin } from 'unified';
 
-  const remarkSmartypants: Plugin;
+	const remarkSmartypants: Plugin;
 
-  export default remarkSmartypants;
+	export default remarkSmartypants;
 }
