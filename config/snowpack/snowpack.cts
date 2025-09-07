@@ -7,13 +7,32 @@ const { PREFIXED_NODE_BUILTIN_MODULES } =
 const path = require('node:path') as typeof NodePath;
 const cwd = process.cwd();
 
+const markdownRelated = [
+	'@mdx-js/mdx',
+	'@mdx-js/preact',
+	'@richardtowers/remark-abbr',
+	'buble-jsx-only',
+	'rehype-accessible-emojis',
+	'rehype-parse',
+	'rehype-plaintext',
+	'rehype-raw',
+	'rehype-remark',
+	'rehype-slug',
+	'remark',
+	'remark-mdx',
+	'remark-mdx-to-plain-text',
+	'remark-rehype',
+	'remark-shiki-twoslash',
+	'remark-smartypants',
+	'remark-stringify',
+];
+
 const externalEntries = [
 	'css-in-js-utils',
 	'dedent',
 	'fela',
 	'fela-tools',
 	'fela-utils',
-	'globby',
 	'md5',
 	'node-object-hash',
 	'rehype-parse',
@@ -23,6 +42,7 @@ const externalEntries = [
 	'remark-stringify',
 	'sharp',
 	'strip-markdown',
+	'typescript',
 ];
 
 const shikiEntries = [
@@ -39,11 +59,8 @@ const config: SnowpackUserConfig = {
 	packageOptions: {
 		external: [
 			...PREFIXED_NODE_BUILTIN_MODULES,
-			'@mdx-js/mdx',
-			'@mdx-js/preact',
-			'buble-jsx-only',
-			'typescript',
 			...externalEntries,
+			...markdownRelated,
 			...shikiEntries,
 		],
 

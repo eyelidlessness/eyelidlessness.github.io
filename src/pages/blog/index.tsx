@@ -38,13 +38,13 @@ export default definePage(BlogIndexPage, {
 	async getStaticProps({ path }) {
 		const selfPath = import.meta.url.replace(/^file:(\/\/)?/, '');
 
-		const { default: glob } = await import('globby');
+		const { globSync } = await import('node:fs');
 		const nodePath = (await import('node:path')) as typeof NodePath;
 
 		const basePath = nodePath.dirname(selfPath);
 		const pagesPath = basePath.replace(/(^.*?\/pages)\/.*$/, '$1');
 		const blogGlob = nodePath.resolve(basePath, './**/*.js');
-		const blogFiles = await glob(blogGlob);
+		const blogFiles = globSync(blogGlob);
 		const postFiles = blogFiles.filter((filePath) => {
 			return filePath !== selfPath;
 		});

@@ -760,7 +760,9 @@ export const Resume = ({
 			<ResumeSection>
 				<h2>References</h2>
 
-				{mdx('Available upon request, email <gnosis@gmail.com>')}
+				{mdx(
+					'Available upon request, email [gnosis@gmail.com](mailto:gnosis@gmail.com)'
+				)}
 			</ResumeSection>
 
 			<ResumePDFSection>
