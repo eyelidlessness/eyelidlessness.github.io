@@ -8,7 +8,7 @@ interface AbbrData extends Data {
 }
 
 interface AbbrNode extends Node {
-	readonly abbr: string;
+	readonly identifier: string;
 	readonly children: readonly Node[];
 	readonly data?: AbbrData;
 	readonly reference: string;
@@ -43,13 +43,13 @@ type MutableAbbrNode = MutableNode<AbbrNode>;
 export const remarkDistinctAbbr: Plugin = () => {
 	return (ast) => {
 		visit(ast, isAbbrNode, (node) => {
-			const { abbr } = node;
+			const { identifier: abbr } = node;
 
 			if (visited.has(abbr)) {
-				delete (node as MutableAbbrNode).abbr;
-				delete (node as MutableAbbrNode).children;
-				delete (node as MutableAbbrNode).data;
-				delete (node as MutableAbbrNode).reference;
+				for (const key in node) {
+					// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+					delete (node as MutableAbbrNode)[key as keyof MutableAbbrNode];
+				}
 
 				Object.assign(node, {
 					type: 'text',

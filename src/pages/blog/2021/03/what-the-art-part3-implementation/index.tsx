@@ -2415,7 +2415,7 @@ const WhatTheArt3Post = (props: BlogPostProps) => {
 
 			<CommentaryAside>
 				{mdx`
-					I had to ~~learn~~ copy & paste some math to generate the curves. I
+					I had to <s>learn</s> copy & paste some math to generate the curves. I
 					did take the time to learn what the math is actually doing while
 					writing this post, but I've never taken a trigonometry course, so I'm
 					probably not the best person to explain it in great detail, but I'll

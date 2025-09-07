@@ -1,16 +1,21 @@
 import * as mdxjs from '@mdx-js/mdx';
-import { MDXProvider } from '@mdx-js/preact';
-import { transform } from 'buble-jsx-only';
+import remarkAbbr from '@richardtowers/remark-abbr';
 import dedent from 'dedent';
-import type { ElementType, FunctionComponent, VNode } from 'preact';
+import type {
+	ComponentChildren,
+	ComponentType,
+	ElementType,
+	FunctionComponent,
+	VNode,
+} from 'preact';
 import { Fragment, h, toChildArray } from 'preact';
 import { renderToString } from 'preact-render-to-string';
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
 import rehypeParse from 'rehype-parse';
+import rehypeRaw from 'rehype-raw';
 import rehypeRemark from 'rehype-remark';
 import rehypeSlug from 'rehype-slug';
 import { remark } from 'remark';
-import remarkAbbr from 'remark-abbr';
 import remarkMDX from 'remark-mdx';
 import remarkMDXToPlainText from 'remark-mdx-to-plain-text';
 import remarkSmartypants from 'remark-smartypants';
@@ -42,13 +47,26 @@ const Span = ({ children, ...props }: JSX.IntrinsicElements['span']) =>
 		? h(Emoji, props, children)
 		: h('span', props, children);
 
-const defaultProps = {
+type AnyComponent = ComponentType | keyof JSX.IntrinsicElements;
+
+type MDXComponentMapping = Readonly<Record<string, AnyComponent>>;
+
+interface DefaultProps {
+	readonly components: MDXComponentMapping;
+	readonly rehypePlugins: PluggableList;
+	readonly remarkPlugins: PluggableList;
+}
+
+const defaultProps: DefaultProps = {
 	components: {
 		div: Div,
 		pre: CodeBlock,
 		span: Span,
 	},
-	rehypePlugins: [rehypeAccessibleEmojis],
+	rehypePlugins: [
+		rehypeAccessibleEmojis,
+		[rehypeRaw, { passThrough: mdxjs.nodeTypes }],
+	],
 	remarkPlugins: [
 		syntaxHighlighting,
 		remarkAbbr,
@@ -80,47 +98,58 @@ export const MDX: MDXComponent = (props): VNode => {
 		...baseComponents,
 	};
 
-	const scope = {
-		mdx: h,
-		MDXProvider,
-		components,
-		props: {},
-	};
+	const rehypePlugins = [...defaultProps.rehypePlugins, ...baseRehypePlugins];
+	const remarkPlugins = [...defaultProps.remarkPlugins, ...baseRemarkPlugins];
 
-	const children =
+	const source =
 		typeof baseChildren === 'string'
 			? dedent(baseChildren).trim()
 			: renderToString(baseChildren);
 
-	const rehypePlugins = [...defaultProps.rehypePlugins, ...baseRehypePlugins];
+	const functionBody = mdxjs.compileSync(source, {
+		rehypePlugins,
+		remarkPlugins,
+		outputFormat: 'function-body',
+		remarkRehypeOptions: {
+			handlers: {
+				abbrDefinition: () => undefined,
+			},
+		},
+	});
 
-	const remarkPlugins = [...defaultProps.remarkPlugins, ...baseRemarkPlugins];
+	interface WrappedFnOptions {
+		readonly Fragment: typeof Fragment;
+		readonly jsx: typeof h;
+		readonly jsxs: typeof h;
+	}
 
-	const jsx = mdxjs
-		.compileSync(children, {
-			rehypePlugins,
-			remarkPlugins,
-		})
-		.value.toString()
-		.trim();
+	interface MDXContentComponentProps {
+		readonly components?: MDXComponentMapping;
+		readonly children?: ComponentChildren;
+	}
 
-	const { code } = transform(jsx, { objectAssign: 'Object.assign' });
+	type MDXContentComponent = (props: MDXContentComponentProps) => VNode;
 
-	const keys = Object.keys(scope);
-	const values = Object.values(scope);
+	interface WrappedFnReturn {
+		readonly default: MDXContentComponent;
+	}
 
-	const suffix = `return h(
-    MDXProvider,
-    {components},
-    h(MDXContent, props)
-  )`;
-
-	type Fn = (...args: unknown[]) => VNode;
+	type WrappedFn = (
+		options: WrappedFnOptions,
+		...rest: unknown[]
+	) => WrappedFnReturn;
 
 	// eslint-disable-next-line @typescript-eslint/no-implied-eval
-	const fn = new Function('h', ...keys, `${code}\n\n${suffix}`) as Fn;
+	const wrappedFn = new Function(
+		'options',
+		functionBody.value.toString()
+	) as WrappedFn;
 
-	return fn(h, ...values);
+	return wrappedFn({
+		Fragment,
+		jsx: h,
+		jsxs: h,
+	}).default({ components });
 };
 
 type CallableTemplateTagParams =
@@ -139,12 +168,12 @@ interface GetMDXStringOptions {
 
 const getMDXString = (
 	[first, ...rest]: CallableTemplateTagParams,
-	{ includeAbbreviations = true }: GetMDXStringOptions
+	{ includeAbbreviations }: GetMDXStringOptions
 ) => {
 	const raw =
 		typeof first === 'string'
 			? [first, ...rest].join('')
-			: String.raw(first, ...rest);
+			: String.raw({ raw: first }, ...rest);
 
 	if (includeAbbreviations) {
 		return withAbbreviations(raw);
