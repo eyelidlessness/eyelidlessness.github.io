@@ -49,7 +49,7 @@ const generatePDF = async () => {
 	}
 
 	const browser = await puppeteer.launch({
-		headless: 'new',
+		headless: true,
 		args,
 	});
 	const page = await browser.newPage();
