@@ -1,6 +1,6 @@
 import type { Plugin } from 'unified';
 import type { Data, Node } from 'unist';
-import visit from 'unist-util-visit';
+import { visit } from 'unist-util-visit';
 
 interface AbbrData extends Data {
 	readonly hName: string;
@@ -15,10 +15,18 @@ interface AbbrNode extends Node {
 	readonly type: 'abbr';
 }
 
+const isAbbrNode = (node: Node): node is AbbrNode => {
+	return node.type === 'abbr';
+};
+
 interface TextNode extends Node {
 	readonly type: 'text';
 	readonly value: string;
 }
+
+const isTextNode = (node: Node): node is TextNode => {
+	return node.type === 'text';
+};
 
 let visited = new Set<string>();
 
@@ -26,16 +34,22 @@ export const resetAbbrContext = (): void => {
 	visited = new Set();
 };
 
+type MutableNode<T extends Node> = {
+	-readonly [K in keyof T]?: T[K];
+};
+
+type MutableAbbrNode = MutableNode<AbbrNode>;
+
 export const remarkDistinctAbbr: Plugin = () => {
 	return (ast) => {
-		visit<AbbrNode>(ast, 'abbr', (node) => {
+		visit(ast, isAbbrNode, (node) => {
 			const { abbr } = node;
 
 			if (visited.has(abbr)) {
-				delete (node as Node).abbr;
-				delete (node as Node).children;
-				delete (node as Node).data;
-				delete (node as Node).reference;
+				delete (node as MutableAbbrNode).abbr;
+				delete (node as MutableAbbrNode).children;
+				delete (node as MutableAbbrNode).data;
+				delete (node as MutableAbbrNode).reference;
 
 				Object.assign(node, {
 					type: 'text',
@@ -46,7 +60,7 @@ export const remarkDistinctAbbr: Plugin = () => {
 			visited.add(abbr);
 		});
 
-		visit<TextNode>(ast, 'text', (node) => {
+		visit(ast, isTextNode, (node) => {
 			if (node.value.includes('\u200b')) {
 				Object.assign(node, {
 					value: node.value.replace(/\u200b/gu, ''),

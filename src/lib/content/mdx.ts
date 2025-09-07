@@ -1,20 +1,21 @@
-import type { AnyPlugin, PluginsList } from '@mdx-js/mdx';
-import mdxjs from '@mdx-js/mdx';
-import { mdx as h, MDXProvider } from '@mdx-js/preact';
-import remarkSmartypants from '@silvenon/remark-smartypants';
+import * as mdxjs from '@mdx-js/mdx';
+import { MDXProvider } from '@mdx-js/preact';
 import { transform } from 'buble-jsx-only';
 import dedent from 'dedent';
 import type { ElementType, FunctionComponent, VNode } from 'preact';
-import { Fragment, h as preactH, toChildArray } from 'preact';
+import { Fragment, h, toChildArray } from 'preact';
+import { renderToString } from 'preact-render-to-string';
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
 import rehypeParse from 'rehype-parse';
 import rehypeRemark from 'rehype-remark';
-import remark from 'remark';
+import rehypeSlug from 'rehype-slug';
+import { remark } from 'remark';
 import remarkAbbr from 'remark-abbr';
 import remarkMDX from 'remark-mdx';
 import remarkMDXToPlainText from 'remark-mdx-to-plain-text';
-import remarkSlug from 'remark-slug';
+import remarkSmartypants from 'remark-smartypants';
 import remarkStringify from 'remark-stringify';
+import type { PluggableList } from 'unified';
 import { CodeBlock } from '../../components/CodeBlock.js';
 import { Emoji, isEmojiProps } from '../../components/Emoji.js';
 import { abbreviations } from '../a11y/abbreviations.js';
@@ -27,7 +28,7 @@ const Div = ({ className, children, ...rest }: JSX.IntrinsicElements['div']) =>
 		? null
 		: className === 'code-container'
 			? h(Fragment, rest, ...toChildArray(children))
-			: preactH(
+			: h(
 					'div',
 					{
 						className,
@@ -38,8 +39,8 @@ const Div = ({ className, children, ...rest }: JSX.IntrinsicElements['div']) =>
 
 const Span = ({ children, ...props }: JSX.IntrinsicElements['span']) =>
 	isEmojiProps(props, children)
-		? preactH(Emoji, props, children)
-		: preactH('span', props, children);
+		? h(Emoji, props, children)
+		: h('span', props, children);
 
 const defaultProps = {
 	components: {
@@ -52,24 +53,19 @@ const defaultProps = {
 		syntaxHighlighting,
 		remarkAbbr,
 		remarkDistinctAbbr,
-		remarkSlug,
+		rehypeSlug,
 		remarkSmartypants,
 	],
 };
 
-interface MDXProps<
-	RH extends readonly AnyPlugin[],
-	RM extends readonly AnyPlugin[],
-> {
+interface MDXProps {
 	readonly children?: string | VNode;
 	readonly components?: Readonly<Record<string, ElementType>>;
-	readonly rehypePlugins?: PluginsList<RH>;
-	readonly remarkPlugins?: PluginsList<RM>;
+	readonly rehypePlugins?: PluggableList;
+	readonly remarkPlugins?: PluggableList;
 }
 
-type MDXComponent = FunctionComponent<
-	MDXProps<readonly AnyPlugin[], readonly AnyPlugin[]>
->;
+type MDXComponent = FunctionComponent<MDXProps>;
 
 export const MDX: MDXComponent = (props): VNode => {
 	const {
@@ -94,18 +90,18 @@ export const MDX: MDXComponent = (props): VNode => {
 	const children =
 		typeof baseChildren === 'string'
 			? dedent(baseChildren).trim()
-			: baseChildren;
+			: renderToString(baseChildren);
 
 	const rehypePlugins = [...defaultProps.rehypePlugins, ...baseRehypePlugins];
 
 	const remarkPlugins = [...defaultProps.remarkPlugins, ...baseRemarkPlugins];
 
 	const jsx = mdxjs
-		.sync(children, {
+		.compileSync(children, {
 			rehypePlugins,
 			remarkPlugins,
-			skipExport: true,
 		})
+		.value.toString()
 		.trim();
 
 	const { code } = transform(jsx, { objectAssign: 'Object.assign' });
@@ -127,10 +123,9 @@ export const MDX: MDXComponent = (props): VNode => {
 	return fn(h, ...values);
 };
 
-// prettier-ignore
 type CallableTemplateTagParams =
-  | Parameters<TemplateTag<unknown>>
-  | readonly string[];
+	| Parameters<TemplateTag<unknown>>
+	| readonly string[];
 
 const mdxAbbreviations = Object.entries(abbreviations)
 	.map(([abbr, expansion]) => `*[${abbr}]: ${expansion}`)
@@ -149,7 +144,7 @@ const getMDXString = (
 	const raw =
 		typeof first === 'string'
 			? [first, ...rest].join('')
-			: String.raw({ raw: first }, ...rest);
+			: String.raw(first, ...rest);
 
 	if (includeAbbreviations) {
 		return withAbbreviations(raw);
@@ -161,16 +156,16 @@ const getMDXString = (
 export const mdx = (...args: CallableTemplateTagParams): VNode => {
 	const str = getMDXString(args, { includeAbbreviations: true });
 
-	return preactH(StylesProvider, {}, preactH(MDX, {}, str));
+	return h(StylesProvider, {}, h(MDX, {}, str));
 };
 
 export const mdxInline = (...args: CallableTemplateTagParams): VNode => {
 	const str = getMDXString(args, { includeAbbreviations: true });
 
-	return preactH(
+	return h(
 		StylesProvider,
 		{},
-		preactH(
+		h(
 			MDX,
 			{
 				components: {
@@ -192,6 +187,6 @@ export const mdxRaw: TemplateTag<string> = (...args) => {
 		.use(remarkMDX)
 		.use(remarkMDXToPlainText)
 		.processSync(str)
-		.contents.toString()
+		.value.toString()
 		.trim();
 };

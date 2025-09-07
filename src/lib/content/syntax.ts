@@ -11,7 +11,7 @@ import { BUNDLED_LANGUAGES } from 'shiki-languages';
 import { renderers } from 'shiki-twoslash';
 import type { Plugin } from 'unified';
 import type { Node } from 'unist';
-import visit from 'unist-util-visit';
+import { visit } from 'unist-util-visit';
 import type { IRawThemeSetting } from 'vscode-textmate';
 import { asserted } from '../assertions.js';
 import { css, styled, StylesProvider, theme } from '../styles/index.js';
@@ -218,7 +218,7 @@ const visitor = (node: RichNode) => {
 	const code = baseCode.replace(/^\n+|\n+$/g, '');
 
 	if (!allLanguages.has(language)) {
-		value = renderers.plainTextRenderer(code, {});
+		value = renderers.plainTextRenderer(code, {}, {});
 	} else {
 		const lightLines = lightHighlighter.codeToThemedTokens(code, language);
 		const darkLines = darkHighlighter.codeToThemedTokens(code, language);
