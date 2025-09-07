@@ -1,7 +1,7 @@
 declare module 'remark-mdx-to-plain-text' {
-  import { Plugin } from 'unified';
+	import type { Plugin } from 'unified';
 
-  const remarkMDXToPlainText: Plugin;
+	const remarkMDXToPlainText: Plugin;
 
-  export default remarkMDXToPlainText;
+	export default remarkMDXToPlainText;
 }

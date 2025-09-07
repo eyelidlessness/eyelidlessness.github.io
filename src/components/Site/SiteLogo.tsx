@@ -1,40 +1,34 @@
-import {
-  styled,
-  theme,
-} from '@/lib/styles';
+import type { ComponentChildren } from 'preact';
+import { styled, theme } from '../../lib/styles/index.js';
 
 export const siteLogoDimensionsPx = {
-  height: 60,
-  width:  338,
+	height: 60,
+	width: 338,
 };
 
 const BaseSiteLogo = styled('svg', {
-  display:  'inline-block',
-  maxWidth: '100%',
-  width:    `${siteLogoDimensionsPx.width}px`,
+	display: 'inline-block',
+	maxWidth: '100%',
+	width: `${siteLogoDimensionsPx.width}px`,
 });
 
 const SiteLogoExternalReference = styled('use', {
-  nested: {
-    [theme.darkMode]: {
-      ...theme[theme.darkMode].siteLogo,
-    },
-  },
+	nested: {
+		[theme.darkMode]: {
+			...theme[theme.darkMode].siteLogo,
+		},
+	},
 
-  ...theme.siteLogo,
+	...theme.siteLogo,
 
-  fill: 'currentcolor',
+	fill: 'currentcolor',
 });
 
-const viewBox = (
-  `0 0 ${siteLogoDimensionsPx.width} ${siteLogoDimensionsPx.height}`
-);
+const viewBox = `0 0 ${siteLogoDimensionsPx.width} ${siteLogoDimensionsPx.height}`;
 
-export const SiteLogo = () => (
-  <BaseSiteLogo
-    viewBox={ viewBox }
-  >
-    <SiteLogoExternalReference xlinkHref="/images/SiteLogo.svg#site-logo" />
-    <title>Eyelidlessness</title>
-  </BaseSiteLogo>
+export const SiteLogo = (): ComponentChildren => (
+	<BaseSiteLogo viewBox={viewBox}>
+		<SiteLogoExternalReference xlinkHref="/images/SiteLogo.svg#site-logo" />
+		<title>Eyelidlessness</title>
+	</BaseSiteLogo>
 );

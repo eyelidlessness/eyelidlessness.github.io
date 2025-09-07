@@ -1,3 +1,3 @@
-export * from './FullBleedContainer';
-export * from './FullBleedScrollableOverflow';
-export * from './FullBleedSymbolBlock';
+export * from './FullBleedContainer.js';
+export * from './FullBleedScrollableOverflow.js';
+export * from './FullBleedSymbolBlock.js';

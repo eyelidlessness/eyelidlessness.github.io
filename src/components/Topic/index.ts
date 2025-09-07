@@ -1,2 +1,2 @@
-export * from './TopicTag';
-export * from './TopicTagList';
+export * from './TopicTag.js';
+export * from './TopicTagList.js';

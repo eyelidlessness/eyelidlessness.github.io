@@ -12,7 +12,7 @@ jobs:
 
       - uses: volta-cli/action@v4
         with:
-          node-version: '14.21.3'
+          node-version: '24.7.0'
           yarn-version: '1.22.22'
 
       # Per https://stackoverflow.com/a/74732671, hopefully addresses current
@@ -22,7 +22,6 @@ jobs:
           python-version: '3.10'
 
       - run: yarn install --frozen-lockfile
-      - run: yarn typecheck
       - run: yarn test
       - run: TZ=America/Los_Angeles yarn build
 

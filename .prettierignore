@@ -1,0 +1,33 @@
+# Vendor
+typings/microsite/**/*
+
+# Platform
+**/.DS_Store
+
+# Dependencies
+node_modules
+
+# Build(ish)
+.microsite
+.test
+.tsimp
+dist
+
+# SEO nonsense
+public/google*.html
+
+# Tools
+tsconfig.tsbuildinfo
+yarn.lock
+
+# Logs
+**/*.log
+yarn-debug.log*
+yarn-error.log*
+
+# Misc copypasta (breadcrumb, if it ever matters: from Qwik starter)
+.history
+.yarn
+*.
+.cache
+temp

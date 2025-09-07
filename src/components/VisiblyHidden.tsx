@@ -1,5 +1,5 @@
-import { styled, theme } from '@/lib/styles';
+import { styled, theme } from '../lib/styles/index.js';
 
 export const VisiblyHidden = styled('span', {
-  ...theme.visiblyHidden,
+	...theme.visiblyHidden,
 });

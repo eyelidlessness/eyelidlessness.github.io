@@ -1,9 +1,6 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".test",
-    "paths": {
-      "@/*": [ "./*.js", "./*/index.js" ]
-    }
+    "baseUrl": ".test"
   }
 }

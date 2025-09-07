@@ -1,180 +1,162 @@
-import {
-  combineRules,
-  createRenderer as baseCreateRenderer,
-  IRenderer,
-  IStyle,
-} from 'fela';
+import type { IRenderer, IStyle, TRule } from 'fela';
+import { createRenderer as baseCreateRenderer } from 'fela';
+import createIdentifier from 'fela-identifier';
+import pluginEmbedded from 'fela-plugin-embedded';
+import pluginSelectors from 'fela-plugin-multiple-selectors';
+import pluginTypescript from 'fela-plugin-typescript';
 import { renderToString } from 'fela-tools';
-import module             from 'module';
-import {
-  ComponentChildren,
-  ComponentType,
-  ElementType,
-  h,
-} from 'preact';
-import {
-  createComponent,
-  RendererProvider,
-  Style,
-} from 'preact-fela';
-import { identity }       from '@/lib/helpers';
-import hashed             from './hashed';
+import type NodeFS from 'node:fs';
+import type NodePath from 'node:path';
+import type { ComponentChildren, ComponentType, ElementType } from 'preact';
+import { h, toChildArray } from 'preact';
+import type { Style } from 'preact-fela';
+import { createComponent, RendererProvider } from 'preact-fela';
+import { identity } from '../helpers/values.js';
+import hashed from './hashed.js';
 
-const _require = module.createRequire(import.meta.url);
+export type StyleableIntrinsicElements = JSX.IntrinsicElements;
+export type StyleableIntrinsicElement = keyof JSX.IntrinsicElements;
+export type AnyStyleableIntrinsicElement =
+	StyleableIntrinsicElements[StyleableIntrinsicElement];
 
-const { default: createIdentifier } = _require('fela-identifier');
-const { default: pluginEmbedded }   = _require('fela-plugin-embedded');
-const { default: pluginSelectors }  = _require('fela-plugin-multiple-selectors');
-
-/** @type {import('fela-plugin-typescript')} */
-const { default: pluginTypescript } = _require('fela-plugin-typescript');
+export type StyleableClassName = AnyStyleableIntrinsicElement['className'];
 
 const devMode = import.meta.env?.MODE === 'development';
 
-export const createRenderer = () => {
-  const identifier = createIdentifier();
+type CreateIdentifierResult = ReturnType<typeof createIdentifier>;
 
-  const renderer = baseCreateRenderer({
-    devMode,
-    enhancers: [
-      hashed(),
-      identifier,
-    ],
-    plugins: [
-      pluginEmbedded(),
-      pluginSelectors(),
-      pluginTypescript(),
-    ],
-  });
-
-  return {
-    identifier,
-    renderer,
-  };
-};
-
-export const {
-  identifier,
-  renderer,
-} = createRenderer();
-
-// let currentStyles: () => string = () => '';
-
-// if (
-//   !devMode &&
-//   import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
-// ) {
-//   renderer.subscribe(async () => {
-//     currentStyles = () => renderToString(renderer);
-//   });
-// }
-
-export const writeCurrentStyles = async () => {
-  // if (!devMode && currentStyles != null) {
-  if (
-    !devMode &&
-    import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
-  ) {
-    const currentStyles = renderToString(renderer);
-    const fs            = await import(`${'fs'}`);
-    const path          = await import(`${'path'}`);
-
-    const cssPath = path.resolve(
-      path.dirname(import.meta.url.replace(/^file:/, '')),
-      '../../global/index.css'
-    );
-
-    fs.writeFileSync(cssPath, currentStyles, {
-      flag: 'w',
-    });
-  }
-};
-
-const toArray = (value: unknown) => (
-  Array.isArray(value)
-    ? value
-  : [ value ]
-);
-
-interface StylesProviderProps {
-  readonly children?: ComponentChildren;
+export interface SerializableUniqueIdentifier {
+	readonly className: string;
+	toString(): string;
 }
 
-export const createStylesProvider = (renderer: IRenderer) => (
-  ({ children }: StylesProviderProps) => (
-    h(RendererProvider, { renderer }, ...toArray(children))
-  )
+// prettier-ignore
+export type UniqueIdentifierFactory = (name?: string) => (
+	& TRule
+	& SerializableUniqueIdentifier
 );
+
+interface StyleRenderer {
+	readonly identifier: UniqueIdentifierFactory;
+	readonly renderer: IRenderer;
+}
+
+export const createRenderer = (): StyleRenderer => {
+	const identifier: CreateIdentifierResult = createIdentifier();
+
+	const renderer = baseCreateRenderer({
+		devMode,
+		enhancers: [hashed(), identifier],
+		plugins: [pluginEmbedded(), pluginSelectors(), pluginTypescript()],
+	});
+
+	return {
+		identifier,
+		renderer,
+	};
+};
+
+export const { identifier, renderer } = createRenderer();
+
+export const writeCurrentStyles = async (): Promise<void> => {
+	if (
+		!devMode &&
+		import.meta.url.endsWith('/.microsite/staging/src/lib/styles/styles.js')
+	) {
+		const currentStyles = renderToString(renderer);
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-template-expression
+		const fs = (await import(`${'node:fs'}`)) as typeof NodeFS;
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-template-expression
+		const path = (await import(`${'node:path'}`)) as typeof NodePath;
+
+		const cssPath = path.resolve(
+			path.dirname(import.meta.url.replace(/^file:/, '')),
+			'../../global/index.css'
+		);
+
+		fs.writeFileSync(cssPath, currentStyles, {
+			flag: 'w',
+		});
+	}
+};
+
+interface StylesProviderProps {
+	readonly children?: ComponentChildren;
+}
+
+type StylesProvider = ComponentType<StylesProviderProps>;
+
+export const createStylesProvider = (
+	providerRenderer: IRenderer
+): StylesProvider => {
+	return ({ children }: StylesProviderProps) => {
+		return h(
+			RendererProvider,
+			{ renderer: providerRenderer },
+			...toChildArray(children)
+		);
+	};
+};
 
 export const StylesProvider = createStylesProvider(renderer);
 
-const baseCSS = <T extends IStyle>(value: T) => (
-  renderer.renderRule(identity, value)
-);
+const baseCSS = (value: IStyle) => renderer.renderRule(identity, value);
 
 export const css = Object.assign(baseCSS, {
-  global: renderer.renderStatic.bind(renderer) as typeof renderer.renderStatic,
+	global: renderer.renderStatic.bind(renderer),
 });
 
 export interface StyleableProps {
-  className?: string;
+	readonly className?: StyleableClassName;
 }
 
 interface BaseStyledProps extends StyleableProps {
-  as?: ElementType<StyleableProps>;
+	as?: ElementType<StyleableProps>;
 }
 
-type StyledProps<P> =
-  & BaseStyledProps
-  & (
-    P extends { as: infer T }
-      ? T extends keyof JSX.IntrinsicElements
-        ? (
-          & { as: T }
-          & JSX.IntrinsicElements[T]
-        )
-      : T extends ComponentType<infer P2>
-        ? P2 extends StyleableProps
-          ? (
-            & { as: ComponentType<P2> }
-            & Omit<P2, 'as'>
-          )
-          : never
-        : Omit<P, 'as'>
-      : Omit<P, 'as'>
-    );
+type IntrinsicElementCastProps<As extends keyof JSX.IntrinsicElements> = {
+	readonly as: As;
+} & BaseStyledProps &
+	JSX.IntrinsicElements[As];
 
-type StyledComponent<P> = ComponentType<
-  StyledProps<P>
->;
+// prettier-ignore
+type StyledComponentProps<P> =
+	& BaseStyledProps
+	& Omit<P, 'as'>;
+
+interface StyledComponent<P> {
+	<As extends keyof JSX.IntrinsicElements>(
+		props: IntrinsicElementCastProps<As>
+	): JSX.Element;
+	<T extends StyleableProps>(
+		props: { readonly as: ComponentType<T> } & Omit<T, 'as'>
+	): JSX.Element;
+	(props: StyledComponentProps<P>): JSX.Element;
+}
 
 interface Styled {
-  <T extends keyof JSX.IntrinsicElements>(
-    Component: T,
-    style:     Style<JSX.IntrinsicElements[T]>
-  ): StyledComponent<
-    & JSX.IntrinsicElements[T]
-  >;
+	<T extends keyof JSX.IntrinsicElements>(
+		Component: T,
+		style: Style<JSX.IntrinsicElements[T]>
+	): StyledComponent<JSX.IntrinsicElements[T]>;
 
-  <P extends StyleableProps>(
-    Component: ComponentType<P>,
-    style:     Style<P>
-  ): StyledComponent<P>;
+	<P extends StyleableProps>(
+		Component: ComponentType<P>,
+		style: Style<P>
+	): StyledComponent<P>;
 }
 
 export const styled: Styled = <P extends StyleableProps>(
-  Component: ElementType<P>,
-  style:     Style<P>
+	Component: ElementType<P>,
+	style: Style<P>
 ) => {
-  const rule = typeof style === 'function'
-    ? style
-    : () => style;
+	const rule = typeof style === 'function' ? style : () => style;
 
-  return createComponent(rule, Component as ComponentType<P>, Object.keys);
+	return createComponent(
+		rule,
+		Component as ComponentType<P>,
+		Object.keys
+	) as never;
 };
 
-export { combineRules };
-export type {
-  IRenderer,
-  IStyle,
-};
+export type { IRenderer, IStyle };

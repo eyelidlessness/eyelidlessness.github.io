@@ -1,29 +1,26 @@
 import { definePage } from 'microsite/page';
+import type { BlogPostProps } from '../../../../../components/Blog/BlogPost.js';
 import {
-  BlogMetadataType,
-  BlogPost,
-  BlogPostProps,
-  getBlogPostStaticProps,
-} from '@/components/Blog';
-import { TopicTag }   from '@/components/Topic';
-import {
-  mdx,
-  Topic,
-} from '@/lib/content';
-import { styled }     from '@/lib/styles';
+	BlogMetadataType,
+	BlogPost,
+	getBlogPostStaticProps,
+} from '../../../../../components/Blog/BlogPost.js';
+import { TopicTag } from '../../../../../components/Topic/TopicTag.js';
+import { mdx, Topic } from '../../../../../lib/content/index.js';
+import { styled } from '../../../../../lib/styles/styles.js';
 
 const VerticallyCenterTopicTagChild = styled('span', {
-  nested: {
-    '& span': {
-      display:       'inline-block',
-      verticalAlign: 'middle',
-    },
-  },
+	nested: {
+		'& span': {
+			display: 'inline-block',
+			verticalAlign: 'middle',
+		},
+	},
 });
 
-const WhatTheArtPost = (props: BlogPostProps<any>) => (
-  <BlogPost { ...props }>
-    {mdx`
+const WhatTheArtPost = (props: BlogPostProps) => (
+	<BlogPost {...props}>
+		{mdx`
       When I left my last job at the end of September, I knew I
       was pretty burned out. But I thought that I wanted to get on
       the job hunt pretty quickly. So I gave myself one week to
@@ -77,20 +74,20 @@ const WhatTheArtPost = (props: BlogPostProps<any>) => (
       that I've included labels for:
     `}
 
-    <ul>
-      <li>
-        <VerticallyCenterTopicTagChild>
-          <TopicTag link={ false } topic={ Topic.NEURODIVERGENCE } />
-        </VerticallyCenterTopicTagChild>
-      </li>
-      <li>
-        <VerticallyCenterTopicTagChild>
-          <TopicTag link={ false } topic={ Topic.MENTAL_ILLNESS } />
-        </VerticallyCenterTopicTagChild>
-      </li>
-    </ul>
+		<ul>
+			<li>
+				<VerticallyCenterTopicTagChild>
+					<TopicTag link={false} topic={Topic.NEURODIVERGENCE} />
+				</VerticallyCenterTopicTagChild>
+			</li>
+			<li>
+				<VerticallyCenterTopicTagChild>
+					<TopicTag link={false} topic={Topic.MENTAL_ILLNESS} />
+				</VerticallyCenterTopicTagChild>
+			</li>
+		</ul>
 
-    {mdx`
+		{mdx`
       I felt since I discussed ADHD and burnout, it'd be a good
       idea to use the art for its purpose from the start! And a
       new piece will be included on every post going forward,
@@ -100,15 +97,15 @@ const WhatTheArtPost = (props: BlogPostProps<any>) => (
 
       [1]: /blog/2021/02/what-the-art-p2-constraints/
     `}
-  </BlogPost>
+	</BlogPost>
 );
 
 export default definePage(WhatTheArtPost, {
-  async getStaticProps(context) {
-    const props = await getBlogPostStaticProps({
-      ...context,
+	async getStaticProps(context) {
+		const props = await getBlogPostStaticProps({
+			...context,
 
-      description: mdx`
+			description: mdx`
         Today is the day! I'm finally ready to share a project I've
         been working on. A labor of love. It's been a long time
         coming—about four months! I've shared some details with
@@ -117,19 +114,19 @@ export default definePage(WhatTheArtPost, {
         post teasing it on social media… 🙃</small> until now.
       `,
 
-      importURL: import.meta.url,
-      title:     'What the art, part 1: Why?',
+			importURL: import.meta.url,
+			title: 'What the art, part 1: Why?',
 
-      topics: [
-        Topic.ART,
-        Topic.TECHNOLOGY,
-        Topic.NEURODIVERGENCE,
-        Topic.MENTAL_ILLNESS,
-      ],
+			topics: [
+				Topic.ART,
+				Topic.TECHNOLOGY,
+				Topic.NEURODIVERGENCE,
+				Topic.MENTAL_ILLNESS,
+			],
 
-      type: BlogMetadataType.IMMUTABLE,
-    });
+			type: BlogMetadataType.IMMUTABLE,
+		});
 
-    return { props };
-  },
+		return { props };
+	},
 });

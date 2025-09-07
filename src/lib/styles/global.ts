@@ -1,60 +1,43 @@
-import {
-  clamp,
-  cleanWhitespace,
-  jsToCSS
-} from './functions';
-import { css }   from './styles';
-import { theme } from './theme';
+import { clamp, cleanWhitespace, jsToCSS } from './functions.js';
+import { css } from './styles.js';
+import { theme } from './theme.js';
 
-const emphasisElements = [
-  'b',
-  'em',
-  'h1',
-  'h2',
-  'h3',
-  'i',
-  'strong',
-] as const;
+const emphasisElements = ['b', 'em', 'h1', 'h2', 'h3', 'i', 'strong'] as const;
 
-export const headingElements = [
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-] as const;
+export const headingElements = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
 
 const semanticBlockElements = [
-  ...headingElements,
-  'address',
-  'article',
-  'aside',
-  'blockquote',
-  'details',
-  'dialog',
-  'figcaption',
-  'figure',
-  'footer',
-  'header',
-  'hgroup',
-  'main',
-  'menu',
-  'nav',
-  'p',
-  'section',
+	...headingElements,
+	'address',
+	'article',
+	'aside',
+	'blockquote',
+	'details',
+	'dialog',
+	'figcaption',
+	'figure',
+	'footer',
+	'header',
+	'hgroup',
+	'main',
+	'menu',
+	'nav',
+	'p',
+	'section',
 ] as const;
 
-const blockElements = Array.from(new Set([
-  ...headingElements,
-  ...semanticBlockElements,
-  'div',
-  'fieldset',
-  'form',
-  'hgroup',
-  'hr',
-  'pre',
-] as const));
+const blockElements = Array.from(
+	new Set([
+		...headingElements,
+		...semanticBlockElements,
+		'div',
+		'fieldset',
+		'form',
+		'hgroup',
+		'hr',
+		'pre',
+	] as const)
+);
 
 const PRINT_FONT_FAMILY = 'PDFPrint';
 const PRINT_FONT_URL = '/fonts/pdf-print.woff';
@@ -84,6 +67,10 @@ export const criticalStyles = cleanWhitespace(`
       url('/fonts/Minipax/regular.woff2') format('woff2');
   }
 
+  :root {
+    color-scheme: light dark;
+  }
+
   html, body {
     margin:     0;
     max-width:  100%;
@@ -94,21 +81,21 @@ export const criticalStyles = cleanWhitespace(`
   html {
     box-sizing:       border-box;
     font-size:        ${clamp(
-      `${theme.baseFontSizeRange.minEm}em`,
-      `${theme.baseFontSizeRange.fluidVw}vw`,
-      `${theme.baseFontSizeRange.maxEm}em`
-    )};
+			`${theme.baseFontSizeRange.minEm}em`,
+			`${theme.baseFontSizeRange.fluidVw}vw`,
+			`${theme.baseFontSizeRange.maxEm}em`
+		)};
     text-size-adjust:         100%;
     -webkit-text-size-adjust: 100%;
   }
 
-  ${jsToCSS([ 'html', 'body' ], {
-    ...theme.document,
-  })}
+  ${jsToCSS(['html', 'body'], {
+		...theme.document,
+	})}
 
-  ${jsToCSS([ 'body' ], {
-    ...theme.prose,
-  })}
+  ${jsToCSS(['body'], {
+		...theme.prose,
+	})}
 
   *, *:before, *:after {
     box-sizing: inherit;
@@ -128,9 +115,9 @@ export const criticalStyles = cleanWhitespace(`
   }
 `);
 
-export const setGlobalStyles = () => {
-  css.global(
-    cleanWhitespace(`
+export const setGlobalStyles = (): void => {
+	css.global(
+		cleanWhitespace(`
       @media (prefers-reduced-motion) {
         * {
           transition: none !important;
@@ -155,26 +142,26 @@ export const setGlobalStyles = () => {
 
       h1 {
         font-size: ${clamp(
-          `${theme.headingRanges.h1.minEm}em`,
-          `${theme.headingRanges.h1.fluidVw}vw`,
-          `${theme.headingRanges.h1.maxEm}em`
-        )};
+					`${theme.headingRanges.h1.minEm}em`,
+					`${theme.headingRanges.h1.fluidVw}vw`,
+					`${theme.headingRanges.h1.maxEm}em`
+				)};
       }
 
       h2 {
         font-size: ${clamp(
-          `${theme.headingRanges.h2.minEm}em`,
-          `${theme.headingRanges.h2.fluidVw}vw`,
-          `${theme.headingRanges.h2.maxEm}em`
-        )};
+					`${theme.headingRanges.h2.minEm}em`,
+					`${theme.headingRanges.h2.fluidVw}vw`,
+					`${theme.headingRanges.h2.maxEm}em`
+				)};
       }
 
       h3 {
         font-size: ${clamp(
-          `${theme.headingRanges.h3.minEm}em`,
-          `${theme.headingRanges.h3.fluidVw}vw`,
-          `${theme.headingRanges.h3.maxEm}em`
-        )};
+					`${theme.headingRanges.h3.minEm}em`,
+					`${theme.headingRanges.h3.fluidVw}vw`,
+					`${theme.headingRanges.h3.maxEm}em`
+				)};
       }
 
       dl {
@@ -209,33 +196,33 @@ export const setGlobalStyles = () => {
         margin: 1.5em 0;
       }
 
-      ${jsToCSS([ 'hr:after' ], {
-        ...theme.separator,
+      ${jsToCSS(['hr:after'], {
+				...theme.separator,
 
-        content:       '"✻ ✻ ✻"',
-        display:       'block',
-        letterSpacing: '0.5em',
-        textAlign:     'center',
-      })}
+				content: '"✻ ✻ ✻"',
+				display: 'block',
+				letterSpacing: '0.5em',
+				textAlign: 'center',
+			})}
 
       li {
         margin: 0.5em 0;
       }
 
-      ${jsToCSS([ 'pre' ], theme.pre)}
+      ${jsToCSS(['pre'], theme.pre)}
 
-      ${jsToCSS([ 'code' ], {
-        ...theme.code,
+      ${jsToCSS(['code'], {
+				...theme.code,
 
-        borderRadius: '0.1875rem',
-        display:      'inline-flex',
-        fontSize:     '0.875em',
-        hyphens:      'auto',
-        lineHeight:   '1.5em',
-        overflowWrap: 'break-word',
-        padding:      '0.1111rem 0.3333rem 0',
-        wordWrap:     'break-word',
-      })}
+				borderRadius: '0.1875rem',
+				display: 'inline-flex',
+				fontSize: '0.875em',
+				hyphens: 'auto',
+				lineHeight: '1.5em',
+				overflowWrap: 'break-word',
+				padding: '0.1111rem 0.3333rem 0',
+				wordWrap: 'break-word',
+			})}
 
       pre code {
         background-color: transparent;
@@ -253,32 +240,32 @@ export const setGlobalStyles = () => {
         margin-bottom: 0;
       }
 
-      ${jsToCSS([ 'a' ], {
-        ...theme.links,
-        fontWeight: 'bolder',
-      })}
+      ${jsToCSS(['a'], {
+				...theme.links,
+				fontWeight: 'bolder',
+			})}
 
-      ${jsToCSS([ 'abbr' ], {
-        ...theme.abbreviation,
+      ${jsToCSS(['abbr'], {
+				...theme.abbreviation,
 
-        textDecoration: 'none',
-      })}
+				textDecoration: 'none',
+			})}
 
-      ${jsToCSS([ 'aside', 'small' ], theme.deemphasize)}
+      ${jsToCSS(['aside', 'small'], theme.deemphasize)}
 
-      ${jsToCSS([ 'aside' ], {
-        ...theme.aside,
+      ${jsToCSS(['aside'], {
+				...theme.aside,
 
-        fontSize: '0.8889em',
-        margin:   '1rem 0',
-        padding:  '0.8889rem',
+				fontSize: '0.8889em',
+				margin: '1rem 0',
+				padding: '0.8889rem',
 
-        nested: {
-          '& a': {
-            fontWeight: 600,
-          },
-        },
-      })}
+				nested: {
+					'& a': {
+						fontWeight: 600,
+					},
+				},
+			})}
 
       ${emphasisElements.map((el) => `aside ${el}`).join(', ')} {
         color: inherit;
@@ -310,13 +297,17 @@ export const setGlobalStyles = () => {
       }
 
       ${theme.darkMode} {
-        ${jsToCSS([ 'html', 'body' ], {
-          ...theme[theme.darkMode].document,
-        })}
+        :root {
+          color-scheme: dark light;
+        }
 
-        ${jsToCSS([ 'body' ], {
-          ...theme[theme.darkMode].prose,
-        })}
+        ${jsToCSS(['html', 'body'], {
+					...theme[theme.darkMode].document,
+				})}
+
+        ${jsToCSS(['body'], {
+					...theme[theme.darkMode].prose,
+				})}
 
         body, dl, p, ol, ul {
           font-weight:    300;
@@ -324,13 +315,13 @@ export const setGlobalStyles = () => {
         }
 
         ${jsToCSS(emphasisElements, theme[theme.darkMode].emphasize)}
-        ${jsToCSS([ 'abbr' ], theme[theme.darkMode].abbreviation)}
-        ${jsToCSS([ 'pre' ], theme[theme.darkMode].pre)}
-        ${jsToCSS([ 'code' ], theme[theme.darkMode].code)}
-        ${jsToCSS([ 'a' ], theme[theme.darkMode].links)}
-        ${jsToCSS([ 'aside', 'small' ], theme[theme.darkMode].deemphasize)}
-        ${jsToCSS([ 'aside' ], theme[theme.darkMode].aside)}
-        ${jsToCSS([ 'hr:after' ], theme[theme.darkMode].separator)}
+        ${jsToCSS(['abbr'], theme[theme.darkMode].abbreviation)}
+        ${jsToCSS(['pre'], theme[theme.darkMode].pre)}
+        ${jsToCSS(['code'], theme[theme.darkMode].code)}
+        ${jsToCSS(['a'], theme[theme.darkMode].links)}
+        ${jsToCSS(['aside', 'small'], theme[theme.darkMode].deemphasize)}
+        ${jsToCSS(['aside'], theme[theme.darkMode].aside)}
+        ${jsToCSS(['hr:after'], theme[theme.darkMode].separator)}
       }
 
       ${theme.print} {
@@ -339,23 +330,23 @@ export const setGlobalStyles = () => {
         }
 
         ${jsToCSS(['a', 'a:hover', 'code'], {
-          color: 'inherit',
-          fontWeight: 'inherit',
-          textDecorationColor: 'currentcolor',
-        })}
+					color: 'inherit',
+					fontWeight: 'inherit',
+					textDecorationColor: 'currentcolor',
+				})}
 
         ${jsToCSS(['abbr'], {
-          backgroundImage: 'none',
-        })}
+					backgroundImage: 'none',
+				})}
 
-        ${jsToCSS([ 'code' ], {
-          backgroundColor: 'transparent',
-          borderRadius:    0,
-          display:         'inline-flex',
-          lineHeight:      'inherit',
-          padding:         0,
-        })}
+        ${jsToCSS(['code'], {
+					backgroundColor: 'transparent',
+					borderRadius: 0,
+					display: 'inline-flex',
+					lineHeight: 'inherit',
+					padding: 0,
+				})}
       }
     `)
-  );
+	);
 };

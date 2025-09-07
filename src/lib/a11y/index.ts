@@ -1,1 +1,1 @@
-export * from './abbreviations';
+export * from './abbreviations.js';
