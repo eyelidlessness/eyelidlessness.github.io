@@ -4,6 +4,7 @@ import {
 	BlogPost,
 	getBlogPostStaticProps,
 } from '../../../../../components/Blog/BlogPost.js';
+import { BLOG_BASE_PATH } from '../../../../../data/site.js';
 import { mdx as baseMDX, Topic } from '../../../../../lib/content/index.js';
 
 const WhatTheArt3Post = (props: BlogPostProps) => <BlogPost {...props} />;
@@ -20,7 +21,7 @@ export default definePage(WhatTheArt3Post, {
       `,
 
 			importURL: import.meta.url,
-			redirect: '/blog/2021/03/what-the-art-part3-implementation/',
+			redirect: `${BLOG_BASE_PATH}2021/03/what-the-art-part3-implementation/`,
 			title: 'What the art, part 3: Implementation',
 
 			topics: [Topic.ART, Topic.TECHNOLOGY, Topic.NEURODIVERGENCE],

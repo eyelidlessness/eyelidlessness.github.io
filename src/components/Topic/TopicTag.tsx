@@ -1,4 +1,5 @@
 import type { ComponentChildren } from 'preact';
+import { BLOG_BASE_PATH } from '../../data/site.js';
 import type { TopicLike } from '../../lib/content/topics.js';
 import { getHyphenatedTopicKey, getTopic } from '../../lib/content/topics.js';
 import { styled, theme } from '../../lib/styles/index.js';
@@ -35,7 +36,7 @@ export const BaseTopicTag = ({
 
 	const TopicTagOuter = link ? TopicTagLink : 'span';
 	const outerProps = link
-		? ({ href: `/blog/topics/${pathSegment}/` } as const)
+		? ({ href: `${BLOG_BASE_PATH}topics/${pathSegment}/` } as const)
 		: {};
 
 	return (

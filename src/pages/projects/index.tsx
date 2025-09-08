@@ -1,5 +1,6 @@
 import { definePage } from 'microsite/page';
 import { Head } from '../../components/Head.js';
+import { RESUME_BASE_PATH } from '../../data/site.js';
 import type { PageMetadata } from '../../lib/content/index.js';
 import { getPageMetadata, PageMetadataType } from '../../lib/content/index.js';
 
@@ -24,7 +25,7 @@ export default definePage(ProjectPage, {
 				...meta,
 
 				description,
-				redirect: '/resume/#projects',
+				redirect: `${RESUME_BASE_PATH}#projects`,
 				title,
 			},
 		});

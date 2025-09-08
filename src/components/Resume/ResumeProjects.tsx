@@ -28,6 +28,7 @@ const ResumeProjectsPrintOnly = styled('div', {
 	nested: {
 		[theme.print]: {
 			display: 'block',
+			paddingBottom: '0.5em',
 		},
 	},
 });

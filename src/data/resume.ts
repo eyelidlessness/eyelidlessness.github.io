@@ -344,25 +344,6 @@ type ResumeSkillsets = typeof ResumeSkillset;
 export type ResumeSkillset = ResumeSkillsets[keyof ResumeSkillsets];
 
 const resumeSkills = {
-	[ResumeSkillset.EXPERTISE]: [
-		{
-			name: 'Domain-driven design & architecture',
-			level: ResumeSkillLevel.EXPERT,
-		},
-		{
-			name: 'Technical vision, direction & execution',
-			level: ResumeSkillLevel.EXPERT,
-		},
-		{
-			name: 'Web apps & services',
-			level: ResumeSkillLevel.ADVANCED,
-		},
-		{
-			name: 'Performance',
-			level: ResumeSkillLevel.ADVANCED,
-		},
-	],
-
 	[ResumeSkillset.WEB_UI_UX]: [
 		{
 			name: 'React (+ Preact & similar)',
@@ -378,6 +359,21 @@ const resumeSkills = {
 		},
 		{
 			name: 'Vue',
+			level: ResumeSkillLevel.INTERMEDIATE,
+		},
+	],
+
+	[ResumeSkillset.SERVICES_DISTRIBUTED_SYSTEMS]: [
+		{
+			name: 'HTTP (REST, RPC, Distributed systems)',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'Node.js (+ similar)',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'Django (+ REST Framework)',
 			level: ResumeSkillLevel.INTERMEDIATE,
 		},
 	],
@@ -415,7 +411,7 @@ const resumeSkills = {
 
 	[ResumeSkillset.NICHE_ESOTERIC]: [
 		{
-			name: 'ODK XForms & XPath',
+			name: 'ODK XForms',
 			level: ResumeSkillLevel.EXPERT,
 		},
 		{

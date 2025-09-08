@@ -5,13 +5,14 @@ import {
 	BlogPost,
 	getBlogPostStaticProps,
 } from '../../../../../components/Blog/BlogPost.js';
+import { BLOG_BASE_PATH } from '../../../../../data/site.js';
 import { mdx, Topic } from '../../../../../lib/content/index.js';
 
 const WhatTheArtPost = (props: BlogPostProps) => {
 	return (
 		<BlogPost {...props}>
 			{mdx`
-        Previous: [What the art, part 1: Why?](/blog/2021/02/what-the-art-p1-why/)
+        Previous: [What the art, part 1: Why?](${BLOG_BASE_PATH}2021/02/what-the-art-p1-why/)
 
         In any creative project, constraints are an important
         part of my process, and a good set of constraints always
@@ -52,7 +53,7 @@ const WhatTheArtPost = (props: BlogPostProps) => {
         part of the whole. So while each piece is unique, it
         should be generally recognizable as part of the whole.
 
-        [2]: /blog/2021/02/what-the-art-p1-why/
+        [2]: ${BLOG_BASE_PATH}2021/02/what-the-art-p1-why/
 
         ## Immutability
 
@@ -106,7 +107,7 @@ const WhatTheArtPost = (props: BlogPostProps) => {
 
         Next: [What the art, part 3: Implementation][implementation]
 
-        [implementation]: /blog/2021/03/what-the-art-part3-implementation/
+        [implementation]: ${BLOG_BASE_PATH}2021/03/what-the-art-part3-implementation/
       `}
 		</BlogPost>
 	);

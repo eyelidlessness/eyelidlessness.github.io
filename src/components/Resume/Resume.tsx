@@ -59,7 +59,8 @@ const ResumeHeader = styled(BaseFlex, {
 	alignItems: 'baseline',
 	justifyContent: 'space-between',
 	margin: '0 -0.5rem',
-	paddingTop: clamp('0.5rem', '3vw', '2rem'),
+	paddingTop: clamp('0.5em', '3vw', '2em'),
+	paddingBottom: clamp('0.5em', '2vw', '1em'),
 
 	nested: {
 		'& > *': {
@@ -177,6 +178,8 @@ const arrowListItemStyles = {
 	display: 'grid',
 	gridTemplateColumns: '1.25rem 1fr',
 	listStyle: 'none',
+	margin: 0,
+	padding: 0,
 
 	nested: {
 		'&:before': {
@@ -191,19 +194,22 @@ const arrowListItemStyles = {
 const ResumeBrief = styled(FullBleedContainer, {
 	...theme.resume.brief,
 
-	margin: '1rem 0 0',
-	padding: '1rem 0',
+	margin: 0,
+	padding: '0.5em 0',
 
 	nested: {
 		...theme.resume.brief.nested,
 
-		'& p': {
-			margin: '0.5em 0',
+		'& p, & ul, & li': {
+			margin: 0,
 		},
 
-		'& ul, & ul li': {
-			margin: 0,
+		'& p, & li': {
 			padding: 0,
+		},
+
+		'& ul': {
+			padding: '0.25em 0',
 		},
 
 		'& li': arrowListItemStyles,
@@ -249,16 +255,21 @@ const ResumeFlexHeading = styled('h2', {
 const ResumeSkillsetsContainer = styled('div', {
 	alignItems: 'baseline',
 	display: 'grid',
-	gap: '0.5rem 0',
+	gap: '0.5em 0',
 	gridTemplateColumns: 'auto',
 	gridTemplateRows: 'auto',
 	fontSize: '0.88889em',
+	padding: '0.25em 0',
 
 	nested: {
 		[resumeSkillsetsColumnarQueries.screen]: {
 			gridTemplateColumns: 'auto 1fr',
 		},
 		[resumeSkillsetsColumnarQueries.print]: { gridTemplateColumns: 'auto 1fr' },
+
+		'& ul, & li': {
+			lineHeight: 1.5,
+		},
 	},
 });
 
@@ -370,14 +381,13 @@ const ResumeSkillsetListing = ({
 );
 
 const ResumeTopLevelListingItem = styled(FullBleedContainer, {
-	padding: '1rem 0',
+	gap: '0.5em 0',
 });
 
 // TODO: the FRESH spec says this should be a summary of my achievements,
 // but so far I've summarized the business.
 const ResumeEmployerSummary = styled('div', {
 	fontSize: '0.94444em',
-	margin: '0.5rem 0',
 });
 
 const ResumeEmployerMarginalia = styled('p', {
@@ -389,16 +399,27 @@ const ResumeEmploymentHeading = styled('h2', {
 	marginBottom: 0,
 });
 
+const ResumeEmploymentSubPeriod = styled(FullBleedContainer, {
+	gap: '0.5em 0',
+	nested: {
+		[theme.print]: {
+			breakInside: 'avoid',
+		},
+	},
+});
+
 const ResumeEmploymentHighlightsList = styled('ul', {
+	display: 'grid',
 	fontSize: '0.88889em',
+	gap: '0.5em 0',
 	paddingInlineStart: 0,
 });
 
 const ResumeEmploymentHighlightsListItem = styled('li', arrowListItemStyles);
 
 const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
-	padding: '1.5rem 0',
 	position: 'relative',
+	padding: '1em 0',
 
 	nested: {
 		'&:last-child:after': {
@@ -425,7 +446,7 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
 
 		[theme.print]: {
 			// breakInside:   'avoid',
-			paddingBottom: 0,
+			padding: '0.25em 0',
 		},
 	},
 });
@@ -586,11 +607,13 @@ const ResumeEmploymentListItem = ({
 				const [subEmployer, subRange, ...actualHighlights] = subHighlights;
 
 				return (
-					<ResumeEmploymentHighlights
-						subEmployer={subEmployer}
-						subRange={subRange}
-						highlights={actualHighlights}
-					/>
+					<ResumeEmploymentSubPeriod>
+						<ResumeEmploymentHighlights
+							subEmployer={subEmployer}
+							subRange={subRange}
+							highlights={actualHighlights}
+						/>
+					</ResumeEmploymentSubPeriod>
 				);
 			})
 		)}
@@ -600,17 +623,27 @@ const ResumeEmploymentListItem = ({
 const BaseResumeEmployment = styled(ResumeSection, {
 	...theme.resume.employment.container,
 
-	marginTop: '1rem',
+	padding: '1em 0',
+
+	nested: {
+		[theme.print]: {
+			...theme.resume.employment.container.nested[theme.print],
+
+			gap: '0.5em 0',
+			padding: '0.25em 0',
+		},
+	},
 });
 
 interface ResumeEmploymentProps {
+	readonly id?: string;
 	readonly employment: ResumeData['employment'] extends infer T
 		? T
 		: ResumeData['employment'];
 }
 
-const ResumeEmployment = ({ employment }: ResumeEmploymentProps) => (
-	<BaseResumeEmployment>
+const ResumeEmployment = ({ id, employment }: ResumeEmploymentProps) => (
+	<BaseResumeEmployment id={id}>
 		<ResumeEmploymentHeading>Recent Experience</ResumeEmploymentHeading>
 
 		{employment.history.map((item) => (
@@ -630,13 +663,11 @@ const ResumePDFSection = styled(ResumeSection, {
 });
 
 const BaseResume = styled(FullBleedContainer, {
+	gap: '0.5em 0',
+
 	nested: {
 		'& p': {
 			lineHeight: 1.325,
-			margin: '0 0 0.75em',
-		},
-
-		'& p:last-child': {
 			margin: 0,
 		},
 	},
@@ -680,11 +711,11 @@ export const Resume = ({
 			itemscope
 			itemtype="http://schema.org/Person"
 		>
-			<ResumeArtContainer>
+			<ResumeArtContainer id="resume-art-container">
 				<ResumeArt {...meta} renderType="post" />
 			</ResumeArtContainer>
 
-			<ResumeHeaderSection>
+			<ResumeHeaderSection id="resume-header">
 				<ResumeHeader>
 					<h1 itemprop="name">{name}</h1>
 					<ReaderModeTimestamp
@@ -721,9 +752,7 @@ export const Resume = ({
 									href={url}
 									itemprop="url"
 									screenLabel={(user as string | null | undefined) ?? network}
-									printLabel={
-										(user as string | null | undefined) ?? shortURL(url)
-									}
+									printLabel={shortURL(url)}
 									Icon={socialLogos[network]}
 									rel="me"
 								>
@@ -734,10 +763,12 @@ export const Resume = ({
 					</ResumeHeaderLinksContainer>
 				</ResumeHeader>
 
-				<ResumeBrief itemprop="description">{mdx(info.brief)}</ResumeBrief>
+				<ResumeBrief id="resume-brief" itemprop="description">
+					{mdx(info.brief)}
+				</ResumeBrief>
 			</ResumeHeaderSection>
 
-			<ResumeSection aria-label="Skillsets">
+			<ResumeSection id="resume-skillsets" aria-label="Skillsets">
 				<ResumeSkillsetsContainer>
 					{Object.entries(skills.merged).map(
 						([skillsetName, skillsetSkills]) => (
@@ -751,13 +782,13 @@ export const Resume = ({
 				</ResumeSkillsetsContainer>
 			</ResumeSection>
 
-			<ResumeEmployment employment={employment} />
+			<ResumeEmployment id="resume-employment" employment={employment} />
 
 			<ResumeSection id="projects">
 				<ResumeProjects projects={projects} />
 			</ResumeSection>
 
-			<ResumeSection>
+			<ResumeSection id="references">
 				<h2>References</h2>
 
 				{mdx(
@@ -765,7 +796,7 @@ export const Resume = ({
 				)}
 			</ResumeSection>
 
-			<ResumePDFSection>
+			<ResumePDFSection id="resume-pdf">
 				<a href="/Trevor_Schmidt_resume.pdf">View as PDF</a>
 			</ResumePDFSection>
 		</BaseResume>
