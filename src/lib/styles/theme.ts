@@ -716,7 +716,6 @@ export const theme = {
 
 					[print]: {
 						backgroundColor: 'transparent',
-						padding: 0,
 					},
 				},
 			},

@@ -57,7 +57,8 @@ export const FullBleedContainer = styled('div', {
 		},
 
 		[theme.print]: {
-			gridTemplateColumns: '0 0 auto 0 0',
+			display: 'flex',
+			flexDirection: 'column',
 		},
 	},
 
