@@ -2,6 +2,7 @@ import { definePage } from 'microsite/page';
 import { BlogArt, BlogArtDefs } from '../../../components/Blog/index.js';
 import { Head } from '../../../components/Head.js';
 import { Main } from '../../../components/Main.js';
+import { BLOG_BASE_PATH } from '../../../data/site.js';
 import type { PageMetadata } from '../../../lib/content/index.js';
 import {
 	getPageMetadata,
@@ -19,7 +20,7 @@ const HuhPage = (props: PageMetadata) => {
 				<BlogArtDefs />
 				<BlogArt hash={hash} title={'Huh'} topics={topics} />
 				<p>
-					<a href="/blog/2021/02/what-the-art-p1-why/">What</a>
+					<a href={`${BLOG_BASE_PATH}2021/02/what-the-art-p1-why/`}>What</a>
 				</p>
 			</Main>
 		</>

@@ -16,6 +16,7 @@ import {
 	FullBleedScrollableOverflow,
 } from '../../../../../components/FullBleed/index.js';
 import { VisiblyHidden } from '../../../../../components/VisiblyHidden.js';
+import { BLOG_BASE_PATH, RESUME_PATH } from '../../../../../data/site.js';
 import type {
 	AnyPoint,
 	AnyPointSequence,
@@ -83,9 +84,9 @@ const links = {
 	goldenRatio: 'https://en.wikipedia.org/wiki/Golden_ratio',
 	microsite: 'https://github.com/natemoo-re/microsite',
 	originMain: repoURL('tree/main'),
-	p1: '/blog/2021/02/what-the-art-p1-why/',
-	p2: '/blog/2021/02/what-the-art-p2-constraints/',
-	resume: '/resume/',
+	p1: `${BLOG_BASE_PATH}2021/02/what-the-art-p1-why/`,
+	p2: `${BLOG_BASE_PATH}2021/02/what-the-art-p2-constraints/`,
+	resume: RESUME_PATH,
 	sha1: 'https://en.wikipedia.org/wiki/SHA-1',
 };
 

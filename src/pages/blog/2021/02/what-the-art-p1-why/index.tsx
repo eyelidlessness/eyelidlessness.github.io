@@ -6,6 +6,7 @@ import {
 	getBlogPostStaticProps,
 } from '../../../../../components/Blog/BlogPost.js';
 import { TopicTag } from '../../../../../components/Topic/TopicTag.js';
+import { BLOG_BASE_PATH } from '../../../../../data/site.js';
 import { mdx, Topic } from '../../../../../lib/content/index.js';
 import { styled } from '../../../../../lib/styles/styles.js';
 
@@ -95,7 +96,7 @@ const WhatTheArtPost = (props: BlogPostProps) => (
 
       Next: [What the art, part 2: Constraints][1]
 
-      [1]: /blog/2021/02/what-the-art-p2-constraints/
+      [1]: ${BLOG_BASE_PATH}2021/02/what-the-art-p2-constraints/
     `}
 	</BlogPost>
 );

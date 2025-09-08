@@ -1,4 +1,5 @@
 import type { ComponentChildren } from 'preact';
+import { BLOG_PATH, RESUME_ISOLATION, RESUME_PATH } from '../../data/site.js';
 import type { PageMetadata } from '../../lib/content/meta.js';
 import { styled, theme } from '../../lib/styles/index.js';
 import { DevilsAlbatross } from '../DevilsAlbatross.js';
@@ -132,23 +133,21 @@ interface SiteHeaderProps {
 	readonly meta: PageMetadata;
 }
 
-const BLOG_HREF = '/blog/';
-const RESUME_HREF = '/resume/#resume';
-
 export const SiteHeader = (props: SiteHeaderProps): ComponentChildren => {
 	const metaProps =
 		props.meta.pageId == null ? {} : { 'data-page-id': props.meta.pageId };
 	const isResume = props.meta.pageId === 'resume';
-	const homeHREF = isResume ? RESUME_HREF : BLOG_HREF;
+	const isHidden = isResume && RESUME_ISOLATION;
+	const homeHREF = isHidden ? RESUME_PATH : BLOG_PATH;
 	const siteLinks: readonly SiteLink[] = [
 		{
 			label: 'Blog',
-			location: BLOG_HREF,
+			location: BLOG_PATH,
 		},
 
 		{
 			label: 'Hire me',
-			location: RESUME_HREF,
+			location: RESUME_PATH,
 		},
 
 		{
@@ -178,7 +177,7 @@ export const SiteHeader = (props: SiteHeaderProps): ComponentChildren => {
 		`${siteLinks.length * listItemMarginRem}rem`,
 	].join(' + ');
 
-	return props.meta.pageId === 'resume' ? (
+	return isHidden ? (
 		<></>
 	) : (
 		<BaseSiteHeader {...metaProps}>

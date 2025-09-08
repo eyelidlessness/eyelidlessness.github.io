@@ -1,5 +1,6 @@
 import { definePage } from 'microsite/page';
 import { Head } from '../components/Head.js';
+import { RESUME_PATH } from '../data/site.js';
 import type { PageMetadata } from '../lib/content/meta.js';
 import { getPageMetadata, PageMetadataType } from '../lib/content/meta.js';
 
@@ -29,7 +30,7 @@ export default definePage(IndexPage, {
 				...meta,
 
 				description,
-				redirect: '/resume/#resume',
+				redirect: RESUME_PATH,
 			},
 		});
 	},
