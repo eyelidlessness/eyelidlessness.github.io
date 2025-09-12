@@ -147,10 +147,16 @@ const ResumeHeaderLinkIcon = styled('svg', {
 	width: '1rem',
 	height: '1rem',
 	color: 'var(--color-prose)',
+
+	nested: {
+		[theme.print]: {
+			display: 'none',
+		},
+	},
 });
 
 const ResumeHeaderLinkPath = styled('path', {
-	color: 'currentColor',
+	fill: 'var(--color-prose)',
 });
 
 const ResumeEmailIcon = () => {
@@ -391,8 +397,19 @@ const ResumeEmployerSummary = styled('div', {
 });
 
 const ResumeEmployerMarginalia = styled('p', {
+	alignItems: 'baseline',
+	display: 'grid',
+	gridTemplateColumns: '1.2ch 1fr',
 	fontSize: '0.88889rem',
 	opacity: 0.8,
+
+	nested: {
+		'&::before': {
+			content: '"*"',
+			display: 'block',
+			width: '2ch',
+		},
+	},
 });
 
 const ResumeEmploymentHeading = styled('h2', {
@@ -412,6 +429,7 @@ const ResumeEmploymentHighlightsList = styled('ul', {
 	display: 'grid',
 	fontSize: '0.88889em',
 	gap: '0.5em 0',
+	margin: 0,
 	paddingInlineStart: 0,
 });
 
@@ -596,9 +614,6 @@ const ResumeEmploymentListItem = ({
 				{mdx(summary)}
 			</ResumeEmployerSummary>
 		)}
-		{marginalia && (
-			<ResumeEmployerMarginalia>* {marginalia}</ResumeEmployerMarginalia>
-		)}
 
 		{isFlatEmploymentHistoryHighlights(highlights) ? (
 			<ResumeEmploymentHighlights highlights={highlights} />
@@ -617,6 +632,10 @@ const ResumeEmploymentListItem = ({
 				);
 			})
 		)}
+
+		{marginalia && (
+			<ResumeEmployerMarginalia>{marginalia}</ResumeEmployerMarginalia>
+		)}
 	</BaseResumeTopLevelListingItem>
 );
 
@@ -626,6 +645,10 @@ const BaseResumeEmployment = styled(ResumeSection, {
 	padding: '1em 0',
 
 	nested: {
+		[theme.darkMode]: {
+			...theme.resume.employment.container.nested[theme.darkMode],
+		},
+
 		[theme.print]: {
 			...theme.resume.employment.container.nested[theme.print],
 

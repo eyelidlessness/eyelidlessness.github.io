@@ -71,24 +71,25 @@ const employmentHistory = validateEmploymentHistory([
 		end: '2025-04',
 
 		summary: `
-      Created & led development of ODK Web Forms, a web-based complement to their flagship Android app.
-    `,
+			Created and led ODK Web Forms, a runtime for user-defined
+			data collection tools & form-based applications.
+		`,
 		marginalia:
 			"2021-2023: Maintainer of ODK Web Forms' legacy predecessor, Enketo.",
 
 		highlights: [
 			`
-        Conceived and prototyped foundations for ODK Web Forms—first as a skunkworks project on personal time, ultimately forming the basis for formally evaluating the project's viability.
-      `,
+				Led ODK Web Forms development, from conception to user adoption in production.
+			`,
 			`
-        Led design & architecture to ensure core product/business goals: initial alignment with the flagship Collect app for Andriod; sustainable productivity and maintainability for user-facing functionality core to the business; anticipation of long-term unification on a single tool/platform.
-      `,
+				Led design and architecture to ensure key business and product goals: alignment with the flagship Collect app for Andriod; sustainable productivity and maintainability for user-facing functionality core to the business; long-term anticipation of unification on Web Forms for that core functionality.
+			`,
 			`
-        Primary development of ODK XForms and XPath engines. Responsible for design & implementation of parsing, data model, runtime computational architecture, and client-agnostic rendering APIs.
-      `,
+				Primary development of ODK XForms and XPath engines. Responsible for design and implementation of parsing, data model, runtime computational architecture, and client-/framework-agnostic rendering APIs.
+			`,
 			`
-        Prototyped initial UI/UX; collaborated with dedicated UI developers as team grew; coordinated downstream integration with team developing ODK Central software for form and submission management.
-      `,
+				Prototyped initial UI/UX; collaborated with dedicated UI developers as team grew; coordinated downstream integration with team developing ODK Central software for managing form applications and data access.
+			`,
 		],
 	},
 	{
@@ -98,9 +99,9 @@ const employmentHistory = validateEmploymentHistory([
 		end: '2020-09',
 
 		summary: `
-      Full-stack web service & application development serving a diverse range of
-      responsibilities related to the legal cannabis industry.
-    `,
+			Full-stack web service and application development serving a diverse range of
+			responsibilities related to the legal cannabis industry.
+		`,
 		marginalia:
 			'Reup partnered with Mister Kraken in 2017; both companies were acquired by Treez in 2018.',
 
@@ -108,160 +109,26 @@ const employmentHistory = validateEmploymentHistory([
 			[
 				'Treez',
 				'2018-2020',
-				"Led integration between Treez B2B inventory management services, and Mister Kraken's extant integrations with state-mandated traceability services; expanded on prior success maturing said integration to all major regulatory & vendor environments.",
-				'Built robust & general web service tooling as basis for Treez/Mister Kraken integration. By time of my departure, this tooling had become a foundation for all new and anticipated service development.',
-				'Intervened on personal initiative in the wake of widespread vendor outages and data corruption, instituting reliable, auditable, and reproducible processes to recover/reconcile customer regulatory reporting and inventory data.',
+				"Led integration between Treez B2B inventory management services, and Mister Kraken's extant integrations with state-mandated traceability services; expanded on prior success maturing said integration to all major regulatory and vendor environments.",
+				'Built robust, general web service tooling as basis for Treez/Mister Kraken integration, which became a foundation for all new and anticipated service development.',
+				'Intervened on personal initiative in the wake of widespread vendor outages and data corruption, to institute reliable, auditable, and reproducible processes to recover and reconcile customer regulatory reporting and inventory history.',
 			],
 			[
 				'Mister Kraken',
 				'2017-2018',
 				"Led efforts to mature and adapt early-stage integrations with WA state-mandated traceability services, ensuring stable continuation of service for customers through abrupt/rapid changes to the state's regulatory environment and service vendor.",
-				'Promoted a team culture shift to embrace automation & other safeguard processes, significantly improving velocity and product quality alike.',
+				'Promoted a team culture shift to embrace automation and other safeguard processes, significantly improving both team velocity and product quality.',
 				"Integrated Reup's B2B marketplace software, filling the remaining gaps in Mister Kraken's end-to-end inventory management offering.",
 			],
 			[
 				'Reup',
 				'2015-2018',
-				"Led technical design & development of Reup's core web application, a B2B cannabis supply chain marketplace.",
-				'Shared leadership & development of associated web services.',
-				'Joined founders & design team in user research to ensure direct engineering involvement in product-market fit.',
+				"Led technical design and development of Reup's core web application, a B2B cannabis supply chain marketplace.",
+				'Shared leadership and development of associated web services.',
+				'Joined founders and design team in user research, to ensure direct engineering involvement in product-market fit.',
 			],
 		],
 	},
-	// {
-	//   employer: 'Treez',
-	//   position: 'Senior Software Engineer',
-	//   start:    '2018-12',
-	//   end:      '2020-09',
-
-	//   summary: `
-	//     Treez provides a full seed-to-sale catalogue of tools for
-	//     inventory & process management, regulatory reporting, B2B
-	//     sales, and point of sale for the legal cannabis market.
-	//   `,
-
-	//   highlights: [
-	//     `
-	//       Created and maintained a set of libraries designed for rapid
-	//       development of REST API services, providing simple,
-	//       declarative API boundaries with runtime & static type safety,
-	//       automatically generated documentation, and a clear separation
-	//       of concerns between those boundaries and a service's business
-	//       logic. These libraries had been used in production for one
-	//       successful service, adopted by another team for a greenfield
-	//       service, and ports of all other Treez API services planned,
-	//       with no significant maintenance requests.
-	//     `,
-
-	//     `
-	//       Expanded the API translation layer built at Mister Kraken to
-	//       support the regulatory reporting APIs used in markets served by
-	//       Treez in CA, MI, and beyond. This also allowed the original
-	//       Mister Kraken product to expand integration into those markets,
-	//       and Treez to expand its operations from point of sale to a full
-	//       seed-to-sale suite.
-	//     `,
-
-	//     `
-	//       Led and maintained a robust fault tolerance service layer
-	//       between Treez end-user products and regulator reporting services.
-	//       This ensured that frequent and widespread errors in the
-	//       regulatory agencies' APIs did not result in a loss of compliance
-	//       for Treez customers.
-	//     `,
-
-	//     `
-	//       Promoted a team culture shift to embrace automated data
-	//       correction with a historical record, and built a standard set
-	//       of tools for data correction operations. These tools were used
-	//       successfully for two major incidents, ensuring compliance was
-	//       maintained with an auditable proof of operations log.
-	//     `,
-	//   ],
-	// },
-
-	// {
-	//   employer: 'Mister Kraken',
-	//   position: 'Senior Software Engineer',
-	//   start:    '2017-04',
-	//   end:      '2018-12',
-
-	//   summary: `
-	//     Mister Kraken provided a rich suite of inventory and process
-	//     management tools for the legal cannabis market. The Reup and
-	//     Mister Kraken teams joined forces and products in 2017.
-
-	//     **Mister Kraken was acquired by Treez in late 2018.**
-	//   `,
-
-	//   highlights: [
-	//     `
-	//       Led design and development of an API translation layer which
-	//       ensured a zero downtime transition for regulatory compliance
-	//       when the WSLCB abruptly selected a new vendor's
-	//       incompatible reporting APIs. This ensured minimal changes in
-	//       the original Mister Kraken codebase while also preparing the
-	//       product for expansion into other markets where other vendor
-	//       APIs were common.
-	//     `,
-
-	//     `
-	//       Promoted a team culture shift in development and collaboration
-	//       to embrace automated testing, type safety, tool-based quality
-	//       assurance, CI & automated review tools, thorough manual review
-	//       by team members, and collaborative design & planning processes.
-	//       This significantly improved the team's ability to deliver and
-	//       maintain quality and value at a faster pace.
-	//     `,
-
-	//     `
-	//       Adapted Reup's frontend web app to integrate with Mister
-	//       Kraken's existing B2B sales platform. From time of release,
-	//       through the Treez acquisition, to my departure, the app
-	//       remained in active use with no significant change requests.
-	//     `,
-	//   ],
-	// },
-
-	// {
-	//   employer: 'Reup',
-	//   position: 'Senior Software Engineer',
-	//   start:    '2015-11',
-	//   end:      '2018-12',
-
-	//   summary: `
-	//     Reup was a startup in the legal recreational cannabis market,
-	//     providing a B2B marketplace for retailers and manufacturers
-	//     to discover and order cannabis products and supplies.
-
-	//     **Reup was acquired by Treez in late 2018.**
-	//   `,
-
-	//   highlights: [
-	//     `
-	//       Shaped and refined product direction as the second engineer
-	//       and fourth employee, sharing leadership on market & user
-	//       research to inform core user stories and product decisions.
-	//     `,
-
-	//     `
-	//       Led frontend architecture and spearheaded development of
-	//       Reup's web app.
-	//     `,
-
-	//     `
-	//       Shared leadership in defining core abstractions in the
-	//       product's backend API layer to improve development safety
-	//       and velocity.
-	//     `,
-
-	//     `
-	//       Took ownership of refining and adapting UI & UX design as
-	//       product requirements changed and use case complexities grew.
-	//     `,
-	//   ],
-	// },
-
 	{
 		employer: 'ClipCard',
 		position: 'Senior Software Engineer',
@@ -269,44 +136,32 @@ const employmentHistory = validateEmploymentHistory([
 		end: '2015-08',
 
 		summary: `
-      ClipCard was a set of apps and services which let users find
-      files, notes and more across a wide variety of consumer and
-      business cloud services by indexing those resources in a
-      common format.
-    `,
+			Full stack engineer, leading frontend team and then service integrations.
+		`,
 
 		highlights: [
 			`
-        Led design and development an ETL framework used by all of
-        ClipCard's API integrations, providing simple, generalized
-        interfaces to accelerate development of service API
-        authorization, backpressure, fault tolerance and
-        extract/integration patterns.
-      `,
+				Led design and development of data processing tools used by all of
+				ClipCard's cloud API integrations; providing common interfaces to
+				standardize and accelerate development of service API authorization,
+				backpressure, fault tolerance, and common data extraction patterns.
+			`,
 
 			`
-        Contributed to 12 of ClipCard's API integrations, leading
-        development on integrations with Dropbox, Evernote, GitHub
-        and Trello.
-      `,
+				Led integrations with Dropbox, Evernote, GitHub and Trello; contributed
+				to integrations with 8 additional cloud services.
+			`,
 
 			`
-        Led frontend architecture and development of ClipCard's
-        web app, and provided mentorship for the team member who
-        eventually replaced me in that role as I transitioned to
-        to lead API integration efforts.
-      `,
+				Led frontend architecture and development of ClipCard's
+				web app, and provided mentorship for my successor in that role.
+			`,
 
 			`
-        Organized a hackathon which produced 8 API integration
-        prototypes, ultimately leading to the company's pivot
-        from enterprise services to focus on cloud services and
-        consumer adoption.
-      `,
-
-			`
-        Designed and developed ClipCard for Mac.
-      `,
+				Organized a hackathon which produced 8 API integration
+				prototypes, ultimately leading to company wide alignment
+				on product direction as a search engine for private cloud data.
+			`,
 		],
 	},
 ] as const);
@@ -496,9 +351,9 @@ Senior software engineer with a proven record of technical leadership and achiev
 
 - driving projects from conception to successful adoption and sustainable growth
 - acquiring and applying deep domain/subject matter expertise
-- fostering an engineering culture of velocity, quality, and continuous improvement of both
+- fostering an engineering culture of velocity, quality, and continuous improvement
 - reducing and overcoming risk, to grow and deliver on new project/business opportunities
-    `.trim(),
+		`.trim(),
 		label: 'Senior Full-Stack Software Engineer',
 	},
 
