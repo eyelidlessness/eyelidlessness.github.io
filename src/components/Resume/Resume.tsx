@@ -180,9 +180,18 @@ const socialLogos: Readonly<Record<string, FunctionComponent>> = {
 	GitHub: ResumeGitHubLogo,
 };
 
+const arrowListStyles = {
+	display: 'grid',
+	fontSize: '0.88889em',
+	margin: 0,
+	paddingInlineStart: 0,
+};
+
 const arrowListItemStyles = {
 	display: 'grid',
 	gridTemplateColumns: '1.25rem 1fr',
+	alignItems: 'baseline',
+	lineHeight: 1.325,
 	listStyle: 'none',
 	margin: 0,
 	padding: 0,
@@ -191,7 +200,7 @@ const arrowListItemStyles = {
 		'&:before': {
 			content: '"›"',
 			fontWeight: 'bolder',
-			lineHeight: 1.2222,
+			lineHeight: 'inherit',
 			textAlign: 'center',
 		},
 	},
@@ -215,6 +224,8 @@ const ResumeBrief = styled(FullBleedContainer, {
 		},
 
 		'& ul': {
+			...arrowListStyles,
+			gap: '0.125em 0',
 			padding: '0.25em 0',
 		},
 
@@ -426,11 +437,8 @@ const ResumeEmploymentSubPeriod = styled(FullBleedContainer, {
 });
 
 const ResumeEmploymentHighlightsList = styled('ul', {
-	display: 'grid',
-	fontSize: '0.88889em',
+	...arrowListStyles,
 	gap: '0.5em 0',
-	margin: 0,
-	paddingInlineStart: 0,
 });
 
 const ResumeEmploymentHighlightsListItem = styled('li', arrowListItemStyles);
