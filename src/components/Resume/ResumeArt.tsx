@@ -390,8 +390,6 @@ export const ResumeArt = ({
 			}
 		: null;
 
-	const padding = isMeta ? '0 !important' : '0 0 1rem !important';
-
 	const defaultRenderHeight = BLOG_ART_HEIGHT;
 	const defaultRenderWidth = '100%';
 
@@ -415,7 +413,7 @@ export const ResumeArt = ({
 		() => ({
 			gridColumn: '1 / -1',
 			height: toPx(renderHeight),
-			padding,
+			padding: '0 !important',
 			width: toPx(renderWidth),
 
 			nested: {

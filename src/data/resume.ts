@@ -42,6 +42,11 @@ export const isFlatEmploymentHistoryHighlights = (
 	return typeof highlights[0] === 'string';
 };
 
+export interface EmploymentHistoryItemAffiliation {
+	readonly id: string;
+	readonly description: string | null;
+}
+
 export interface EmploymentHistoryItem
 	extends FRESHResumeEmploymentHistoryItem {
 	readonly employer: string;
@@ -50,7 +55,7 @@ export interface EmploymentHistoryItem
 	readonly position: string;
 	readonly start: ProjectTimestamp;
 	readonly summary?: string;
-	readonly marginalia?: string;
+	readonly affiliation?: EmploymentHistoryItemAffiliation;
 }
 
 export type EmploymentHistory = readonly EmploymentHistoryItem[];
@@ -60,6 +65,8 @@ type ValidEmploymentHistory<T extends Immutable<EmploymentHistory>> = Merge<T>;
 const validateEmploymentHistory = <T extends Immutable<EmploymentHistory>>(
 	value: ValidEmploymentHistory<T>
 ): T => value;
+
+const TREEZ_MK_REUP_AFFILIATION_ID = 'treez.mk.reup';
 
 const employmentHistory = validateEmploymentHistory([
 	{
@@ -74,9 +81,6 @@ const employmentHistory = validateEmploymentHistory([
 			Created and led ODK Web Forms, a runtime for user-defined
 			data collection tools & form-based applications.
 		`,
-		marginalia:
-			"2021-2023: Maintainer of ODK Web Forms' legacy predecessor, Enketo.",
-
 		highlights: [
 			`
 				Led ODK Web Forms development, from conception to user adoption in production.
@@ -90,45 +94,62 @@ const employmentHistory = validateEmploymentHistory([
 			`
 				Prototyped initial UI/UX; collaborated with dedicated UI developers as team grew; coordinated downstream integration with team developing ODK Central software for managing form applications and data access.
 			`,
+			'(2021-2023) Maintainer of Enketo, legacy predecessor to ODK Web Forms.',
 		],
 	},
 	{
-		employer: 'Reup → Mister Kraken → Treez',
+		employer: 'Treez',
 		position: 'Senior Software Engineer',
-		start: '2015-11',
+		start: '2018-12',
 		end: '2020-09',
-
-		summary: `
-			Full-stack web service and application development serving a diverse range of
-			responsibilities related to the legal cannabis industry.
-		`,
-		marginalia:
-			'Reup partnered with Mister Kraken in 2017; both companies were acquired by Treez in 2018.',
+		affiliation: {
+			id: TREEZ_MK_REUP_AFFILIATION_ID,
+			description: null,
+		},
+		summary:
+			'Led integration of core inventory management services across a full spectrum of regulatory reporting services.',
 
 		highlights: [
-			[
-				'Treez',
-				'2018-2020',
-				"Led integration between Treez B2B inventory management services, and Mister Kraken's extant integrations with state-mandated traceability services; expanded on prior success maturing said integration to all major regulatory and vendor environments.",
-				'Built robust, general web service tooling as basis for Treez/Mister Kraken integration, which became a foundation for all new and anticipated service development.',
-				'Intervened on personal initiative in the wake of widespread vendor outages and data corruption, to institute reliable, auditable, and reproducible processes to recover and reconcile customer regulatory reporting and inventory history.',
-			],
-			[
-				'Mister Kraken',
-				'2017-2018',
-				"Led efforts to mature and adapt early-stage integrations with WA state-mandated traceability services, ensuring stable continuation of service for customers through abrupt/rapid changes to the state's regulatory environment and service vendor.",
-				'Promoted a team culture shift to embrace automation and other safeguard processes, significantly improving both team velocity and product quality.',
-				"Integrated Reup's B2B marketplace software, filling the remaining gaps in Mister Kraken's end-to-end inventory management offering.",
-			],
-			[
-				'Reup',
-				'2015-2018',
-				"Led technical design and development of Reup's core web application, a B2B cannabis supply chain marketplace.",
-				'Shared leadership and development of associated web services.',
-				'Joined founders and design team in user research, to ensure direct engineering involvement in product-market fit.',
-			],
+			"Led integration between Treez B2B inventory management services, and Mister Kraken's extant integrations with state-mandated traceability services; expanded on prior success maturing said integration to all major regulatory and vendor environments.",
+			'Built robust, general web service tooling as basis for Treez/Mister Kraken integration, which became a foundation for all new and anticipated service development.',
+			'Intervened on personal initiative in the wake of widespread vendor outages and data corruption, to institute reliable, auditable, and reproducible processes to recover and reconcile customer regulatory reporting and inventory history.',
 		],
 	},
+	{
+		employer: 'Mister Kraken',
+		position: 'Senior Software Engineer',
+		start: '2017-04',
+		end: '2018-12',
+		affiliation: {
+			id: TREEZ_MK_REUP_AFFILIATION_ID,
+			description: 'Mister Kraken and Reup were acquired by Treez in 2018',
+		},
+		summary:
+			'Led regulatory reporting integration amidst rapid growth and evolution of early legal cannabis markets.',
+		highlights: [
+			"Led efforts to mature and adapt early-stage integrations with Washington State-mandated traceability services, ensuring stable continuation of service for customers through abrupt/rapid changes to the state's regulatory environment and service vendor.",
+			'Promoted a team culture shift to embrace automation and other safeguard processes, significantly improving both team velocity and product quality.',
+			"Integrated Reup's B2B marketplace software, filling the remaining gaps in Mister Kraken's end-to-end inventory management offering.",
+		],
+	},
+
+	{
+		employer: 'Reup',
+		position: 'Senior Software Engineer',
+		start: '2015-11',
+		end: '2017-04',
+		affiliation: {
+			id: TREEZ_MK_REUP_AFFILIATION_ID,
+			description: 'Reup informally merged with Mister Kraken in 2017',
+		},
+		summary: "Led UI/UX and co-led backend API of Reup's B2B marketplace.",
+		highlights: [
+			"Led technical design and development of Reup's core web application, a B2B cannabis supply chain marketplace.",
+			'Shared leadership and development of supporting web services.',
+			'Joined founders and design team in user research, to ensure direct engineering involvement in product-market fit.',
+		],
+	},
+
 	{
 		employer: 'ClipCard',
 		position: 'Senior Software Engineer',
@@ -153,14 +174,14 @@ const employmentHistory = validateEmploymentHistory([
 			`,
 
 			`
-				Led frontend architecture and development of ClipCard's
-				web app, and provided mentorship for my successor in that role.
-			`,
-
-			`
 				Organized a hackathon which produced 8 API integration
 				prototypes, ultimately leading to company wide alignment
 				on product direction as a search engine for private cloud data.
+			`,
+
+			`
+				Led frontend architecture and development of ClipCard's
+				web app, and provided mentorship for my successor in that role.
 			`,
 		],
 	},
@@ -189,7 +210,7 @@ export const ResumeSkillset = {
 	EXPERTISE: 'Expertise',
 	LANGUAGES_PLATFORMS: 'Languages',
 	SERVICES_DISTRIBUTED_SYSTEMS: 'Services',
-	WEB_UI_UX: 'Web UI & UX',
+	WEB_UI_UX: 'UI & UX',
 	DOMAIN_SPECIFIC_LANGUAGES: 'DSL\u200bs',
 	NICHE_ESOTERIC: 'Niche/Esoteric',
 } as const;
@@ -199,6 +220,52 @@ type ResumeSkillsets = typeof ResumeSkillset;
 export type ResumeSkillset = ResumeSkillsets[keyof ResumeSkillsets];
 
 const resumeSkills = {
+	[ResumeSkillset.LANGUAGES_PLATFORMS]: [
+		{
+			name: 'TypeScript',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'Python',
+			level: ResumeSkillLevel.ADVANCED as ResumeSkillLevel,
+		},
+		{
+			name: 'SQL',
+			level: ResumeSkillLevel.ADVANCED,
+		},
+		{
+			name: 'CSS',
+			level: ResumeSkillLevel.ADVANCED,
+		},
+		{
+			name: 'HTML',
+			level: ResumeSkillLevel.ADVANCED,
+		},
+		{
+			name: 'Java',
+			level: ResumeSkillLevel.BASIC,
+		},
+		{
+			name: 'Swift',
+			level: ResumeSkillLevel.BASIC,
+		},
+	],
+
+	[ResumeSkillset.SERVICES_DISTRIBUTED_SYSTEMS]: [
+		{
+			name: 'HTTP (REST, RPC, Distributed Systems)',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'Node.js (+ similar)',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'Django (+ REST Framework)',
+			level: ResumeSkillLevel.INTERMEDIATE,
+		},
+	],
+
 	[ResumeSkillset.WEB_UI_UX]: [
 		{
 			name: 'React (+ Preact & similar)',
@@ -215,52 +282,6 @@ const resumeSkills = {
 		{
 			name: 'Vue',
 			level: ResumeSkillLevel.INTERMEDIATE,
-		},
-	],
-
-	[ResumeSkillset.SERVICES_DISTRIBUTED_SYSTEMS]: [
-		{
-			name: 'HTTP (REST, RPC, Distributed systems)',
-			level: ResumeSkillLevel.EXPERT,
-		},
-		{
-			name: 'Node.js (+ similar)',
-			level: ResumeSkillLevel.EXPERT,
-		},
-		{
-			name: 'Django (+ REST Framework)',
-			level: ResumeSkillLevel.INTERMEDIATE,
-		},
-	],
-
-	[ResumeSkillset.LANGUAGES_PLATFORMS]: [
-		{
-			name: 'TypeScript/JavaScript',
-			level: ResumeSkillLevel.EXPERT,
-		},
-		{
-			name: 'CSS',
-			level: ResumeSkillLevel.EXPERT,
-		},
-		{
-			name: 'HTML',
-			level: ResumeSkillLevel.EXPERT,
-		},
-		{
-			name: 'SQL',
-			level: ResumeSkillLevel.ADVANCED,
-		},
-		{
-			name: 'Python',
-			level: ResumeSkillLevel.INTERMEDIATE,
-		},
-		{
-			name: 'Swift',
-			level: ResumeSkillLevel.BASIC,
-		},
-		{
-			name: 'Java',
-			level: ResumeSkillLevel.BASIC,
 		},
 	],
 
@@ -349,16 +370,16 @@ export const resume = validateResume({
 	},
 
 	info: {
-		class: 'Software Engineer',
+		class: 'Senior Software Engineer',
 		brief: `
-Senior software engineer with a proven record of technical leadership and achievement, across a wide range of problems and disciplines:
+<span class="inline-role">Full Stack Senior Software Engineer</span> with a proven record of achievement and leadership, across a broad range of disciplines, roles, and technologies:
 
 - driving projects from conception to successful adoption and sustainable growth
-- acquiring and applying deep domain/subject matter expertise
-- fostering an engineering culture of velocity, quality, and continuous improvement
-- reducing and overcoming risk, to grow and deliver on new project/business opportunities
+- acquiring and applying deep domain & subject matter expertise
+- fostering an engineering culture of velocity & quality, and continuous improvement of both
+- reducing and overcoming risk, to grow and deliver on new project & business opportunities
 		`.trim(),
-		label: 'Senior Full-Stack Software Engineer',
+		label: 'Full Stack Senior Software Engineer',
 	},
 
 	location: {
