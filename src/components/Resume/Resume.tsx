@@ -20,18 +20,8 @@ import { FullBleedContainer } from '../FullBleed/FullBleedContainer.js';
 import { GitHubLogo } from '../GitHubLogo.js';
 import { TimeRange } from '../TimeRange.js';
 import { Timestamp, TimestampMode } from '../Timestamp.js';
-import { ResumeArt } from './ResumeArt.js';
 import { ResumeProjects } from './ResumeProjects.js';
 import { ResumeSection } from './ResumeSection.js';
-
-const ResumeArtContainer = styled(FullBleedContainer, {
-	nested: {
-		[theme.print]: {
-			display: 'none',
-			paddingInline: '0.125rem',
-		},
-	},
-});
 
 const Flex = styled('div', {
 	alignItems: 'start',
@@ -58,13 +48,15 @@ const BaseFlex = styled(Flex, {
 const ResumeHeader = styled(BaseFlex, {
 	alignItems: 'baseline',
 	justifyContent: 'space-between',
-	margin: '0 -0.5rem',
 	paddingTop: clamp('0.5em', '3vw', '2em'),
 	paddingBottom: clamp('0.5em', '2vw', '1em'),
 
 	nested: {
+		'&, & > *': {
+			margin: 0,
+		},
+
 		'& > *': {
-			margin: '0 0.5rem',
 			minWidth: 'auto',
 		},
 
@@ -167,7 +159,7 @@ const ResumeEmailIcon = () => {
 			height="24"
 			viewBox="0 0 24 24"
 		>
-			<ResumeHeaderLinkPath d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z" />
+			<ResumeHeaderLinkPath d="M1.75 3h20.5c.966 0 1.75.784 1.75 1.75v14a1.75 1.75 0 0 1-1.75 1.75H1.75A1.75 1.75 0 0 1 0 18.75v-14C0 3.784.784 3 1.75 3ZM1.5 7.412V18.75c0 .138.112.25.25.25h20.5a.25.25 0 0 0 .25-.25V7.412l-9.52 6.433c-.592.4-1.368.4-1.96 0Zm0-2.662v.852l10.36 7a.25.25 0 0 0 .28 0l10.36-7V4.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Z" />
 		</ResumeHeaderLinkIcon>
 	);
 };
@@ -209,6 +201,7 @@ const arrowListItemStyles = {
 const ResumeBrief = styled(FullBleedContainer, {
 	...theme.resume.brief,
 
+	rowGap: '0.25em',
 	margin: 0,
 	padding: '0.5em 0',
 
@@ -246,7 +239,6 @@ const ResumeBrief = styled(FullBleedContainer, {
 
 		[theme.print]: {
 			...theme.resume.brief.nested[theme.print],
-
 			padding: 0,
 		},
 	},
@@ -471,7 +463,7 @@ const BaseResumeTopLevelListingItem = styled(ResumeTopLevelListingItem, {
 		},
 
 		[theme.print]: {
-			// breakInside:   'avoid',
+			// breakInside: 'avoid',
 			padding: '0.25em 0',
 		},
 	},
@@ -481,20 +473,43 @@ const ResumeEmploymentListItemHeader = styled('div', {
 	alignItems: 'baseline',
 	display: 'grid',
 	columnGap: '0.5rem',
-	gridTemplate: `
-    "employer time-range"
-    "position position"
-  `,
-	justifyContent: 'space-between',
+	rowGap: '0.25rem',
+	// gridTemplate: `
+	// 	"employer employer employer"
+	// 	"position time-range time-range"
+	// `,
+	// gridAutoColumns: 'auto auto 1fr',
+	// justifyContent: 'start',
 
-	nested: {
-		[theme.print]: {
-			gridTemplate: `
-        "employer position time-range"
-      `,
-			gridAutoColumns: '1fr auto auto',
-		},
-	},
+	// nested: {
+	// 	[theme.print]: {
+	gridTemplate: `
+				"employer"
+				"position"
+				"time-range"
+			`,
+	gridAutoColumns: 'auto',
+	// 	},
+	// },
+	// gridTemplate: `
+	//   "employer time-range"
+	//   "position position"
+	// `,
+	// justifyContent: 'space-between',
+
+	// nested: {
+	// 	[theme.print]: {
+	// 		// gridTemplate: `
+	// 		//   "employer position time-range"
+	// 		// `,
+	// 		gridTemplate: `
+	// 			"employer employer"
+	// 			"position time-range"
+	// 		`,
+	// 		gridAutoColumns: '1fr auto auto',
+	// 		justifyContent: 'start',
+	// 	},
+	// },
 });
 
 const ResumeEmploymentListItemEmployerHeading = styled('h3', {
@@ -504,7 +519,10 @@ const ResumeEmploymentListItemEmployerHeading = styled('h3', {
 });
 
 const ResumeEmploymentListItemTimeRange = styled(TimeRange, {
+	fontSize: '0.88889rem',
+	fontWeight: theme.deemphasize.fontWeight,
 	gridArea: 'time-range',
+	lineHeight: 1,
 
 	nested: {
 		'&.has-marginalia::after': {
@@ -517,16 +535,6 @@ const ResumeEmploymentPosition = styled('div', {
 	fontSize: '0.88889rem',
 	fontWeight: theme.deemphasize.fontWeight,
 	gridArea: 'position',
-
-	nested: {
-		[theme.print]: {
-			nested: {
-				'&:after': {
-					content: '","',
-				},
-			},
-		},
-	},
 });
 
 interface ResumeEmploymentHighlightsProps {
@@ -660,8 +668,8 @@ const BaseResumeEmployment = styled(ResumeSection, {
 		[theme.print]: {
 			...theme.resume.employment.container.nested[theme.print],
 
-			gap: '0.5em 0',
-			padding: '0.25em 0',
+			gap: '0.675em 0',
+			padding: '0.5em 0',
 		},
 	},
 });
@@ -683,12 +691,20 @@ const ResumeEmployment = ({ id, employment }: ResumeEmploymentProps) => (
 	</BaseResumeEmployment>
 );
 
-const ResumePDFSection = styled(ResumeSection, {
-	textAlign: 'right',
+const ResumeProjectsSection = styled(ResumeSection, {
+	nested: {
+		[theme.print]: {
+			order: 10,
+		},
+	},
+});
+
+const ResumeReferencesSection = styled(ResumeSection, {
+	paddingTop: '1em',
 
 	nested: {
 		[theme.print]: {
-			display: 'none',
+			paddingTop: 0,
 		},
 	},
 });
@@ -721,7 +737,6 @@ interface ResumeProps {
 export const Resume = ({
 	className,
 	id,
-	meta,
 	resume,
 	updated,
 }: ResumeProps): ComponentChildren => {
@@ -742,10 +757,6 @@ export const Resume = ({
 			itemscope
 			itemtype="http://schema.org/Person"
 		>
-			<ResumeArtContainer id="resume-art-container">
-				<ResumeArt {...meta} renderType="post" />
-			</ResumeArtContainer>
-
 			<ResumeHeaderSection id="resume-header">
 				<ResumeHeader>
 					<h1 itemprop="name">{name}</h1>
@@ -815,21 +826,16 @@ export const Resume = ({
 
 			<ResumeEmployment id="resume-employment" employment={employment} />
 
-			<ResumeSection id="projects">
+			<ResumeProjectsSection id="projects">
 				<ResumeProjects projects={projects} />
-			</ResumeSection>
+			</ResumeProjectsSection>
 
-			<ResumeSection id="references">
-				<h2>References</h2>
-
-				{mdx(
-					'Available upon request, email [gnosis@gmail.com](mailto:gnosis@gmail.com)'
-				)}
-			</ResumeSection>
-
-			<ResumePDFSection id="resume-pdf">
-				<a href="/Trevor_Schmidt_resume.pdf">View as PDF</a>
-			</ResumePDFSection>
+			<ResumeReferencesSection id="references">
+				<p>
+					<b>References:</b> available upon request to{' '}
+					<a href="mailto:gnosis@gmail.com">gnosis@gmail.com</a>.
+				</p>
+			</ResumeReferencesSection>
 		</BaseResume>
 	);
 };

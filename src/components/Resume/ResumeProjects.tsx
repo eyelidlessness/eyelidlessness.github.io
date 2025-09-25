@@ -61,7 +61,6 @@ export const ResumeProjects = (
 			contributor: [],
 		}
 	);
-	const totalProjects = creator.length + contributor.length;
 
 	return (
 		<>
@@ -87,11 +86,12 @@ export const ResumeProjects = (
 				</div>
 			</ProjectsTwoUp>
 			<ResumeProjectsPrintOnly>
-				<h2>Projects</h2>
-				{totalProjects} projects listed at{' '}
-				<a href="https://eyelidlessness.github.io/projects">
-					eyelidlessness.github.io/projects
-				</a>
+				<p>
+					<b>Open source projects & contributions:</b>{' '}
+					<a href="https://eyelidlessness.github.io/projects">
+						eyelidlessness.github.io/projects
+					</a>
+				</p>
 			</ResumeProjectsPrintOnly>
 		</>
 	);

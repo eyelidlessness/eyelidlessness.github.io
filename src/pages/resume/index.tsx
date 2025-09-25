@@ -1,7 +1,12 @@
 import { definePage } from 'microsite/page';
+import { FullBleedContainer } from '../../components/FullBleed/FullBleedContainer.js';
 import { Head } from '../../components/Head.js';
 import { Main } from '../../components/Main.js';
-import { Resume, ResumeArt } from '../../components/Resume/index.js';
+import {
+	Resume,
+	ResumeArt,
+	ResumeSection,
+} from '../../components/Resume/index.js';
 import { resume } from '../../data/resume.js';
 import type { PageMetadata } from '../../lib/content/index.js';
 import {
@@ -10,10 +15,34 @@ import {
 	Topic,
 } from '../../lib/content/index.js';
 import { styled } from '../../lib/styles/styles.js';
+import { theme } from '../../lib/styles/theme.js';
+
+const ResumePageBody = styled(FullBleedContainer, {
+	rowGap: '1em',
+});
 
 const ResumePageResume = styled(Resume, {
 	marginTop: 0,
 	paddingTop: 0,
+});
+
+const ResumeArtContainer = styled(FullBleedContainer, {
+	nested: {
+		[theme.print]: {
+			display: 'none',
+			paddingInline: '0.125rem',
+		},
+	},
+});
+
+const ResumePDFSection = styled(ResumeSection, {
+	textAlign: 'right',
+
+	nested: {
+		[theme.print]: {
+			display: 'none',
+		},
+	},
 });
 
 interface ResumePageProps extends PageMetadata {
@@ -33,12 +62,22 @@ const ResumePage = (props: ResumePageProps) => (
 		</Head>
 
 		<Main meta={props}>
-			<ResumePageResume
-				id="resume"
-				meta={props}
-				resume={resume}
-				updated={props.stat.updated}
-			/>
+			<ResumePageBody>
+				<ResumePageResume
+					id="resume"
+					meta={props}
+					resume={resume}
+					updated={props.stat.updated}
+				/>
+
+				<ResumeArtContainer id="resume-art-container">
+					<ResumeArt {...props} renderType="post" />
+				</ResumeArtContainer>
+
+				<ResumePDFSection id="resume-pdf">
+					<a href="/Trevor_Schmidt_resume.pdf">View as PDF</a>
+				</ResumePDFSection>
+			</ResumePageBody>
 		</Main>
 	</>
 );
@@ -46,7 +85,7 @@ const ResumePage = (props: ResumePageProps) => (
 export default definePage(ResumePage, {
 	getStaticProps({ path }) {
 		const description = `Trevor Schmidt's résumé`;
-		const title = 'Hire Me';
+		const title = 'Trevor Schmidt: Full Stack Senior Software Engineer';
 		const topics = [Topic.TECHNOLOGY, Topic.ART];
 		const meta = getPageMetadata(
 			path,
