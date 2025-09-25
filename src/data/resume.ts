@@ -281,6 +281,10 @@ const resumeSkills = {
 			name: 'DSL\u200bs (parsers, semantics & runtime)',
 			level: ResumeSkillLevel.ADVANCED,
 		},
+		{
+			name: 'Effect',
+			level: ResumeSkillLevel.INTERMEDIATE,
+		},
 		// {
 		//   name: 'XSLT',
 		//   level: ResumeSkillLevel.INTERMEDIATE,
