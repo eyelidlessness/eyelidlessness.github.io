@@ -75,7 +75,7 @@ const ResumePage = (props: ResumePageProps) => (
 				</ResumeArtContainer>
 
 				<ResumePDFSection id="resume-pdf">
-					<a href="/Trevor_Schmidt_resume.pdf">View as PDF</a>
+					<a href="/Trevor-Schmidt-Resume.pdf">View as PDF</a>
 				</ResumePDFSection>
 			</ResumePageBody>
 		</Main>
