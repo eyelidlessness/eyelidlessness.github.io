@@ -8,6 +8,9 @@ import handler from 'serve-handler';
 const CWD = cwd();
 const SERVE_PATH = resolvePath(CWD, './dist');
 
+const PDF_FILE_NAME = 'Trevor-Schmidt-Resume.pdf';
+const PDF_FILE_PATH = resolvePath(SERVE_PATH, PDF_FILE_NAME);
+
 interface StartServerResult {
 	readonly server: Server;
 	readonly port: number;
@@ -64,7 +67,7 @@ const generatePDF = async () => {
 	});
 
 	await page.pdf({
-		path: './dist/Trevor_Schmidt_resume.pdf',
+		path: PDF_FILE_PATH,
 		scale: 0.99,
 	});
 	await browser.close();
@@ -82,7 +85,7 @@ const generatePDF = async () => {
 	});
 
 	// eslint-disable-next-line no-console
-	console.log('PDF rendered: ./dist/Trevor_Schmidt_resume.pdf');
+	console.log('PDF rendered:', PDF_FILE_PATH);
 };
 
 void generatePDF();
