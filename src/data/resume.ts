@@ -79,7 +79,7 @@ const employmentHistory = validateEmploymentHistory([
 
 		summary: `
 			Created and led ODK Web Forms, a runtime for user-defined
-			data collection tools & form-based applications.
+			data collection tools and form-based applications.
 		`,
 		highlights: [
 			`
@@ -207,12 +207,10 @@ type ResumeSkillLevels = typeof ResumeSkillLevel;
 export type ResumeSkillLevel = ResumeSkillLevels[keyof ResumeSkillLevels];
 
 export const ResumeSkillset = {
-	EXPERTISE: 'Expertise',
 	LANGUAGES_PLATFORMS: 'Languages',
-	SERVICES_DISTRIBUTED_SYSTEMS: 'Services',
-	WEB_UI_UX: 'UI & UX',
-	DOMAIN_SPECIFIC_LANGUAGES: 'DSL\u200bs',
-	NICHE_ESOTERIC: 'Niche/Esoteric',
+	BACKEND: 'Backend',
+	FRONTEND: 'Frontend',
+	NICHE: 'Niche',
 } as const;
 
 type ResumeSkillsets = typeof ResumeSkillset;
@@ -234,12 +232,8 @@ const resumeSkills = {
 			level: ResumeSkillLevel.ADVANCED,
 		},
 		{
-			name: 'CSS',
-			level: ResumeSkillLevel.ADVANCED,
-		},
-		{
-			name: 'HTML',
-			level: ResumeSkillLevel.ADVANCED,
+			name: 'Clojure',
+			level: ResumeSkillLevel.EXPERT,
 		},
 		{
 			name: 'Java',
@@ -249,67 +243,103 @@ const resumeSkills = {
 			name: 'Swift',
 			level: ResumeSkillLevel.BASIC,
 		},
-	],
-
-	[ResumeSkillset.SERVICES_DISTRIBUTED_SYSTEMS]: [
 		{
-			name: 'HTTP (REST, RPC, Distributed Systems)',
-			level: ResumeSkillLevel.EXPERT,
+			name: 'HTML',
+			level: ResumeSkillLevel.ADVANCED,
 		},
 		{
-			name: 'Node.js (+ similar)',
-			level: ResumeSkillLevel.EXPERT,
+			name: 'CSS',
+			level: ResumeSkillLevel.ADVANCED,
 		},
 		{
-			name: 'Django (+ REST Framework)',
-			level: ResumeSkillLevel.INTERMEDIATE,
+			name: 'SVG',
+			level: ResumeSkillLevel.ADVANCED,
 		},
 	],
 
-	[ResumeSkillset.WEB_UI_UX]: [
+	[ResumeSkillset.BACKEND]: [
 		{
-			name: 'React (+ Preact & similar)',
+			name: 'REST',
 			level: ResumeSkillLevel.EXPERT,
 		},
 		{
-			name: 'Reactivity (framework-agnostic)',
+			name: 'RPC',
 			level: ResumeSkillLevel.EXPERT,
 		},
 		{
-			name: '“Vanilla” JS',
+			name: 'Distributed Systems',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'Node',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'Django REST Framework',
+			level: ResumeSkillLevel.ADVANCED,
+		},
+	],
+
+	[ResumeSkillset.FRONTEND]: [
+		{
+			name: 'React',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'Reactivity',
 			level: ResumeSkillLevel.EXPERT,
 		},
 		{
 			name: 'Vue',
 			level: ResumeSkillLevel.INTERMEDIATE,
 		},
-	],
-
-	[ResumeSkillset.NICHE_ESOTERIC]: [
 		{
-			name: 'ODK XForms',
-			level: ResumeSkillLevel.EXPERT,
+			name: 'Astro',
+			level: ResumeSkillLevel.INTERMEDIATE,
 		},
 		{
-			name: 'Clojure',
-			level: ResumeSkillLevel.ADVANCED,
+			name: 'Qwik',
+			level: ResumeSkillLevel.INTERMEDIATE,
 		},
 		{
 			name: 'SolidJS',
 			level: ResumeSkillLevel.ADVANCED,
 		},
 		{
-			name: 'DSL\u200bs (parsers, semantics & runtime)',
-			level: ResumeSkillLevel.ADVANCED,
+			name: 'DOM & Web APIs',
+			level: ResumeSkillLevel.EXPERT,
 		},
+	],
+
+	[ResumeSkillset.NICHE]: [
 		{
 			name: 'Effect',
 			level: ResumeSkillLevel.INTERMEDIATE,
 		},
-		// {
-		//   name: 'XSLT',
-		//   level: ResumeSkillLevel.INTERMEDIATE,
-		// },
+		{
+			name: 'Marko',
+			level: ResumeSkillLevel.INTERMEDIATE,
+		},
+		{
+			name: 'Custom DSL\u200bs',
+			level: ResumeSkillLevel.ADVANCED,
+		},
+		{
+			name: 'Custom JSX',
+			level: ResumeSkillLevel.ADVANCED,
+		},
+		{
+			name: 'ODK XForms',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'XPath',
+			level: ResumeSkillLevel.EXPERT,
+		},
+		{
+			name: 'XSLT',
+			level: ResumeSkillLevel.INTERMEDIATE,
+		},
 		// {
 		//   name: 'JSX (custom)',
 		//   level: ResumeSkillLevel.INTERMEDIATE,
@@ -374,10 +404,10 @@ export const resume = validateResume({
 		brief: `
 <span class="inline-role">Full Stack Senior Software Engineer</span> with a proven record of achievement and leadership, across a broad range of disciplines, roles, and technologies:
 
-- driving projects from conception to successful adoption and sustainable growth
-- acquiring and applying deep domain & subject matter expertise
-- fostering an engineering culture of velocity & quality, and continuous improvement of both
-- reducing and overcoming risk, to grow and deliver on new project & business opportunities
+- Driving projects from conception to successful adoption and sustainable growth.
+- Acquiring and applying deep domain and subject matter expertise.
+- Fostering an engineering culture of velocity and quality, continuously improving both.
+- Reducing and overcoming risk, to grow and deliver on new project and business opportunities.
 		`.trim(),
 		label: 'Full Stack Senior Software Engineer',
 	},
