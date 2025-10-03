@@ -213,7 +213,7 @@ const arrowListItemStyles = {
 		'&:before': {
 			content: '"›"',
 			fontWeight: 'bolder',
-			lineHeight: 'inherit',
+			lineHeight: 'normal',
 			textAlign: 'center',
 		},
 	},
@@ -290,6 +290,7 @@ const ResumeSkillsetsContainer = styled('div', {
 	nested: {
 		'@media screen and (min-width: 48rem), print and (min-width: 0)': {
 			gridTemplateColumns: 'minmax(5rem, max-content) 1fr',
+			paddingBlockStart: '0.75em',
 			paddingInline: '1.2rem',
 		},
 
@@ -436,7 +437,10 @@ const ResumeEmploymentHeading = styled('h2', {
 
 	nested: {
 		[theme.print]: {
+			fontSize: '1.2em',
+			paddingInline: 0,
 			textAlign: 'center',
+			textIndent: 0,
 		},
 	},
 });
@@ -535,9 +539,15 @@ const ResumeEmploymentListItemHeader = styled('div', {
 });
 
 const ResumeEmploymentListItemEmployerHeading = styled('h3', {
+	fontFamily: 'inherit',
+	fontWeight: 550,
 	gridArea: 'employer',
 	marginBottom: 0,
 	whiteSpace: 'nowrap',
+
+	[theme.print]: {
+		fontWeight: 600,
+	},
 });
 
 const ResumeEmploymentListItemTimeRange = styled(TimeRange, {
@@ -691,7 +701,6 @@ const BaseResumeEmployment = styled(ResumeSection, {
 			...theme.resume.employment.container.nested[theme.print],
 
 			gap: '0.675em 0',
-			padding: '0.5em 0',
 		},
 	},
 });
