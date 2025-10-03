@@ -2,7 +2,6 @@ import type { IRenderer, IStyle, TRule } from 'fela';
 import { createRenderer as baseCreateRenderer } from 'fela';
 import createIdentifier from 'fela-identifier';
 import pluginEmbedded from 'fela-plugin-embedded';
-import pluginSelectors from 'fela-plugin-multiple-selectors';
 import pluginTypescript from 'fela-plugin-typescript';
 import { renderToString } from 'fela-tools';
 import type NodeFS from 'node:fs';
@@ -12,6 +11,7 @@ import { h, toChildArray } from 'preact';
 import type { Style } from 'preact-fela';
 import { createComponent, RendererProvider } from 'preact-fela';
 import { identity } from '../helpers/values.js';
+import { pluginSelectors } from './fela-plugins/selectors.js';
 import hashed from './hashed.js';
 
 export type StyleableIntrinsicElements = JSX.IntrinsicElements;

@@ -39,6 +39,7 @@ const BaseGitHubLogo = styled('rect', {
 
 interface GitHubLogoProps {
 	readonly className?: string;
+	readonly omitTitle?: boolean;
 }
 
 /**
@@ -46,17 +47,15 @@ interface GitHubLogoProps {
  *
  * @see {@link https://github.com/edent/SuperTinyIcons}
  */
-export const GitHubLogo = ({
-	className,
-}: GitHubLogoProps): ComponentChildren => (
+export const GitHubLogo = (props: GitHubLogoProps): ComponentChildren => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		aria-label="GitHub"
-		className={className}
+		className={props.className}
 		role="img"
 		viewBox={viewBox}
 	>
-		<title>GitHub</title>
+		{!props.omitTitle && <title>GitHub</title>}
 		<BaseGitHubLogo
 			height={baseSize}
 			mask="url(#octocat-knockout)"

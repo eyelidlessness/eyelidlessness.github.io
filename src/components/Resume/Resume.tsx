@@ -120,6 +120,14 @@ type ResumeHeaderLinkProps = ComponentProps<typeof BaseResumeHeaderLink> & {
 	readonly Icon?: FunctionComponent;
 };
 
+const ResumeHeaderLinkScreenLabel = styled('span', {
+	nested: {
+		'@media screen and (min-width: 0)': {
+			display: 'none',
+		},
+	},
+});
+
 const ResumeHeaderLink = ({
 	children,
 	screenLabel,
@@ -130,14 +138,19 @@ const ResumeHeaderLink = ({
 	<BaseResumeHeaderLink {...props}>
 		{Icon && <Icon />}
 		<ResumeHeaderLinkInner data-print-label={printLabel}>
-			<span>{screenLabel ?? children}</span>
+			<ResumeHeaderLinkScreenLabel>
+				{screenLabel ?? children}
+			</ResumeHeaderLinkScreenLabel>
 		</ResumeHeaderLinkInner>
 	</BaseResumeHeaderLink>
 );
 
 const ResumeHeaderLinkIcon = styled('svg', {
-	width: '1rem',
-	height: '1rem',
+	'--line-height': '1.05lh',
+
+	width: 'var(--line-height)',
+	height: 'var(--line-height)',
+	lineHeight: 'var(--line-height)',
 	color: 'var(--color-prose)',
 
 	nested: {
@@ -164,8 +177,16 @@ const ResumeEmailIcon = () => {
 	);
 };
 
+interface BaseResumeGitHubLogoProps {
+	readonly className?: string;
+}
+
+const BaseResumeGitHubLogo = (props: BaseResumeGitHubLogoProps) => {
+	return <GitHubLogo {...props} omitTitle={true} />;
+};
+
 const ResumeGitHubLogo = () => {
-	return <ResumeHeaderLinkIcon as={GitHubLogo} />;
+	return <ResumeHeaderLinkIcon as={BaseResumeGitHubLogo} />;
 };
 
 const socialLogos: Readonly<Record<string, FunctionComponent>> = {
@@ -244,21 +265,17 @@ const ResumeBrief = styled(FullBleedContainer, {
 	},
 });
 
-const resumeSkillsetsColumnarQueries = {
-	screen: '@media screen and (min-width: 40rem)',
-	print: '@media print',
-} as const;
-
-const ResumeFlexHeading = styled('h2', {
+const ResumeSkillsetHeading = styled('h2', {
+	fontFamily: 'inherit',
 	fontSize: '1em',
+	fontWeight: 600,
 	marginBottom: 0,
 	paddingLeft: 0,
 	textIndent: 0,
 
-	nested: {
-		[resumeSkillsetsColumnarQueries.screen]: { justifySelf: 'end' },
-		[resumeSkillsetsColumnarQueries.print]: { justifySelf: 'end' },
-	},
+	// nested: {
+	// 	'@media screen and (min-width: 45rem), print and (min-width: 0)': { justifySelf: 'end' },
+	// },
 });
 
 const ResumeSkillsetsContainer = styled('div', {
@@ -271,10 +288,10 @@ const ResumeSkillsetsContainer = styled('div', {
 	padding: '0.25em 0',
 
 	nested: {
-		[resumeSkillsetsColumnarQueries.screen]: {
-			gridTemplateColumns: 'auto 1fr',
+		'@media screen and (min-width: 48rem), print and (min-width: 0)': {
+			gridTemplateColumns: 'minmax(5rem, max-content) 1fr',
+			paddingInline: '1.2rem',
 		},
-		[resumeSkillsetsColumnarQueries.print]: { gridTemplateColumns: 'auto 1fr' },
 
 		'& ul, & li': {
 			lineHeight: 1.5,
@@ -355,6 +372,9 @@ const ResumeSkillLevelMarkers = {
 	}),
 } as const;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+ResumeSkillLevelMarkers;
+
 const BaseResumeSkillsetListing = styled('div', {
 	display: 'contents',
 });
@@ -369,18 +389,14 @@ const ResumeSkillsetListing = ({
 	skills,
 }: ResumeSkillsListProps) => (
 	<BaseResumeSkillsetListing itemscope itemtype="http://schema.org/ItemList">
-		<ResumeFlexHeading itemprop="name">
+		<ResumeSkillsetHeading itemprop="name">
 			{mdxInline(skillsetName)}
-		</ResumeFlexHeading>
+		</ResumeSkillsetHeading>
 
 		<ResumeSkillsList>
-			{skills.map(({ level, name: skillName }) => {
-				const Marker = ResumeSkillLevelMarkers[level];
-
+			{skills.map(({ /* level, */ name: skillName }) => {
 				return (
 					<ResumeSkillsListItem key={skillName} itemprop="itemListElement">
-						<Marker level={level} />
-
 						{mdxInline`${skillName}`}
 					</ResumeSkillsListItem>
 				);
@@ -417,6 +433,12 @@ const ResumeEmployerMarginalia = styled('p', {
 
 const ResumeEmploymentHeading = styled('h2', {
 	marginBottom: 0,
+
+	nested: {
+		[theme.print]: {
+			textAlign: 'center',
+		},
+	},
 });
 
 const ResumeEmploymentSubPeriod = styled(FullBleedContainer, {
@@ -772,6 +794,7 @@ export const Resume = ({
 							itemprop="email"
 							screenLabel={email}
 							printLabel={email}
+							title={`Email: ${email}`}
 							Icon={ResumeEmailIcon}
 						>
 							Email
@@ -795,6 +818,7 @@ export const Resume = ({
 									itemprop="url"
 									screenLabel={(user as string | null | undefined) ?? network}
 									printLabel={shortURL(url)}
+									title={`${network}: ${user}`}
 									Icon={socialLogos[network]}
 									rel="me"
 								>
