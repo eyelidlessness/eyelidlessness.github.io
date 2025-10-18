@@ -131,6 +131,9 @@ interface SiteLink {
 
 interface SiteHeaderProps {
 	readonly meta: PageMetadata;
+
+	/** @default false */
+	readonly hideMenu?: boolean;
 }
 
 export const SiteHeader = (props: SiteHeaderProps): ComponentChildren => {
@@ -138,7 +141,6 @@ export const SiteHeader = (props: SiteHeaderProps): ComponentChildren => {
 		props.meta.pageId == null ? {} : { 'data-page-id': props.meta.pageId };
 	const isResume = props.meta.pageId === 'resume';
 	const isHidden = isResume && RESUME_ISOLATION;
-	const homeHREF = isHidden ? RESUME_PATH : BLOG_PATH;
 	const siteLinks: readonly SiteLink[] = [
 		{
 			label: 'Blog',
@@ -184,18 +186,22 @@ export const SiteHeader = (props: SiteHeaderProps): ComponentChildren => {
 			<SiteHeaderNavOuter>
 				<DevilsAlbatross as="nav" devilsBreakpoint={devilsBreakpoint} gap={gap}>
 					<SiteHeaderHomeLinkContainer>
-						<SiteHeaderHomeLink href={homeHREF}>
+						<SiteHeaderHomeLink href="/">
 							<SiteLogo />
 						</SiteHeaderHomeLink>
 					</SiteHeaderHomeLinkContainer>
 
-					<SiteHeaderPagesList {...metaProps}>
-						{siteLinks.map(({ location, label }) => (
-							<SiteHeaderPagesListItem>
-								<SiteHeaderPageLink href={location}>{label}</SiteHeaderPageLink>
-							</SiteHeaderPagesListItem>
-						))}
-					</SiteHeaderPagesList>
+					{!props.hideMenu && (
+						<SiteHeaderPagesList {...metaProps}>
+							{siteLinks.map(({ location, label }) => (
+								<SiteHeaderPagesListItem>
+									<SiteHeaderPageLink href={location}>
+										{label}
+									</SiteHeaderPageLink>
+								</SiteHeaderPagesListItem>
+							))}
+						</SiteHeaderPagesList>
+					)}
 				</DevilsAlbatross>
 			</SiteHeaderNavOuter>
 		</BaseSiteHeader>
