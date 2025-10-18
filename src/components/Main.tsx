@@ -2,8 +2,8 @@ import type { ComponentProps } from 'preact';
 import type { PageMetadata } from '../lib/content/meta.js';
 import { styled, StylesProvider, theme } from '../lib/styles/index.js';
 import { FullBleedContainer } from './FullBleed/FullBleedContainer.js';
-import { SiteHeader } from './Site/SiteHeader.js';
 import { GitHubLogoDefs } from './GitHubLogo.js';
+import { SiteHeader } from './Site/SiteHeader.js';
 
 const BaseMain = styled(FullBleedContainer, {
 	paddingTop: 0,
@@ -23,6 +23,9 @@ const BaseMain = styled(FullBleedContainer, {
 
 type MainProps = ComponentProps<typeof FullBleedContainer> & {
 	readonly meta: PageMetadata;
+
+	/** @default false */
+	readonly hideMenu?: boolean;
 };
 
 const mainMetaProps = (meta: PageMetadata) => {
@@ -35,7 +38,7 @@ const mainMetaProps = (meta: PageMetadata) => {
 	};
 };
 
-export const Main = ({ meta, ...props }: MainProps): JSX.Element => {
+export const Main = ({ meta, hideMenu, ...props }: MainProps): JSX.Element => {
 	if (meta.redirect) {
 		return <></>;
 	}
@@ -43,7 +46,7 @@ export const Main = ({ meta, ...props }: MainProps): JSX.Element => {
 	return (
 		<StylesProvider>
 			<GitHubLogoDefs />
-			<SiteHeader meta={meta} />
+			<SiteHeader meta={meta} hideMenu={hideMenu} />
 			<BaseMain as="main" {...mainMetaProps(meta)} {...props} />
 		</StylesProvider>
 	);
