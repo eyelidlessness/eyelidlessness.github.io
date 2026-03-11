@@ -25,9 +25,16 @@ jobs:
         shell: bash
         run: nix profile add nixpkgs#devenv
 
+      # - Ensures consistent human-readable dates (and downstream functionality
+      #   depending on that)
+      # - Provides a simple initial step for setup (and hopefully caching) for
+      #   devenv init
+      - name: Set timezone
+        run: echo "TZ=America/Los_Angeles" >> $GITHUB_ENV
+
       - run: yarn install --frozen-lockfile
       - run: yarn test
-      - run: TZ=America/Los_Angeles yarn build
+      - run: yarn build
 
       - name: Dist tarball
         if: ${{ github.ref != 'refs/heads/main' }}
