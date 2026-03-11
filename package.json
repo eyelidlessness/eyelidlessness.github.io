@@ -4,10 +4,6 @@
   "type": "module",
   "types": "./env.d.ts",
   "homepage": "/",
-  "volta": {
-    "node": "24.7.0",
-    "yarn": "1.22.22"
-  },
   "scripts": {
     "start": "yarn run build:watch & yarn run test:watch",
     "build": "yarn build:microsite && yarn build:pdf && echo 'Full build complete!'",

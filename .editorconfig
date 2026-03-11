@@ -8,5 +8,8 @@ indent_style = tab
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[{.*,*.md,*.json,*.toml,*.xml,*.yml,}]
+[.*]
+indent_style = space
+
+[*.{md,json,toml,xml,yml,yaml}]
 indent_style = space
