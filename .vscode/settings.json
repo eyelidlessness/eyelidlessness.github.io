@@ -12,7 +12,7 @@
   // - VSCode TS Language Server uses locally installed version of TypeScript.
   //   (TODO: This doesn't seem to take automatically on project load? But it
   //   is the exact setting that VSCode writes when choosing it in the UI?!?)
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   // #endregion
 
   // #region Linting
