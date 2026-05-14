@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact';
-import { BLOG_PATH, RESUME_ISOLATION, RESUME_PATH } from '../../data/site.js';
+import { BLOG_PATH, PROJECTS_PATH, RESUME_ISOLATION } from '../../data/site.js';
 import type { PageMetadata } from '../../lib/content/meta.js';
 import { styled, theme } from '../../lib/styles/index.js';
 import { DevilsAlbatross } from '../DevilsAlbatross.js';
@@ -148,8 +148,8 @@ export const SiteHeader = (props: SiteHeaderProps): ComponentChildren => {
 		},
 
 		{
-			label: 'Hire me',
-			location: RESUME_PATH,
+			label: 'Projects',
+			location: PROJECTS_PATH,
 		},
 
 		{

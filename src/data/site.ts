@@ -10,3 +10,5 @@ export const RESUME_PATH = (() => {
 
 	return `${RESUME_BASE_PATH}#resume`;
 })();
+
+export const PROJECTS_PATH = '/projects/';

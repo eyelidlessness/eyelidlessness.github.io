@@ -1,12 +1,25 @@
 import { definePage } from 'microsite/page';
 import { Head } from '../../components/Head.js';
-import { RESUME_BASE_PATH } from '../../data/site.js';
+import { Main } from '../../components/Main.js';
+import { Projects } from '../../components/Projects/Projects.js';
+import { projects } from '../../data/projects.js';
 import type { PageMetadata } from '../../lib/content/index.js';
-import { getPageMetadata, PageMetadataType } from '../../lib/content/index.js';
+import {
+	getPageMetadata,
+	PageMetadataType,
+	Topic,
+} from '../../lib/content/index.js';
 
 interface ProjectPageProps extends PageMetadata {}
 
-const ProjectPage = (props: ProjectPageProps) => <Head meta={props} />;
+const ProjectPage = (props: ProjectPageProps) => (
+	<>
+		<Head meta={props} />
+		<Main meta={props}>
+			<Projects meta={props} projects={projects} />
+		</Main>
+	</>
+);
 
 export default definePage(ProjectPage, {
 	getStaticProps({ path }) {
@@ -24,8 +37,8 @@ export default definePage(ProjectPage, {
 			props: {
 				...meta,
 
+				topics: [Topic.ART, Topic.TECHNOLOGY, Topic.LEMON],
 				description,
-				redirect: `${RESUME_BASE_PATH}#projects`,
 				title,
 			},
 		});
