@@ -79,14 +79,16 @@ export const Projects = ({
 			<ProjectsArt {...meta} renderType={'post'} />
 			<h1>Projects</h1>
 
-			<ProjectsCurrent>
-				<h2>Current</h2>
-				<ProjectSet>
-					{current.map((project) => (
-						<Project project={project} />
-					))}
-				</ProjectSet>
-			</ProjectsCurrent>
+			{current.length > 0 ? (
+				<ProjectsCurrent>
+					<h2>Current</h2>
+					<ProjectSet>
+						{current.map((project) => (
+							<Project project={project} />
+						))}
+					</ProjectSet>
+				</ProjectsCurrent>
+			) : null}
 
 			<ProjectsTwoUp {...props}>
 				<div>
