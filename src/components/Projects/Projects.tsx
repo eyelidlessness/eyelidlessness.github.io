@@ -77,7 +77,7 @@ export const Projects = ({
 	return (
 		<>
 			<ProjectsArt {...meta} renderType={'post'} />
-			<h1>Projects</h1>
+			<h1>Open Source Projects &amp; Contributions</h1>
 
 			{current.length > 0 ? (
 				<ProjectsCurrent>
@@ -92,7 +92,7 @@ export const Projects = ({
 
 			<ProjectsTwoUp {...props}>
 				<div>
-					<FlexHeading>Projects I Created</FlexHeading>
+					<FlexHeading>Projects I created</FlexHeading>
 
 					<ProjectSet>
 						{creator.map((project) => (
@@ -102,7 +102,7 @@ export const Projects = ({
 				</div>
 
 				<div>
-					<FlexHeading>Open Source Contributions</FlexHeading>
+					<FlexHeading>Other contributions</FlexHeading>
 
 					<ProjectSet>
 						{contributor.map((project) => (
