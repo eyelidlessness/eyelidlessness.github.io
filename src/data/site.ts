@@ -11,4 +11,5 @@ export const RESUME_PATH = (() => {
 	return `${RESUME_BASE_PATH}#resume`;
 })();
 
+export const OPEN_SOURCE_PATH = '/open-source/';
 export const PROJECTS_PATH = '/projects/';
