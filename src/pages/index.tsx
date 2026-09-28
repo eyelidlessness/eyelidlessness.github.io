@@ -46,7 +46,6 @@ export default definePage(IndexPage, {
 				topics: [Topic.ART, Topic.TECHNOLOGY, Topic.LEMON],
 
 				description,
-				redirect: '/blog/',
 			},
 		});
 	},
